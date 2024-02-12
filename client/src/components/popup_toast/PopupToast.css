@@ -1,0 +1,11 @@
+.the-toast{
+    position:fi;
+    top: 2cm;
+    left:0
+}
+@media screen and (max-width:10cm){
+    .the-toast{
+        width:5cm;
+    }
+
+}

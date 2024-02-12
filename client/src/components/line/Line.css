@@ -1,0 +1,13 @@
+.primary-line {
+    background-color: var(--primary-color);
+    height: 0.2cm;
+    width: 20vw;
+    border-bottom-left-radius:0.1cm; /* Corrected syntax */
+    border-top-left-radius:0.1cm; /* Corrected syntax */
+    border-bottom-right-radius:0.1cm; /* Corrected syntax */
+    border-top-right-radius:0.1cm; 
+    margin-top:0.2cm
+}
+div{
+    margin-bottom: 5px;
+}

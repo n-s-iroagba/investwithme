@@ -1,0 +1,11 @@
+.navbar {
+  padding-left: 1.5cm;
+  padding-right: 1.5cm;
+}
+
+@media (max-width: 15cm) {
+  .navbar {
+    padding-left: 0.7cm;
+    padding-right: 0.7cm;
+  }
+}
