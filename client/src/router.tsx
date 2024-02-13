@@ -1,8 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
-import Home from "./pages/home/Home"
-import Dashboard from "./components/dashboard/Dashboard";
-import SignupForm from "./components/Forms/SignUpForm";
-import InvestmentCards from "./components/Investment_cards/InvestmentCards";
+import Home from "./pages/Home"
+import Dashboard from "./pages/Dashboard";
+import InvestmentCards from "./components/InvestmentCards";
 
 
 export const router = createBrowserRouter([
@@ -16,10 +15,7 @@ export const router = createBrowserRouter([
     path:'/account',
     element: <Dashboard/>,
 },
-{
-    path:'/a',
-    element: <SignupForm/>,
-},
+
 {
     path:'/dashboard',
     element: <Dashboard/>,

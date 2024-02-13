@@ -1,0 +1,222 @@
+.background-secondary {
+    background-color: var(--secondary-color);
+}
+
+.button-styles {
+    align-items: center;
+    background-color: var(--secondary-color);
+    border: 0.05cm solid white;
+    border-bottom-left-radius: 50px;
+    border-bottom-right-radius: 50px;
+    border-top-left-radius: 50px;
+    border-top-right-radius: 50px;
+    display: flex;
+    height: 1.5cm;
+    justify-content: space-evenly;
+    width: 6cm;
+}
+
+.dashboard-wrapper {
+    background: white;
+    padding: 5vw;
+    width: 100%;
+}
+
+.div-margin-bottom {
+    margin-bottom: 5px;
+}
+
+.form {
+    background: var(--primary-color);
+    border-bottom-left-radius: 1cm;
+    border-top-right-radius: 1cm;
+    padding: 1cm 0.8cm;
+    width: 50vw;
+}
+
+.form .custom-input {
+    border: 0;
+    border-bottom: 2px solid black;
+}
+
+.form .custom-input:focus {
+    box-shadow: none;
+}
+
+.header {
+    background-color: var(--primary-color);
+    padding-bottom: var(--deep-vertical-space);
+    padding-top: 3.5cm;
+}
+
+.header-image-border {
+    border: 3px solid var(--secondary-color);
+    border-bottom-left-radius: 0.6cm;
+    border-bottom-right-radius: 0.6cm;
+    border-top-left-radius: 0.6cm;
+    border-top-right-radius: 0.6cm;
+    width: 100%;
+}
+
+.header-main-text {
+    font-size: xx-large;
+    font-weight: 1000;
+}
+
+.heavy-font {
+    font-weight: 950;
+}
+
+.intro-wrapper {
+    background-color: #D1FFBD;
+    padding-bottom: 0.7cm;
+}
+
+.main-intro {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    padding-top: 0.5cm;
+    width: 100vw;
+}
+
+.main-intro-writeup {
+    padding-left: 1.5cm;
+    padding-right: 1.5cm;
+    text-align: center;
+}
+
+.primary-color {
+    color: var(--primary-color);
+}
+
+.primary-line {
+    background-color: var(--primary-color);
+    border-bottom-left-radius: 0.1cm;
+    border-bottom-right-radius: 0.1cm;
+    border-top-left-radius: 0.1cm;
+    border-top-right-radius: 0.1cm;
+    height: 0.2cm;
+    margin-top: 0.2cm;
+    width: 20vw;
+}
+
+.secondary-color {
+    color: var(--secondary-color);
+}
+
+.shallow-top-padding {
+    padding-top: 0.5cm;
+}
+
+.space-down {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-bottom: calc(var(--shallow-vertical-space)/4);
+    width: 100%;
+}
+
+.toast {
+    left: -100%;
+    position: absolute;
+    top: -2cm;
+}
+
+.toastContainer {
+    position: relative;
+}
+
+.logo-container {
+    align-items: center;
+    display: flex;
+}
+
+.logo {
+    margin-right: 5vw;
+}
+
+@media (max-width: 767px) {
+    .element {
+        border-bottom: 1px solid black;
+    }
+
+    .some-padding {
+        padding-bottom: 10px;
+        padding-top: 15px;
+    }
+    
+    .form {
+        background: var(--secondary-color);
+        border-bottom-left-radius: 1cm;
+        border-top-right-radius: 1cm;
+        padding-left: 0.8cm;
+        padding-right: 0.8cm;
+        width: 85vw;
+    }
+}
+
+@media (min-width: 768px) {
+    .element {
+        border-bottom: none;
+        border-right: 1px dotted black;
+    }
+
+    .some-padding {
+        padding-bottom: 10px;
+        padding-top: 15px;
+    }
+
+    .the-bottom {
+        border-bottom: 4px solid var(--primary-color);
+    }
+}
+
+@media screen and (min-width: 10cm) {
+    .header-image-border {
+        border-bottom-left-radius: 1cm;
+        border-bottom-right-radius: 1cm;
+        border-top-left-radius: 1cm;
+        border-top-right-radius: 1cm;
+    }
+
+    .header-main-text {
+        font-size: 5vw;
+    }
+
+    .header-sub-text {
+        font-size: larger;
+    }
+}
+
+
+.g-outer-paddings-side{
+   padding-left:0.7cm;
+   padding-right: 0.7cm;
+}
+.g-outer-margins-side{
+    padding-left:0.7cm;
+    padding-right: 0.7cm;
+ }
+
+@media screen and (min-width:10cm){
+    .g-outer-paddings-side{
+        padding-left:1.5cm;
+        padding-right:1.5cm;
+     }
+     .g-outer-margins-side{
+        padding-left:1.5cm;
+        padding-right:1.5cm;
+     }
+}
+.g-shallow-margins-vertical{
+    margin-top: 0.7cm;
+    margin-bottom: 0.7cm;
+}
+.g-shallow-margin-bottom{
+    margin-bottom: 0.7cm;
+}
+.g-shallow-padding-bottom{
+    padding-bottom: 0.7cm;
+}
