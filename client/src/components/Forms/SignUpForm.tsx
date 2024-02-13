@@ -4,70 +4,99 @@ import Container from 'react-bootstrap/Container'; // Added Container import
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Row from 'react-bootstrap/Row';
-import * as formik from 'formik';
-import * as yup from 'yup';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './SignUpForm.css';
 
+
+type PasswordStrengthType = 'weak' | 'fairly-strong' | 'strong'|'';
+
+const PasswordStrengthMeter: React.FC<{ password: string }> = ({ password }) => {
+  const [strength, setStrength] = useState<PasswordStrengthType>('');
+useEffect(()=>{
+  const calculateStrength = () => {
+    if (!password) {
+      setStrength('');
+      return;
+    }else{
+      console.log(password)
+    }
+
+    const hasNumber = /\d/.test(password);
+    const hasUppercase = /[A-Z]/.test(password);
+    const hasLowercase = /[a-z]/.test(password);
+    const length = password.length;
+
+    if (length < 4 && length>1) {
+      setStrength('weak');
+    } else if (length>4 && length < 8) {
+      setStrength('fairly-strong');
+    } else if (!hasNumber || !hasUppercase || !hasLowercase) {
+      setStrength('fairly-strong');
+    } else {
+      setStrength('strong');
+    }
+  };
+ console.log(password)
+ console.log(strength)
+ calculateStrength()
+},[password,strength])
+
+
+  return (
+    <div className={`password-strength-meter ${strength}`}>
+      <div className="meter-bar" /><h6>password</h6>
+      <div className="meter-label">
+        {strength === 'weak' && <p>Weak password</p>}
+        {strength === 'fairly-strong' && <p>Fairly strong password</p>}
+        {strength === 'strong' && <p>Strong password</p>}
+      </div>
+    </div>
+  );
+};
+
 function ContactForm() {
-  const { Formik } = formik;
+
   const [showPopup, setShowPopup] = useState(false);
+  const [data, setData] = useState({
+    firstName:'',
+    lastName:'',
+    username:'',
+    password:'',
+    city:'',
+    state:'',
+    zip:'',
+    terms:''
+  })
 
-  const schema = yup.object().shape({
-    firstName: yup.string().required(),
-    lastName: yup.string().required(),
-    username: yup.string().required(),
-    city: yup.string().required(),
-    state: yup.string().required(),
-    zip: yup.string().required(),
-    terms: yup.bool().required().oneOf([true], 'Terms must be accepted'),
 
-  });
-  const anStyles = {
-    border: '0',
-    background: 'transparent',
-    borderBottom: '2px solid white',
-    '&:focus': {
-      border: '2px solid black',
-      outline: 'none',
-      background: 'transparent',
-    },
+  const validatePasswordLength = (password: string) => {
+    if (password.length < 8) {
+      return 'Password must be at least 8 characters';
+    }
+    return undefined;
   };
 
-  const handleSubmit = async () => {
-    // Show the spinner
-    // setShowSpinner(true);
 
-    // Simulate an asynchronous operation (e.g., API call)
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-
-    // After the operation, hide the spinner and show the popup
-    // setShowSpinner(false);
-    setShowPopup(true);
+  const handleSubmit = async (values:any) => {
+    
+    console.log(values)
   };
+
 
   const handlePopupClick = () => {
     // Close the popup when the user clicks to continue
     setShowPopup(false);
   };
-
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    e.preventDefault()
+    setData({
+      ...data,
+      [e.target.name]: e.target.value,
+    });
+  };
   return (
-    <div>
+ 
       <Container fluid className="d-flex justify-content-center align-content-center mt-5 mb-5 ">
-        <Formik
-          validationSchema={schema}
-          onSubmit={console.log}
-          initialValues={{
-            firstName: 'Mark',
-            lastName: 'Otto',
-            username: '',
-            city: '',
-            state: '',
-            zip: '',
-            terms: false,
-          }}
-        >
-          {({ handleChange, values, touched, errors }) => (
             <Form className='form d-flext justify-content-center align-content-center' noValidate onSubmit={handleSubmit}>
               <Row className="mb-5">
                 <Form.Group as={Col} lg='6' controlId="validationFormik01">
@@ -75,11 +104,9 @@ function ContactForm() {
                   <Form.Control
                     type="text"
                     name="firstName"
-                    value={values.firstName}
-                    onChange={handleChange}
+                    value={data.firstName}
+                    onChange={handleChange} // Use handleChange here
                     className='custom-input bg-transparent'
-                
-                    isValid={touched.firstName && !errors.firstName}
                   />
                   <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                 </Form.Group>
@@ -88,12 +115,12 @@ function ContactForm() {
                   <Form.Control
                     type="text"
                     name="lastName"
-                    value={values.lastName}
+                    value={data.lastName}
                     onChange={handleChange}
                     className='form-control'
                     style={{ border: '0', background: 'transparent', borderBottom: "1px solid black" }}
-                    isValid={touched.lastName && !errors.lastName}
                   />
+                  
                   <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                 </Form.Group>
                 <Form.Group as={Col} md="4" controlId="validationFormikUsername">
@@ -105,46 +132,49 @@ function ContactForm() {
                       placeholder="Username"
                       aria-describedby="inputGroupPrepend"
                       name="username"
-                      value={values.username}
+                      value={data.username}
                       onChange={handleChange}
                       style={{ border: '0', background: 'transparent', borderBottom: "1px solid black" }}
-                      isInvalid={!!errors.username}
+                  
                     />
                     <Form.Control.Feedback type="invalid">
-                      {errors.username}
+          
                     </Form.Control.Feedback>
                   </InputGroup>
                 </Form.Group>
               </Row>
               <Row className="mb-3">
                 <Form.Group as={Col} md="6" controlId="validationFormik03">
-                  <Form.Label>City</Form.Label>
+                  <Form.Label>Password</Form.Label>
                   <Form.Control
-                    type="text"
+                    type="password"
                     placeholder="City"
-                    name="city"
-                    value={values.city}
+                    name="password"
+                    value={data.password}
                     style={{ border: '0', background: 'transparent', borderBottom: "1px solid black" }}
                     onChange={handleChange}
-                    isInvalid={!!errors.city}
+                    isInvalid={!!validatePasswordLength(data.password)} 
                   />
                   <Form.Control.Feedback type="invalid">
-                    {errors.city}
-                  </Form.Control.Feedback>
+                   {validatePasswordLength(data.password)}
+                   </Form.Control.Feedback>
+                   <PasswordStrengthMeter password={data.password}/>    
                 </Form.Group>
+                
+               
                 <Form.Group as={Col} md="3" controlId="validationFormik04">
                   <Form.Label>State</Form.Label>
                   <Form.Control
                     type="text"
                     placeholder="State"
                     name="state"
-                    value={values.state}
+                    value={data.state}
                     onChange={handleChange}
                     style={{ border: '0', background: 'transparent', borderBottom: "1px solid black" }}
-                    isInvalid={!!errors.state}
+                 
                   />
                   <Form.Control.Feedback type="invalid">
-                    {errors.state}
+               
                   </Form.Control.Feedback>
                 </Form.Group>
                 <Form.Group as={Col} md="3" controlId="validationFormik05">
@@ -153,13 +183,13 @@ function ContactForm() {
                     type="text"
                     placeholder="Zip"
                     name="zip"
-                    value={values.zip}
+                    value={data.zip}
                     onChange={handleChange}
                     style={{ border: '0', background: 'transparent', borderBottom: "1px solid black" }}
-                    isInvalid={!!errors.zip}
+                
                   />
                   <Form.Control.Feedback type="invalid">
-                    {errors.zip}
+                   
                   </Form.Control.Feedback>
                 </Form.Group>
               </Row>
@@ -169,8 +199,6 @@ function ContactForm() {
                   name="terms"
                   label="Agree to terms and conditions"
                   onChange={handleChange}
-                  isInvalid={!!errors.terms}
-                  feedback={errors.terms}
                   feedbackType="invalid"
                   style={{ border: '0', background: 'transparent', borderBottom: "1px solid black" }}
                   id="validationFormik0"
@@ -178,17 +206,15 @@ function ContactForm() {
               </Form.Group>
               <Button type="submit">Submit form</Button>
             </Form>
-          )}
-        </Formik>
       </Container>
-    <button onClick={handleSubmit}>click</button>
-      {showPopup && (
-        <div className="popup">
-          <p>This is a custom popup. Click to continue.</p>
-          <button onClick={handlePopupClick}>Continue</button>
-        </div>
-      )}
-    </div>
+    //   <button>click</button>
+    //   {showPopup && (
+    //     <div className="popup">
+    //       <p>This is a custom popup. Click to continue.</p>
+    //       <button onClick={handlePopupClick}>Continue</button>
+    //     </div>
+    //   )}
+    // </div>
   );
 }
 

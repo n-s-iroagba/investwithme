@@ -12,7 +12,7 @@ interface InvestmentTiersProps {
   children?: React.ReactNode;
 }
 
-const InvestmentTiersCard: React.FC<InvestmentTiersProps> = ({
+export const InvestmentTiersCard: React.FC<InvestmentTiersProps> = ({
   title,
   image,
   name,

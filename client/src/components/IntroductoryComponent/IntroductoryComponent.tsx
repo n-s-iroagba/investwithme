@@ -78,8 +78,6 @@ const IntroductoryComponent: React.FC = () => {
   <h2 style={{textAlign:'center',paddingLeft:'0',marginLeft:'0',paddingTop:'1cm',fontWeight:'950'}}>Unlock your</h2>
   <h2 style={{textAlign:'center',paddingLeft:'0',marginLeft:'0',fontWeight:'950'}}>financial freedom</h2>  
     <p style={{paddingTop:'0.5cm'}}>Attaining financial freedom has never been so easy. Get started in 3 easy steps:</p>
-       
-  
           <Row>
             <Col lg={4}>
               <Information head='Create an account' text='by filling in the sign-up form and verifying your phone number via SMS or email' icon ={faUser}/>

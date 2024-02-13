@@ -9,7 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 const GradientDiv = styled.div`
   width: 100%;
   padding:5vw;
-  background: linear-gradient(to bottom right,#1a6e41, #79b294);
+  background: white;
 
 `;
 
@@ -18,7 +18,7 @@ const LogoContainer = styled.div`
   display: flex;
   align-items: center;
 `;
-
+// linear-gradient(to bottom right,#1a6e41, #79b294);
 const Logo = styled.div`
   margin-right: 5vw;
 `;
@@ -41,7 +41,8 @@ const DashboardBar: React.FC = () => {
   );
 };
 
-
+// #1a6e41;
+//   --secondary-color: #79b294
 
 
 const Dashboard: React.FC = () => {
