@@ -1,7 +1,8 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Container, Row, Col } from 'react-bootstrap'
 import DashboardNav from '../components/DashboardNav'
-import { faBars, faBell, faMoneyBillTrendUp } from '@fortawesome/free-solid-svg-icons'
+import { faBars, faBell, faMoneyBillTrendUp,faHandHoldingDollar } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import '../assets/Styles.css'
 // <{greeting:string,username:string}>
@@ -28,6 +29,9 @@ const DashboardBar: React.FC = () => {
 
 
 const Dashboard: React.FC = () => {
+  const navigate = useNavigate();
+
+
 
   return <div className='dashboard-wrapper'>
     
@@ -37,13 +41,13 @@ const Dashboard: React.FC = () => {
         <Row className="d-flex flex-wrap justify-content-center g-4">
 
           <Col xs={4}  lg={4} className="mb-3">
-            <div className="g-4"><DashboardNav text='invest' icon={faBars} /></div>
+            <div onClick={()=>navigate('/investment-guide')} className="g-4"><DashboardNav text='How to invest' icon={faHandHoldingDollar} /></div>
           </Col>
           <Col  xs={4}  lg={3} className="mb-3">
-            <div className="g-4"><DashboardNav text='invest' icon={faMoneyBillTrendUp} /></div>
+            <div onClick={()=>navigate('/invest')} className="g-4"><DashboardNav text='Invest' icon={faMoneyBillTrendUp} /></div>
           </Col>
           <Col xs={4}  lg={3} className="mb-3">
-            <div className="flex-item"><DashboardNav text='invest' icon={faBars} /></div>
+            <div className="flex-item"><DashboardNav text='Transaction History' icon={faBars} /></div>
           </Col>
           <Col  xs={4}  lg={3} className="mb-3">
             <div className="flex-item"><DashboardNav text='invest' icon={faBars} /></div>
