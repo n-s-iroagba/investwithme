@@ -36,19 +36,16 @@ const NavbarComponent: React.FC = () => {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ms-auto">
-            <Nav.Link className="text-dark" href="#home">
+            <Nav.Link className="text-dark" href="home">
               Home
             </Nav.Link>
-            <Nav.Link className="text-dark" href="#about-us">
+            <Nav.Link className="text-dark" href="about-us">
               About Us
             </Nav.Link>
-            <Nav.Link className="text-dark" href="#managers">
-              Fund Managers
-            </Nav.Link>
-            <Nav.Link className="text-dark" href="#login">
+            <Nav.Link className="text-dark" href="login">
               Login
             </Nav.Link>
-            <Nav.Link className="text-dark" href="#register">
+            <Nav.Link className="text-dark" href="register">
               Register
             </Nav.Link>
           </Nav>

@@ -7,7 +7,7 @@ import IntroductoryComponent from "../components/IntroductoryComponent";
 import SecurityAssurance from "../components/SecurityAssurance";
 import InvestmentTiers from "../components/InvestmentTiers";
 import NewsWidget from "../components/NewsWidget";
-
+import Contact from "../components/Contact";
 import Testimonial from "../components/Testimonial";
 import Awards from "../components/Awards";
 import OfficeMap from "../components/OfficeMap";
@@ -24,6 +24,7 @@ const Home:React.FC = ()=>{
         <SecurityAssurance/>
         <Testimonial/>
         <InvestmentTiers/>
+        <Contact/>
         <NewsWidget/>
         <OfficeMap apiKey={apiKey} />
         <Footer/>

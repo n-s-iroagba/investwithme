@@ -5,7 +5,7 @@ import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Row from 'react-bootstrap/Row';
 import { useEffect, useState } from 'react';
-import './SignUpForm.css';
+
 
 
 type PasswordStrengthType = 'weak' | 'fairly-strong' | 'strong'|'';
@@ -54,7 +54,7 @@ useEffect(()=>{
   );
 };
 
-function ContactForm() {
+function  SignUpForm() {
 
   const [showPopup, setShowPopup] = useState(false);
   const [data, setData] = useState({
@@ -181,4 +181,4 @@ function ContactForm() {
   );
 }
 
-export default ContactForm;
+export default  SignUpForm;

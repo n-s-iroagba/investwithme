@@ -12,7 +12,7 @@ const Header: React.FC = () => {
   return (
     <div className='header'>
     <NavbarComponent/>
-    <PopupToast />
+    <PopupToast/>
     <div className=' g-outer-paddings-side'>
        <Container className=''>
         <Row>
