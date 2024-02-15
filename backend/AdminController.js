@@ -1,5 +1,6 @@
 const Investor = require('../models/investor');
 const { Wallet } = require('../models');
+const bcrypt = require('bcrypt');
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, 'uploads/'); // Destination directory for uploaded files
@@ -13,6 +14,41 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 module.exports = {
+  createAdmin: async (email, password) => {
+    try {
+      const existingAdmin = await Admin.findOne({ where: { email } });
+      if (existingAdmin) {
+        throw new Error('Admin with this email already exists');
+      }
+      const hashedPassword = await bcrypt.hash(password, 10); 
+      const admin = await Admin.create({ email, password: hashedPassword });
+      const jwToken = jwt.sign({ id: investor.id, email: investor.email }, JWT_SECRET);
+      return res.status(200).json({ jwToken });    ;
+    } catch (error) {
+      throw new Error(`Error creating admin: ${error.message}`);
+    }
+    
+  },
+
+loginAdmin : async (email, password) => {
+  try {
+    const admin = await Admin.findOne({ where: { username } });
+    if (!admin) {
+      return null;
+    }
+    const passwordsMatch = await bcrypt.compare(password, admin.password);
+    if (passwordsMatch) {
+      const jwToken = jwt.sign({ id: investor.id, email: investor.email }, JWT_SECRET);
+      return res.status(200).json({ jwToken });    
+    } else {
+      return res.status(400).json({message:'wrong password'});
+    }
+  } catch (error) {
+    throw new Error(`Error logging in admin: ${error.message}`);
+  }
+},
+
+  //investor
   addInvestmentAmount: async (req, res) => {
     try {
       const { walletAddress, investmentAmount, intendedManagerId } = req.body;
