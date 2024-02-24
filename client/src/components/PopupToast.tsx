@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Toast } from 'react-bootstrap';
-
+import '../assets/Styles.css'
+import { messages } from '../helpers/data';
 const PopupToast: React.FC = () => {
   const [index, setIndex] = useState(0);
   const [show, setShow] = useState(true);
-  const messages = ['I am a clown','clowns are good'];
+
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -18,7 +19,7 @@ const PopupToast: React.FC = () => {
     }, 4000); 
 
     return () => clearInterval(interval);
-  }, [index, messages.length, show]);
+  }, [index, show]);
   const toggleShow = () => {
     setShow((prevShow) => !prevShow);
   };
@@ -27,14 +28,13 @@ const PopupToast: React.FC = () => {
     <Toast
       show={show}
       onClose={() => setShow(false)}
-      style={{
-        position: 'absolute',
-        top: '2cm',
-        left: '1rem',
-        backgroundColor: 'white',
-      }}
+     className='toast-style'
     >
-      <Toast.Body>{messages[index]}</Toast.Body>
+    <Toast.Header>
+        <strong className="me-auto background-primary">$$$$$</strong>
+        <small>{messages[index].time}</small>
+      </Toast.Header>
+      <Toast.Body>{messages[index].message}</Toast.Body>
     </Toast>
   );
 };

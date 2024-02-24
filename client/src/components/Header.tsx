@@ -1,37 +1,35 @@
 
 import React from 'react';
 import NavbarComponent from './NavbarComponent';
-import {Col,Container,Row} from 'react-bootstrap'
-import Button from './Button'
+import { Col, Row } from 'react-bootstrap'
+import { GetStartedButton } from './Button'
 import header from '../assets/home0.gif'
-import { faSackDollar } from '@fortawesome/free-solid-svg-icons';
 import PopupToast from './PopupToast';
-import'../assets/Styles.css'
+import '../assets/Styles.css'
+import { companyName } from '../helpers/data';
 const Header: React.FC = () => {
 
   return (
-    <div className='header'>
-    <NavbarComponent/>
-    <PopupToast/>
-    <div className=' g-outer-paddings-side'>
-       <Container className=''>
+    <div className='primary-background header pb-4 px-4'>
+      <NavbarComponent />
+      <PopupToast />
         <Row>
           <Col xs={12} lg={6}>
-            <div>
-              <h5 style={{padding:'0'}}className='text-light header-main-text'>The best way to invest in the financial markets</h5>
-              <p  className='text-light header-sub-text g-shallow-margin-bottom'>Cassock is the easiest way to make smarter investments and earn real returns. We make investing simple, accessible, and affordable.</p>
-              <div className='g-shallow-margins-vertical g-shallow-margin-bottom'>
-               <Button text='Become an investor'  icon={faSackDollar} />   
+            <div className='text-light'>
+              <h1 className=' heavy-font'>The best way to invest in the financial markets</h1>
+              <h6 className='mid-font'>{companyName} is the and safest and easiest way to make smarter investments and earn real returns. We make investing simple, accessible, and affordable.</h6>
+              <div className='py-4 button-width-narrow'>
+                <GetStartedButton/>
               </div>
             </div>
           </Col>
           <Col xs={12} lg={6}>
-            <img className='header-image-border'src={header} alt='header' /> 
+            <img className='header-image-border' src={header} alt='header' />
           </Col>
         </Row>
-      </Container>
-    </div>
-    </div>
+
+      </div>
+   
   );
 };
 

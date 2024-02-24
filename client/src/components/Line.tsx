@@ -3,7 +3,7 @@ import'../assets/Styles.css'
 
 
 const Line: React.FC = ()=>{
-    return<div className='primary-line'>
+    return<div >
         
     </div>
 }

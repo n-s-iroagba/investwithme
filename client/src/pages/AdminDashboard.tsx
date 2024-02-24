@@ -1,68 +1,70 @@
-import React from 'react'
+import React,{useEffect,useState} from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Container, Row, Col } from 'react-bootstrap'
+import { Container, Row, Col,Spinner} from 'react-bootstrap'
 import DashboardNav from '../components/DashboardNav'
-import { faBars, faBell, faMoneyBillTrendUp,faHandHoldingDollar } from '@fortawesome/free-solid-svg-icons'
+import { faBars, faBell, faMoneyBillTrendUp,faHandHoldingDollar, faWallet, faUser} from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import '../assets/Styles.css'
+import { checkAuthorised } from '../helpers/api'
 // <{greeting:string,username:string}>
-const DashboardBar: React.FC = () => {
+const DashboardBar: React.FC<{username:string}> = (props) => {
   return (
-    <Row>
-      <Col xs={6}>
-        <h5>Good Afternoon,</h5>
-        <h6>Wakkias</h6>
+    <Row className="d-flex text-light justify-content-start align-items-center">
+      <Col className='text-light' xs={6}>
+        <h6 className='mb-0'>Good Afternoon,</h6>
+    
       </Col>
 
-      <Col xs={6} className="d-flex justify-content-end align-items-center">
+      <Col xs={6} className="d-flex text-light justify-content-end align-items-center">
         <div className='logo-container'>
-          <div className='logo'>logo</div>
+          <div className='logo '>logo</div>
           <FontAwesomeIcon icon={faBell} />
         </div >
       </Col>
+      <h6 className='text-wrap'>{props.username}</h6>
     </Row>
   );
 };
 
-// #1a6e41;
-//   --secondary-color: #79b294
-
-
-const Dashboard: React.FC = () => {
+const AdminDashboard: React.FC = () => {
   const navigate = useNavigate();
+  const [authorised, setAuthorised] = useState<boolean>(false);
+  const [username, setUsername] = useState<string>('');
+  const [role,setRole] = useState<string>('');
 
+  useEffect(() => {
+    const authorised = checkAuthorised('admin', navigate,setUsername,setRole);
+    if (authorised){
+      setAuthorised(authorised)
+    }
+  }, [setAuthorised, navigate]);
 
+  if (!authorised||role !== 'admin') {
+    return (
+      <div className="d-flex justify-content-center align-items-center" style={{ height: '100vh' }}>
+        <Spinner>You are not authorised. Redirecting...</Spinner>
+      </div>
+    );
+  }
 
-  return <div className='dashboard-wrapper'>
-    
-      <DashboardBar />
+  const icons = [faWallet,faUser, faHandHoldingDollar, ];
+  const actions: string[] = ['admin wallets', 'admin-managers','admin-investors'];
+  const texts: string[] = ['Wallets', 'Managers','investors'];
 
-      <Container className=''>
-        <Row className="d-flex flex-wrap justify-content-center g-4">
-
-          <Col xs={4}  lg={4} className="mb-3">
-            <div onClick={()=>navigate('/investment-guide')} className="g-4"><DashboardNav text='How to invest' icon={faHandHoldingDollar} /></div>
-          </Col>
-          <Col  xs={4}  lg={3} className="mb-3">
-            <div onClick={()=>navigate('/invest')} className="g-4"><DashboardNav text='Invest' icon={faMoneyBillTrendUp} /></div>
-          </Col>
-          <Col xs={4}  lg={3} className="mb-3">
-            <div className="flex-item"><DashboardNav text='Transaction History' icon={faBars} /></div>
-          </Col>
-          <Col  xs={4}  lg={3} className="mb-3">
-            <div className="flex-item"><DashboardNav text='invest' icon={faBars} /></div>
-          </Col>
-          <Col  xs={4}  lg={3} className="mb-3">
-            <div className="flex-item"><DashboardNav text='invest' icon={faBars} /></div>
-          </Col>
-          <Col  xs={4}  lg={3} className="mb-3">
-            <div className="flex-item"><DashboardNav text='invest' icon={faBars} /></div>
-          </Col>
-
-
-
+  return (
+    <div className='primary-background px-4 py-4'>
+      <DashboardBar username={username} />
+   
+        <Row className="justify-content-between gy-2 gx-2">
+          {texts.map((text, index) => (
+            <Col key={index} xs={4} sm={4} md={4} lg={3} xl={3}>
+              <DashboardNav action={() => navigate('/' + actions[index])} text={text} icon={icons[index]} />
+            </Col>
+          ))}
         </Row>
-      </Container>
+   
     </div>
-}
-export default Dashboard
+  );
+};
+
+export default AdminDashboard;

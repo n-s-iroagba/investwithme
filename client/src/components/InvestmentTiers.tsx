@@ -1,29 +1,27 @@
 import React from "react";
-import { Card, Container,Image,Row,Col} from "react-bootstrap";
-import Line from "./Line";
+import { Card, Image} from "react-bootstrap";
 
-interface InvestmentTiersProps {
+
+interface InvestmentTiersType {
   title: string;
   image: string;
   name: string;
   minDeposit: string;
   maxDeposit: string;
   duration: string;
-  children?: React.ReactNode;
 }
 
-export const InvestmentTiersCard: React.FC<InvestmentTiersProps> = ({
+export const InvestmentTiersCard: React.FC<InvestmentTiersType> = ({
   title,
   image,
   name,
   minDeposit,
   maxDeposit,
   duration,
-  children,
 }) => {
   return (
-    <Container className="my-3">
-      <Card bg="light" text="black" style={{ width: "18rem" }}>
+    <div className="px-4">
+      <Card bg="light" text="black" style={{ width: "8cm" }}>
         <Card.Header className="background-secondary">
           <Card.Title className="text-center">{title}</Card.Title>
         </Card.Header>
@@ -31,24 +29,25 @@ export const InvestmentTiersCard: React.FC<InvestmentTiersProps> = ({
           <div className="d-flex justify-content-center">
             <Image src={image} alt="Card Image" roundedCircle />
           </div>
-          <Card.Title className="my-3 text-center">{name}</Card.Title>
-          <Card.Text className="text-center">Minimum Deposit: ${minDeposit}</Card.Text>
-          <Card.Text className="text-center">Maximum Deposit: ${maxDeposit}</Card.Text>
-          <Card.Text className="text-center">Investment Duration: {duration}</Card.Text>
-          {children}
+          <Card.Title className=" text-center">{name}</Card.Title>
+       <Card.Text className='d-flex  align-items-center text-center  mb-0'><p className=' card-label-width-wide' >Minimum Amount:</p> <p >$1,600,000</p></Card.Text>
+       <Card.Text className='d-flex align-items-center  text-center mb-0'><p className='card-label-width-wide' >Maximum Amount:</p> <p >$6,000</p></Card.Text>
+       <Card.Text className='d-flex align-items-center  text-center mb-0'><p className='card-label-width-wide' >Duration:</p> <p >2 weeks</p></Card.Text>
         </Card.Body>
       </Card>
-    </Container>
+    </div>
   );
 };
 
 
 const InvestmentTiers: React.FC = () => {
   return (
-    <div className="InvestmentTiers d-flex justify-content-center flex-column align-items-center">
-      <h2 className="text-center" >Investment Tiers and Fund Managers</h2><Line/>
-
-    <Col xs={12}>
+    <div className="pt-2 px-4">
+    <div className="d-flex justify-content-center flex-column align-items-center">
+      <h2 className="text-center" >Investment Tiers and Fund Managers</h2>
+     <div className="primary-line mb-4"></div>
+    </div>
+    <div className="d-flex justify-content-center flex-column align-items-center">
       <InvestmentTiersCard
         title="150% RETURNS"
         image="https://via.placeholder.com/150"
@@ -56,9 +55,9 @@ const InvestmentTiers: React.FC = () => {
         minDeposit="500"
         maxDeposit="10000"
         duration="1 year"
-      >
-      </InvestmentTiersCard>
-      </Col>
+     />
+    </div>  
+     
     </div>
   );
 };

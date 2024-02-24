@@ -1,28 +1,17 @@
 import React from "react";
-import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
 
-interface OfficeMapProps {
-  apiKey: string;
-}
+const OfficeMap: React.FC = () => {
 
-const OfficeMap: React.FC<OfficeMapProps> = ({ apiKey }) => {
-  const mapContainerStyle = {
-    height: "400px",
-    width: "100%",
+      return (
+          <div className='d-flex justify-content-center px-4'>
+              <iframe
+                  title="Google Map"
+                  style={{ width: '100%', height: '6cm' }}
+                  src="https://maps.google.com/maps?width=100%25&amp;height=600&amp;hl=en&amp;q=1%20Grafton%20Street,%20Dublin,%20Ireland+(My%20Business%20Name)&amp;t=&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"
+              />
+          </div>
+      );
   };
-
-  const center = {
-    lat: 40.7128,
-    lng: -74.0060,
-  };
-
-  return (
-    <LoadScript googleMapsApiKey={apiKey}>
-      <GoogleMap mapContainerStyle={mapContainerStyle} center={center} zoom={15}>
-        <Marker position={center} />
-      </GoogleMap>
-    </LoadScript>
-  );
-};
-
+  
+  
 export default OfficeMap;

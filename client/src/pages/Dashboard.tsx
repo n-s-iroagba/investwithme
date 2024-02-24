@@ -33,36 +33,25 @@ const Dashboard: React.FC = () => {
 
 
 
-  return <div className='dashboard-wrapper'>
-    
-      <DashboardBar />
+  const icons = [faHandHoldingDollar,faMoneyBillTrendUp,faBars]
+  const actions = ['investment-guide','investment-guide','investment-guide']
+  const texts =  ['how to invest','how to invest','how to invest',]
+return <div className='dashboard-wrapper'>
+  
+    <DashboardBar />
 
-      <Container className=''>
-        <Row className="d-flex flex-wrap justify-content-center g-4">
+    <Container className=''>
+      <Row className="d-flex flex-wrap justify-content-center">
+      {texts.map((text,index)=>{
 
-          <Col xs={4}  lg={4} className="mb-3">
-            <div onClick={()=>navigate('/investment-guide')} className="g-4"><DashboardNav text='How to invest' icon={faHandHoldingDollar} /></div>
-          </Col>
-          <Col  xs={4}  lg={3} className="mb-3">
-            <div onClick={()=>navigate('/invest')} className="g-4"><DashboardNav text='Invest' icon={faMoneyBillTrendUp} /></div>
-          </Col>
-          <Col xs={4}  lg={3} className="mb-3">
-            <div className="flex-item"><DashboardNav text='Transaction History' icon={faBars} /></div>
-          </Col>
-          <Col  xs={4}  lg={3} className="mb-3">
-            <div className="flex-item"><DashboardNav text='invest' icon={faBars} /></div>
-          </Col>
-          <Col  xs={4}  lg={3} className="mb-3">
-            <div className="flex-item"><DashboardNav text='invest' icon={faBars} /></div>
-          </Col>
-          <Col  xs={4}  lg={3} className="mb-3">
-            <div className="flex-item"><DashboardNav text='invest' icon={faBars} /></div>
-          </Col>
-
-
-
-        </Row>
-      </Container>
-    </div>
+        return  <Col xs={4}  lg={4} className="mb-3">
+         <DashboardNav  action={()=>navigate('/'+actions[index])} text={text} icon={icons[index]} />
+        </Col>
+        
+      }
+      )}
+      </Row>
+    </Container>
+  </div>
 }
 export default Dashboard
