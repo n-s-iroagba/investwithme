@@ -10,6 +10,7 @@ import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 // index.js or index.tsx
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { AuthContextProvider } from './context/AuthContext';
 
 
 const root = ReactDOM.createRoot(
@@ -18,8 +19,10 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
    
-
-   <RouterProvider router={router} />
+<AuthContextProvider>
+<RouterProvider router={router} />
+</AuthContextProvider>
+  
   </React.StrictMode>
 );
 

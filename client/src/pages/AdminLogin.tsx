@@ -25,13 +25,13 @@ const navigate = useNavigate()
       alert('email or password empty');
       return;
     }
-    const responseStatus = await postData('hello',data,navigate,'/admin-dashboard/xxx',setAuthTokenAndNavigate)
-    if (responseStatus !== 200)
+    const responseStatus = await postData('hello',data)
+    if (responseStatus)
     {
         alert('error occured while trying to login admin')
     }
     
-  };
+  }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     e.preventDefault();

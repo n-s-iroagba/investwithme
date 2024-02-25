@@ -3,14 +3,7 @@ import {jwtDecode} from 'jwt-decode';
 
 export type SuccessCallback<T> = (data: T, navigate: (path: string) => void ,navUrl:string) => void;
 
-export async function postData<T>(
-    url: string,
-    data: any,
-    navigate: (path: string) => void,
-    navUrl: string,
-    successCallback: SuccessCallback<T> | null = null,
-    authorizationData: string | null = null
-  ): Promise<any> {
+export  const postData:any = async ( url: string,data: {}, authorizationData: string | null = null)=>{
     const headers: { [key: string]: string } = {
       'Content-Type': 'application/json'
     };
@@ -18,18 +11,10 @@ export async function postData<T>(
       headers['Authorization'] = authorizationData;
     }
     try {
-      const response: AxiosResponse<T> = await axios.post(url, data, { headers });
-      if (response.status === 200) {
-        if (successCallback) {
-          successCallback(response.data,navigate, navUrl);
-        }
-         return response.status;
-      } else {
-        return response.status;
-      }
-    } catch (error: any) {
-      console.error('Error:', error.message);
-    
+      const response: AxiosResponse<{data:string}> = await axios.post(url, data, { headers });
+      return response
+      } catch (error: any) {
+      throw(new Error(error))
     }
   }
   

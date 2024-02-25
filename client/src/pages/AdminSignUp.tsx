@@ -1,75 +1,41 @@
-import React, { useState } from 'react';
-import Button from 'react-bootstrap/Button';
+import React, {useContext, useState } from 'react';
 import Col from 'react-bootstrap/Col';
-import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
-import { InputGroup } from 'react-bootstrap';
-import { postData } from '../helpers/api';
-import PasswordStrengthMeter from '../components/PasswordStrengthMeter'; // Make sure to import the PasswordStrengthMeter component
-import {PasswordStrengthType } from '../components/PasswordStrengthMeter';
-import {adminDomain } from '../helpers/data';
-import { useNavigate } from 'react-router-dom';
-import {setAuthTokenAndNavigate } from '../helpers/helpers';
+import { InputGroup, Spinner } from 'react-bootstrap';
+import { adminDomain } from '../helpers/data';
 import { required } from '../components/forms/required';
+import { validatePassword,} from '../helpers/helpers';
+import PasswordStrengthMeter from '../components/PasswordStrengthMeter';
 import '../assets/Styles.css'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import ErrorMessage from '../components/ErrorMessage';
+import { AdminData, AuthContextType } from '../context/AuthTypes';
+import { AuthContext } from '../context/AuthContext';
+
 
 const AdminSignUp: React.FC = () => {
-  const [data, setData] = useState({
-    name: '',
-    password: '',
-    confirmPassword: '',
-    email: '',
-  });
-const navigate = useNavigate()
+  const {submitting, adminData, validated,handleSubmit} = useContext<any>(AuthContext)
 
-  const [showPasswordWarning,setShowPasswordWarning] = useState<string>('text-light')
-  const [passwordType,setPasswordType] = useState<string>('text')
-  const validatePasswordLength = (password: string) => {
-    if (password.length < 8) {
-     setShowPasswordWarning('text-danger')
-    return undefined;
-  };
-  }
-  const passwordsMatch = (password: string, confirmPassword: string) => {
-    return password === confirmPassword;
-  };
+  const tempPasswordState: string[] = []
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const { name, password, confirmPassword, email } = data;
+ 
 
-    if (!passwordsMatch(password, confirmPassword)) {
-      alert('Passwords do not match');
-      return;
-    }
-    const responseStatus = await postData(adminDomain,data,navigate,'/admin-dashboard/xxx',setAuthTokenAndNavigate)
-    if (responseStatus !== 200)
-    {
-        alert('error occured while trying to register admin')
-    }
-    
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    e.preventDefault();
-    setData({
-      ...data,
-      [e.target.name]: e.target.value,
-    });
-  };
+  
 
   return (
-    <Container fluid className="d-flex justify-content-center align-content-center mt-5 mb-5">
-      <Form className="form text-light d-flext justify-content-center align-content-center" noValidate onSubmit={handleSubmit}>
-      <Row>
+    <div className="d-flex justify-content-center align-items-center flex-column mt-5 mb-5">
+      <div className={`${submitting}`}></div>
+      <Form className="form " noValidate validated={validated} onSubmit={(e)=>handleSubmit()}>
+        <Row>
           <Form.Group as={Col} lg="12" controlId="validationFormik04">
             <Form.Label className='mb-0'>Name{required}</Form.Label>
             <Form.Control
               required
               type="text"
               name="name"
-              value={data.name}
+              value={adminData.name}
               onChange={handleChange}
               className=" custom-input bg-transparent form-control text-light"
             />
@@ -84,7 +50,7 @@ const navigate = useNavigate()
               type="email"
               required
               name="email"
-              value={data.email}
+              value={adminData.email}
               onChange={handleChange}
               className=" custom-input bg-transparent form-control text-light"
             />
@@ -92,48 +58,79 @@ const navigate = useNavigate()
           </Form.Group>
         </Row>
         <br />
-        <Row >
-          <Form.Group  className='mb-4' as={Col} lg="12" controlId="validationFormik04">
-            <Form.Label className='mb-0'>Password{required}</Form.Label>
+
+        <Form.Group className='mb-4' as={Col} lg="12" controlId="validationFormik04">
+          <Form.Label className='mb-0'>Password{required}</Form.Label>
+          <InputGroup>
             <Form.Control
+              required
               type={passwordType}
               name='password'
-              value={data.password}
-              onChange={handleChange}
+              value={adminData.password}
+              onChange={(e) => handlePasswordChange(e, tempPasswordState, validatePassword)}
               className=" custom-input bg-transparent form-control text-light"
-            />
-            <PasswordStrengthMeter password={data.password}/>
-            <Form.Text className={`${showPasswordWarning}  pt-0`}>*password must have least 8 characters</Form.Text>
-               </Form.Group>
 
-          <Form.Group  as={Col} lg="12" controlId="validationFormik04">
-            <Form.Label className='mb-0'>Confirm Password{required}</Form.Label>
-            <Form.Control
-              type="password"
-              placeholder="Confirm password"
-              name="confirmPassword"
-              value={data.confirmPassword}
-              onChange={handleChange}
-              className=" custom-input bg-transparent form-control"
             />
-          </Form.Group>
-        </Row>
+            <InputGroup.Text onClick={() => showPassword()}>
+              <FontAwesomeIcon icon={passwordType === 'text' ? faEye : faEyeSlash} />
+            </InputGroup.Text>
+          </InputGroup>
+          <PasswordStrengthMeter password={admindata.password} />
+          <div className='d-flex flex-column'>
+            {
+              Array.isArray(passwordValidityMessage) && passwordValidityMessage.length > 0 && (
+                passwordValidityMessage.map((message, index) => (
+                  <Form.Text className='text-danger' key={index}>*{message}</Form.Text>
+                ))
+              )
+            }
+          </div>
+        </Form.Group>
+
         <Form.Group as={Col} lg="12" controlId="validationFormik04">
-            <Form.Label className='mb-0'>Secret code{required}</Form.Label>
+          <Form.Label className='mb-0'>Confirm password{required}</Form.Label>
+          <InputGroup>
             <Form.Control
-              type="password"
-              name="secretCode"
-              value={data.secretCode}
-              onChange={handleChange}
-              className=" custom-input bg-transparent form-control text-light"
+              required
+              type={passwordType}
+              name="confirmPassword"
+              value={adminData.confirmPassword}
+              onChange={(e) => handleConfirmPasswordsChange(e, passwordsMatch)}
+              className=" custom-input text-light bg-transparent form-control"
             />
-          </Form.Group>
-        
-        <br />
+            <InputGroup.Text onClick={() => showPassword()}>
+              <FontAwesomeIcon icon={passwordType === 'text' ? faEye : faEyeSlash} />
+            </InputGroup.Text>
+          </InputGroup>
+          <div>
+            {
+              !isPasswordsMatch && <Form.Text className='text-danger'>*passwords do not match</Form.Text>
+            }
+          </div>
+        </Form.Group>
 
-        <Button type="submit">Submit form</Button>
+        <Form.Group className='mt-4' as={Col} lg="12" controlId="validationFormik04">
+          <Form.Label className='mb-0'>Secret code{required}</Form.Label>
+          <Form.Control
+            required
+            type="password"
+            name="secretCode"
+            value={admindata.secretCode}
+            onChange={handleChange}
+            className=" custom-input bg-transparent form-control text-light"
+          />
+        </Form.Group>
+        <br />
+        <div className='d-flex justify-content-evenly'>
+          <button className='button-styles button-width-narrower text-light' type={submitting === 'submitting' ? 'button' : 'submit'}>
+            {submitting === 'submitting' ? <Spinner animation='border' size='sm' /> : 'Submit'}
+          </button>
+          <button className='button-styles button-width-narrower text-light' onClick={() => navigate('/')}> Home</button>
+        </div>
       </Form>
-    </Container>
+      <ErrorMessage message={errorMessage} />
+    </div>
+
   );
 };
 

@@ -94,3 +94,29 @@ export function getTimeSinceFirstVisit(): number | null {
     return null;
   }
 }
+
+
+export const validatePassword = (password:string, tempPasswordState:string[], setValidPassword:(array:string[])=>void) => {
+
+  const hasNumber = /\d/.test(password);
+  const hasUppercase = /[A-Z]/.test(password);
+  const hasLowercase = /[a-z]/.test(password);
+  const length = password.length;
+
+  if (!hasNumber) {
+    tempPasswordState.push('no number in password provided')
+  }
+  if (!hasUppercase) {
+    tempPasswordState.push('no uppercase letter in password provided')
+  }
+  if (!hasLowercase) {
+    tempPasswordState.push('no lowercase letter in password provided')
+  }
+  if (length < 7) {
+    tempPasswordState.push('password is less than 8 characters')
+  }
+  setValidPassword(tempPasswordState)
+}
+export const doPasswordsMatch = (password: string, confirmPassword: string) => {
+  return password === confirmPassword;
+};
