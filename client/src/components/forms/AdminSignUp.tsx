@@ -4,14 +4,14 @@ import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import { InputGroup, Spinner } from 'react-bootstrap';
-import { createAdminUrl } from '../helpers/data';
-import { required } from '../components/forms/required';
-import PasswordStrengthMeter from '../components/PasswordStrengthMeter';
-import '../assets/Styles.css'
+import { createAdminUrl } from '../../helpers/data';
+import { required } from '../../components/forms/required';
+import PasswordStrengthMeter from '../../components/PasswordStrengthMeter';
+import '../../assets/Styles.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
-import ErrorMessage from '../components/ErrorMessage';
-import { AuthContext } from '../context/AuthContext';
+import ErrorMessage from '../../components/ErrorMessage';
+import { AuthContext } from '../../context/AuthContext';
 
 
 
@@ -34,8 +34,6 @@ const AdminSignUp: React.FC = () => {
     passwordValidityMessage
   } = useContext<any>(AuthContext)// used 'any' type because code was buggy when using <AuthContextType|undefined>
  
-
-
  const navigateToVerifyEmailPage=()=>{
       navigate('/verify-email')
     }
@@ -44,8 +42,8 @@ const navigateToHome=()=>{
     }
     
   return (
-    <div className="d-flex justify-content-center align-items-center flex-column mt-5 mb-5">
-      <Form className="form " noValidate validated={validated} onSubmit={(e) => handleSubmit(adminData, e, createAdminUrl,navigateToVerifyEmailPage)}>
+    <div className="d-flex justify-content-center align-items-center flex-column my-3">
+      <Form className="form py-5 " noValidate validated={validated} onSubmit={(e) => handleSubmit(adminData, e, createAdminUrl,navigateToVerifyEmailPage)}>
         <Row>
           <Form.Group as={Col} lg="12" controlId="validationFormik04">
             <Form.Label className='mb-0'>Name{required}</Form.Label>
@@ -55,7 +53,7 @@ const navigateToHome=()=>{
               name="name"
               value={adminData.name}
               onChange={(e) => handleChange(adminData, e)}
-              className=" custom-input bg-transparent form-control text-light"
+              className=" custom-input bg-transparent form-control"
             />
             <Form.Control.Feedback></Form.Control.Feedback>
           </Form.Group>
@@ -71,7 +69,7 @@ const navigateToHome=()=>{
               name="email"
               value={adminData.email}
               onChange={(e) => handleChange(adminData, e)}
-              className=" custom-input bg-transparent form-control text-light"
+              className=" custom-input bg-transparent form-control "
             />
             <Form.Control.Feedback></Form.Control.Feedback>
           </Form.Group>
@@ -87,7 +85,7 @@ const navigateToHome=()=>{
               name='password'
               value={adminData.password}
               onChange={(e) => handlePasswordChange(adminData, e)}
-              className=" custom-input bg-transparent form-control text-light"
+              className=" custom-input bg-transparent form-control "
 
             />
             <InputGroup.Text onClick={() => showPassword()}>
@@ -116,7 +114,7 @@ const navigateToHome=()=>{
               name="confirmPassword"
               value={adminData.confirmPassword}
               onChange={(e) => handleConfirmPasswordsChange(adminData, e)}
-              className=" custom-input text-light bg-transparent form-control"
+              className=" custom-input  bg-transparent form-control"
             />
             <InputGroup.Text onClick={() => showPassword()}>
               <FontAwesomeIcon icon={passwordType === 'text' ? faEye : faEyeSlash} />
@@ -137,15 +135,15 @@ const navigateToHome=()=>{
             name="secretCode"
             value={adminData.secretCode}
             onChange={(e) => handleChange(adminData, e)}
-            className=" custom-input bg-transparent form-control text-light"
+            className=" custom-input bg-transparent form-control "
           />
         </Form.Group>
         <br />
-        <div className='d-flex justify-content-evenly'>
-          <button className='button-styles button-width-narrower text-light' type={submitting === 'submitting' ? 'button' : 'submit'}>
+        <div className='d-flex justify-content-evenly w-100'>
+          <button className='button-styles w-50 text-light' type={submitting === 'submitting' ? 'button' : 'submit'}>
             {submitting === 'submitting' ? <Spinner animation='border' size='sm' /> : 'Submit'}
           </button>
-          <button className='button-styles button-width-narrower text-light' onClick={() => navigateToHome()}> Home</button>
+          <button className='button-styles text-light w-50' onClick={() => navigateToHome()}> Home</button>
         </div>
       </Form>
       <ErrorMessage message={errorMessage} />

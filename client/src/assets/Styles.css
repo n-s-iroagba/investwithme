@@ -27,9 +27,6 @@
     margin: 0;
 }
 
-.div-margin-bottom {
-    margin-bottom: 5px;
-}
 .rounded-image-size{
     width: 2cm;
     height: 2cm;  
@@ -49,14 +46,22 @@
 }
 
 .form {
-    /* background:linear-gradient(to bottom right,#1a6e41, #79b294); */
     border-bottom-left-radius: 1cm;
     border-top-right-radius: 1cm;
     border-bottom-right-radius: 1cm;
     border-top-left-radius: 1cm;
     padding: 0.5cm 0.5cm;
     width: 50vw;
-    background:#79b294 ;
+    color:white;
+    background: var(--primary-color);
+    @media screen and (max-width: 767px) {
+    border-bottom-left-radius: 1cm;
+            border-top-right-radius: 1cm;
+            padding-left: 0.8cm;
+            padding-right: 0.8cm;
+            width: 85vw;
+        
+}
 }
 
 .form .custom-input {
@@ -82,6 +87,13 @@
     border-top-left-radius: 0.6cm;
     border-top-right-radius: 0.6cm;
     width: 100%;
+    @media screen and (min-width: 10cm) {
+
+            border-bottom-left-radius: 1cm;
+            border-bottom-right-radius: 1cm;
+            border-top-left-radius: 1cm;
+            border-top-right-radius: 1cm;
+    }
 }
 .toast-style {
     position: absolute;
@@ -117,24 +129,7 @@
         padding-top: 1em;
     }
 }
-.intro-wrapper {
-    background-color: #D1FFBD;
-    padding-bottom: 0.7cm;
-}
 
-.main-intro {
-    align-items: center;
-    display: flex;
-    flex-direction: column;
-    padding-top: 0.5cm;
-    width: 100vw;
-}
-
-.main-intro-writeup {
-    padding-left: 1.5cm;
-    padding-right: 1.5cm;
-    text-align: center;
-}
 
 .primary-color {
     color: var(--primary-color);
@@ -154,9 +149,7 @@
     color: var(--secondary-color);
 }
 
-.shallow-top-padding {
-    padding-top: 0.5cm;
-}
+
 
 
 
@@ -183,8 +176,8 @@
     }
 }
 .dash-nav {
-    /* background: linear-gradient(to bottom right, #1a6e41, #79b294); */
-    background-color: rgba(254, 250, 250, 0.1);
+  
+    background-color: rgba(250, 250, 250, 0.1);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -198,7 +191,7 @@
     }
   }
   .dash-nav:hover {
-    background: rgba(254, 250, 250, 0.3); /* corrected color value */
+    background: rgba(250, 250, 250, 0.3); /* corrected color value */
 }
 .carousel-wrapper{
     width:100vw;
@@ -229,7 +222,7 @@
   .card .card-label-width-wide{
     width: 5cm;
   }
-  .dash-text {
+  .dashbutton-text {
     color: white;
     margin:0;
     text-wrap: wrap;
@@ -238,90 +231,25 @@
   }
 
 
-@media (max-width: 767px) {
-    .element {
-        border-bottom: 1px solid black;
-    }
 
-    .some-padding {
-        padding-bottom: 10px;
-        padding-top: 15px;
-    }
-    
-    .form {
-        background: var(--primary-color);
-        border-bottom-left-radius: 1cm;
-        border-top-right-radius: 1cm;
-        padding-left: 0.8cm;
-        padding-right: 0.8cm;
-        width: 85vw;
-        color: white;
-    }
-}
 
-@media (min-width: 768px) {
-    .element {
-        border-bottom: none;
-        border-right: 1px dotted black;
-    }
 
-    .some-padding {
-        padding-bottom: 10px;
-        padding-top: 15px;
-    }
 
-    .the-bottom {
-        border-bottom: 4px solid var(--primary-color);
-    }
-}
 
-@media screen and (min-width: 10cm) {
-    .header-image-border {
-        border-bottom-left-radius: 1cm;
-        border-bottom-right-radius: 1cm;
-        border-top-left-radius: 1cm;
-        border-top-right-radius: 1cm;
-    }
-
-    .header-main-text {
+.header-main-text {
+        @media screen and (min-width: 10cm) {
         font-size: 5vw;
+        }
     }
 
     .header-sub-text {
+        @media screen and (min-width: 10cm) {
         font-size: larger;
     }
 }
 
 
-.g-outer-paddings-side{
-   padding-left:0.7cm;
-   padding-right: 0.7cm;
-}
-.g-outer-margins-side{
-    padding-left:0.7cm;
-    padding-right: 0.7cm;
- }
-
-@media screen and (min-width:10cm){
-    .g-outer-paddings-side{
-        padding-left:1.5cm;
-        padding-right:1.5cm;
-     }
-     .g-outer-margins-side{
-        padding-left:1.5cm;
-        padding-right:1.5cm;
-     }
-}
-.g-shallow-margins-vertical{
-    margin-top: 0.7cm;
-    margin-bottom: 0.7cm;
-}
-.g-shallow-margin-bottom{
-    margin-bottom: 0.7cm;
-}
-.g-shallow-padding-bottom{
-    padding-bottom: 0.7cm;
-}
 .disappear{
     display:none
 }
+

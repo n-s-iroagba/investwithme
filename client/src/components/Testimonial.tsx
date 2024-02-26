@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import { Card, Carousel, Image, Col, Row } from 'react-bootstrap';
-import home0 from '../assets/home0.gif'
-import home1 from '../assets/home1.webp';
 import '../assets/Styles.css'
 import testimonials from '../helpers/data';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -11,11 +9,11 @@ interface TheTestimonial {
   name: string;
   testimonial: string;
 }
-const images = [home0, home1]
-
 interface TestimonialProps {
   testimonials: TheTestimonial[];
 }
+
+const images = ['','']
 
 const TestimonialCarousel: React.FC<TestimonialProps> = ({ testimonials }) => {
   const [index, setIndex] = useState(0);

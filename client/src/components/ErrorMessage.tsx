@@ -5,7 +5,7 @@ const ErrorMessage:React.FC<{message:string}> = (message)=> {
 
 return<>
 {
-    message.message===''?'': <p className='text-danger'>{message.message}</p>
+    message.message===''?'': <p className='text-danger text-center'>{message.message}</p>
 }
 </>
 

@@ -7,7 +7,7 @@ const DashboardNav: React.FC<{ icon: IconProp; text: string; action: () => void 
   return (
     <div onClick={props.action} className="dash-nav">
       <FontAwesomeIcon className="nav-icon" icon={props.icon} />
-      <p className="dash-text text-wrap">{props.text}</p>
+      <p className="dashbutton-text text-wrap">{props.text}</p>
     </div>
   );
 };

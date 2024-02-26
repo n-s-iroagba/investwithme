@@ -2,7 +2,7 @@ import React from 'react';
 import { Row, Col } from 'react-bootstrap';
 import Information from './Information';
 import { ViewCerficateButton } from './Button';
-import security from '../assets/security.webp';
+import security from '../assets/padlock.webp'
 import '../assets/Styles.css'
 import { faBank } from '@fortawesome/free-solid-svg-icons';
 

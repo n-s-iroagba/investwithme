@@ -1,48 +1,22 @@
-import React, { useState } from 'react';
-import Button from 'react-bootstrap/Button';
-import Col from 'react-bootstrap/Col';
-import Container from 'react-bootstrap/Container';
-import Form from 'react-bootstrap/Form';
-import Row from 'react-bootstrap/Row';
-import { postData } from '../helpers/api';
-
-import { useNavigate } from 'react-router-dom';
-import { setAuthTokenAndNavigate } from '../helpers/helpers';
+import React from 'react';
+// import Button from 'react-bootstrap/Button';
+// import Col from 'react-bootstrap/Col';
+// import Container from 'react-bootstrap/Container';
+// import Form from 'react-bootstrap/Form';
+// import Row from 'react-bootstrap/Row';
+// import { postData } from '../helpers/api';
+// import { useNavigate } from 'react-router-dom';
 
 
 
 const AdminLogin: React.FC = () => {
-  const [data, setData] = useState({
-    password: '',
-    email: '',
-  });
-const navigate = useNavigate()
   
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const { password,  email } = data;
-    if (email===''|| password===''){
-      alert('email or password empty');
-      return;
-    }
-    const responseStatus = await postData('hello',data)
-    if (responseStatus)
-    {
-        alert('error occured while trying to login admin')
-    }
-    
-  }
+// const navigate = useNavigate()
+  
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    e.preventDefault();
-    setData({
-      ...data,
-      [e.target.name]: e.target.value,
-    });
-  };
 
-  return (
-    <Container fluid className="d-flex justify-content-center align-content-center mt-5 mb-5">
+  return (<div>
+    {/* <Container fluid className="d-flex justify-content-center align-content-center mt-5 mb-5">
       <Form className="form d-flext justify-content-center align-content-center" noValidate onSubmit={handleSubmit}>
    
         <Row>
@@ -76,7 +50,8 @@ const navigate = useNavigate()
 
         <Button type="submit">Login</Button>
       </Form>
-    </Container>
+    </Container> */}
+    </div>
   );
 };
 

@@ -5,20 +5,17 @@ import InvestmentCards from "./components/InvestmentCards";
 import InvestmentGuide from "./pages/InvestmentGuide";
 import Payments from './pages/Payments'
 import AboutUs from "./pages/AboutUs";
-import SignUp from './pages/SignUp'
 import Login from "./pages/Login";
 import ContactUs from "./pages/ContactUs";
 import VerifyEmail from "./pages/VerifyEmail";
 import AdminLogin from "./pages/AdminLogin";
-import AdminDashboard from "./pages/AdminDashboard";
-import WorkingSignUp from "./pages/WorkingSignUp ";
+import AdminDashboard from "./pages/AdminDashboard"
 import NewWallet from "./pages/NewWallet";
 import Wallets from "./pages/Wallets";
 import UpdateWallet from "./pages/UpdateWallet";
-import AdminSignUp from "./pages/AdminSignUp";
-import ImageCrop from "./pages/ImageCrop";
+import AdminSignUpPage from "./pages/AdminSignUpPage";
 import InvestmentManagers from "./pages/InvestmentManagers";
-import AdminWallet from "./pages/AdminWallets";
+
 
 export const router = createBrowserRouter([
 
@@ -53,10 +50,6 @@ export const router = createBrowserRouter([
     element: <AboutUs/>
 },
 {
-    path:'/register',
-    element: <SignUp/>
-},
-{
     path:'/login',
     element: <Login/>
 },
@@ -74,16 +67,13 @@ export const router = createBrowserRouter([
 },
 {
     path:'/admin',
-    element: <AdminSignUp/>
+    element: <AdminSignUpPage/>
 },
 {
     path:'/admin-dashboard',
     element: <AdminDashboard/>
 },
-{
-    path:'/working/register',
-    element: <WorkingSignUp/>
-},
+
 {
     path:'/create-wallets',
     element: <NewWallet/>
@@ -96,16 +86,6 @@ export const router = createBrowserRouter([
     path:'/update-wallet',
     element: <UpdateWallet/>
 },
-{
-    path:'/a',
-    element: <ImageCrop/>
-},
-{
-    path:'/B',
-    element: <AdminWallet/>
-},
-
-
 {
     path:'/investement-managers',
     element: <InvestmentManagers/>

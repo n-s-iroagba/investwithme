@@ -1,6 +1,6 @@
 import React from 'react';
 import { Col, Row } from 'react-bootstrap';
-import home from '../assets/header.jpeg'
+
 const awards = ['a', 'b', 'c', 'd', 'e', 'f'];
 
 const Awards: React.FC = () => {
@@ -12,7 +12,7 @@ const Awards: React.FC = () => {
   {
     awards.map((award: any, index: number) => (
       <Col style={{  height: '4cm' }} key={index} xs={12} md={4} lg={4} className='gx-3 d-flex justify-content-center align-items-center border border-white'>
-          <img className='p-1' style={{ width: '100%', height: '100%', maxWidth: '4cm', maxHeight: '3cm' }} src={home} alt='award' />
+          <img className='p-1' style={{ width: '100%', height: '100%', maxWidth: '4cm', maxHeight: '3cm' }} src={''} alt='award' />
       </Col>
     ))
   }

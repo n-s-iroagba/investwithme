@@ -1,86 +1,46 @@
-import Button from 'react-bootstrap/Button';
-import Col from 'react-bootstrap/Col';
-import DatePicker from "react-datepicker";
-import Form from 'react-bootstrap/Form';
-import Row from 'react-bootstrap/Row';
-import Select from 'react-select';
-import {useEffect, useState } from 'react';
+import React from 'react';
+// import Col from 'react-bootstrap/Col';
+// import DatePicker from "react-datepicker";
+// import Form from 'react-bootstrap/Form';
+// import Row from 'react-bootstrap/Row';
+// import Select from 'react-select';
+// import {useEffect, useState } from 'react';
 import'../../assets/Styles.css';
-import "react-datepicker/dist/react-datepicker.css"
-import PasswordStrengthMeter from '../PasswordStrengthMeter';
-import { required } from './required';
+// import "react-datepicker/dist/react-datepicker.css"
+// import { required } from './required';
 
 
 
 
 
 
-function SignUpForm() {
+const SignUpForm:React.FC=()=> {
 
-  const [showPopup, setShowPopup] = useState(false);
-  const [validated, setValidated] = useState(false);
-  const [startDate, setStartDate] = useState(new Date())
-  const [strength,setStrength] = useState('')
-  const [data, setData] = useState({
-    firstName:'',
-    lastName:'',
-    username:'',
-    password:'',
-    email:'',
-    gender:'',
-    bank:'',
-    confirmPassword:''
-  })
-  const [countries, setCountries] = useState([]);
-  const [selectedCountry, setSelectedCountry] = useState({});
+  
+  // const [countries, setCountries] = useState([]);
+  // const [selectedCountry, setSelectedCountry] = useState({});
 
-  useEffect(() => {
-    fetch(
-      "https://valid.layercode.workers.dev/list/countries?format=select&flags=true&value=code"
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        console.log('countries'+ data)
-        setCountries(data.countries);
-        setSelectedCountry(data.userSelectValue);
-      });
-  }, []);
-
-  const validatePasswordLength = (password: string) => {
-    if (password.length < 8) {
-      return 'Password must be at least 8 characters';
-    }
-    return undefined;
-  };
+  // useEffect(() => {
+  //   fetch(
+  //     "https://valid.layercode.workers.dev/list/countries?format=select&flags=true&value=code"
+  //   )
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       console.log('countries'+ data)
+  //       setCountries(data.countries);
+  //       setSelectedCountry(data.userSelectValue);
+  //     });
+  // }, []);
 
 
 
-  const handleSubmit = (event:any) => {
-    const form = event.currentTarget;
-    if (form.checkValidity() === false) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
 
-    setValidated(true);
-  };
 
-  const handlePopupClick = () => {
-    // Close the popup when the user clicks to continue
-    setShowPopup(false);
-  };
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    e.preventDefault()
-    setData({
-      ...data,
-      [e.target.name]: e.target.value,
-    });
-  };
   
   return (
  
       <div className="d-flex justify-content-center align-content-center mt-5 mb- px-2 ">
-            <Form className='form ' noValidate validated={validated} onSubmit={handleSubmit}>
+            {/* <Form className='form ' noValidate validated={validated} onSubmit={handleSubmit}>
 
               <Row className="mb-3">
                 <Form.Group as={Col}  controlId="validationFormik01">
@@ -177,16 +137,8 @@ function SignUpForm() {
                 </Form.Group>
       
               <Button type="submit">Submit form</Button>
-            </Form>
+            </Form> */}
       </div>
-    //   <button>click</button>
-    //   {showPopup && (
-    //     <div className="popup">
-    //       <p>This is a custom popup. Click to continue.</p>
-    //       <button onClick={handlePopupClick}>Continue</button>
-    //     </div>
-    //   )}
-    // </div>
   );
 }
 

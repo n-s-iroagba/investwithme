@@ -1,7 +1,6 @@
 import React from 'react'
 import { Row,Col,Card,Image} from 'react-bootstrap'
 import '../assets/Styles.css'
-import home1 from '../assets/home1.jpeg'
 import { GetStartedButton } from '../components/Button'
 
 const InvestmentManagers:React.FC = () => {
@@ -12,7 +11,7 @@ const InvestmentManagers:React.FC = () => {
         <Row className='justify-content-start border-bottom border-white align-items-center pt-3'>
           <Col >
             <div>
-              <Image src={home1} alt="Card Image" roundedCircle  className='rounded-image-size' />
+              <Image src={''} alt="Card Image" roundedCircle  className='rounded-image-size' />
             </div>
           </Col>
           <Col>
