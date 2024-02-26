@@ -43,7 +43,7 @@ const Promo: React.FC = () => {
       <div className='primary-line mb-2'></div>
       </div>
       <div className='text-light primary-background py-3'>
-      <h5 className='mb-4'>If you invest before the timer runs out your return of investment will be increased by 17% no matter the investement tier of manager you choose. So you make extra profits</h5>
+      <h5 className='mb-4'>If you invest before the timer runs out your return of investment will be increased by 17% no matter the investement tier you choose. So you make extra profits</h5>
       <h6>
         {formatTime(countdown)}
       </h6>
