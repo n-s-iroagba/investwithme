@@ -3,7 +3,7 @@ import React from 'react';
 import NavbarComponent from './NavbarComponent';
 import { Col, Row } from 'react-bootstrap'
 import { GetStartedButton } from './Button'
-import header from '../assets/header.gif'
+import header from '../assets/images/header.gif'
 import PopupToast from './PopupToast';
 import '../assets/Styles.css'
 import { companyName } from '../helpers/data';

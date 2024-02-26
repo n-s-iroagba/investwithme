@@ -141,6 +141,8 @@ const handlePasswordChange = (
     showPassword,
     handleSubmit,
     handleChange,
+    passwordType,
+    passwordValidityMessage
   };
 
   return (

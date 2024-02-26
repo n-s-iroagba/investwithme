@@ -15,7 +15,7 @@ import { AuthContext } from '../../context/AuthContext';
 
 
 
-const AdminSignUp: React.FC = () => {
+const AdminSignUpForm: React.FC = () => {
 
   const navigate = useNavigate()
 
@@ -53,7 +53,7 @@ const navigateToHome=()=>{
               name="name"
               value={adminData.name}
               onChange={(e) => handleChange(adminData, e)}
-              className=" custom-input bg-transparent form-control"
+              className=" custom-input bg-transparent form-control text-light"
             />
             <Form.Control.Feedback></Form.Control.Feedback>
           </Form.Group>
@@ -69,7 +69,7 @@ const navigateToHome=()=>{
               name="email"
               value={adminData.email}
               onChange={(e) => handleChange(adminData, e)}
-              className=" custom-input bg-transparent form-control "
+              className=" custom-input bg-transparent form-control text-light"
             />
             <Form.Control.Feedback></Form.Control.Feedback>
           </Form.Group>
@@ -85,7 +85,7 @@ const navigateToHome=()=>{
               name='password'
               value={adminData.password}
               onChange={(e) => handlePasswordChange(adminData, e)}
-              className=" custom-input bg-transparent form-control "
+              className=" custom-input bg-transparent form-control text-light"
 
             />
             <InputGroup.Text onClick={() => showPassword()}>
@@ -114,7 +114,7 @@ const navigateToHome=()=>{
               name="confirmPassword"
               value={adminData.confirmPassword}
               onChange={(e) => handleConfirmPasswordsChange(adminData, e)}
-              className=" custom-input  bg-transparent form-control"
+              className=" custom-input  bg-transparent form-control text-light "
             />
             <InputGroup.Text onClick={() => showPassword()}>
               <FontAwesomeIcon icon={passwordType === 'text' ? faEye : faEyeSlash} />
@@ -135,7 +135,7 @@ const navigateToHome=()=>{
             name="secretCode"
             value={adminData.secretCode}
             onChange={(e) => handleChange(adminData, e)}
-            className=" custom-input bg-transparent form-control "
+            className=" custom-input bg-transparent form-control text-light "
           />
         </Form.Group>
         <br />
@@ -152,4 +152,4 @@ const navigateToHome=()=>{
   );
 };
 
-export default AdminSignUp;
+export default AdminSignUpForm;

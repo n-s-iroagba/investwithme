@@ -2,7 +2,7 @@ import React from 'react';
 import { faUser, faWallet, faBank } from '@fortawesome/free-solid-svg-icons';
 import Information from './Information';
 import { Col, Row } from 'react-bootstrap';
-import moneyBag from '../assets/moneyBag.webp'
+import moneyBag from '../assets/images/moneyBag.webp'
 import '../assets/Styles.css'
 import { GetStartedButton } from './Button';
 

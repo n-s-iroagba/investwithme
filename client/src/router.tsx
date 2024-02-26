@@ -13,7 +13,7 @@ import AdminDashboard from "./pages/AdminDashboard"
 import NewWallet from "./pages/NewWallet";
 import Wallets from "./pages/Wallets";
 import UpdateWallet from "./pages/UpdateWallet";
-import AdminSignUpPage from "./pages/AdminSignUpPage";
+import AdminSignUp from "./pages/AdminSignUp";
 import InvestmentManagers from "./pages/InvestmentManagers";
 
 
@@ -67,7 +67,7 @@ export const router = createBrowserRouter([
 },
 {
     path:'/admin',
-    element: <AdminSignUpPage/>
+    element: <AdminSignUp/>
 },
 {
     path:'/admin-dashboard',

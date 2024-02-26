@@ -11,6 +11,8 @@ export interface AuthContextType {
     submitting: string;
     isPasswordsMatch: boolean;
     errorMessage: string;
+    passwordType:string;
+    passwordValidityMessage:string[]
     setErrorMessage: React.Dispatch<React.SetStateAction<string>>;
     validated: boolean;
     setValidated: React.Dispatch<React.SetStateAction<boolean>>;
