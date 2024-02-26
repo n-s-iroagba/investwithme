@@ -1,33 +1,51 @@
-import React, {useContext, useState } from 'react';
+import React, { useContext } from 'react';
+import { useNavigate} from 'react-router-dom'
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import { InputGroup, Spinner } from 'react-bootstrap';
-import { adminDomain } from '../helpers/data';
+import { createAdminUrl } from '../helpers/data';
 import { required } from '../components/forms/required';
-import { validatePassword,} from '../helpers/helpers';
 import PasswordStrengthMeter from '../components/PasswordStrengthMeter';
 import '../assets/Styles.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import ErrorMessage from '../components/ErrorMessage';
-import { AdminData, AuthContextType } from '../context/AuthTypes';
 import { AuthContext } from '../context/AuthContext';
 
 
+
 const AdminSignUp: React.FC = () => {
-  const {submitting, adminData, validated,handleSubmit} = useContext<any>(AuthContext)
 
-  const tempPasswordState: string[] = []
+  const navigate = useNavigate()
 
+  const {
+    submitting,
+    adminData,
+    validated,
+    handleSubmit,
+    handleChange,
+    handleConfirmPasswordsChange,
+    handlePasswordChange,
+    passwordType,
+    showPassword,
+    isPasswordsMatch,
+    errorMessage,
+    passwordValidityMessage
+  } = useContext<any>(AuthContext)// used 'any' type because code was buggy when using <AuthContextType|undefined>
  
 
-  
 
+ const navigateToVerifyEmailPage=()=>{
+      navigate('/verify-email')
+    }
+const navigateToHome=()=>{
+      navigate('/')
+    }
+    
   return (
     <div className="d-flex justify-content-center align-items-center flex-column mt-5 mb-5">
-      <div className={`${submitting}`}></div>
-      <Form className="form " noValidate validated={validated} onSubmit={(e)=>handleSubmit()}>
+      <Form className="form " noValidate validated={validated} onSubmit={(e) => handleSubmit(adminData, e, createAdminUrl,navigateToVerifyEmailPage)}>
         <Row>
           <Form.Group as={Col} lg="12" controlId="validationFormik04">
             <Form.Label className='mb-0'>Name{required}</Form.Label>
@@ -36,13 +54,14 @@ const AdminSignUp: React.FC = () => {
               type="text"
               name="name"
               value={adminData.name}
-              onChange={handleChange}
+              onChange={(e) => handleChange(adminData, e)}
               className=" custom-input bg-transparent form-control text-light"
             />
             <Form.Control.Feedback></Form.Control.Feedback>
           </Form.Group>
         </Row>
         <br />
+
         <Row>
           <Form.Group as={Col} lg="12" controlId="validationFormik04">
             <Form.Label className='mb-0'>Email{required}</Form.Label>
@@ -51,7 +70,7 @@ const AdminSignUp: React.FC = () => {
               required
               name="email"
               value={adminData.email}
-              onChange={handleChange}
+              onChange={(e) => handleChange(adminData, e)}
               className=" custom-input bg-transparent form-control text-light"
             />
             <Form.Control.Feedback></Form.Control.Feedback>
@@ -67,7 +86,7 @@ const AdminSignUp: React.FC = () => {
               type={passwordType}
               name='password'
               value={adminData.password}
-              onChange={(e) => handlePasswordChange(e, tempPasswordState, validatePassword)}
+              onChange={(e) => handlePasswordChange(adminData, e)}
               className=" custom-input bg-transparent form-control text-light"
 
             />
@@ -75,7 +94,7 @@ const AdminSignUp: React.FC = () => {
               <FontAwesomeIcon icon={passwordType === 'text' ? faEye : faEyeSlash} />
             </InputGroup.Text>
           </InputGroup>
-          <PasswordStrengthMeter password={admindata.password} />
+          <PasswordStrengthMeter password={adminData.password} />
           <div className='d-flex flex-column'>
             {
               Array.isArray(passwordValidityMessage) && passwordValidityMessage.length > 0 && (
@@ -86,6 +105,7 @@ const AdminSignUp: React.FC = () => {
             }
           </div>
         </Form.Group>
+        <br/>
 
         <Form.Group as={Col} lg="12" controlId="validationFormik04">
           <Form.Label className='mb-0'>Confirm password{required}</Form.Label>
@@ -95,7 +115,7 @@ const AdminSignUp: React.FC = () => {
               type={passwordType}
               name="confirmPassword"
               value={adminData.confirmPassword}
-              onChange={(e) => handleConfirmPasswordsChange(e, passwordsMatch)}
+              onChange={(e) => handleConfirmPasswordsChange(adminData, e)}
               className=" custom-input text-light bg-transparent form-control"
             />
             <InputGroup.Text onClick={() => showPassword()}>
@@ -115,8 +135,8 @@ const AdminSignUp: React.FC = () => {
             required
             type="password"
             name="secretCode"
-            value={admindata.secretCode}
-            onChange={handleChange}
+            value={adminData.secretCode}
+            onChange={(e) => handleChange(adminData, e)}
             className=" custom-input bg-transparent form-control text-light"
           />
         </Form.Group>
@@ -125,7 +145,7 @@ const AdminSignUp: React.FC = () => {
           <button className='button-styles button-width-narrower text-light' type={submitting === 'submitting' ? 'button' : 'submit'}>
             {submitting === 'submitting' ? <Spinner animation='border' size='sm' /> : 'Submit'}
           </button>
-          <button className='button-styles button-width-narrower text-light' onClick={() => navigate('/')}> Home</button>
+          <button className='button-styles button-width-narrower text-light' onClick={() => navigateToHome()}> Home</button>
         </div>
       </Form>
       <ErrorMessage message={errorMessage} />

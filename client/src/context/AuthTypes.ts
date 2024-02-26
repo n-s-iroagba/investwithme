@@ -23,15 +23,13 @@ export interface AuthContextType {
     handleConfirmPasswordsChange: (
         data:AdminData,
       e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-      passwordsMatch: (password: string, confirmatoryPassword: string) => boolean
     ) => void;
     checkIfPasswordsMatch: (
       password: string,
       confirmatoryPassword: string
     ) => boolean;
     showPassword: () => void;
-    navigateToVerifyEmailPage:()=>void;
-    handleSubmit:(data:AdminData,event: React.FormEvent<HTMLFormElement>,domain:string)=>void;
+    handleSubmit:(data:AdminData,event: React.FormEvent<HTMLFormElement>,domain:string,callback:()=>void)=>void;
     handleChange:(data:AdminData, event:  React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>)=>void
    
   }

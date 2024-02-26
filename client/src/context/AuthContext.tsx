@@ -1,5 +1,5 @@
 import React, { createContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
+
 import { doPasswordsMatch } from "../helpers/helpers";
 import { postData } from "../helpers/api";
 import { AdminData,AuthContextType} from "./AuthTypes";
@@ -23,9 +23,9 @@ export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({ c
     secretCode: ''
   });
 
-  const navigate = useNavigate()
 
-  const handleSubmit = async (data:AdminData, event: React.FormEvent<HTMLFormElement>, domain:string) => {
+
+  const handleSubmit = async (data:AdminData, event: React.FormEvent<HTMLFormElement>, domain:string, navigateToVerifyEmailPage:()=>void) => {
     const form = event.currentTarget;
     const password = data.password
     const confirmPassword = data.confirmPassword
@@ -70,14 +70,10 @@ const checkIfPasswordsMatch = (password:string,confirmPassword:string) => {
   }
 };
 
-const navigateToVerifyEmailPage=()=>{
-  navigate('/verify-email')
-}
 
 const handlePasswordChange = (
     data:AdminData,
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-    tempPasswordState: string[],
   ) => {
     handleChange(data,e);
     validatePassword(e.target.value);
@@ -143,7 +139,6 @@ const handlePasswordChange = (
     handleConfirmPasswordsChange,
     checkIfPasswordsMatch,
     showPassword,
-    navigateToVerifyEmailPage,
     handleSubmit,
     handleChange,
   };
