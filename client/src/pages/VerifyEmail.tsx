@@ -1,58 +1,53 @@
-import Button from 'react-bootstrap/Button';
-import Col from 'react-bootstrap/Col';
-import Container from 'react-bootstrap/Container'; // Added Container import
-import Form from 'react-bootstrap/Form';
-import InputGroup from 'react-bootstrap/InputGroup';
-import Row from 'react-bootstrap/Row';
-import { useEffect, useState } from 'react';
-
-
-
+// import Button from 'react-bootstrap/Button';
+// import Col from 'react-bootstrap/Col';
+// import div from 'react-bootstrap/Container'; // Added div import
+// import Form from 'react-bootstrap/Form';
+// import Row from 'react-bootstrap/Row';
 
 function  VerifyEmail() {
 
-  const [showPopup, setShowPopup] = useState(false);
-  const [data, setData] = useState({
-    firstName:'',
-    lastName:'',
-    username:'',
-    password:'',
-    city:'',
-    state:'',
-    zip:'',
-    terms:''
-  })
+  // const [showPopup, setShowPopup] = useState(false);
+  // const [data, setData] = useState({
+  //   firstName:'',
+  //   lastName:'',
+  //   username:'',
+  //   password:'',
+  //   city:'',
+  //   state:'',
+  //   zip:'',
+  //   terms:''
+  // })
 
 
-  const validatePasswordLength = (password: string) => {
-    if (password.length < 8) {
-      return 'Password must be at least 8 characters';
-    }
-    return undefined;
-  };
+  // const validatePasswordLength = (password: string) => {
+  //   if (password.length < 8) {
+  //     return 'Password must be at least 8 characters';
+  //   }
+  //   return undefined;
+  // };
 
 
-  const handleSubmit = async (values:any) => {
+  // const handleSubmit = async (values:any) => {
     
-    console.log(values)
-  };
+  //   console.log(values)
+  // };
 
 
-  const handlePopupClick = () => {
-    // Close the popup when the user clicks to continue
-    setShowPopup(false);
-  };
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    e.preventDefault()
-    setData({
-      ...data,
-      [e.target.name]: e.target.value,
-    });
-  };
+  // const handlePopupClick = () => {
+  //   // Close the popup when the user clicks to continue
+  //   setShowPopup(false);
+  // };
+  // const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  //   e.preventDefault()
+  //   setData({
+  //     ...data,
+  //     [e.target.name]: e.target.value,
+  //   });
+  // };
   return (
  
-      <Container fluid className="d-flex justify-content-center align-content-center mt-5 mb-5 ">
-            <Form className='form d-flext justify-content-center align-content-center' noValidate onSubmit={handleSubmit}>
+      <div className="d-flex justify-content-center align-content-center mt-5 mb-5 ">
+            {/* <Form className='form d-flext justify-content-center align-content-center' noValidate onSubmit={handleSubmit}>
               <Row className="mb-5">
                 <Form.Group as={Col} lg='6' controlId="validationFormik01">
                   <Form.Label>First name</Form.Label>
@@ -123,8 +118,8 @@ function  VerifyEmail() {
                 />
               </Form.Group>
               <Button type="submit">Submit form</Button>
-            </Form>
-      </Container>
+            </Form> */}
+      </div>
     //   <button>click</button>
     //   {showPopup && (
     //     <div className="popup">

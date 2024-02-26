@@ -1,8 +1,8 @@
 import React,{useEffect,useState} from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Container, Row, Col,Spinner} from 'react-bootstrap'
+import { Row, Col,Spinner} from 'react-bootstrap'
 import DashboardNav from '../components/DashboardNav'
-import { faBars, faBell, faMoneyBillTrendUp,faHandHoldingDollar, faWallet, faUser} from '@fortawesome/free-solid-svg-icons'
+import {  faBell, faHandHoldingDollar, faWallet, faUser} from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import '../assets/Styles.css'
 import { checkAuthorised } from '../helpers/api'

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import '../assets/Styles.css'
 import Header from "../components/Header";
 import {TickerTape, } from "react-ts-tradingview-widgets";
