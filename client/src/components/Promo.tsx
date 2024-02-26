@@ -47,7 +47,7 @@ const Promo: React.FC = () => {
       <h6>
         {formatTime(countdown)}
       </h6>
-      <p>Left to offer close</p>
+      <p> to offer close.</p>
       <div className='d-flex justify-content-center'>
       <div className='button-width-narrow'>
       <GetStartedButton/>
