@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import '../assets/Styles.css'
 import { checkAuthorised } from '../helpers/api'
 // <{greeting:string,username:string}>
-const DashboardBar: React.FC<{username:string}> = (props) => {
+export const DashboardBar: React.FC<{username:string}> = (props) => {
   return (
     <Row className="d-flex text-light justify-content-start align-items-center">
       <Col className='text-light' xs={6}>

@@ -2,7 +2,7 @@ import React, { createContext, useState } from "react";
 
 import { doPasswordsMatch } from "../helpers/helpers";
 import { postData } from "../helpers/api";
-import { AdminData,AuthContextType} from "./AuthTypes";
+import { AdminData,AuthContextType, InvestorData} from "./AuthTypes";
 
 
 
@@ -22,10 +22,22 @@ export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({ c
     email: '',
     secretCode: ''
   });
+const [investorData, setInvestorData] = useState<InvestorData>({
+  firstName: '',
+  lastName: '',
+  password: '',
+  confirmPassword: '',
+  email: '',
+  dateOfBirth: '',
+  gender: '',
+  country: '',
+  bank: '',
+  timezone: 'PST'
+})
 
 
 
-  const handleSubmit = async (data:AdminData, event: React.FormEvent<HTMLFormElement>, domain:string, navigateToVerifyEmailPage:()=>void) => {
+  const handleSubmit = async (data:AdminData | InvestorData, event: React.FormEvent<HTMLFormElement>, domain:string, navigateToVerifyEmailPage:()=>void) => {
     const form = event.currentTarget;
     const password = data.password
     const confirmPassword = data.confirmPassword
@@ -72,16 +84,17 @@ const checkIfPasswordsMatch = (password:string,confirmPassword:string) => {
 
 
 const handlePasswordChange = (
-    data:AdminData,
+    data:AdminData | InvestorData,
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    setState: React.Dispatch<React.SetStateAction<InvestorData|AdminData>> 
   ) => {
-    handleChange(data,e);
+    handleChange(data,e, setState);
     validatePassword(e.target.value);
   };
 
-  const handleChange = (data:AdminData ,e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (data:AdminData | InvestorData ,e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,setState: React.Dispatch<React.SetStateAction<InvestorData|AdminData>>) => {
     e.preventDefault();
-    setAdminData({
+setState({
       ...data,
       [e.target.name]: e.target.value,
     });
@@ -109,8 +122,8 @@ const handlePasswordChange = (
     setPasswordValidityMessage(tempPasswordState)
   }
 
-  const handleConfirmPasswordsChange = (data:AdminData, e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    handleChange(data,e);
+  const handleConfirmPasswordsChange = (data:AdminData | InvestorData, e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,setState: React.Dispatch<React.SetStateAction<InvestorData|AdminData>> ) => {
+    handleChange(data,e,setState);
     if (!doPasswordsMatch(data.password, e.target.value)) {
       setIsPasswordsMatch(false);
     } else {
@@ -128,6 +141,7 @@ const handlePasswordChange = (
 
   
   const authContextValue: AuthContextType = {
+    setAdminData,
     adminData,
     submitting,
     isPasswordsMatch,
@@ -142,7 +156,9 @@ const handlePasswordChange = (
     handleSubmit,
     handleChange,
     passwordType,
-    passwordValidityMessage
+    passwordValidityMessage,
+    setInvestorData,
+    investorData,
   };
 
   return (

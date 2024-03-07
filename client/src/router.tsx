@@ -15,6 +15,10 @@ import Wallets from "./pages/Wallets";
 import UpdateWallet from "./pages/UpdateWallet";
 import AdminSignUp from "./pages/AdminSignUp";
 import InvestmentManagers from "./pages/InvestmentManagers";
+import SignUp from "./pages/SignUp";
+import SelectWallet from "./pages/SelectWallet";
+import AdminWallet from "./pages/AdminWallets";
+import AdminInvestor from "./components/AdminiInvestors";
 
 
 export const router = createBrowserRouter([
@@ -32,6 +36,11 @@ export const router = createBrowserRouter([
 {
     path:'/dashboard',
     element: <Dashboard/>,
+},
+
+{
+    path:'/register',
+    element: <SignUp/>,
 },
 {
     path:'/invest',
@@ -87,7 +96,15 @@ export const router = createBrowserRouter([
     element: <UpdateWallet/>
 },
 {
+    path:'/select-wallet',
+    element: <SelectWallet/>
+},
+{
     path:'/investement-managers',
     element: <InvestmentManagers/>
+},
+{
+    path:'/a',
+    element: <AdminInvestor/>
 },
 ])

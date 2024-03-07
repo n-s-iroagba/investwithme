@@ -2,7 +2,7 @@ import React from 'react';
 import {Row,Col} from 'react-bootstrap'
 import { InvestmentTiersCard } from './InvestmentTiers';
 const InvestmentCards:React.FC = ()=>{
-    return <Row>
+    return <Row className='primary-background'>
         <Col>Select Your Fund Manager And Investement Tier</Col>
         <Col xs={12} lg={4}>
         <InvestmentTiersCard

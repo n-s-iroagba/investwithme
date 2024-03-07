@@ -3,10 +3,12 @@ const domain = 'http://localhost:8000';
 const createAdminroute = 'admins';
 const loginAdminroute = 'admin-login'
 const adminWallet = 'admin-wallet'
+const createInvestorRoute = 'investors'
 export const companyName = `Cassock`
 export const createAdminUrl = `${domain}/${createAdminroute}`
 export const loginAdminDomain =  `${domain}/${loginAdminroute  }`
 export const deleteWalletAdminDomain = `${domain}/${adminWallet}`
+export const createInvestorUrl  = `${domain}/${createInvestorRoute}`
 export const messages = [
     {
       time: `10 min ago`,

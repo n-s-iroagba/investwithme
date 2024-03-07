@@ -23,6 +23,7 @@ const AdminSignUpForm: React.FC = () => {
     submitting,
     adminData,
     validated,
+    setAdminData,
     handleSubmit,
     handleChange,
     handleConfirmPasswordsChange,
@@ -52,7 +53,7 @@ const navigateToHome=()=>{
               type="text"
               name="name"
               value={adminData.name}
-              onChange={(e) => handleChange(adminData, e)}
+              onChange={(e) => handleChange(adminData, e, setAdminData)}
               className=" custom-input bg-transparent form-control text-light"
             />
             <Form.Control.Feedback></Form.Control.Feedback>
@@ -68,7 +69,7 @@ const navigateToHome=()=>{
               required
               name="email"
               value={adminData.email}
-              onChange={(e) => handleChange(adminData, e)}
+              onChange={(e) => handleChange(adminData, e, setAdminData)}
               className=" custom-input bg-transparent form-control text-light"
             />
             <Form.Control.Feedback></Form.Control.Feedback>
@@ -84,7 +85,7 @@ const navigateToHome=()=>{
               type={passwordType}
               name='password'
               value={adminData.password}
-              onChange={(e) => handlePasswordChange(adminData, e)}
+              onChange={(e) => handlePasswordChange(adminData, e, setAdminData)}
               className=" custom-input bg-transparent form-control text-light"
 
             />
@@ -113,7 +114,7 @@ const navigateToHome=()=>{
               type={passwordType}
               name="confirmPassword"
               value={adminData.confirmPassword}
-              onChange={(e) => handleConfirmPasswordsChange(adminData, e)}
+              onChange={(e) => handleConfirmPasswordsChange(adminData, e, setAdminData)}
               className=" custom-input  bg-transparent form-control text-light "
             />
             <InputGroup.Text onClick={() => showPassword()}>
@@ -134,7 +135,7 @@ const navigateToHome=()=>{
             type="password"
             name="secretCode"
             value={adminData.secretCode}
-            onChange={(e) => handleChange(adminData, e)}
+            onChange={(e) => handleChange(adminData, e, setAdminData)}
             className=" custom-input bg-transparent form-control text-light "
           />
         </Form.Group>
