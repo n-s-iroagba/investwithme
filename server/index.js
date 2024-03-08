@@ -5,7 +5,7 @@ const PORT = 8000;
 const cors = require('cors');
 const routes = require('./router');
 const User = require('./model');
-const {sendInvestmentReminderEmails, updatePromosAndNotify} = require('./service');
+const {updatePromosAndNotify, sendInvestmentReminderEmails,updateInvestmentEarningsAndNotifiy} = require('./service');
 const cron = require('node-cron');
 
 app.use(cors());
@@ -14,7 +14,7 @@ app.use(express.urlencoded({ extended: true }));
 
 
 sendInvestmentReminderEmails()
-sendInvestmentReminderEmails()
+updateInvestmentEarningsAndNotifiy()
 cron.schedule('0 0 */2 * *',updatePromosAndNotify);
 
 

@@ -111,6 +111,10 @@ const Investment= sequelize.define("investment", {
         defaultValue:1.0
 
     },
+    InvestmentDate:{
+        type:Sequelize.DATE,
+        allowNull:true,
+    },
     dueDate:{
         type:Sequelize.DATE,
         allowNull:true,
@@ -208,6 +212,12 @@ Investment.hasOne(WithdrawalWallet,{
 })
 
   const Transaction = sequelize.define('transaction', {
+    id: {
+        type: Sequelize.INTEGER,
+        autoIncrement: true,
+        allowNull: false,
+        primaryKey: true,
+    },
     amount: {
       type:Sequelize.FLOAT,
       allowNull: false,
@@ -229,7 +239,40 @@ Investment.hasOne(WithdrawalWallet,{
     foreignKey: 'investorId',
     onDelete: 'CASCADE', 
   });
-  
+
+  const Referral = sequelize.define('referral', {
+    id: {
+        type: Sequelize.INTEGER,
+        autoIncrement: true,
+        allowNull: false,
+        primaryKey: true,
+    },
+    amountRecieved: {
+      type:Sequelize.FLOAT,
+      allowNull: false,
+    },
+    profit: {
+      type:Sequelize.DOUBLE,
+      allowNull:false,
+      defaultValue:0
+    },
+    targetProfit:{
+        type:Sequelize.DOUBLE,
+      allowNull:true,
+    } 
+  });
+  Investor.hasMany(Referral, {
+    foreignKey: 'investorId',
+    onDelete: 'CASCADE', 
+  });
+
+  Investment.hasOne(Referral,{
+    foreignKey: 'investormentId',
+    onDelete: 'CASCADE', 
+  }
+
+  )
+
    const Notification = sequelize.define('Notification', {
     amount: {
       type:Sequelize.FLOAT,

@@ -12,10 +12,16 @@ module.exports = {
   },
   registerInvestor: async (req, res) => {
     try {
-      const { firstName, lastName, email, password, dateOfBirth,bank,timezone} = req.body;
-      const newinvestor = await Investor.create({ firstName, lastName,dateOfBirth, email, password, bank,timezone});
-      await sendVerificationEmail(newinvestor);
-      res.status(201).json(newinvestor);
+      const { firstName, lastName, email, password, dateOfBirth,bank,timezone,referralCode} = req.body;
+      const newInvestor = await Investor.create({ firstName, lastName,dateOfBirth, email, password, bank,timezone});
+      newInvestor.referralCode = newInvestor.id + 2225
+      newInvestor.save()
+      await sendVerificationEmail(newInvestor);
+      res.status(201).json(newInvestor);
+      refreeInvestor = await Investor.findOne({where:{referralCode:referralCode}})
+      //create Entry Notification
+      await Notification.create({investorId:refreeInvestor,message:'you just referred'})
+      await sendReferalCompletedMail(refreeInvestor,newInvestor)
     } catch (error) {
       console.error('Error registering investor:', error);
       res.status(400).json({ error: 'Could not register you at this point our servers are over loaded' });
