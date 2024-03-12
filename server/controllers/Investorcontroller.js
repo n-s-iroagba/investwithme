@@ -1,4 +1,4 @@
-const {Investor,Admin,Manager,AdminWallet}= require('../model')
+const {Investor,Admin,Manager,AdminWallet, TopUp}= require('../model')
 const {sendVerificationEmail} = require('../service')
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
@@ -258,12 +258,42 @@ module.exports = {
       user.resetPasswordExpires = null;
       await user.save();
   
-      res.send('Password has been successfully reset.');
+      return res.status(200).json('password reset successful');
     } catch (error) {
       console.error('Error resetting password:', error);
       res.status(500).send('Error resetting password.');
     }
-  }
-
+  },
+  createInvestmentAndTopUp:async (req,res) => {
+    const investorId = req.params
+    const investor = Investor.findByPk(investorId)
+    const {intendedAmount} = req.body 
+    const investment = await Investment.create({ 
+      amount: intendedAmount, 
+      investorId 
+    });
+    
+    const topUp = await TopUp.create({ 
+      intendedAmount: intendedAmount,
+       investmentId: investment.id 
+      });
+    await sendCreateNotificationMail(investor)
+    Notification.create({investorId:investor.id, message: 'investment created notification'})
+    return res.status(201).json('investemet created succesfully');
+  },
+  createTopUp:async (req,res) => {
+    const investmentId = req.params.investmentId
+    const {intendedAmount} = req.body 
+     TopUp.create({ 
+      intendedTopupAmount: topUpAmount,
+       investmentId: investment.id ,
+      intendedAmount: intendedAmount
+      });
+  ;
+    
+    const topUp = await TopUp.create({ inventend: topUpAmount, investmentId: investment.id });
+  
+    return { investment, topUp };
+  },
 } 
 

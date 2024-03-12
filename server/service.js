@@ -1,6 +1,7 @@
 
 const nodemailer = require('nodemailer');
 const { Investor, Promo } = require('./model');
+const {generateEmailVerificationToken}= require('./auth')
 const moment = require('moment');
 const schedule = require('node-schedule');
 
@@ -36,9 +37,7 @@ const sendVerificationEmail = async (user) => {
   }
 }
 
-const generateEmailVerificationToken = (email) => {
-  return jwt.sign({ email }, 'yourSecretKey', { expiresIn: '10m' });
-}
+
 
 const updatePromosAndNotify = async () => {
   try {

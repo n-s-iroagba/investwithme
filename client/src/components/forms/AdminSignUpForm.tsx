@@ -127,6 +127,7 @@ const navigateToHome=()=>{
             }
           </div>
         </Form.Group>
+         <br/>
 
         <Form.Group className='mt-4' as={Col} lg="12" controlId="validationFormik04">
           <Form.Label className='mb-0'>Secret code{required}</Form.Label>
@@ -140,13 +141,18 @@ const navigateToHome=()=>{
           />
         </Form.Group>
         <br />
-        <div className='d-flex justify-content-evenly w-100'>
+
+        <Form.Group>
+        <div className='d-flex justify-content-evenly w-100 pb-5'>
           <button className='button-styles w-50 text-light' type={submitting === 'submitting' ? 'button' : 'submit'}>
             {submitting === 'submitting' ? <Spinner animation='border' size='sm' /> : 'Submit'}
           </button>
           <button className='button-styles text-light w-50' onClick={() => navigateToHome()}> Home</button>
         </div>
+        </Form.Group>
       </Form>
+      <br/>
+
       <ErrorMessage message={errorMessage} />
     </div>
 

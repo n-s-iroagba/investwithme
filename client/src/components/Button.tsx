@@ -24,6 +24,11 @@ export const ContactButton:React.FC =()=>{
 
 }
 
+export const ResendVerificationTokenButton:React.FC =()=>{
+  return<Button text='Resend Token' icon ={faEnvelope}/>
+
+}
+
 export const  SocialMediaButton:React.FC = ()=>{
   return<div>
     <FontAwesomeIcon icon={faFacebook} className='primary-color icon-size' beatFade/>

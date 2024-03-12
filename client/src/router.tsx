@@ -71,20 +71,20 @@ export const router = createBrowserRouter([
     element: <VerifyEmail/>
 },
 {
-    path:'/admin-login',
+    path:'/admin/login',
     element: <AdminLogin/>
 },
 {
-    path:'/admin',
+    path:'/admin/signup',
     element: <AdminSignUp/>
 },
 {
-    path:'/admin-dashboard',
+    path:'/admin/dashboard',
     element: <AdminDashboard/>
 },
 
 {
-    path:'/create-wallets',
+    path:'/new-wallets',
     element: <NewWallet/>
 },
 {

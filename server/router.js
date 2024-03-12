@@ -10,11 +10,11 @@ router.get("/", investorController.index)
 
 
 router.post("/admins", adminController.createAdmin)
-router.post("/admin-login", adminController.loginAdmin)
+router.post("/admin/login", adminController.loginAdmin)
 
 router.post("/register_managers", adminController.createManager)
 router.post("/investors", investorController.registerInvestor)
- router.get("/verify-email/:token", investorController.verifyMail) 
+ router.get("/verify-email/:token", adminController.verifyMail) 
 
 // router.patch("/funds/investor/:id", controller.addInvestorFunds) 
 // router.post("/investors", controller.registerInvestor)

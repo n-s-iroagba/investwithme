@@ -60,9 +60,17 @@
             padding-left: 0.8cm;
             padding-right: 0.8cm;
             width: 85vw;
+     
+    }
+}
+.auth-page-items{
+    width: 50vw;
+    @media screen and (max-width: 767px) {
+            width: 85vw;
         
 }
 }
+
 
 .form .custom-input {
     border: 0;

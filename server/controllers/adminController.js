@@ -1,35 +1,26 @@
 
-const {Investor,Admin,Manager,AdminWallet,DepositWallet,WithdrawalWallet,Investment,Transaction,Withdrawal, TopUp,Notification}= require('../model')
+const { ADMIN_VERIFY_EMAIL_REDIRECT_ROUTE, ADMIN_CLIENT_DASHBOARD_ROUTE, ADMIN_CLIENT_CHANGE_PASSWORD_ROUTE,JWT_SECRET, EMAIL_VERIFICATION_ERROR_ROUTE} = require('../data');
+const {Investor,Admin,Manager,AdminWallet,DepositWallet,WithdrawalWallet,Investment,Transaction,TopUp,Notification}= require('../model')
+const {decodeJWT,createJWT,encryptPassword,createVerificationJWT} = require('../auth')
+
 const {sendVerificationEmail} = require('../service')
 const bcrypt = require('bcrypt');
-const multer = require('multer')
-const jwt = require('jsonwebtoken');
-const Investorcontroller = require('./Investorcontroller');
-const JWT_SECRET = 'ababanna'
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'uploads/'); // Destination directory for uploaded files
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + '-' + file.originalname); // Rename the file with timestamp prefix
-  }
-});
 
-const upload = multer({ storage: storage });
 
 module.exports = {
 //Auth
   createAdmin: async (req, res) => {
-    const {name,email, password} =req.body
+    let {name,email, password} =req.body
     try {
       const existingAdmin = await Admin.findOne({ where: { email } });
       if (existingAdmin) {
         return res.status(409).json({ message: 'Admin already exists' });
       }
-      const hashedPassword = await bcrypt.hash(password, 10); 
-      const admin = await Admin.create({name,email, password: hashedPassword });
+      password = await encryptPassword(password); 
+      const admin = await Admin.create({name,email, password});
       await sendVerificationEmail(admin);
-      return res.status(201).json({admin,role:'admin'});    ;
+      const token = createVerificationJWT(admin)
+      return res.status(201).send(token);    ;
     } catch (error) {
      return res.status(400).json({message:error.message});
     }
@@ -43,35 +34,37 @@ loginAdmin : async (req, res) => {
       return res.status(400).json({message:'admin not found'})
     }
     if (admin.verified===false){
-      return res.redirect('http://localhost:3000/admin/verify-email')  
+      await sendVerificationEmail(admin);
+      return res.redirect( ADMIN_VERIFY_EMAIL_REDIRECT_ROUTE)  
     }
     const passwordsMatch = await bcrypt.compare(password, admin.password);  
     if (passwordsMatch) {
-      const jwToken = jwt.sign({ id: investor.id, email: investor.email }, JWT_SECRET);
-      res.redirect('http://localhost:3000/admin/dashboard')
+      const jwToken = createJWT(admin)
       return res.status(200).json({ jwToken });    
     } else {
       return res.status(400).json({message:'wrong password'});
     }
   } catch (error) {
-    throw new Error(`Error logging in admin: ${error.message}`);
+    return res.status(400).json({message:error.message});
   }
 },
 
 verifyMail: async (req, res) => {
-  const { token } = req.query;
+  const { token } = req.params;
   try {
-    const decoded = jwt.verify(token, 'yourSecretKey');
+    const decoded = decodeJWT(token)
     if (Date.now() >= decoded.exp * 1000) {
       return res.status(401).json({ error: 'Token expired. Please request a new one.' });
     }
-    const investor = await Investor.findOne({ where: { verificationToken: token } });
-    if (!investor) {
-      return res.status(400).json({ error: 'Invalid verification token' });
+    const admin = await Admin.findOne({ where: { verificationToken: token } });
+    if (!admin) {
+      return res.status(400).redirect(EMAIL_VERIFICATION_ERROR_ROUTE).json({ error: 'Invalid verification token' });
      } 
-     await investor.update({ verified: true, verificationToken: null });
-      const jwToken = jwt.sign({ id: investor.id, email: investor.email }, JWT_SECRET);
-      res.redirect('http://localhost:3000/admin/dashboard')
+     await admin.update({ verified: true, verificationToken: null })
+     admin.save()
+     console.log('admin after update '+admin)
+     const jwToken = createJWT(admin)
+      res.redirect(ADMIN_CLIENT_DASHBOARD_ROUTE)
       res.status(200).json(jwToken)
   }catch (error) {
       console.error('Error verifying email:', error);
@@ -92,7 +85,7 @@ verifyMail: async (req, res) => {
        } 
        await investor.update({ verified: true, verificationToken: null });
         const jwToken = jwt.sign({ id: investor.id, email: investor.email }, JWT_SECRET);
-        res.redirect('http://localhost:3000/admin/change-password')
+        res.redirect(ADMIN_CLIENT_CHANGE_PASSWORD_ROUTE)
         res.status(200).json(jwToken)
     }catch (error) {
         console.error('Error verifying email:', error);
@@ -110,7 +103,7 @@ verifyMail: async (req, res) => {
         }
         admin.password = await bcrypt.hash(password, 10)
           const jwToken = jwt.sign({ id: admin.id, role:'admin' }, JWT_SECRET);
-          res.redirect('http://localhost:3000/admin/dashboard')
+          res.redirect(ADMIN_CLIENT_DASHBOARD_ROUTE)
           return res.status(200).json({ jwToken });    
       } catch (error) {
         throw new Error(`Error logging in admin: ${error.message}`);
@@ -178,7 +171,17 @@ verifyMail: async (req, res) => {
         investor.incrementPercent = manager.incrementPercent;
         await sendinvestmentMail(manager, investmentAmount, 0, investor, true);
       }
-  
+      if (investmentAmount< topUp.intendedAmount){
+        await sendLowerInvestmentMail()///implement
+      }
+      if (investmentAmount> topUp.intendedAmount){
+        await sendHigherInvestmentMail()///implement
+      }
+      if(investment.depositNumber !== 0){
+      investment.amount = investment.amount + investmentAmount
+      }
+      investment.depositNumber+=1
+      investment.save
      await Notification.create({time:new Date(),message:'hello this is top up notification'})
 
      return res.status(204)
@@ -200,13 +203,8 @@ payInvestors:async (req, res) => {
                   model: Investment,
                   include: [
                       {
-                          model: TopUp,
-                          include: [
-                              {
-                                  model: DepositWallet,
+                                  model: WithdrawalWallet,
                                   where: { id: wallet.id },
-                              },
-                          ],
                       },
                   ],
               },

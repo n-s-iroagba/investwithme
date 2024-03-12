@@ -47,6 +47,11 @@ const Investor = sequelize.define("Investor", {
         type: Sequelize.STRING,
         allowNull: false,
     },
+    hasInvessted: {
+      type: Sequelize.BOOLEAN,
+      defaultValue:false,
+      allowNull: false,
+  },
     firstName: {
         type: Sequelize.STRING,
         allowNull: false,
@@ -107,8 +112,13 @@ const Investment= sequelize.define("investment", {
     },
     incrementPercent:{
         type:Sequelize.DOUBLE,
-        allowNull:true,
-        defaultValue:1.0
+        allowNull:false,
+        defaultValue:0.0
+    },
+    deposit:{
+        type:Sequelize.INTEGER,
+        allowNull:false,
+        defaultValue:0
 
     },
     InvestmentDate:{
@@ -340,15 +350,17 @@ const Admin = sequelize.define('admin', {
     },
     changePasswordToken:{
         type:Sequelize.STRING,
+        defaultValue:'',
         allowNull:true
     },
     verificationToken:{
         type:Sequelize.STRING,
+        defaultValue:"",
         allowNull:true
     },
     verified: {
       type: Sequelize.BOOLEAN,
-      default:false,
+      defaultValue:false,
       allowNull: false,
     },
   }, {

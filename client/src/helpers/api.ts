@@ -12,6 +12,7 @@ export  const postData:any = async ( url: string,data: {}, authorizationData: st
     }
     try {
       const response: AxiosResponse<{data:string}> = await axios.post(url, data, { headers });
+      console.log(response)
       return response
       } catch (error: any) {
       throw(new Error(error))

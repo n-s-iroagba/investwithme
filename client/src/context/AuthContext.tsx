@@ -2,11 +2,7 @@ import React, { createContext, useState } from "react";
 
 import { doPasswordsMatch } from "../helpers/helpers";
 import { postData } from "../helpers/api";
-import { AdminData,AuthContextType, InvestorData} from "./AuthTypes";
-
-
-
-
+import { AdminData, AuthContextType, InvestorData } from "./AuthTypes";
 
 export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [passwordValidityMessage, setPasswordValidityMessage] = useState<string[]>([]);
@@ -22,91 +18,102 @@ export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({ c
     email: '',
     secretCode: ''
   });
-const [investorData, setInvestorData] = useState<InvestorData>({
-  firstName: '',
-  lastName: '',
-  password: '',
-  confirmPassword: '',
-  email: '',
-  dateOfBirth: '',
-  gender: '',
-  country: '',
-  bank: '',
-  timezone: 'PST'
-})
+  const [investorData, setInvestorData] = useState<InvestorData>({
+    firstName: '',
+    lastName: '',
+    password: '',
+    confirmPassword: '',
+    email: '',
+    dateOfBirth: '',
+    gender: '',
+    country: '',
+    bank: '',
+    timezone: 'PST'
+  })
 
-
-
-  const handleSubmit = async (data:AdminData | InvestorData, event: React.FormEvent<HTMLFormElement>, domain:string, navigateToVerifyEmailPage:()=>void) => {
-    const form = event.currentTarget;
+  const handleSubmit = async (data: AdminData | InvestorData, event: React.FormEvent<HTMLFormElement>, domain: string, navigateToVerifyEmailPage: () => void) => {
+    event.preventDefault();
+    const form = event.currentTarget
     const password = data.password
     const confirmPassword = data.confirmPassword
     const passwordCorrect = checkIfUserEnteredPasswordCorrectly(password)
     const passwordMatch = checkIfPasswordsMatch(password, confirmPassword)
-    if (form.checkValidity() === false || !passwordCorrect || !passwordMatch) {
-        event.preventDefault();
-        event.stopPropagation();
+    let secretCodeMatch: boolean = false;
+    let shouldSubmit:boolean = true //flag to check if form details are good enough to be submitted
+    if ('secretCode' in data) {
+      secretCodeMatch = data.secretCode === process.env.REACT_APP_ADMIN_SECRET_KEY ? true : false
     }
-    setValidated(true);
+    if (form.checkValidity() === false || !passwordCorrect || !passwordMatch || !secretCodeMatch) {
+      event.preventDefault();
+      setValidated(true)
+      console.log(passwordCorrect)
+      shouldSubmit=false
+      event.stopPropagation();
+    }
+
+    if (shouldSubmit){
     setSubmitting('submitting')
     try {
-        const response  = await postData(domain,data)
-        if (response.statusText==='Created') {
-        localStorage.setItem('cassockUnverifiedUserDetails',JSON.stringify(response.data.data))
-        navigateToVerifyEmailPage()  
-        }
-    } catch (error:any) {
-        setSubmitting('');
-        console.error(error)
-        setErrorMessage('Sorry it seems we can not register you at this moment')
+      const response = await postData(domain, data)
+      if (response.statusText === 'Created') {
+        localStorage.setItem('cassockUnverifiedUserDetails', JSON.stringify(response.data.data))
+        navigateToVerifyEmailPage()
+      }
+    } catch (error: any) {
+    setErrorMessage('we are sorry, we cannot register you at this time')
+      setSubmitting('');
+      console.error(error)
+      if (!secretCodeMatch){
+        setErrorMessage('The secret code provided is wrong')
+      }
     }
-};
+    }
+  };
 
-const checkIfUserEnteredPasswordCorrectly = (password:string) => {
-  if (password === '') {
-    setPasswordValidityMessage(['no number in provided password', 'no uppercase letter in provided', 'no lowercase in provided', 'password is less than 8 characters']);
-    return false;
-  } else if (Array.isArray(passwordValidityMessage) && passwordValidityMessage.length === 0) {
-    return false;
-  }
-  return true;
-};
-
-const checkIfPasswordsMatch = (password:string,confirmPassword:string) => {
-  if (!doPasswordsMatch(password, confirmPassword)) {
-    setIsPasswordsMatch(false);
-    return false;
-  } else {
-    setIsPasswordsMatch(true);
+  const checkIfUserEnteredPasswordCorrectly = (password: string) => {
+    if (password === '') {
+      setPasswordValidityMessage(['no number in provided password', 'no uppercase letter in provided', 'no lowercase in provided', 'password is less than 8 characters']);
+      return false;
+    } else if (Array.isArray(passwordValidityMessage) && passwordValidityMessage.length > 0) {
+      return false;
+    }
     return true;
-  }
-};
+  };
 
+  const checkIfPasswordsMatch = (password: string, confirmPassword: string) => {
+    if (!doPasswordsMatch(password, confirmPassword)) {
+      setIsPasswordsMatch(false);
+      return false;
+    } else {
+      setIsPasswordsMatch(true);
+      return true;
+    }
+  };
 
-const handlePasswordChange = (
-    data:AdminData | InvestorData,
+  const handlePasswordChange = (
+    data: AdminData | InvestorData,
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-    setState: React.Dispatch<React.SetStateAction<InvestorData|AdminData>> 
+    setState: React.Dispatch<React.SetStateAction<InvestorData | AdminData>>
   ) => {
-    handleChange(data,e, setState);
+    handleChange(data, e, setState);
     validatePassword(e.target.value);
   };
 
-  const handleChange = (data:AdminData | InvestorData ,e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,setState: React.Dispatch<React.SetStateAction<InvestorData|AdminData>>) => {
+  const handleChange = (data: AdminData | InvestorData, e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, setState: React.Dispatch<React.SetStateAction<InvestorData | AdminData>>) => {
     e.preventDefault();
-setState({
+    setState({
       ...data,
       [e.target.name]: e.target.value,
     });
   };
 
-  const validatePassword = (password:string) => {
-    let tempPasswordState:string[] = []
+  const validatePassword = (password: string) => {
+    let tempPasswordState: string[] = []
     const hasNumber = /\d/.test(password);
     const hasUppercase = /[A-Z]/.test(password);
     const hasLowercase = /[a-z]/.test(password);
     const length = password.length;
-  
+
     if (!hasNumber) {
       tempPasswordState.push('no number in password provided')
     }
@@ -122,8 +129,8 @@ setState({
     setPasswordValidityMessage(tempPasswordState)
   }
 
-  const handleConfirmPasswordsChange = (data:AdminData | InvestorData, e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,setState: React.Dispatch<React.SetStateAction<InvestorData|AdminData>> ) => {
-    handleChange(data,e,setState);
+  const handleConfirmPasswordsChange = (data: AdminData | InvestorData, e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, setState: React.Dispatch<React.SetStateAction<InvestorData | AdminData>>) => {
+    handleChange(data, e, setState);
     if (!doPasswordsMatch(data.password, e.target.value)) {
       setIsPasswordsMatch(false);
     } else {
@@ -139,7 +146,6 @@ setState({
     }
   };
 
-  
   const authContextValue: AuthContextType = {
     setAdminData,
     adminData,
@@ -168,4 +174,4 @@ setState({
   );
 };
 
-export const AuthContext = createContext<AuthContextType|undefined>(undefined);
+export const AuthContext = createContext<AuthContextType | undefined>(undefined);
