@@ -1,3 +1,4 @@
+import { LargeNumberLike } from "crypto";
 import { SuccessCallback } from "./api";
 
 export function navigateToInvestOrLogin(navigate: (path: string) => void) {
@@ -77,7 +78,6 @@ export function getTimeSinceFirstVisit(): number | null {
       const timeDifference = currentTime.getTime() - previousVisitTime.getTime();
       console.log('time-difference',+ timeDifference)
       
-      // Convert time difference from milliseconds to days
       const daysDifference = timeDifference / (1000 * 3600 * 24);
       
       if (daysDifference <= 2) {
@@ -85,7 +85,7 @@ export function getTimeSinceFirstVisit(): number | null {
         return 172800000-timeDifference;
       } else {
         console.log('Subsequent visit is more than 2 days from first visit.');
-        return null; // Return null if more than 2 days have passed
+        return null;
       }
     }
   } else {
@@ -97,3 +97,19 @@ export function getTimeSinceFirstVisit(): number | null {
 export const doPasswordsMatch = (password: string, confirmPassword: string) => {
   return password === confirmPassword;
 };
+
+
+export const canInvest = (investmentAmount:number, managers:any) =>{
+  if (!managers || managers.length === 0) {
+    return false;
+  }
+  const minMinInvestment = Math.min(...managers.map((manager:any) => manager.minimumInvestmentAmount));
+  return investmentAmount < minMinInvestment;
+}
+function findManagerWithLowestMinimumInvestment(managers:any) {
+  return managers?.length && managers.reduce((lowest:any, manager:any) => (manager.minimumInvestmentAmount < lowest.minimumInvestmentAmount ? manager : lowest), managers[0]);
+}
+function findManagerWithHighestMinimumInvestment(managers:any) {
+  return managers?.length && managers.reduce((highest:any, manager:any) => (manager.minimumInvestmentAmount > highest.minimumInvestmentAmount ? manager : highest), managers[0]);
+}
+

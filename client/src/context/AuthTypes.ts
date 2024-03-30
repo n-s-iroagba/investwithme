@@ -17,6 +17,7 @@ export interface AdminData {
     country:string
     bank:string;
     timezone: string
+    referralCode:string
   }
 
 export interface AuthContextType {

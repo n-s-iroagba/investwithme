@@ -12,32 +12,47 @@ export  const postData:any = async ( url: string,data: {}, authorizationData: st
     }
     try {
       const response: AxiosResponse<{data:string}> = await axios.post(url, data, { headers });
-      console.log(response)
       return response
       } catch (error: any) {
       throw(new Error(error))
     }
   }
   
+  export  const getData:any = async ( url: string,authorizationData: string | null = null)=>{
+    const headers: { [key: string]: string } = {
+      'Content-Type': 'application/json'
+    };
+    if (authorizationData) {
+      headers['Authorization'] = authorizationData;
+    }
+    try {
+      const response: AxiosResponse<{data:string}> = await axios.get(url, { headers });
+      return response
+      } catch (error: any) {
+      console.error(error)
+      throw(new Error(error))
+    }
+  }
   
 
   interface DecodedToken {
     id: string;
     email: string;
     role: string;
+    status:string
   }
   
   // Define your verifyToken function
-  const verifyToken = (token: string): DecodedToken | null => {
+  export const verifyToken = (token: string): DecodedToken | null => {
     try {
       const decoded: any = jwtDecode(token);
-      const { id, email, role } = decoded;
-      return { id, email, role };
+      const { id, email, role,status} = decoded;
+      return { id, email, role,status};
     } catch (error) {
       console.error('Error decoding token:', error);
       return null;
     }
-  };
+  }
   
   // Modify your checkAuthorised function
   export const checkAuthorised = (
@@ -69,15 +84,12 @@ export  const postData:any = async ( url: string,data: {}, authorizationData: st
       return false;
     }
   };
-
+export const createInvestment = (managerId:number,investorId:number,navigate:(path:string)=>void)=>{
+  navigate('/invest')
+}
   const displayAlertAndRedirect = (role: string, navigate: (path: string) => void): void => {
-    let redirectPath: string;
-    if (role === 'admin') {
-      redirectPath = '/admin-login/xxx';
-    } else {
-      redirectPath = '/login';
-    }
-    alert('You are forbidden from accessing this portal, kindly login');
+    const redirectPath = '/login';
+    alert('You are forbidden from accessing this view, kindly login');
     navigate(redirectPath);
   };
  export  const deleteItem = async (domain:string,itemId:number) => {
@@ -101,4 +113,6 @@ export  const postData:any = async ( url: string,data: {}, authorizationData: st
         return { error: error.message };
       }
     }
+
+    
   };

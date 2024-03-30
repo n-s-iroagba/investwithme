@@ -3,7 +3,8 @@ import { Row, Col } from 'react-bootstrap';
 import '../assets/Styles.css'
 import { SocialMediaButton } from './Button';
 import { companyName } from '../helpers/data';
-
+export const miniFooter = 
+<footer className='border-0 border-top border-light text-light w-100 text-center py-3 mt-5'>{companyName}</footer>
 
 const Footer = () => {
   return (

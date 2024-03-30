@@ -5,7 +5,6 @@ import Navbar from 'react-bootstrap/Navbar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { isLargeScreen } from '../helpers/helpers';
-import {  navigateToRegister } from '../helpers/navigation';
 import { useNavigate } from 'react-router-dom';
 
 const NavbarComponent: React.FC = () => {
@@ -36,12 +35,12 @@ const NavbarComponent: React.FC = () => {
       expand="lg"
       className="bg-body-tertiary px-4"
     >  
-     <div>{iconDisplay && <div onClick={()=>navigateToRegister(navigate) }><FontAwesomeIcon icon = {faUser}/></div>}</div>
+     <div>{iconDisplay && <div onClick={()=>navigate('/signup') }><FontAwesomeIcon icon = {faUser}/></div>}</div>
         <Navbar.Brand>Logo</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ms-auto">
-          <Nav.Link><div onClick={()=>navigateToRegister(navigate) }><FontAwesomeIcon icon = {faUser}/></div></Nav.Link>
+          <Nav.Link><div onClick={()=>navigate('/signup') }><FontAwesomeIcon icon = {faUser}/></div></Nav.Link>
           {navLinks.map((link, index) => (
         <Nav.Link key={index} className="text-dark" href={link.path}>
           {link.text}

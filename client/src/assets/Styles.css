@@ -18,8 +18,42 @@
     justify-content: space-evenly;
     width: 100%;
 }
+div .round-card{
+    border-bottom-left-radius: 1.5rem;
+    border-bottom-right-radius: 1.5rem;
+    border-top-right-radius: 1.5rem;
+    border-top-left-radius: 1.5rem;
 
+   
+}
+.round-card{
+   
+    border-top-right-radius: 1.5rem;
+    border-top-left-radius: 1.5rem;
+
+   
+}
+.round-card-bottom{
+  
+     
+    border-top-right-radius: 1.5rem;
+    border-top-left-radius: 1.5rem;
+}
+/* rgba(0, 0, 0, 0.5) */
+.card .shade{
+    box-shadow: inset 0 0 10px var(--primary-color)
+}
+.shade{
+    box-shadow: inset 0 0 10px var(--primary-color)
+}
 .primary-background {
+    background:var(--primary-color) ;
+    width:100%;
+}
+.green{
+    background:var(--primary-color) ;
+}
+div .card-primary-background {
     background:var(--primary-color) ;
     width:100%;
 }
@@ -63,6 +97,33 @@
      
     }
 }
+.dashboard{
+    
+        padding-left: 25px;
+        padding-right: 25px;
+        background:var(--primary-color) ;
+        width:100%;
+        height: 18cm;
+     
+
+      @media (min-width: 768px) and (max-width: 991px) {
+        
+          padding-left: 60px;
+          padding-right: 60px;
+          height: 20cm;
+        
+        
+      }
+      
+      /* Media query for large screens */
+      @media (min-width: 992px) {
+        
+          padding-left: 300px;
+          padding-right: 300px;
+          height: 20cm;
+        
+      }
+}
 .auth-page-items{
     width: 50vw;
     @media screen and (max-width: 767px) {
@@ -70,8 +131,20 @@
         
 }
 }
+.transaction{
+    background-color: rgba(250, 250, 250, 0.1);
+}
 
+.form .custom {
+    border: 0;
+    
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+}
 
+.add .accordion{
+    background-color: red;
+}
 .form .custom-input {
     border: 0;
     border-bottom: 2px solid white;
@@ -165,10 +238,6 @@
     position: relative;
 }
 
-.logo-container {
-    align-items: center;
-    display: flex;
-}
 .icon-size{
     width: 0.7cm;
     height: 0.7cm;
@@ -190,14 +259,24 @@
     flex-direction: column;
     align-items: center;
     justify-content: space-evenly;
-    width: 100%;
-    height: 3.5cm;
-    padding:0.1cm;
-    padding-top: 0.5cm;
-    @media (min-width:15cm){
-        height:4.5cm;
+ 
+    height: 120px;
+    @media (min-width: 640px) and (max-width: 991px) {
+        
+      
+    height: 120px;
+      
     }
-  }
+    
+    /* Media query for large screens */
+    @media (min-width: 992px) {
+      
+   
+        height: 180px;
+      
+    }
+}
+  
   .dash-nav:hover {
     background: rgba(250, 250, 250, 0.3); /* corrected color value */
 }

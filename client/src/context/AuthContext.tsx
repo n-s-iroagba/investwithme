@@ -28,7 +28,8 @@ export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({ c
     gender: '',
     country: '',
     bank: '',
-    timezone: 'PST'
+    timezone: '',
+    referralCode:''
   })
 
   const handleSubmit = async (data: AdminData | InvestorData, event: React.FormEvent<HTMLFormElement>, domain: string, navigateToVerifyEmailPage: () => void) => {
@@ -46,7 +47,6 @@ export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({ c
     if (form.checkValidity() === false || !passwordCorrect || !passwordMatch || !secretCodeMatch) {
       event.preventDefault();
       setValidated(true)
-      console.log(passwordCorrect)
       shouldSubmit=false
       event.stopPropagation();
     }
@@ -56,14 +56,15 @@ export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({ c
     try {
       const response = await postData(domain, data)
       if (response.statusText === 'Created') {
-        localStorage.setItem('cassockUnverifiedUserDetails', JSON.stringify(response.data.data))
+        console.log(response.data)
+        localStorage.setItem('cassockEmailVerificationToken', JSON.stringify(response.data))
         navigateToVerifyEmailPage()
       }
     } catch (error: any) {
     setErrorMessage('we are sorry, we cannot register you at this time')
       setSubmitting('');
       console.error(error)
-      if (!secretCodeMatch){
+      if ('secretCode' in data && !secretCodeMatch){
         setErrorMessage('The secret code provided is wrong')
       }
     }
