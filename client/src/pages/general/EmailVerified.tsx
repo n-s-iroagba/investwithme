@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import Information from '../../components/Information';
 import { faMailchimp } from '@fortawesome/free-brands-svg-icons';
 import { useNavigate } from 'react-router-dom';
-import { getData, verifyToken } from '../../helpers/api';
+import { getData} from '../../helpers/api'
+  import {verifyToken } from '../../helpers/auth';
 import { resendVerificationTokenUrl } from '../../helpers/data';
 
 const EmailVerified = () => {
@@ -43,7 +44,7 @@ const EmailVerified = () => {
     const response = await getData(`${resendVerificationTokenUrl}/${token?.id}`);
     if (response) {
       setCounter(600);
-      localStorage.setItem('cassockEmailVerificationToken', response.data);
+      localStorage.setItem('cassockEmailVerificationToken', response.data.data);
     }
   };
 

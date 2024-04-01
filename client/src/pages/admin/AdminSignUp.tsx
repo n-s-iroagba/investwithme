@@ -16,11 +16,6 @@ const AdminSignUp: React.FC = () => {
              route='admin/login' />
             <Information text='Welcome to the admin registeration page, please note there can only be one admin.' head='Account Details' icon={faUser} />
             <AdminSignUpForm />
-            <LoginOption
-            title='forgot password?'
-            buttonText='Change password'
-             icon = {faUser}
-             route='forgot-password' />
             </div>
         </div>
     )

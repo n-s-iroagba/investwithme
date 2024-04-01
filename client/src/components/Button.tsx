@@ -6,30 +6,26 @@ import'../assets/Styles.css'
 import { faFacebook } from '@fortawesome/free-brands-svg-icons';
 import { useNavigate } from 'react-router-dom';
 import { createInvestment } from '../helpers/api';
-const Button: React.FC<{ text: string; icon: IconProp,function:()=>void}> = (props) => {
-  return 
-};
 
-export default Button;
+
+
 
 export const GetStartedButton:React.FC =()=>{
   const navigate = useNavigate()
-    return<Button  function ={navigate('/dashboard')} text='Become an investor' icon ={faDollarSign}/>
-
+    return<button className='button-styles'><div>Invest with this manager</div><div ><FontAwesomeIcon icon={faDollarSign} beatFade/></div></button>
 }
 export const ViewCerficateButton:React.FC =()=>{
 
-  return<Button  function ={console.log('/dashboard')} text='View certificate of incorporation' icon ={faFile}/>
+  return<button  className='button-styles'><div>Invest with this manager</div><div ><FontAwesomeIcon icon={faDollarSign} beatFade/></div></button>
 
 }
 
 export const ContactButton:React.FC =()=>{
-  return<Button  function ={console.log('/dashboard')}text='Get in Touch' icon ={faEnvelope}/>
-
+  return<button className='button-styles'><div>Invest with this manager</div><div ><FontAwesomeIcon icon={faDollarSign} beatFade/></div></button>
 }
 
 export const ResendVerificationTokenButton:React.FC<{function:any}> =(props)=>{
-  return<Button function={props.function()}text='Resend Token' icon ={faEnvelope}/>
+  return<button className='button-styles'><div>Invest with this manager</div><div ><FontAwesomeIcon icon={faDollarSign} beatFade/></div></button>
 
 }
 

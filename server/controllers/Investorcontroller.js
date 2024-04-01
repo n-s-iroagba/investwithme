@@ -1,8 +1,9 @@
-const {Investor,Admin,Manager,AdminWallet, TopUp}= require('../model')
-const {sendVerificationEmail} = require('../service')
+const {Investor,Admin,Manager,InvestorWallet, TopUp}= require('../model')
+const {sendVerificationEmail,sendReferalCompletedMail} = require('../service')
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const multer = require('multer')
+const getOrdinalSuffix = require('../helpers')
 const JWT_SECRET = 'your_jwt_secret';
 
 module.exports = {
@@ -12,102 +13,126 @@ module.exports = {
   },
   registerInvestor: async (req, res) => {
     try {
-      const { firstName, lastName, email, password, dateOfBirth,bank,timezone,referralCode} = req.body;
-      const newInvestor = await Investor.create({ firstName, lastName,dateOfBirth, email, password, bank,timezone});
-      newInvestor.referralCode = newInvestor.id + 2225
+      const { firstName, lastName, dateOfBirth, email, password,gender, country,  bank, timezone,referralCode } = req.body;
+      const newInvestor = await Investor.create({ firstName, lastName, dateOfBirth, email, password,gender, country,  bank, timezone});
+      newInvestor.referralCode = newInvestor.id + 2222
+      
+      const token = createVerificationJWT(newInvestor.id)
+      newInvestor.verificationToken = token
+
+      await sendVerificationEmail(newInvestor,token);
+
+      if(referralCode){
+        refreeInvestor = await Investor.findOne({where:{referralCode:referralCode}})
+        newInvestor.refreeId = refreeInvestor.isDepositIncomplete
+        await Notification.create({investorId:refreeInvestor.id,message:'you just referred'})
+        await sendReferalCompletedMail(refreeInvestor,newInvestor)
+
+      }
+
       newInvestor.save()
-      await sendVerificationEmail(newInvestor);
-      res.status(201).json(newInvestor);
-      refreeInvestor = await Investor.findOne({where:{referralCode:referralCode}})
-      //create Entry Notification
-      await Notification.create({investorId:refreeInvestor,message:'you just referred'})
-      await sendReferalCompletedMail(refreeInvestor,newInvestor)
+      return res.status(201).json(token)
     } catch (error) {
       console.error('Error registering investor:', error);
       res.status(400).json({ error: 'Could not register you at this point our servers are over loaded' });
     }
   },
- updateInvestor:async (req, res) => {
+
+  
+  createInvestment: async (req, res)=>{
     try {
-      const { id } = req.params; // Extract the investor ID from req.params
-      const { firstName, lastName, email, phoneNumber } = req.body; // Extract updated attributes from req.body
-      let investor = await Investor.findByPk(id);
-  
-      if (!investor) {
-        return res.status(404).json({ error: 'Investor not found' });
+      const { managerId, investorId } = req.params;
+      const intendedManager = await Manager.findByPk(managerId);
+      if (!intendedManager) {
+        return res.status(404).json({ message: "Manager not found" });
       }
-      investor.firstName = firstName;
-      investor.lastName = lastName;
-      investor.email = email;
-      investor.phoneNumber = phoneNumber;
-      await investor.save();
+
+      const allInvestments = await Investment.findAll({ where: { investorId } });
   
-      return res.status(200).json({ message: 'Investor updated successfully', investor });
+      const numberOfInvestments = allInvestments.length;
+
+      const investmentOrdinalSuffix = getOrdinalSuffix(numberOfInvestments + 1);
+
+      const newInvestment = await Investment.create({
+        name: `my ${investmentOrdinalSuffix} investment`,
+        amount: 0,
+        managerId,
+      });
+
+      return res.status(201).json({ investment: newInvestment, managers: allManagers });
     } catch (error) {
-      console.error('Error updating investor:', error);
-      return res.status(500).json({ error: 'Failed to update investor' });
+      console.error(error);
+      return res.status(500).json({ message: "Internal server error" });
     }
   },
- uploadInvestorImage: async (req, res) => {
+
+  getInvestments: async (req, res)=>{
     try {
-      const { id } = req.params; 
-      const investor = await Investor.findByPk(id); 
+      const investments = await Investment.findAll({
+        where: { investorId }
+      });
   
-      if (!investor) {
-        return res.status(404).json({ error: 'Investor not found' });
-      }
-      if (!req.file) {
-        return res.status(400).json({ error: 'An image file must be provided' });
-      }
-      const imagePath = req.file.path;
-       investor.image = imagePath;
-      await investor.save();
-      return res.status(200).json({ message: 'Investor image uploaded successfully', imagePath: imagePath });
+      const formattedInvestments = investments.map((investment) => {
+        const isDepositIncomplete = investment.amount > investment.amountDeposited;
+        const hasNoDeposit = investment.amountDeposited === 0;
+
+        return {
+          ...investment.dataValues, 
+          incompleteDeposit: isDepositIncomplete,
+          hasNoDeposit,
+        };
+      });
+  
+      return res.status(200).json(formattedInvestments);
     } catch (error) {
-      console.error('Error uploading investor image:', error);
-      return res.status(500).json({ error: 'Error uploading investor image' });
+      console.error(error);
+      return res.status(500).json({ message: "Internal server error" });
     }
   },
-  addWallet:async (res,req) => {
-    const {address,type,currency} = req.body
-    const {id} = req.params
-    if(type==='withdrawal'){
-    const randomNumber = Math.floor(Math.random() * 10) + 1;
-   address+= randomNumber.toString()
-    }
-      try {
-   
-          const wallet = await Wallet.create({
-              address: address,
-              type: type,
-              currency: currency,
-              investorid
-              
-          });
-          wallet.save();
-          return res.status(200).json({message:`admin ${currency} wallet created`})
-      } catch (error) {
-       
-          console.error('Error creating wallet:', error);
-          return res.status(500).json({message:`error adding wallet try again later`})
-      }
-  },
-  fetchInvestorWallets: async (req, res) => {
+  createInvestorWallet: async (req, res) => {
     try {
-      const { investorId } = req.params;
-      const wallets = await Wallet.findAll({ where: { investorId: investorId } });
+      const { type, address } = req.body;
+      const {investorId} = req.params.id
+
+      if (!type || !address) {
+        return res.status(400).json({ message: 'Missing required fields' });
+      }
+  
+      const existingType = await WalletType.findOne({ where: { type } });
+  
+      if (existingType) {
+        const newWalletAddress = await InvestorWallet({ address});
+        newWalletAddress.walletTypeId = existingType.id
+        newWalletAddress.investorId = investorId
+        await newWalletAddress.save()
+      } else {
+        const newWalletType = await WalletType.create({ type });
+        const newWalletAddress = await newWalletType.createWalletAddress({ address});
+        newWalletAddress.walletTypeId = newWalletType.id
+        newWalletAddress.investorId = investorId
+        await newWalletAddress.save()
+      }
+      return res.status(201).json({ message: 'Wallet address created successfully', data: newWalletAddress });
+    } catch (error) {
+      console.error('Error creating wallet address:', error);
+      return res.status(500).json({ message: 'Internal server error' });
+    }
+  },
+
+  getAllWallets: async (req, res) => {
+    try {
+      const wallets = await InvestorWallet.findAll();
       return res.status(200).json({ wallets: wallets });
     } catch (error) {
-      console.error('Error fetching investor wallets:', error);
-      return res.status(500).json({ error: 'Error fetching investor wallets' });
+      console.error('Error fetching wallets:', error);
+      return res.status(500).json({ error: 'Error fetching wallets' });
     }
   },
- updateWalletAddressById:async (req, res) => {
+  updateWalletAddressById: async (req, res) => {
+    const { id } = req.params; 
+    const { address } = req.body; 
     try {
-      const { id } = req.params; 
-      const { address } = req.body; 
-      let wallet = await Wallet.findOne({ where: { id: walletId, investorId: investorId } });
-  
+      const wallet = await InvestorWallet.findByPk(id);
       if (!wallet) {
         return res.status(404).json({ error: 'Wallet not found' });
       }
@@ -119,20 +144,14 @@ module.exports = {
       return res.status(500).json({ error: 'Failed to update wallet address' });
     }
   },
-  deleteInvestorWalletAddress:async (req, res) => {
-    try {
-      const { investorId, walletId } = req.params;
-      const investor = await Investor.findByPk(investorId);
-  
-      if (!investor) {
-        return res.status(404).json({ error: 'Investor not found' });
-      }
-      const wallet = await Wallet.findOne({ where: { id: walletId, investorId: investorId } });
-  
-      if (!wallet) {
-        return res.status(404).json({ error: 'Wallet not found for this investor' });
-      }
 
+  deleteWalletAddress: async (req, res) => {
+    const { id } = req.params;
+    try {
+      const wallet = await Wallet.findByPk(id);
+      if (!wallet) {
+        return res.status(404).json({ error: 'Wallet not found' });
+      }
       await wallet.destroy();
       return res.status(200).json({ message: 'Wallet address deleted successfully' });
     } catch (error) {
@@ -140,21 +159,29 @@ module.exports = {
       return res.status(500).json({ error: 'Failed to delete wallet address' });
     }
   },
-
+  
 //Auth
   login: async (req, res) => {
     try {
       const { email, password } = req.body;
-      const investor = await Investor.findOne({ where: { email } });
-      if (!investor) {
+      let isAdmin= false
+      let user =  await Investor.findOne({ where: { email } });
+      if(!user){
+        user =  user = await Admin.findOne({ where: { email } })
+        isAdmin = true
+        if (!user)
         return res.status(401).json({ error: 'Invalid email or password' });
       }
-      const isPasswordValid = await bcrypt.compare(password, investor.password);
+      const isPasswordValid = await bcrypt.compare(password, user.password);
       if (!isPasswordValid) {
         return res.status(401).json({ error: 'Invalid email or password' });
       }
+      if(user.verified){
       const token = jwt.sign({ id: investor.id, email: investor.email }, JWT_SECRET);
       res.json({ token });
+      }else{
+        //token is
+      }
     } catch (error) {
       console.error('Error logging in:', error);
       res.status(500).json({ error: 'Internal server error' });
@@ -217,36 +244,44 @@ module.exports = {
       }
     },
     checkPasswordToken: async (req, res) => {
-      try {
-        const token = req.params.token;
-        const user = await User.findOne({
-          where: {
-            resetPasswordToken: token,
-            resetPasswordExpires: { $gt: Date.now() }
-          }
-        });
-    
-        if (!user) {
-          return res.status(400).send('Password reset token is invalid or has expired.');
-        }
-    
-        // Redirect the user to a page where they can input their new password
-        res.redirect(`/reset-password-form?token=${token}`);
-      } catch (error) {
-        console.error('Error handling reset password request:', error);
-        res.status(500).send('Error handling reset password request');
-      }
+  try {
+    const { token } = req.params;
 
-  },
+    const decoded = verifyPasswordResetToken(token);
+    if (!decoded) {
+      return res.status(401).json({ message: "Invalid or expired token" });
+    }
+
+    const investor = await Investor.findOne({
+      where: { email: decoded.email },
+    });
+    if (!investor) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    const newChangeToken = generatePasswordChangeToken(user.id);
+    // Redirect user to change password route with the token in URL params
+    const redirectUrl = `/change-password?token=${newChangeToken}`;
+    return res.redirect(redirectUrl);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+},
+
+
+
   resetPassword: async (req, res) => {
     try {
-      const { token, password } = req.body;
-      const user = await User.findOne({
-        where: {
-          resetPasswordToken: token,
-          resetPasswordExpires: { $gt: Date.now() }
-        }
-      });
+      const {password } = req.body;
+      const { token } = req.params;
+
+    const decoded = verifyPasswordChangeToken(token);
+    const investor = await Investor.findOne({
+      where: { email: decoded.email },
+    });
+    if (!investor) {
+      return res.status(404).json({ message: "User not found" });
+    }
   
       if (!user) {
         return res.status(400).send('Password reset token is invalid or has expired.');

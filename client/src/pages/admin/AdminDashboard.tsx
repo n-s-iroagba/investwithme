@@ -6,7 +6,7 @@ import {faHandHoldingDollar, faWallet, faUser} from '@fortawesome/free-solid-svg
 import { DashboardBar } from '../../components/DashboardNav'
 
 import '../../assets/Styles.css'
-import { checkAuthorised } from '../../helpers/api'
+import { isAuthorised } from '../../helpers/auth'
 
 // <{greeting:string,username:string}>
 
@@ -15,7 +15,7 @@ const AdminDashboard: React.FC = () => {
   const navigate = useNavigate();
   const [authorised, setAuthorised] = useState<boolean>(false);
   const [username, setUsername] = useState<string>('');
-  const [role,setRole] = useState<string>('');
+
   const location = useLocation();
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
@@ -23,14 +23,14 @@ const AdminDashboard: React.FC = () => {
     if (receivedToken){
       localStorage.setItem('cAssocKJwtToken',receivedToken)
     }
-    const authorised = checkAuthorised('admin', navigate,setUsername,setRole);
+    const authorised = isAuthorised('admin', setUsername);
     if (authorised){
       setAuthorised(authorised)
     }
   }, [setAuthorised, navigate, location.search]);
 
  
- if (!authorised||role !== 'admin') {
+ if (!authorised) {
 
     return (
       <div className="d-flex justify-content-center flex-column align-items-center" style={{ height: '100vh' }}>

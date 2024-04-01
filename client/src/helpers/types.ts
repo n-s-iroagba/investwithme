@@ -36,4 +36,14 @@ export interface InvestmentType{
 }
 
 
+export interface DecodedToken {
+    id: string;
+    role: string;
+    hasInvested?:boolean;
+    name:string
+    status?:string
+  }
+  
+
+
   

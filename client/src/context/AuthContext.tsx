@@ -1,6 +1,5 @@
 import React, { createContext, useState } from "react";
-
-import { doPasswordsMatch } from "../helpers/helpers";
+import { doPasswordsMatch } from "../helpers/auth";
 import { postData } from "../helpers/api";
 import { AdminData, AuthContextType, InvestorData } from "./AuthTypes";
 
@@ -45,7 +44,6 @@ export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({ c
       secretCodeMatch = data.secretCode === process.env.REACT_APP_ADMIN_SECRET_KEY ? true : false
     }
     if (form.checkValidity() === false || !passwordCorrect || !passwordMatch || !secretCodeMatch) {
-      event.preventDefault();
       setValidated(true)
       shouldSubmit=false
       event.stopPropagation();
@@ -140,11 +138,7 @@ export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({ c
   };
 
   const showPassword = () => {
-    if (passwordType === 'password') {
-      setPasswordType('text');
-    } else {
-      setPasswordType('password');
-    }
+    setPasswordType(passwordType === 'password' ? 'text' : 'password');
   };
 
   const authContextValue: AuthContextType = {

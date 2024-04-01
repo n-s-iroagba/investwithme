@@ -1,118 +1,103 @@
 import axios, { AxiosResponse } from 'axios';
-import {jwtDecode} from 'jwt-decode';
 
-export type SuccessCallback<T> = (data: T, navigate: (path: string) => void ,navUrl:string) => void;
 
-export  const postData:any = async ( url: string,data: {}, authorizationData: string | null = null)=>{
-    const headers: { [key: string]: string } = {
-      'Content-Type': 'application/json'
-    };
-    if (authorizationData) {
-      headers['Authorization'] = authorizationData;
-    }
-    try {
-      const response: AxiosResponse<{data:string}> = await axios.post(url, data, { headers });
-      return response
-      } catch (error: any) {
-      throw(new Error(error))
-    }
-  }
-  
-  export  const getData:any = async ( url: string,authorizationData: string | null = null)=>{
-    const headers: { [key: string]: string } = {
-      'Content-Type': 'application/json'
-    };
-    if (authorizationData) {
-      headers['Authorization'] = authorizationData;
-    }
-    try {
-      const response: AxiosResponse<{data:string}> = await axios.get(url, { headers });
-      return response
-      } catch (error: any) {
-      console.error(error)
-      throw(new Error(error))
-    }
-  }
-  
 
-  interface DecodedToken {
-    id: string;
-    email: string;
-    role: string;
-    status:string
+export const postData = async (url: string, data: any, authorizationData: string | null = null) => {
+  const headers: { [key: string]: string } = {
+    'Content-Type': 'application/json'
+  };
+
+  if (authorizationData) {
+    headers['Authorization'] = authorizationData;
   }
-  
-  // Define your verifyToken function
-  export const verifyToken = (token: string): DecodedToken | null => {
-    try {
-      const decoded: any = jwtDecode(token);
-      const { id, email, role,status} = decoded;
-      return { id, email, role,status};
-    } catch (error) {
-      console.error('Error decoding token:', error);
-      return null;
-    }
+
+  try {
+    const response: AxiosResponse<{ data: string }> = await axios.post(url, data, { headers });
+    return response;
+  } catch (error: any) {
+    console.error(error);
+    throw new Error(error.message);
   }
-  
-  // Modify your checkAuthorised function
-  export const checkAuthorised = (
-    role: string,
-    navigate: (path: string) => void,
-    setUserEmail: (email: string) => void,
-    setUserRole: (role: string) => void
-  ): boolean  => {
-    const token: string | null = localStorage.getItem('cAssocKJwtToken');
-  
-    if (!token) {
-      displayAlertAndRedirect(role, navigate);
-      return false;
-    }
-  
-    const verifiedToken = verifyToken(token);
-    if (verifiedToken) {
-      if (verifiedToken.role !== role) {
-        displayAlertAndRedirect(role, navigate);
-        return false;
-      } else {
-        setUserEmail(verifiedToken.email);
-        setUserRole(verifiedToken.role);
-      }
-      return true;
+};
+
+export const getData = async (url: string, authorizationData: string | null=null) => {
+  const headers: { [key: string]: string } = {
+    'Content-Type': 'application/json'
+  };
+
+  if (authorizationData === null) {
+    throw new Error('Authorization data is null, not allowed to make this request');
+  }
+
+  headers['Authorization'] = authorizationData;
+
+  try {
+    const response: AxiosResponse<{ data: string }> = await axios.get(url, { headers });
+    return response;
+  } catch (error: any) {
+    console.error(error);
+    throw new Error(error.message);
+  }
+};
+
+export const deleteItem = async (url: string, itemId: number, authorizationData: string | null = null) => {
+  const headers: { [key: string]: string } = {
+    'Content-Type': 'application/json'
+  };
+
+  if (authorizationData === null) {
+    throw new Error('Authorization data is null, not allowed to make this request');
+  }
+
+  headers['Authorization'] = authorizationData;
+
+  try {
+    const response: AxiosResponse<{ message: string }> = await axios.delete(`${url}/${itemId}`, { headers });
+    return response;
+  } catch (error: any) {
+    console.error(error);
+    throw new Error(error.message);
+  }
+};
+
+
+export const patchItem = async (url: string, itemId: number, data: any, authorizationData: string | null = null) => {
+  const headers: { [key: string]: string } = {
+    'Content-Type': 'application/json'
+  };
+
+  if (authorizationData === null) {
+    throw new Error('Authorization data is null, not allowed to make this request');
+  }
+
+  headers['Authorization'] = authorizationData;
+
+  try {
+    const response: AxiosResponse<{ message: string }> = await axios.patch(`${url}/${itemId}`, data, { headers });
+    return response;
+  } catch (error: any) {
+    console.error(error);
+    throw new Error(error.message);
+  }
+};
+
+export const createInvestment = async (managerId: number, investorId: number, navigate: (path: string) => void) => {
+  const url = 'your-api-url-for-create-investment';
+  const data = {
+    managerId,
+    investorId,
+  };
+  const authorizationData = localStorage.getItem('cassockAuthToken');
+
+  try {
+    const response = await postData(url, data, authorizationData);
+    if (response.status === 201) {
+      navigate('/success-page'); // Navigate to success page or any other route
     } else {
-      // Handle case when verifiedToken is null
-      console.error('Token verification failed.');
-      return false;
+      throw new Error('Failed to create investment'); // Handle other status codes or error cases
     }
-  };
-export const createInvestment = (managerId:number,investorId:number,navigate:(path:string)=>void)=>{
-  navigate('/invest')
-}
-  const displayAlertAndRedirect = (role: string, navigate: (path: string) => void): void => {
-    const redirectPath = '/login';
-    alert('You are forbidden from accessing this view, kindly login');
-    navigate(redirectPath);
-  };
- export  const deleteItem = async (domain:string,itemId:number) => {
-    try {
-      const response:any = await axios.delete(`${domain}/${itemId}`);
-      alert('Item deleted successfully:'+ response.data);
-      return response.data;
-    } catch (error:any) {
-      if (error.response) {
-        // The request was made and the server responded with a status code
-        // that falls out of the range of 2xx
-        console.error('Server Error:', error.response.data);
-        return { error: error.response.data };
-      } else if (error.request) {
-        // The request was made but no response was received
-        console.error('No response received:', error.request);
-        return { error: 'No response received from server' };
-      } else {
-        // Something happened in setting up the request that triggered an Error
-        console.error('Request Error:', error.message);
-        return { error: error.message };
-      }
-    }
-
-    
-  };
+  } catch (error) {
+    console.error('Error creating investment:', error);
+    throw new Error('Failed to create investment'); // Throw a more descriptive error if needed
+  }
+};

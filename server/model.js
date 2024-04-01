@@ -1,5 +1,6 @@
 const Sequelize = require("sequelize");
 const sequelize = require("./orm_setup");
+const { COMPANY_NAME } = require("./config");
 
 
 const Manager = sequelize.define("Manager", {
@@ -17,14 +18,15 @@ const Manager = sequelize.define("Manager", {
         type: Sequelize.STRING,
         allowNull: false,
     },
+    image: {
+      type: Sequelize.STRING,
+      allowNull: false,
+  },
     minimumDeposit: {
         type: Sequelize.INTEGER,
         allowNull: false,
     },
-    maximumDeposit: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-    },
+
     returnPercentage: {
         type: Sequelize.DOUBLE,
         allowNull: false,
@@ -47,11 +49,7 @@ const Investor = sequelize.define("Investor", {
         type: Sequelize.STRING,
         allowNull: false,
     },
-    hasInvessted: {
-      type: Sequelize.BOOLEAN,
-      defaultValue:false,
-      allowNull: false,
-  },
+
     firstName: {
         type: Sequelize.STRING,
         allowNull: false,
@@ -72,22 +70,42 @@ const Investor = sequelize.define("Investor", {
         type: Sequelize.STRING,
         allowNull: false,
     },
+    gender: {
+      type: Sequelize.STRING,
+      allowNull: false,
+  },
+  country: {
+    type: Sequelize.STRING,
+    allowNull: false,
+},
     timezone:{
         type:Sequelize.STRING,
         allowNull:false
     },
-    changePasswordToken:{
-        type:Sequelize.STRING,
-        allowNull:true
-    },
-    verificationToken:{
-        type:Sequelize.STRING,
-        allowNull:true
-    },
     referralCode:{
+      type:Sequelize.INTEGER,
+      allowNull:true,
+  },
+  verificationToken:{
+    type:Sequelize.STRING,
+    allowNull:true
+},
+
+referreeId:{
+  type:Sequelize.INTEGER,
+  allowNull:true,
+},
+
+hasInvested:{
+  type:Sequelize.BOOLEAN,
+  allowNull:true,
+},
+
+changePasswordToken:{
         type:Sequelize.STRING,
-        allowNull:false,
-    }
+        allowNull:true
+    },
+
 });
 
 const Investment= sequelize.define("investment", {
@@ -97,30 +115,23 @@ const Investment= sequelize.define("investment", {
         allowNull: false,
         primaryKey: true,
     },
-    name: {
-        type: Sequelize.STRING,
-        allowNull: false,
-    },
-    amountWithdrawable:{
-        type:Sequelize.DOUBLE,
-        default:0.00
-    },
-    paymentStatus:{
-        type:Sequelize.BOOLEAN,
-        allowNull:false,
-        default:false
-    },
+ 
     incrementPercent:{
         type:Sequelize.DOUBLE,
         allowNull:false,
         defaultValue:0.0
     },
-    deposit:{
+    amount:{
         type:Sequelize.INTEGER,
         allowNull:false,
-        defaultValue:0
 
     },
+   amountDeposited:{
+    type:Sequelize.INTEGER,
+    allowNull:false,
+    defaultValue:0
+   },
+
     InvestmentDate:{
         type:Sequelize.DATE,
         allowNull:true,
@@ -130,8 +141,11 @@ const Investment= sequelize.define("investment", {
         allowNull:true,
     }
 });
-
-Investor.hasMany(Investment,{
+Investment.hasOne(Investor,{
+  foreignKey:'referrerId',
+  onDelete:'CASCADE'
+})
+Investor.hasOne(Investment,{
     foreignKey:'investorId',
     onDelete:'CASCADE'
 })
@@ -141,35 +155,7 @@ Manager.hasMany(Investment,{
     onDelete:'CASCADE'
 })
 
-const TopUp= sequelize.define("topUp", {
-    id: {
-        type: Sequelize.INTEGER,
-        autoIncrement: true,
-        allowNull: false,
-        primaryKey: true,
-    },
-    date: {
-        type: Sequelize.DATE,
-        allowNull: false,
-    },
-    amount:{
-        type:Sequelize.DATE,
-        allowNull:false
-
-    },
-    profit:{
-        type: Sequelize.DATE,
-        allowNull: false
-    },
-    
-});
-
-Investment.hasMany(TopUp, {
-    foreignKey: 'investmentId',
-    onDelete: 'CASCADE', 
-  });
-
-const DepositWallet = sequelize.define("wallet", {
+const DepositWallet = sequelize.define("depositWallet", {
     id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
@@ -180,48 +166,23 @@ const DepositWallet = sequelize.define("wallet", {
         type: Sequelize.STRING,
         allowNull: false,
     },
-    type: {
+    blockchain: {
         type: Sequelize.STRING,
         allowNull: false,
     },
-    currency: {
+    network: {
         type: Sequelize.STRING,
         allowNull: false
     }
 });
 
-TopUp.hasMany(DepositWallet, {
-    foreignKey: 'investmentId',
-    onDelete: 'CASCADE', 
-  });
-
-const WithdrawalWallet = sequelize.define("wallet", {
-    id: {
-        type: Sequelize.INTEGER,
-        autoIncrement: true,
-        allowNull: false,
-        primaryKey: true,
-    },
-    address: {
-        type: Sequelize.STRING,
-        allowNull: false,
-    },
-    type: {
-        type: Sequelize.STRING,
-        allowNull: false,
-    },
-    currency: {
-        type: Sequelize.STRING,
-        allowNull: false
-    }
-});
-
-Investment.hasOne(WithdrawalWallet,{
+Investment.hasOne(DepositWallet,{
     foreignKey:'investmentId',
     onDelete:'CASCADE'
 })
 
-  const Transaction = sequelize.define('transaction', {
+
+const Transaction = sequelize.define('transaction', {
     id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
@@ -232,6 +193,13 @@ Investment.hasOne(WithdrawalWallet,{
       type:Sequelize.FLOAT,
       allowNull: false,
     },
+    subject: {
+      type:Sequelize.STRING,
+      allowNull: false,
+      validate: {
+        isIn: [['Your Wallet', COMPANY_NAME]],
+      },
+    },
     time: {
       type:Sequelize.DATE,
       defaultValue:Sequelize.NOW,
@@ -240,7 +208,7 @@ Investment.hasOne(WithdrawalWallet,{
       type:Sequelize.STRING,
       allowNull: false,
       validate: {
-        isIn: [['deposit', 'withdrawal']],
+        isIn: [['Deposit', 'Credit']],
       },
     },
   });
@@ -258,39 +226,28 @@ Investment.hasOne(WithdrawalWallet,{
         primaryKey: true,
     },
     amountRecieved: {
-      type:Sequelize.FLOAT,
-      allowNull: false,
+      type:Sequelize.DOUBLE,
+      allowNull: true,
     },
     profit: {
       type:Sequelize.DOUBLE,
-      allowNull:false,
-      defaultValue:0
+
+      allowNull: true,
     },
-    targetProfit:{
-        type:Sequelize.DOUBLE,
-      allowNull:true,
-    } 
+  
   });
+
   Investor.hasMany(Referral, {
-    foreignKey: 'investorId',
+    foreignKey: 'refereeInvestorId',
     onDelete: 'CASCADE', 
   });
 
-  Investment.hasOne(Referral,{
-    foreignKey: 'investormentId',
-    onDelete: 'CASCADE', 
-  }
-
-  )
 
    const Notification = sequelize.define('Notification', {
-    amount: {
-      type:Sequelize.FLOAT,
+    header: {
+      type:Sequelize.STRING,
       allowNull: false,
-    },
-    time: {
-      type:Sequelize.DATE,
-      defaultValue:Sequelize.NOW,
+    
     },
     message: {
       type:Sequelize.STRING,
@@ -299,36 +256,48 @@ Investment.hasOne(WithdrawalWallet,{
     },
   });
 
-
-
-const Currency = sequelize.define('Currency', {
-    name: {
-      type: Sequelize.STRING,
-      allowNull: false,
-      unique: true, 
-    },
+  Investor.hasMany(Notification, {
+    foreignKey: 'investorId',
+    onDelete: 'CASCADE', 
   });
 
-const AdminWallet = sequelize.define("adminWwallet", {
+
+
+
+
+  const AdminWallet = sequelize.define('AdminWallet', {
     id: {
-        type: Sequelize.INTEGER,
-        autoIncrement: true,
-        allowNull: false,
-        primaryKey: true,
+      type: Sequelize.INTEGER,
+      autoIncrement: true,
+      allowNull: false,
+      primaryKey: true,
     },
     address: {
-        type: Sequelize.STRING,
-        allowNull: false,
+      type: Sequelize.STRING,
+      allowNull: false,
     },
-    currency: {
-        type: Sequelize.STRING,
-        allowNull: false
+    blockchain: {
+      type: Sequelize.STRING,
+      allowNull: false,
+      unique: 'unique_blockchain_network', // Use a custom unique constraint name
+    },
+    network: {
+      type: Sequelize.STRING,
+      allowNull: false,
+      unique: 'unique_blockchain_network', // Use the same custom unique constraint name
     }
-});
+  }, {
+    indexes: [
+      {
+        unique: true,
+        fields: ['blockchain', 'network'],
+        name: 'unique_blockchain_network_index' // Custom index name for the unique pair
+      }
+    ]
+  });
+  
 
-Currency.hasOne(AdminWallet,{
-    foreignKey:'currencyId'
-})
+
 
 const Admin = sequelize.define('admin', {
     name: {
@@ -382,4 +351,4 @@ sequelize.sync()
   .catch(err => {
     console.error('Unable to sync User model:', err);
   });
-module.exports =  {Investor,Admin,Manager,AdminWallet,DepositWallet,WithdrawalWallet,Investment,Transaction, TopUp,Notification}
+module.exports =  {Investor,Admin,Manager,AdminWallet,DepositWallet,Referral,Investment,Transaction,Notification}
