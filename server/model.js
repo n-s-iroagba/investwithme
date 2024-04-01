@@ -139,6 +139,11 @@ const Investment= sequelize.define("investment", {
     dueDate:{
         type:Sequelize.DATE,
         allowNull:true,
+    },
+    isPaused:{
+      type:Sequelize.BOOLEAN,
+      allowNull:false,
+      defaultValue:false
     }
 });
 Investment.hasOne(Investor,{
@@ -215,6 +220,11 @@ const Transaction = sequelize.define('transaction', {
 
   Investor.hasMany(Transaction, {
     foreignKey: 'investorId',
+    onDelete: 'CASCADE', 
+  });
+
+  Investment.Admin.hasMany(Transaction, {
+    foreignKey: 'investmentId',
     onDelete: 'CASCADE', 
   });
 
