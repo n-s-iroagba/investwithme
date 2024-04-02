@@ -1,11 +1,5 @@
 const {Investor,Admin,Manager, DepositWallet, Investment,Referral}= require('../model')
 
-
-
-const getOrdinalSuffix = require('../helpers');
-const { where } = require('sequelize');
-const JWT_SECRET = 'your_jwt_secret';
-
 module.exports = {
 
   index: async (req, res) => {

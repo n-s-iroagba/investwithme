@@ -1,6 +1,8 @@
 const nodemailer = require('nodemailer');
+const moment = require('moment-timezone');
 const { SERVER_VERIFY_EMAIL_ROUTE, COMPANY_NAME, TOKEN_EXPIRATION_TIME, COMPANY_VERIFICATION_EMAIL,COMPANY_REFERRAL_EMAIL } = require('./config');
 const {getVerificationEmailContent} = require('./helpers')
+const Investor = require('./model'); 
 
 const transporter = nodemailer.createTransport({
   service: "Gmail",
@@ -52,6 +54,41 @@ const sendPasswordResetEmail=()=>{
 
 
 }
+
+
+// Import transporter
+
+const sendInvestmentReminderEmails = async () => {
+  try {
+    const investors = await Investor.findAll({ where: { hasInvested: false } });
+    const currentDate = moment().format('YYYY-MM-DD'); // Get current date
+
+    for (const investor of investors) {
+      const { id, firstName, lastName, email, timezone } = investor;
+      const investorTime = moment.tz(currentDate, timezone).startOf('day').add(8, 'hours'); // Set reminder time to 8 AM in investor's timezone
+
+      if (moment().isSameOrAfter(investorTime)) {
+        // Send email
+        await transporter.sendMail({
+          from: 'your-email@gmail.com',
+          to: email,
+          subject: 'Investment Reminder',
+          text: `Hi ${firstName} ${lastName}, This is a friendly reminder to invest in our platform.`,
+          html: `<p>Hi ${firstName} ${lastName},</p><p>This is a friendly reminder to invest in our platform.</p>`,
+        });
+
+        console.log(`Reminder email sent to ${firstName} ${lastName}`);
+      } else {
+        console.log(`No reminder needed for ${firstName} ${lastName}`);
+      }
+    }
+
+    console.log('Reminder emails sent successfully.');
+  } catch (error) {
+    console.error('Error sending reminder emails:', error);
+  }
+};
+
 
 
 
