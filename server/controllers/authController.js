@@ -51,7 +51,7 @@ module.exports = {
         const refereeInvestor = await Investor.findOne({ where: { referralCode: referralCode } });
         if (refereeInvestor) {
           newInvestor.refereeId = refereeInvestor.id;
-          await Referral.create({refereeInvestorId: refereeInvestor.id});
+          await Referral.create({refereeId: refereeInvestor.id,referredId:newInvestor.id});
           await Notification.create({ investorId: refereeInvestor.id, header: 'Referral', message: `Thank you!\n You just referred ${newInvestor.firstName} ${newInvestor.lastName}. You'd earn ${referralBonusPercent} on the first deposit` });
           await sendReferalCompletedMail(refereeInvestor, newInvestor);
         } else {

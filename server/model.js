@@ -123,18 +123,24 @@ const Investment= sequelize.define("investment", {
     },
     amount:{
         type:Sequelize.INTEGER,
-        allowNull:false,
+        allowNull:true,
+        defaultValue:0
 
     },
+
    amountDeposited:{
     type:Sequelize.INTEGER,
     allowNull:false,
     defaultValue:0
    },
 
-    InvestmentDate:{
+  creationDate:{
         type:Sequelize.DATE,
-        allowNull:true,
+        allowNull:false,
+    },
+    investmentDate:{
+      type:Sequelize.DATE,
+      allowNull:false,
     },
     dueDate:{
         type:Sequelize.DATE,
@@ -146,10 +152,7 @@ const Investment= sequelize.define("investment", {
       defaultValue:false
     }
 });
-Investment.hasOne(Investor,{
-  foreignKey:'referrerId',
-  onDelete:'CASCADE'
-})
+
 Investor.hasOne(Investment,{
     foreignKey:'investorId',
     onDelete:'CASCADE'
@@ -227,31 +230,34 @@ const Transaction = sequelize.define('transaction', {
     foreignKey: 'investmentId',
     onDelete: 'CASCADE', 
   });
-
-  const Referral = sequelize.define('referral', {
+  
+  const Referral = sequelize.define('Referral', {
     id: {
-        type: Sequelize.INTEGER,
-        autoIncrement: true,
-        allowNull: false,
-        primaryKey: true,
+      type: Sequelize.INTEGER,
+      autoIncrement: true,
+      allowNull: false,
+      primaryKey: true,
     },
     amountRecieved: {
-      type:Sequelize.DOUBLE,
+      type: Sequelize.DOUBLE,
       allowNull: true,
     },
     profit: {
-      type:Sequelize.DOUBLE,
-
+      type: Sequelize.DOUBLE,
       allowNull: true,
     },
-  
   });
-
+  
   Investor.hasMany(Referral, {
-    foreignKey: 'refereeInvestorId',
+    foreignKey: 'refereeId',
     onDelete: 'CASCADE', 
   });
-
+  
+  Investor.hasOne(Referral, {
+    foreignKey: 'referredId',
+    onDelete: 'CASCADE', 
+  });
+  
 
    const Notification = sequelize.define('Notification', {
     header: {
