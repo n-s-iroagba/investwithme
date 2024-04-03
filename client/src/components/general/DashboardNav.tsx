@@ -4,12 +4,13 @@ import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import '../styles.css';
 import { Col, Row } from 'react-bootstrap';
 import { faBell } from '@fortawesome/free-solid-svg-icons';
+import { getGreeting } from '../../utils/helpers';
 
 export const DashboardBar: React.FC<{username:string,newNotification:boolean}> = (props) => {
   return (
     <Row className="d-flex text-light align-items-center w-100">
       <Col className='text-light mb-3' xs={4}>
-        <h6 className='mb-0'>Good Afternoon,</h6>
+      <h6 className='mb-0'>{getGreeting()+','}</h6>
         <h6 className='text-wrap'>{props.username}</h6>
       </Col>
 
@@ -33,6 +34,25 @@ export const DashboardBar: React.FC<{username:string,newNotification:boolean}> =
     </Row>
   );
 };
+
+
+export const AdminDashboardBar: React.FC<{username:string}> = (props) => {
+  return (
+    <Row className="d-flex text-light align-items-center w-100">
+      <Col className='text-light mb-3' xs={12} md={6}>
+        <h6 className='mb-0'>{getGreeting()+','}</h6>
+        <br/>
+        <h6 className='text-wrap'>{props.username}</h6>
+      </Col>
+
+      <Col xs={4} className="d-flex justify-content-center align-items-center mb-3">
+     Logo.....
+      </Col>
+    </Row>
+  );
+};
+
+
 const DashboardNav: React.FC<{ icon: IconProp; text: string; action: () => void }> = (props) => {
   return (
     <div onClick={props.action} className="dash-nav" >

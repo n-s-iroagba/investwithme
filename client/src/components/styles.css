@@ -49,7 +49,12 @@ div .round-card{
 .primary-background {
     background:var(--primary-color) ;
     width:100%;
+    height: 100%;
 }
+.full-height{
+    height: 100vh;
+}
+
 .green{
     background:var(--primary-color) ;
 }

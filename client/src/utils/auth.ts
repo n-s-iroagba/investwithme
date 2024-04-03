@@ -1,46 +1,19 @@
-import { DecodedToken } from "./types";
+import { AdminAuthorizationData, AdminDecodedToken, AuthorizationData, DecodedToken } from "./types";
 import { jwtDecode } from "jwt-decode";
 
 
-export const verifyToken = (token: string): DecodedToken | null => {
-    try {
-      const decoded: any = jwtDecode(token);
-      const { id,  role, name,hasInvested } = decoded;
-      return { id, role, hasInvested,name, };
-    } catch (error: any) {
-      console.error('Error decoding token:', error);
-      return null;
-    }
-  };
 
-  export const isAuthorised =  (
-    role: string,
-    setUserName: (name: string) => void
-  ): boolean => {
-    const token: string | null = localStorage.getItem('cassockAuthToken');
+  export const getAuthData = (role: string): AdminAuthorizationData | AuthorizationData| null => {
+    // Mock decoded token for demonstration
+    const token = localStorage.getItem('cassockJwtToken') as string;
+    let decodedToken: AdminDecodedToken | DecodedToken | null = null
+
+      decodedToken = jwtDecode(token);
   
-    if (!token) {
-      return false;
-    }
-  
-    try {
-      const verifiedToken = verifyToken(token);
-      if (verifiedToken) {
-        if (verifiedToken.role !== role) {
-          return false;
-        } else {
-          if (verifiedToken.name) {
-            setUserName(verifiedToken.name);
-          }
-          return true;
-        }
-      } else {
-        console.error('Token verification failed.');
-        return false;
-      }
-    } catch (error) {
-      console.error('Error verifying token:', error);
-      return false;
+    if (decodedToken && decodedToken.role === role) {
+      return { authorised: true, name: decodedToken.name };
+    } else {
+      return { authorised: false, name: '' }; // or handle unauthorized case as needed
     }
   };
 

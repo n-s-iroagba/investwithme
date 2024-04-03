@@ -36,14 +36,26 @@ export interface InvestmentType{
 }
 
 
+
 export interface DecodedToken {
     id: string;
     role: string;
     hasInvested?:boolean;
     name:string
-    status?:string
   }
-  
+export interface AdminDecodedToken{
+    id: string;
+    role: string;
+    name:string 
+}
+export interface AdminAuthorizationData{
+    authorised:boolean;
+    name:string
+}
+
+export interface AuthorizationData extends DecodedToken {
+    authorised: boolean;
+  }
 
 
   
