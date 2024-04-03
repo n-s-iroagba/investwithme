@@ -9,9 +9,8 @@ interface InvestmentTiersType {
   image: string;
   name: string;
   minDeposit: string;
-
   duration: string;
-  investbutton:React.ReactNode
+  button:React.ReactNode
 }
 
 export const InvestmentTiersCard: React.FC<InvestmentTiersType> = ({
@@ -20,7 +19,7 @@ export const InvestmentTiersCard: React.FC<InvestmentTiersType> = ({
   name,
   minDeposit,
   duration,
-  investbutton,
+  button,
 }) => {
   return (
     <div className="px-4">
@@ -39,7 +38,7 @@ export const InvestmentTiersCard: React.FC<InvestmentTiersType> = ({
        <Card.Text className='d-flex align-items-center mb-0'><p className='card-label-width-wide ' >Duration:</p> <p >{duration} </p></Card.Text>
        </div>
       </div>
-       <div className="w-100 d-flex justify-content-center"><div className="w-75">{investbutton}</div></div>
+       <div className="w-100 d-flex justify-content-center"><div className="w-75">{button}</div></div>
         </Card.Body>
       </Card>
     </div>

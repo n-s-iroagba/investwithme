@@ -1,6 +1,6 @@
 import React from 'react'
-import TransactionComponent from '../../components/Transaction';
-import Information from '../../components/Information';
+import TransactionComponent from '../../components/investor/Transaction';
+import Information from '../../components/general/Information';
 import { faMoneyBillTransfer } from '@fortawesome/free-solid-svg-icons';
 
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Toast } from 'react-bootstrap';
-import '../../assets/Styles.css'
-import { messages } from '../../helpers/data';
+import '../styles.css'
+import { messages } from '../../utils/constants';
 const PopupToast: React.FC = () => {
   const [index, setIndex] = useState(0);
   const [show, setShow] = useState(true);

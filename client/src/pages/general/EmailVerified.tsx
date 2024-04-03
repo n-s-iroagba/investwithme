@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import Information from '../../components/Information';
+import Information from '../../components/general/Information';
 import { faMailchimp } from '@fortawesome/free-brands-svg-icons';
 import { useNavigate } from 'react-router-dom';
-import { getData} from '../../helpers/api'
-  import {verifyToken } from '../../helpers/auth';
-import { resendVerificationTokenUrl } from '../../helpers/data';
+import { getData} from '../../utils/api'
+  import {verifyToken } from '../../utils/auth';
+import { resendVerificationTokenUrl } from '../../utils/constants';
 
 const EmailVerified = () => {
   const [counter, setCounter] = useState(0);

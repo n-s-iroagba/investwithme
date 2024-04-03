@@ -4,13 +4,13 @@ import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import { Spinner,Accordion,Image, Card, Button } from'react-bootstrap';
 import { useState } from 'react';
-import '../../assets/Styles.css';
-import ErrorMessage from '../ErrorMessage';
-import { required } from './required';
+import '../styles.css';
+import ErrorMessage from '../general/ErrorMessage';
+import { required } from '../auth/general/required';
 
 import { useNavigate } from 'react-router-dom';
-import { patchManagerUrl } from '../../helpers/data';
-import { ManagerType } from '../../helpers/types';
+import { patchManagerUrl } from '../../utils/constants';
+import { ManagerType } from '../../utils/types';
 
 
 const EditManagerAccordion: React.FC<{manager:ManagerType}> = ({manager}) => {
@@ -33,7 +33,7 @@ const EditManagerAccordion: React.FC<{manager:ManagerType}> = ({manager}) => {
  }
 
  const handleFileChange = (e:any) => {
-  e.preventDefault();
+  e.preventDefault(); 
   const file = e.target.files[0];
   const reader = new FileReader();
 

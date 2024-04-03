@@ -2,11 +2,11 @@ import React from 'react'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Spinner, Row, Col} from 'react-bootstrap'
-import DashboardNav from '../../components/DashboardNav'
+import DashboardNav from '../../components/general/DashboardNav'
 import { faWallet,faHandHoldingDollar,faQuestion,faMoneyBillTransfer,faMoneyBill, faUserFriends} from '@fortawesome/free-solid-svg-icons'
-import { DashboardBar } from '../../components/DashboardNav'
-import '../../assets/Styles.css'
-import { miniFooter } from '../../components/Footer'
+import { DashboardBar } from '../../components/general/DashboardNav'
+import '../../components/styles.css'
+import { MiniFooter } from '../../components/home_components/Footer'
 
 
 const Dashboard: React.FC = () => {
@@ -49,7 +49,7 @@ const Dashboard: React.FC = () => {
           ))}
            <Col xs={4}>  <button className='mt-3 button-styles text-light'>Logout</button></Col>
         </Row>
-        {miniFooter}
+        <MiniFooter primaryVariant={true}/>
     </div>
   );
 };

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card } from 'react-bootstrap';
-import '../assets/Styles.css'
+import '../styles.css'
 
 
 const PorfolioCard:React.FC<{title:string,mainText:string,subText:string,primaryBackground?:boolean}> = ({title, mainText,subText,primaryBackground})=>{

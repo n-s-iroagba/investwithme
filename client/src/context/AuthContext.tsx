@@ -1,6 +1,6 @@
 import React, { createContext, useState } from "react";
-import { doPasswordsMatch } from "../helpers/auth";
-import { postData } from "../helpers/api";
+import { doPasswordsMatch } from "../utils/auth";
+import { postData } from "../utils/api";
 import { AdminData, AuthContextType, InvestorData } from "./AuthTypes";
 
 export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {

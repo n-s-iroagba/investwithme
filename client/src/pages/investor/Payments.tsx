@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Form } from 'react-bootstrap';
-import Information from '../../components/Information';
+import Information from '../../components/general/Information';
 import { faHandHoldingDollar } from '@fortawesome/free-solid-svg-icons';
 
 

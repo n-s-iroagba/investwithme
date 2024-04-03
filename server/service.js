@@ -56,7 +56,7 @@ const sendPasswordResetEmail=()=>{
 }
 
 
-// Import transporter
+
 
 const sendInvestmentReminderEmails = async () => {
   try {

@@ -1,8 +1,8 @@
 import React from 'react';
 import { Row, Col } from 'react-bootstrap'
-import { InvestmentTiersCard } from '../InvestmentTiersCard';
-import { InvestButton } from '../Button';
-import { miniFooter } from '../Footer';
+import { InvestmentTiersCard } from '../general/InvestmentTiersCard';
+import { InvestButton } from '../general/Button';
+
 const InvestmentCards: React.FC = () => {
 
 
@@ -51,12 +51,11 @@ const InvestmentCards: React.FC = () => {
                             minDeposit={data.minDeposit}
                     
                             duration={data.duration}
-                            investbutton={<InvestButton managerId={1} investorId={2}  />}
+                            button={<InvestButton managerId={1} investorId={2}  />}
                         />
                     </Col>
                 ))}
             </Row>
-            {miniFooter}
         </div>
     );
 

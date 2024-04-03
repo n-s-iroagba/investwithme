@@ -4,14 +4,14 @@ import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import { InputGroup, Spinner } from 'react-bootstrap';
-import { createAdminUrl } from '../../helpers/data';
-import { required } from '../../components/forms/required';
-import PasswordStrengthMeter from '../../components/PasswordStrengthMeter';
-import '../../assets/Styles.css'
+import { createAdminUrl } from '../../../utils/constants';
+import { required } from './required';
+import PasswordStrengthMeter from './PasswordStrengthMeter';
+import '../../styles.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
-import ErrorMessage from '../../components/ErrorMessage';
-import { AuthContext } from '../../context/AuthContext';
+import ErrorMessage from '../../general/ErrorMessage';
+import { AuthContext } from '../../../context/AuthContext';
 
 
 

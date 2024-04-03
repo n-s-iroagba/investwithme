@@ -5,17 +5,17 @@ import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Select from 'react-select';
 import { useEffect, useState } from 'react';
-import '../../assets/Styles.css';
+import '../../styles.css';
 import "react-datepicker/dist/react-datepicker.css"
-import { required } from './required';
-import { AuthContext } from '../../context/AuthContext';
+import { required } from '../general/required';
+import { AuthContext } from '../../../context/AuthContext';
 import { InputGroup, Spinner } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import PasswordStrengthMeter from '../PasswordStrengthMeter';
+import PasswordStrengthMeter from '../general/PasswordStrengthMeter';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
-import ErrorMessage from '../ErrorMessage';
+import ErrorMessage from '../../general/ErrorMessage';
 import { useNavigate } from 'react-router-dom';
-import { createInvestorUrl } from '../../helpers/data';
+import { createInvestorUrl } from '../../../utils/constants';
 
 
 const SignUpForm: React.FC = () => {

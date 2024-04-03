@@ -2,10 +2,10 @@ import React from 'react'
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDollarSign, faEnvelope, faFile,} from '@fortawesome/free-solid-svg-icons';
-import'../assets/Styles.css'
+import'../styles.css'
 import { faFacebook } from '@fortawesome/free-brands-svg-icons';
 import { useNavigate } from 'react-router-dom';
-import { createInvestment } from '../helpers/api';
+import { createInvestment } from '../../utils/api';
 
 
 

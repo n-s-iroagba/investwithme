@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Card, Carousel, Image, Col, Row } from 'react-bootstrap';
-import '../../assets/Styles.css'
-import testimonials from '../../helpers/data';
+import '../styles.css'
+import testimonials from '../../utils/constants';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
 

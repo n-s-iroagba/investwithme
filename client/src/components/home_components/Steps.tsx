@@ -1,10 +1,10 @@
 import React from 'react';
 import { faUser, faWallet, faBank } from '@fortawesome/free-solid-svg-icons';
-import Information from '../Information';
+import Information from '../general/Information';
 import { Col, Row } from 'react-bootstrap';
 import moneyBag from '../../assets/images/moneyBag.webp'
-import '../../assets/Styles.css'
-import { GetStartedButton } from '../Button';
+import '../styles.css'
+import { GetStartedButton } from '../general/Button';
 
 const Steps: React.FC = () => {
 

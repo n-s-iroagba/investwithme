@@ -1,5 +1,5 @@
 import React from 'react'
-import Information from '../Information'
+import Information from '../general/Information'
 import { faUsers } from '@fortawesome/free-solid-svg-icons'
 
 

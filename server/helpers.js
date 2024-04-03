@@ -1,22 +1,16 @@
-const getOrdinalSuffix = (number)=>{
-    const ones = number % 10;
-    const tens = Math.floor(number / 10) % 10;
-  
-    if (tens !== 1) {
-      switch (ones) {
-        case 1:
-          return number + 'st';
-        case 2:
-          return number + 'nd';
-        case 3:
-          return number + 'rd';
-        default:
-          return number + 'th';
-      }
-    } else {
-      return number + 'th'; 
+function findManagerWithHighestMinInvestment(managers, amount) {
+  let highestMinInvestmentManager = null;
+  let highestMinInvestment = -Infinity;
+
+  for (const manager of managers) {
+    if (manager.minimumInvestmentAmount <= amount && manager.minimumInvestmentAmount > highestMinInvestment) {
+      highestMinInvestment = manager.minimumInvestmentAmount;
+      highestMinInvestmentManager = manager;
     }
   }
+
+  return highestMinInvestmentManager;
+}
 
 const getVerificationEmailContent = (verificationUrl,TOKEN_EXPIRATION_TIME,COMPANY_NAME) => {
     return `<!DOCTYPE html>
@@ -41,4 +35,4 @@ const getVerificationEmailContent = (verificationUrl,TOKEN_EXPIRATION_TIME,COMPA
   </body>
   </html>`;
   }
-module.exports = {getOrdinalSuffix, getVerificationEmailContent}
+module.exports = {findManagerWithHighestMinInvestment, getVerificationEmailContent}

@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 import { Form,Row,Col, Spinner } from 'react-bootstrap'
-import { required } from './required'
-import ConfirmationModal from '../ConfirmationModal'
-import ErrorMessage from '../ErrorMessage'
+import { required } from '../auth/general/required'
+import ConfirmationModal from '../investor/ConfirmationModal'
+import ErrorMessage from '../general/ErrorMessage'
 import { useNavigate } from 'react-router-dom'
-import '../../assets/Styles.css'
+import '../styles.css'
 
 
 const NewInvestmentForm:React.FC = ()=>{

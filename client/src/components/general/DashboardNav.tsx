@@ -1,7 +1,7 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
-import '../assets/Styles.css';
+import '../styles.css';
 import { Col, Row } from 'react-bootstrap';
 import { faBell } from '@fortawesome/free-solid-svg-icons';
 

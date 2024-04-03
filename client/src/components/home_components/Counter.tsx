@@ -1,7 +1,7 @@
 import React from "react";
 import { useState,useEffect,useRef } from "react";
 import { Row,Col } from "react-bootstrap";
-import '../../assets/Styles.css'
+import '../styles.css'
 
 const Counter:React.FC = ()=>{
 const [clientCount, setClientCount] = useState(0);

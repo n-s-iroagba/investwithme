@@ -1,12 +1,12 @@
 
 import React from 'react';
-import NavbarComponent from '../NavbarComponent';
+import NavbarComponent from '../general/NavbarComponent';
 import { Col, Row } from 'react-bootstrap'
-import { GetStartedButton } from '../Button'
+import { GetStartedButton } from '../general/Button'
 import header from '../../assets/images/header.gif'
 import PopupToast from './PopupToast';
-import '../../assets/Styles.css'
-import { companyName } from '../../helpers/data';
+import '../styles.css'
+import { companyName } from '../../utils/constants';
 const Header: React.FC = () => {
 
   return (

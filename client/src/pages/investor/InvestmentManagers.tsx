@@ -1,8 +1,9 @@
 import React from 'react';
   import { Row, Col } from 'react-bootstrap';
-  import { InvestmentTiersCard } from '../../components/InvestmentTiersCard';
-  import { InvestButton } from '../../components/Button';
-  import { miniFooter } from '../../components/Footer';
+  import { InvestmentTiersCard } from '../../components/general/InvestmentTiersCard';
+  import { InvestButton } from '../../components/general/Button';
+
+import { MiniFooter } from '../../components/home_components/Footer';
 
   const InvestmentManagers:React.FC = () => {
       const investorId = 1
@@ -47,12 +48,12 @@ import React from 'react';
                               name={data.name}
                               minDeposit={data.minDeposit}
                               duration={data.duration}
-                              investbutton={<InvestButton managerId={data.id} investorId={investorId} />}
+                              button={<InvestButton managerId={data.id} investorId={investorId} />}
                           />
                       </Col>
                   ))}
               </Row>
-              {miniFooter}
+              <MiniFooter primaryVariant={true}/>
           </div>
       );
   };

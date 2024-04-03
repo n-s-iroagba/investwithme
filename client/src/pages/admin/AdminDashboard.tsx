@@ -1,32 +1,34 @@
 import React,{useEffect,useState} from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Row, Col,Spinner} from 'react-bootstrap'
-import DashboardNav from '../../components/DashboardNav'
+import DashboardNav from '../../components/general/DashboardNav'
 import {faHandHoldingDollar, faWallet, faUser} from '@fortawesome/free-solid-svg-icons'
-import { DashboardBar } from '../../components/DashboardNav'
+import { DashboardBar } from '../../components/general/DashboardNav'
+import { MiniFooter } from '../../components/home_components/Footer'
 
-import '../../assets/Styles.css'
-import { isAuthorised } from '../../helpers/auth'
+import '../../components/styles.css'
+import { isAuthorised } from '../../utils/auth'
 
 // <{greeting:string,username:string}>
 
 
 const AdminDashboard: React.FC = () => {
   const navigate = useNavigate();
-  const [authorised, setAuthorised] = useState<boolean>(false);
+  const [authorised, setAuthorised] = useState<boolean>(true);
   const [username, setUsername] = useState<string>('');
 
   const location = useLocation();
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
-    const receivedToken:string|null = searchParams.get('token');
-    if (receivedToken){
-      localStorage.setItem('cAssocKJwtToken',receivedToken)
-    }
-    const authorised = isAuthorised('admin', setUsername);
-    if (authorised){
-      setAuthorised(authorised)
-    }
+  //   const receivedToken:string|null = searchParams.get('token');
+  //   if (receivedToken){
+  //     localStorage.setItem('cAssocKJwtToken',receivedToken)
+  //   }
+  //   const authorised = isAuthorised('admin', setUsername);
+  //   if (authorised){
+  //     setAuthorised(authorised)
+  //   }
+
   }, [setAuthorised, navigate, location.search]);
 
  
@@ -41,13 +43,14 @@ const AdminDashboard: React.FC = () => {
     );
 
   }
-  const icons = [faWallet,faUser, faHandHoldingDollar, ];
-  const actions: string[] = ['admin/wallets', 'admin/managers','admin/investors'];
-  const texts: string[] = ['Wallets', 'Managers','investors'];
+  const icons = [faUser,faWallet,faUser, faHandHoldingDollar, ];
+  const actions: string[] = ['admin/managers','admin/wallets','admin/investors','promos'];
+  const texts: string[] = [ 'Managers','Wallets', 'Investors', 'Promo'];
+
 
   return (
     <div className='primary-background px-4 py-4'>
-      <DashboardBar newNotification={true} username={username} />
+      <DashboardBar newNotification={false} username={username} />
    
         <Row className="justify-content-between gy-2 gx-2">
           {texts.map((text, index) => (
@@ -56,7 +59,7 @@ const AdminDashboard: React.FC = () => {
             </Col>
           ))}
         </Row>
-   
+   <MiniFooter primaryVariant = {true} />
     </div>
   );
 };

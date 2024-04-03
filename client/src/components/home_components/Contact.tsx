@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEnvelope, } from '@fortawesome/free-solid-svg-icons'
 import { faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons'
 import { Col, Row } from "react-bootstrap";
-import { ContactButton, SocialMediaButton } from "../Button";
+import { ContactButton, SocialMediaButton } from "../general/Button";
 
 const Contact = () => {
     return (

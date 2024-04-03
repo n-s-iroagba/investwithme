@@ -6,9 +6,9 @@ import Row from 'react-bootstrap/Row';
 import { InputGroup, Spinner } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
-import ErrorMessage from '../../components/ErrorMessage';
-import { loginUrl } from '../../helpers/data';
-import { postData } from '../../helpers/api';
+import ErrorMessage from '../../general/ErrorMessage';
+import { loginUrl } from '../../../utils/constants';
+import { postData } from '../../../utils/api';
 
 const LoginForm: React.FC = () => {
   const navigate = useNavigate();

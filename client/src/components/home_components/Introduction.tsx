@@ -1,6 +1,6 @@
 import React from 'react'
-import '../../assets/Styles.css'
-import { whoWeAre, howWeDoIt } from '../../helpers/data'
+import '../styles.css'
+import { whoWeAre, howWeDoIt } from '../../utils/constants'
 const Introduction: React.FC = () => {
     return<>
         <div className='px-4'>

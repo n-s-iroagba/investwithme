@@ -1,5 +1,5 @@
 import React from  'react';
-import { ManagerType } from '../../helpers/types';
+import { ManagerType } from '../../utils/types';
 import EditManagerAccordion from '../../components/forms/EditManagerAccordion ';
 
 const AdminManager: React.FC = () => {

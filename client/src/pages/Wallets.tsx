@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Card,Form,Button} from 'react-bootstrap'
 import '../assets/Styles.css'
 import { GetStartedButton } from '../components/Button'
-import { WalletType } from '../helpers/types'
+import { WalletType } from '../utils/types'
 
 const   Wallet :React.FC<WalletType> = (props) => {
   const [isEditable, setIsEditable] = useState(true);

@@ -1,5 +1,4 @@
-import { LargeNumberLike } from "crypto";
-import { SuccessCallback } from "./api";
+import { ManagerType } from "./types";
 
 export function navigateToInvestOrLogin(navigate: (path: string) => void) {
     // Check if user is logged in (you need to implement this logic)
@@ -25,9 +24,7 @@ export const chooseVisitView = (navigate: (path: string) => void) => {
     }
   };
   
-  export const setAuthTokenAndNavigate: SuccessCallback<any> = (data,navigate,navUrl) => {
-    localStorage.setItem('cAssocKJwtToken', data);
-  };
+
   export function isLargeScreen() {
     const screenWidth = window.innerWidth;
     // Define your threshold for what constitutes a large screen, for example, 1024px
@@ -106,10 +103,17 @@ export const canInvest = (investmentAmount:number, managers:any) =>{
   const minMinInvestment = Math.min(...managers.map((manager:any) => manager.minimumInvestmentAmount));
   return investmentAmount < minMinInvestment;
 }
-function findManagerWithLowestMinimumInvestment(managers:any) {
-  return managers?.length && managers.reduce((lowest:any, manager:any) => (manager.minimumInvestmentAmount < lowest.minimumInvestmentAmount ? manager : lowest), managers[0]);
-}
-function findManagerWithHighestMinimumInvestment(managers:any) {
-  return managers?.length && managers.reduce((highest:any, manager:any) => (manager.minimumInvestmentAmount > highest.minimumInvestmentAmount ? manager : highest), managers[0]);
-}
+export const findManagerWithHighestMinInvestment = (managers: ManagerType[], amount: number): ManagerType | null => {
+  let highestMinInvestmentManager: ManagerType | null = null;
+  let highestMinInvestment = -Infinity;
+
+  managers.forEach((manager) => {
+    if (manager.minimumInvestmentAmount <= amount && manager.minimumInvestmentAmount > highestMinInvestment) {
+      highestMinInvestment = manager.minimumInvestmentAmount;
+      highestMinInvestmentManager = manager;
+    }
+  });
+
+  return highestMinInvestmentManager;
+};
 

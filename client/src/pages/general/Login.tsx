@@ -1,8 +1,8 @@
 import React from 'react';
-import LoginForm from '../../components/forms/LoginForm';
-import { LoginOption } from '../../components/AuthOption';
+import LoginForm from '../../components/auth/general/LoginForm';
+import { LoginOption } from '../../components/auth/general/AuthOption';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
-import Information from '../../components/Information';
+import Information from '../../components/general/Information';
 
 
 

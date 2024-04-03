@@ -4,7 +4,7 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
-import { isLargeScreen } from '../helpers/helpers';
+import { isLargeScreen } from '../../utils/helpers';
 import { useNavigate } from 'react-router-dom';
 
 const NavbarComponent: React.FC = () => {

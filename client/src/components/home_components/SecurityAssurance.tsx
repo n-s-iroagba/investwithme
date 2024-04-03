@@ -1,9 +1,9 @@
 import React from 'react';
 import { Row, Col } from 'react-bootstrap';
-import Information from '../Information';
-import { ViewCerficateButton } from '../Button';
+import Information from '../general/Information';
+import { ViewCerficateButton } from '../general/Button';
 import security from '../../assets/images/padlock.webp'
-import '../../assets/Styles.css'
+import '../styles.css'
 import { faBank } from '@fortawesome/free-solid-svg-icons';
 
 const SecurityAssurance: React.FC = () => {

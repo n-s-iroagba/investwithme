@@ -1,6 +1,6 @@
 import React from "react";
 import NewInvestmentForm from "../../components/forms/NewInvestmentForm";
-import Information from "../../components/Information";
+import Information from "../../components/general/Information";
 import { faHandHoldingDollar } from "@fortawesome/free-solid-svg-icons";
 
 const NewInvestment:React.FC = ()=>{

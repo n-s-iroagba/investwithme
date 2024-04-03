@@ -4,12 +4,11 @@ import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import { Spinner } from'react-bootstrap';
 import { useState } from 'react';
-import '../../assets/Styles.css';
-import ErrorMessage from '../ErrorMessage';
-import { required } from './required';
-
+import '../styles.css';
+import ErrorMessage from '../general/ErrorMessage';
+import { required } from '../auth/general/required';
 import { useNavigate } from 'react-router-dom';
-import { createInvestorUrl } from '../../helpers/data';
+import { createInvestorUrl } from '../../utils/constants';
 
 
 const ManagerForm: React.FC = () => {

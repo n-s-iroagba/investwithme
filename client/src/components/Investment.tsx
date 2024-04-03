@@ -1,10 +1,9 @@
 import React from 'react'
 import { Col, Card, Form, InputGroup, Row } from 'react-bootstrap'
 import '../assets/Styles.css'
-import { InvestmentType } from '../helpers/types'
+import { InvestmentType } from '../utils/types'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPencil } from '@fortawesome/free-solid-svg-icons'
-import Deposit from '../components/Deposit'
 import { useEffect, useState } from 'react'
 
 const Investment: React.FC<{ receivedInvestment: InvestmentType }> = ({ receivedInvestment }) => {

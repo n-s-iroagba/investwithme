@@ -13,22 +13,22 @@ import Wallets from "./pages/Wallets";
 import UpdateWallet from "./pages/UpdateWallet";
 import AdminSignUp from "./pages/admin/AdminSignUp";
 import InvestmentManagers from "./pages/investor/InvestmentManagers";
-import SignUp from "./pages/SignUp";
+import SignUp from "./pages/investor/SignUp";
 import SelectWallet from "./pages/SelectWallet";
 import AdminWallet from "./pages/admin/AdminWallets";
-import AdminInvestor from "./components/AdminiInvestors";
+
 import AdminInvestmentManagers from "./pages/admin/AdminInvestmentManagers";
 import Portfolio from "./pages/investor/Portfolio";
 import NewInvestment from "./pages/investor/NewInvestment";
 import ManagerForm from "./components/forms/NewManagerForm";
 import Email from "./pages/general/Email";
 import NewPassword from "./pages/general/NewPassword";
-import Transaction from "./components/Transaction";
+import Transaction from "./components/investor/Transaction";
 import EditManagerAccordion from "./components/forms/EditManagerAccordion ";
 import Transactions from "./pages/investor/Transactions";
 import Referral from "./pages/investor/Referral";
 import { Chart } from "chart.js";
-import Referra from "./components/Referra";
+
 
 
 
@@ -115,10 +115,6 @@ element: <Email />
     element: <AdminDashboard />,
 },
 
-{
-    path:'/referrals',
-    element: <Referra />
-},
 {
     path:'/portfolio',
     element: <Portfolio/>

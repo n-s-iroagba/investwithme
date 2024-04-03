@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Col, Form, Row } from 'react-bootstrap';
-import Information from '../../components/Information';
+import Information from '../../components/general/Information';
 import { faHandHoldingDollar, faUsers } from '@fortawesome/free-solid-svg-icons';
-import PortfolioCard from '../../components/PortfolioCard';
+import PortfolioCard from '../../components/investor/PortfolioCard';
 
 
 const TextWithCopy: React.FC = () => {

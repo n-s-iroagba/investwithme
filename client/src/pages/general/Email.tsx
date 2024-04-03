@@ -1,8 +1,8 @@
 import React from "react";
-import ChangePasswordEmailForm from "../../components/forms/ChangePasswordEmailForm";
-import Information from "../../components/Information";
+import ChangePasswordEmailForm from "../../components/auth/general/ChangePasswordEmailForm";
+import Information from "../../components/general/Information";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
-import '../../assets/Styles.css'
+import '../../components/styles.css'
 
 
 const Email = ()=>{

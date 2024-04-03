@@ -1,8 +1,8 @@
 import React from 'react'
-import SignUpForm from '../components/forms/SignUpForm'
-import { LoginOption } from '../components/AuthOption'
+import SignUpForm from '../../components/auth/investor/SignUpForm'
+import { LoginOption } from '../../components/auth/general/AuthOption'
 import { faUser } from '@fortawesome/free-solid-svg-icons'
-import Information from '../components/Information'
+import Information from '../../components/general/Information'
 
 const SignUp:React.FC = ()=>{
     return(

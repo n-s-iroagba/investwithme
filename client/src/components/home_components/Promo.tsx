@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { getTimeSinceFirstVisit } from '../../helpers/helpers';
-import { GetStartedButton } from '../Button';
+import { getTimeSinceFirstVisit } from '../../utils/helpers';
+import { GetStartedButton } from '../general/Button';
 
 const Promo: React.FC = () => {
   const [countdown, setCountdown] = useState<number | null>(null);
