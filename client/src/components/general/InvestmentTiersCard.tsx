@@ -1,23 +1,17 @@
 
 import React from "react";
 import { Card, Image} from "react-bootstrap";
+import { InvestmentTiersType } from "../../utils/types";
 
 
 
-interface InvestmentTiersType {
-  title: string;
-  image: string;
-  name: string;
-  minDeposit: string;
-  duration: string;
-  button:React.ReactNode
-}
 
 export const InvestmentTiersCard: React.FC<InvestmentTiersType> = ({
-  title,
+  percentageYield,
   image,
-  name,
-  minDeposit,
+  firstName,
+  lastName,
+  minimumInvestmentAmount,
   duration,
   button,
 }) => {
@@ -25,16 +19,16 @@ export const InvestmentTiersCard: React.FC<InvestmentTiersType> = ({
     <div className="px-4">
       <Card bg="light" text="black" className="w-100">
         <Card.Header className="background-secondary">
-          <Card.Title className="text-center">{title}</Card.Title>
+          <Card.Title className="text-center">{percentageYield}</Card.Title>
         </Card.Header>
         <Card.Body>
           <div className="d-flex justify-content-center">
             <Image src={image} alt="Card Image" roundedCircle />
           </div>
-          <Card.Title className=" text-center w-100">{name}</Card.Title>
+          <Card.Title className=" text-center w-100">{firstName + ' ' + lastName}</Card.Title>
         <div className="w-100 d-flex flex-column align-items-center">
         <div className="w-75 ">
-       <Card.Text className='d-flex  align-items-center mb-0'><p className=' card-label-width-wide' >Minimum Amount:</p> <p >{minDeposit}</p></Card.Text>
+       <Card.Text className='d-flex  align-items-center mb-0'><p className=' card-label-width-wide' >Minimum Amount:</p> <p >{minimumInvestmentAmount}</p></Card.Text>
        <Card.Text className='d-flex align-items-center mb-0'><p className='card-label-width-wide ' >Duration:</p> <p >{duration} </p></Card.Text>
        </div>
       </div>

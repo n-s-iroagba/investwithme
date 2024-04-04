@@ -41,3 +41,11 @@ export const InvestButton:React.FC<{investorId:number,managerId:number}> =({mana
   
 
 }
+
+
+export const EditManagerButton:React.FC<{investorId:number,managerId:number}> =({managerId,investorId})=>{
+  const navigate = useNavigate()
+  return <button onClick={()=>createInvestment(managerId,investorId,navigate)} className='button-styles'><div>Invest with this manager</div><div ><FontAwesomeIcon icon={faDollarSign} beatFade/></div></button>;
+  
+
+}

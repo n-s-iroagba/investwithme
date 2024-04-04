@@ -17,17 +17,18 @@ import SignUp from "./pages/investor/SignUp";
 import SelectWallet from "./pages/SelectWallet";
 import AdminWallet from "./pages/admin/AdminWallets";
 
-import AdminInvestmentManagers from "./pages/admin/AdminInvestmentManagers";
+
 import Portfolio from "./pages/investor/Portfolio";
 import NewInvestment from "./pages/investor/NewInvestment";
 import ManagerForm from "./components/forms/NewManagerForm";
 import Email from "./pages/general/Email";
 import NewPassword from "./pages/general/NewPassword";
 import Transaction from "./components/investor/Transaction";
-import EditManagerAccordion from "./components/forms/EditManagerAccordion ";
+
 import Transactions from "./pages/investor/Transactions";
 import Referral from "./pages/investor/Referral";
 import { Chart } from "chart.js";
+import AdminManager from "./pages/admin/AdminManager";
 
 
 
@@ -112,7 +113,7 @@ element: <Email />
 },
 {
     path:'/admin/dashboard',
-    element: <AdminDashboard />,
+    element: <AdminDashboard name={""} />,
 },
 
 {
@@ -129,7 +130,7 @@ element: <Email />
 },
 {
     path:'/admin/managers',
-    element: <AdminInvestmentManagers />
+    element: <AdminManager />
 },
 
 {

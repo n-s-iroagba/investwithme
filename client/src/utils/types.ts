@@ -1,14 +1,6 @@
 
-export interface ManagerType {
-    id:number,
-    firstName:string,
-    lastName:string,
-    minimumInvestmentAmount:number,
-    percentageYield:number, 
-    duration:string,
-    image:any,
-    qualification:string
-}
+
+
 
 export interface WalletType{
     type:string,
@@ -36,7 +28,27 @@ export interface InvestmentType{
 }
 
 
+export interface ManagerType {
+  id: number,
+    firstName: string,
+    lastName: string,
+    minimumInvestmentAmount: number
+    percentageYield: number
+    duration:number
+    image: string,
+    qualification: string
+  }
 
+export interface EditManagerType {
+  id?:number
+    firstName: string,
+    lastName: string,
+    minimumInvestmentAmount: number
+    percentageYield: number
+    duration:number
+    image: string,
+    qualification: string
+  }
 export interface DecodedToken {
     id: string;
     role: string;
@@ -58,4 +70,15 @@ export interface AuthorizationData extends DecodedToken {
   }
 
 
+  export interface InvestmentTiersType{
+    firstName: string,
+    lastName: string,
+    minimumInvestmentAmount:string,
+    percentageYield: string,
+    duration:string,
+    image: string,
+    qualification: string
+    button: React.ReactNode,
+    deleteButton?: React.ReactNode;
+  }
   

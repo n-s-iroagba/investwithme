@@ -6,7 +6,7 @@ import { InvestButton } from '../../components/general/Button';
 import { MiniFooter } from '../../components/home_components/Footer';
 import { ManagerType } from '../../utils/types';
 
-const InvestmentManagers: React.FC = () => {
+const AdminInvestmentManagersCard: React.FC = () => {
     const investorId = 1
     const managerData:ManagerType[] = [
         {
@@ -43,7 +43,8 @@ const InvestmentManagers: React.FC = () => {
 
     return (
         <div className='primary-background px-3'>
-            <Row className='gy-4 gx-1'>
+            {managerData.length > 0?
+                <Row className='gy-4 gx-1'>
                 <Col xs={12}>
                     <h3 className='text-center mt-4 text-light'>
                         Select Your Fund Manager And Investment Tier
@@ -66,9 +67,15 @@ const InvestmentManagers: React.FC = () => {
                     </Col>
                 ))}
             </Row>
+            :
+            <h3 className='text-center mt-4 text-light'>
+                No Managers yet, kindly add a manager.
+                </h3>
+            }
+            
             <MiniFooter primaryVariant={true} />
         </div>
     );
 };
 
-export default InvestmentManagers
+export default AdminInvestmentManagersCard
