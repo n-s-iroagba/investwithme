@@ -61,14 +61,11 @@ const sendPasswordResetEmail=()=>{
 const sendInvestmentReminderEmails = async () => {
   try {
     const investors = await Investor.findAll({ where: { hasInvested: false } });
-    const currentDate = moment().format('YYYY-MM-DD'); // Get current date
-
+  
     for (const investor of investors) {
-      const { id, firstName, lastName, email, timezone } = investor;
-      const investorTime = moment.tz(currentDate, timezone).startOf('day').add(8, 'hours'); // Set reminder time to 8 AM in investor's timezone
+      const {firstName, lastName, email,} = investor;
 
-      if (moment().isSameOrAfter(investorTime)) {
-        // Send email
+
         await transporter.sendMail({
           from: 'your-email@gmail.com',
           to: email,

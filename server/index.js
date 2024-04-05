@@ -4,27 +4,50 @@ const app = express();
 const PORT = 8000;
 const cors = require('cors');
 const routes = require('./router');
-const {updatePromosAndNotify, sendInvestmentReminderEmails,updateInvestmentEarningsAndNotifiy} = require('./service');
+const {sendInvestmentReminderEmails,updateInvestmentEarningsAndNotifiy} = require('./service');
 const cron = require('node-cron');
-const { JWT_SECRET } = require('./auth');
 
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-
-// sendInvestmentReminderEmails()
-// updateInvestmentEarningsAndNotifiy()
-// cron.schedule('0 0 */2 * *',updatePromosAndNotify);
-
+cron.schedule('0 0 */17 * *', updateInvestmentEarningsAndNotifiy());
+cron.schedule('0 7 * * *', sendInvestmentReminderEmails())
 
 app.use('/', routes)
-app.use('/admins', routes); 
-app.use('/register_managers', routes); 
-app.use('/admin-login', routes); 
-app.use('/investors', routes); 
+
+app.use('/login', routes); 
 app.use('/verify-email/:token',routes)
-app.use("/resend-verification-token/:id", routes) 
+app.use("/resend-verification-token/:id", routes)
+app.use ("/request-passswordChange", routes)
+app.use('/new-password', routes)
+
+app.use('/create-admin', routes); 
+
+app.use('/create-investor', routes);
+app.use('/get-investors', routes);
+app.use('/top-up', routes);
+app.use('/pay', routes);
+app.use('/delete-investor/:id', routes);
+
+app.use('/create-manager', routes);
+app.use('/patch-manager', routes); 
+app.use('/get-managers', routes);
+app.use('/delete-manager/:id', routes);
+
+app.use('/create-investment',routes)
+app.use('/patch-investment',routes)
+app.use('/get-investment/:id', routes);
+
+app.use('/create-wallet',routes)
+app.use('/get-wallets',routes)
+app.use('/patch-wallet',routes)
+app.use('/delete-wallet/:id',routes)
+
+app.use('/create-wallet',routes)
+app.use('/get-wallets',routes)
+app.use('/patch-wallet',routes)
+app.use('/delete-wallet/:id',routes)
 
 sequelize.sync()
   .then(() => console.log('model formed'))

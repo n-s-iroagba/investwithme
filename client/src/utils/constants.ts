@@ -1,24 +1,36 @@
 
 const domain = 'http://localhost:8000';
-const createAdminroute = 'admins';
-const loginAdminroute = 'admin-login'
-const adminWallet = 'admin-wallet'
-const createInvestorRoute = 'investors'
-const resendVerificationTokenRoute = 'resend-verification-token'
+
 export const companyName = `Cassock`
-export const createAdminUrl = `${domain}/${createAdminroute}`
+
 export const loginUrl =  `${domain}/login`
-export const deleteWalletAdminDomain = `${domain}/${adminWallet}`
-export const createInvestorUrl  = `${domain}/${createInvestorRoute}`
-export const resendVerificationTokenUrl  = `${domain}/${resendVerificationTokenRoute}`
-export const createInvestmentRoute = `${domain}/create-investment`
-export const patchInvestmentRoute = `${domain}/patch-investment`
+export const resendVerificationTokenRoute = `${domain}/resend-verification-token`
+
+export const createAdminUrl = `${domain}/create-admin`
+
+export const createInvestorUrl  = `${domain}/create-investor`
+export const topUpUrl = `${domain}/top-up`
+export const payUrl = `${domain}/pay`
+export const deleteInvestorRoute = `${domain}/delete-investor`
+
+export const createInvestmentUrl = `${domain}/create-investment`
+export const patchInvestmentUrl = `${domain}/patch-investment`
+export const getInvestmentUrl = `${domain}/get-investment`
+
 export const createManagerUrl = `${domain}/create-manager`
-export const patchManagerRoute = `${domain}/patch-manager`
+export const patchManagerUrl = `${domain}/patch-manager`
+export const getManagersUrl = `${domain}/get-managers`
 export const deleteManagerRoute = `${domain}/delete-manager`
-export const createWalletRoute = `${domain}/create-wallet`
-export const patchWalletRoute = `${domain}/patch-wallet`
-export const deleteWalletRoute = `${domain}/delete-wallet`
+
+export const createWalletUrl = `${domain}/create-wallet`
+export const patchWalletUrl = `${domain}/patch-wallet`
+export const deleteWalletUrl = `${domain}/delete-wallet`
+export const getWalletsRoute = `${domain}/get-wallets`
+
+export const createPromoUrl = `${domain}/create-promo`
+export const getPromoUrl = `${domain}/get-promo`
+export const patchPromoUrl = `${domain}/patch-promo`
+export const deletePromoRoute = `${domain}/delete-promo`
 export const messages = [
     {
       time: `10 min ago`,
