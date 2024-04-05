@@ -85,11 +85,11 @@ module.exports = {
         network,
         investmentId: id,
       })
-      
+      //SEARCH FOR CORRESPONDING ADMIN WALLET
       //CreateNotification
       //SendMailMessage
   
-      return res.status(200).json({ message: 'Investment updated successfully', investment });
+      return res.status(200).json({wallet:wallet });
     } catch (error) {
       console.error(error);
       return res.status(500).json({ message: "Internal server error" });

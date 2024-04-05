@@ -1,35 +1,41 @@
 import React from 'react';
 import { Row, Col } from 'react-bootstrap'
 import { InvestmentTiersCard } from '../general/InvestmentTiersCard';
-import { InvestButton } from '../general/Button';
+import { GetStartedButton } from '../general/Button';
 
 const InvestmentCards: React.FC = () => {
 
 
     const investmentData = [
         {
-            title: "150% RETURNS",
+            id: 1,
+            percentageYield: 150,
             image: "https://via.placeholder.com/150",
-            name: "Anna Glasgow",
-            minDeposit: "500",
-            
-            duration: "2"
+            firstName: "Annabel",
+            qualification:'Chartered Financial Analyst',
+            lastName: "Glasgow",
+            minimumInvestmentAmount: 500,
+            duration: 2,
         },
         {
-            title: "150% RETURNS",
+            id: 2,
+            percentageYield: 150,
             image: "https://via.placeholder.com/150",
-            name: "Anna Glasgow",
-            minDeposit: "500",
-            
-            duration: "2"
+            firstName: "Annabel",
+            lastName: "Glasgow",
+            qualification:'Chartered Wealth Manager',
+            minimumInvestmentAmount: 500,
+            duration: 2,
         },
         {
-            title: "150% RETURNS",
+            id: 3,
+            percentageYield: 150,
             image: "https://via.placeholder.com/150",
-            name: "Anna Glasgow",
-            minDeposit: "500",
-            
-            duration: "2"
+            firstName: "Annabel",
+            lastName: "Glasgow",
+            qualification: 'MSc Finance',
+            minimumInvestmentAmount: 500,
+            duration: 2
         }
     ];
 
@@ -45,13 +51,14 @@ const InvestmentCards: React.FC = () => {
                 {investmentData.map((data, index) => (
                     <Col key={index} xs={12} md={6} lg={4}>
                         <InvestmentTiersCard
-                            title={data.title}
+                            percentageYield={`${data.percentageYield}% RETURN ON INVESTMENT`}
                             image={data.image}
-                            name={data.name}
-                            minDeposit={data.minDeposit}
-                    
-                            duration={data.duration}
-                            button={<InvestButton managerId={1} investorId={2}  />}
+                            firstName={data.firstName}
+                            lastName={data.lastName}
+                            qualification={data.qualification}
+                            minimumInvestmentAmount={`$${data.minimumInvestmentAmount}`}
+                            duration={`${data.duration} weeks`}
+                            button={<GetStartedButton/>}
                         />
                     </Col>
                 ))}

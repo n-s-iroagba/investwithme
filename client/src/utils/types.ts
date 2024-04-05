@@ -2,11 +2,14 @@
 
 
 
-export interface WalletType{
-    type:string,
-    address:string
-}
 
+export interface EditWalletType{
+  id:number
+  blockchain:string,
+  address:string
+  network:string,
+  currency:string
+}
 export interface DepositsType{
     id?:number
     date:string,
@@ -28,6 +31,18 @@ export interface InvestmentType{
 }
 
 
+export interface NotificationType{
+  id:number
+  title:string
+  message:string
+}
+
+export interface WalletType{
+  blockchain:string,
+  address:string
+  network:string,
+  currency:string
+}
 export interface ManagerType {
   id: number,
     firstName: string,
@@ -35,7 +50,7 @@ export interface ManagerType {
     minimumInvestmentAmount: number
     percentageYield: number
     duration:number
-    image: string,
+    image: any,
     qualification: string
   }
 
@@ -46,7 +61,7 @@ export interface EditManagerType {
     minimumInvestmentAmount: number
     percentageYield: number
     duration:number
-    image: string,
+    image: any,
     qualification: string
   }
 export interface DecodedToken {

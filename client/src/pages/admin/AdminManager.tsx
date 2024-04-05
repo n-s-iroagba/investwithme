@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import {  EditManagerType } from '../../utils/types';
 import AdminInvestmentManagersCard from '../../components/admin/AdminInvestmentManagersCard';
 import ManagerForm from '../../components/forms/ManagerForm';
-
-
+import '../../components/styles.css'
 const AdminManager: React.FC = () => {
   const [showManagers, setShowManagers] = useState<boolean>(true)
   const managerInitData:EditManagerType = {
@@ -12,7 +11,7 @@ const AdminManager: React.FC = () => {
     minimumInvestmentAmount: 0,
     percentageYield: 0,
     duration: 0,
-    image: '',
+    image: null,
     qualification: ''
   };
   const handleToggle = () => {
@@ -20,21 +19,25 @@ const AdminManager: React.FC = () => {
    
   }
   return (
-    <div>
+  <div className='primary-background px-3 pt-5'>
+            <div className='d-flex flex-column align-items-center'>
       {showManagers ?
 
-        <div>
-          <button onClick={handleToggle}>Add Manager</button>
+
+          <>
+          <button className='button-styles button-width-narrow' onClick={handleToggle}>Add Manager</button>
 
           <AdminInvestmentManagersCard />
-        </div>
+          </>
         :
-        <div>
-          <button onClick={handleToggle}>View Managers</button>
+       <>
+          <button className='button-styles button-width-narrow' onClick={handleToggle}>View Managers</button>
 
           <ManagerForm details={managerInitData} />
-        </div>
+          </>
+    
       }
+          </div>
     </div >)
 
 }

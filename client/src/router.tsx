@@ -9,26 +9,24 @@ import Login from "./pages/general/Login";
 import EmailVerified from "./pages/general/EmailVerified";
 import VerifyEmail from "./pages/general/VerifyEmail";
 import AdminDashboard from "./pages/admin/AdminDashboard"
-import Wallets from "./pages/Wallets";
-import UpdateWallet from "./pages/UpdateWallet";
+
 import AdminSignUp from "./pages/admin/AdminSignUp";
 import InvestmentManagers from "./pages/investor/InvestmentManagers";
 import SignUp from "./pages/investor/SignUp";
-import SelectWallet from "./pages/SelectWallet";
-import AdminWallet from "./pages/admin/AdminWallets";
+
 
 
 import Portfolio from "./pages/investor/Portfolio";
 import NewInvestment from "./pages/investor/NewInvestment";
-import ManagerForm from "./components/forms/NewManagerForm";
+
 import Email from "./pages/general/Email";
 import NewPassword from "./pages/general/NewPassword";
-import Transaction from "./components/investor/Transaction";
 
 import Transactions from "./pages/investor/Transactions";
 import Referral from "./pages/investor/Referral";
-import { Chart } from "chart.js";
 import AdminManager from "./pages/admin/AdminManager";
+import AdminWallets from "./pages/admin/AdminWallets";
+import Notifications from "./pages/investor/Notification";
 
 
 
@@ -121,18 +119,17 @@ element: <Email />
     element: <Portfolio/>
 },
 {
-    path:'/update-wallet',
-    element: <UpdateWallet />
-},
-{
-    path:'/select-wallet',
-    element: <SelectWallet />
+    path:'/notifications',
+    element: <Notifications/>
 },
 {
     path:'/admin/managers',
     element: <AdminManager />
 },
-
+{
+    path:'/admin/wallets',
+    element: <AdminWallets/>
+},
 {
     path:'/enter-email',
     element: <Email />

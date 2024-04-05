@@ -5,7 +5,8 @@ import { faDollarSign, faEnvelope, faFile,} from '@fortawesome/free-solid-svg-ic
 import'../styles.css'
 import { faFacebook } from '@fortawesome/free-brands-svg-icons';
 import { useNavigate } from 'react-router-dom';
-import { createInvestment } from '../../utils/api';
+import { createInvestment,deleteManager, patchManager,createManager,patchInvestment,createWallet, patchWallet } from '../../utils/api';
+import { EditManagerType, EditWalletType, InvestmentType, WalletType } from '../../utils/types';
 
 
 
@@ -35,17 +36,38 @@ export const  SocialMediaButton:React.FC = ()=>{
   </div>
 }
 
-export const InvestButton:React.FC<{investorId:number,managerId:number}> =({managerId,investorId})=>{
+export const MoveToPatchManager:React.FC<{data:EditManagerType}> =({data})=>{
+  localStorage.setItem('cassockManager',JSON.stringify(data))
+
+  const navigate = useNavigate()
+  return <button onClick={()=>navigate('/patch-manager')} className='button-styles'><div>Invest with this manager</div><div ><FontAwesomeIcon icon={faDollarSign} beatFade/></div></button>;
+}
+
+export const MoveToPatchWallet:React.FC<{data:EditWalletType}> =({data})=>{
+  localStorage.setItem('cassockWallet',JSON.stringify(data))
+
+  const navigate = useNavigate()
+  return <button onClick={()=>navigate('/patch-wallet')} className='button-styles'><div>Invest with this manager</div><div ><FontAwesomeIcon icon={faDollarSign} beatFade/></div></button>;
+}
+
+// export const DeleteManagerButton:React.FC<{managerId:number}> =({managerId})=>{
+//   const navigate = useNavigate()
+//   return <button onClick={()=>deleteManager(managerId,navigate)} className='button-styles'><div>Invest with this manager</div><div ><FontAwesomeIcon icon={faDollarSign} beatFade/></div></button>;
+// }
+
+
+export const CreateInvestmentButton:React.FC<{investorId:number,managerId:number}> =({managerId,investorId})=>{
   const navigate = useNavigate()
   return <button onClick={()=>createInvestment(managerId,investorId,navigate)} className='button-styles'><div>Invest with this manager</div><div ><FontAwesomeIcon icon={faDollarSign} beatFade/></div></button>;
-  
+}
 
+export const EditInvestmentButton:React.FC<{investorId:number,data:InvestmentType}> =({investorId,data})=>{
+  const navigate = useNavigate()
+  return <button onClick={()=>patchInvestment(investorId,data,navigate)} className='button-styles'><div>Invest with this manager</div><div ><FontAwesomeIcon icon={faDollarSign} beatFade/></div></button>;
 }
 
 
-export const EditManagerButton:React.FC<{investorId:number,managerId:number}> =({managerId,investorId})=>{
-  const navigate = useNavigate()
-  return <button onClick={()=>createInvestment(managerId,investorId,navigate)} className='button-styles'><div>Invest with this manager</div><div ><FontAwesomeIcon icon={faDollarSign} beatFade/></div></button>;
-  
-
-}
+// export const DeleteManagerButton:React.FC<{managerId:number}> =({managerId})=>{
+//   const navigate = useNavigate()
+//   return <button onClick={()=>deleteManager(managerId,navigate)} className='button-styles'><div>Invest with this manager</div><div ><FontAwesomeIcon icon={faDollarSign} beatFade/></div></button>;
+// }

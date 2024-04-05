@@ -18,6 +18,19 @@
     justify-content: space-evenly;
     width: 100%;
 }
+.red-button {
+    align-items: center;
+    background-color: red;
+    border: 0.05cm solid white;
+    border-bottom-left-radius: 50px;
+    border-bottom-right-radius: 50px;
+    border-top-left-radius: 50px;
+    border-top-right-radius: 50px;
+    display: flex;
+    height: 1.5cm;
+    justify-content: space-evenly;
+    width: 100%;
+}
 div .round-card{
     border-bottom-left-radius: 1.5rem;
     border-bottom-right-radius: 1.5rem;

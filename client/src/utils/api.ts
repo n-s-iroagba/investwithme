@@ -12,7 +12,7 @@ export const postData = async (url: string, data: any, authorizationData: string
   }
 
   try {
-    const response: AxiosResponse<{ data: string }> = await axios.post(url, data, { headers });
+    const response: AxiosResponse<any> = await axios.post(url, data, { headers });
     return response;
   } catch (error: any) {
     console.error(error);
@@ -32,7 +32,7 @@ export const getData = async (url: string, authorizationData: string | null=null
   headers['Authorization'] = authorizationData;
 
   try {
-    const response: AxiosResponse<{ data: string }> = await axios.get(url, { headers });
+    const response: AxiosResponse<any> = await axios.get(url, { headers });
     return response;
   } catch (error: any) {
     console.error(error);
@@ -40,19 +40,19 @@ export const getData = async (url: string, authorizationData: string | null=null
   }
 };
 
-export const deleteItem = async (url: string, itemId: number, authorizationData: string | null = null) => {
+export const deleteItem = async (url: string, authorizationData: string|null) => {
   const headers: { [key: string]: string } = {
     'Content-Type': 'application/json'
   };
 
-  if (authorizationData === null) {
+  if (!authorizationData) {
     throw new Error('Authorization data is null, not allowed to make this request');
   }
 
   headers['Authorization'] = authorizationData;
 
   try {
-    const response: AxiosResponse<{ message: string }> = await axios.delete(`${url}/${itemId}`, { headers });
+    const response: AxiosResponse<any> = await axios.delete(url, { headers });
     return response;
   } catch (error: any) {
     console.error(error);
@@ -61,19 +61,19 @@ export const deleteItem = async (url: string, itemId: number, authorizationData:
 };
 
 
-export const patchItem = async (url: string, itemId: number, data: any, authorizationData: string | null = null) => {
+export const patchItem = async (url: string, data: any, authorizationData: string|null) => {
   const headers: { [key: string]: string } = {
     'Content-Type': 'application/json'
   };
 
-  if (authorizationData === null) {
+  if (!authorizationData) {
     throw new Error('Authorization data is null, not allowed to make this request');
   }
 
   headers['Authorization'] = authorizationData;
 
   try {
-    const response: AxiosResponse<{ message: string }> = await axios.patch(`${url}/${itemId}`, data, { headers });
+    const response: AxiosResponse<any> = await axios.patch(url, data, { headers });
     return response;
   } catch (error: any) {
     console.error(error);
@@ -81,23 +81,3 @@ export const patchItem = async (url: string, itemId: number, data: any, authoriz
   }
 };
 
-export const createInvestment = async (managerId: number, investorId: number, navigate: (path: string) => void) => {
-  const url = 'your-api-url-for-create-investment';
-  const data = {
-    managerId,
-    investorId,
-  };
-  const authorizationData = localStorage.getItem('cassockAuthToken');
-
-  try {
-    const response = await postData(url, data, authorizationData);
-    if (response.status === 201) {
-      navigate('/success-page'); // Navigate to success page or any other route
-    } else {
-      throw new Error('Failed to create investment'); // Handle other status codes or error cases
-    }
-  } catch (error) {
-    console.error('Error creating investment:', error);
-    throw new Error('Failed to create investment'); // Throw a more descriptive error if needed
-  }
-};

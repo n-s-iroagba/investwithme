@@ -11,7 +11,14 @@ export const loginUrl =  `${domain}/login`
 export const deleteWalletAdminDomain = `${domain}/${adminWallet}`
 export const createInvestorUrl  = `${domain}/${createInvestorRoute}`
 export const resendVerificationTokenUrl  = `${domain}/${resendVerificationTokenRoute}`
-export const patchManagerUrl = `${domain}/update-manager`
+export const createInvestmentRoute = `${domain}/create-investment`
+export const patchInvestmentRoute = `${domain}/patch-investment`
+export const createManagerUrl = `${domain}/create-manager`
+export const patchManagerRoute = `${domain}/patch-manager`
+export const deleteManagerRoute = `${domain}/delete-manager`
+export const createWalletRoute = `${domain}/create-wallet`
+export const patchWalletRoute = `${domain}/patch-wallet`
+export const deleteWalletRoute = `${domain}/delete-wallet`
 export const messages = [
     {
       time: `10 min ago`,

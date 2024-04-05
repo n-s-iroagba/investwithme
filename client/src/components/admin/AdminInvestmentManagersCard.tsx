@@ -1,10 +1,11 @@
 import React from 'react';
-import { Row, Col } from 'react-bootstrap';
+import { Row, Col,Form } from 'react-bootstrap';
 import { InvestmentTiersCard } from '../../components/general/InvestmentTiersCard';
-import { InvestButton } from '../../components/general/Button';
+import {  MoveToPatchManager } from '../../components/general/Button';
 
 import { MiniFooter } from '../../components/home_components/Footer';
 import { ManagerType } from '../../utils/types';
+import '../../components/styles.css'
 
 const AdminInvestmentManagersCard: React.FC = () => {
     const investorId = 1
@@ -42,12 +43,12 @@ const AdminInvestmentManagersCard: React.FC = () => {
     ];
 
     return (
-        <div className='primary-background px-3'>
+        <>
             {managerData.length > 0?
                 <Row className='gy-4 gx-1'>
                 <Col xs={12}>
                     <h3 className='text-center mt-4 text-light'>
-                        Select Your Fund Manager And Investment Tier
+                        Your Managers
                     </h3>
                 </Col>
 
@@ -61,9 +62,26 @@ const AdminInvestmentManagersCard: React.FC = () => {
                             qualification={data.qualification}
                             minimumInvestmentAmount={`$${data.minimumInvestmentAmount}`}
                             duration={`${data.duration} weeks`}
-                            button={<InvestButton managerId={data.id} investorId={investorId} />}
-
+                            button={<MoveToPatchManager data={data} />}
+                            deleteButton={<button className='red-button'>Delete Manager</button>}
                         />
+ <Form.Group as={Col} controlId="validationFormik01">
+                                <div className="mb-0 text-light">
+                                    First name
+                                </div>
+                                <Form.Control
+                                    required
+                                    type="text"
+                                    name="firstName"
+                                    value={'adfadgd'}
+                                    
+                                    className="text-light custom-input bg-transparent form-control"
+                                />
+                            </Form.Group>
+
+
+
+
                     </Col>
                 ))}
             </Row>
@@ -74,7 +92,7 @@ const AdminInvestmentManagersCard: React.FC = () => {
             }
             
             <MiniFooter primaryVariant={true} />
-        </div>
+        </>
     );
 };
 

@@ -1,29 +1,47 @@
-import React from 'react'
-import { Row,Col,Image, Button, ListGroup } from 'react-bootstrap'
-import '../assets/Styles.css'
+import React, { useState } from 'react';
+import {  EditManagerType } from '../../utils/types';
+import AdminInvestmentManagersCard from '../../components/admin/AdminInvestmentManagersCard';
+import ManagerForm from '../../components/forms/ManagerForm';
+import '../../components/styles.css'
+import AdminWallet from '../../components/admin/AdminWallet';
+const AdminWallets: React.FC = () => {
+  const [showManagers, setShowManagers] = useState<boolean>(true)
+  const managerInitData:EditManagerType = {
+    firstName: '',
+    lastName: '',
+    minimumInvestmentAmount: 0,
+    percentageYield: 0,
+    duration: 0,
+    image: null,
+    qualification: ''
+  };
+  const handleToggle = () => {
+    setShowManagers(!showManagers)
+   
+  }
+  return (
+  <div className='primary-background px-3 pt-5'>
+            <div className='d-flex flex-column align-items-center'>
+      {showManagers ?
 
 
-const AdminWallet:React.FC =()=>{
-    return<div>
+          <>
+          <button className='button-styles button-width-narrow' onClick={handleToggle}>Add Manager</button>
 
-<ListGroup >
- <ListGroup.Item className='py-2' >  
+          <AdminWallet />
+          </>
+        :
+       <>
+          <button className='button-styles button-width-narrow' onClick={handleToggle}>View Managers</button>
 
- <Row className='d-flex' >
-        <Col className='d-flex justify-content-center'xs={6} lg={3}>
-        <Image src ={''} className='rounded-image-size' alt='aaa' roundedCircle/>
-        </Col>
-    <Col className='d-flex justify-content-center align-items-center'xs={6} lg={3} >Ann Glasgow</Col>
+         {/* <WalletForm/> */}
+          </>
     
-    
-            <Col className='py-2 d-flex justify-content-center' xs={6} lg={3}><Button>update</Button></Col>
-            <Col className='py-2 d-flex justify-content-center' xs={6} lg={3}><Button>update</Button></Col>
-         
-        </Row>
-    </ListGroup.Item> 
-    </ListGroup>
+      }
+          </div>
+    </div >)
 
-    </div>
-    
 }
-export default AdminWallet
+
+
+export default AdminWallets;

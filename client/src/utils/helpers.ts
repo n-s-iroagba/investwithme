@@ -1,100 +1,12 @@
-import { ManagerType } from "./types";
+import { deleteItem, patchItem, postData } from "./api";
+import { EditManagerType, EditWalletType, InvestmentType, ManagerType, WalletType } from "./types";
+import { createInvestmentRoute, patchInvestmentRoute,createManagerUrl, patchManagerRoute, deleteManagerRoute, createWalletRoute, patchWalletRoute, deleteWalletRoute} from "./constants";
 
-export function navigateToInvestOrLogin(navigate: (path: string) => void) {
-    // Check if user is logged in (you need to implement this logic)
-    const isLoggedIn = !!localStorage.getItem('jwtToken'); // Assuming the JWT token is stored in localStorage
-    
-    if (isLoggedIn) {
-      // Navigate to the invest route
-      navigate('/invest');
-    } else {
-      // Navigate to the login route
-      navigate('/login');
-    }
-  }
 
-export const chooseVisitView = (navigate: (path: string) => void) => {
-    const isMember = !!localStorage.getItem('memberCookie');
-    const isLoggedIn = !!localStorage.getItem('jwtToken')
-    if (isMember && !isLoggedIn) {
-      navigate('/login'); // Navigate to the login page
-    }
-    if (isLoggedIn) {
-      navigate('/dashboard'); 
-    }
-  };
-  
 
-  export function isLargeScreen() {
-    const screenWidth = window.innerWidth;
-    // Define your threshold for what constitutes a large screen, for example, 1024px
-    const largeScreenWidth = 1024;
-    
-    return screenWidth >= largeScreenWidth;
-  }
-
-//  export const checkAboutToInvest = async (investorId: string, navigate: (path: string)=>void,setSpinner:(spinner:boolean)=> void) => {
-//     const aboutToInvest = localStorage.getItem('cassockabouttocashout')
-//     if (aboutToInvest) {
-  
-//       navigate('/make-payment');
-//     } 
-//     else {
-//       try {
-//         // Replace 'YOUR_API_ENDPOINT' with your actual endpoint
-//         const response = await axios.post(`${YOUR_API_ENDPOINT}/investors/${investorId}/check-about-to-invest`);
-//         if (response.investmentStatus){
-//             setSpinner(false)
-//             localStorage.setItem('cassockabouttocashout', response.investmentStatus)
-//         }
-//       } catch (error) {
-//         alert ('error getting your investment status please check your network connection and try again')
-//         navigate('/')
-//       }
-//     }
-//   };
-  
-//   export default checkAboutToInvest;
-export function getTimeSinceFirstVisit(): number | null {
-  // Check if localStorage is supported
-  if (typeof Storage !== "undefined") {
-    const firstVisitTime = localStorage.getItem('firstVsitTime');
-    console.log('time I first logged in'+firstVisitTime) 
-    // Check if the user has visited before
-    if (!firstVisitTime) {
-      // User is visiting for the first time
-      const currentTime = new Date();
-      // Save the current time in localStorage
-      localStorage.setItem('firstVsitTime', currentTime.toString());
-      console.log('First visit time set to: ' + currentTime);
-      return null; // No time difference since it's the first visit
-    } else {
-      // User has visited before
-      const currentTime = new Date();
-      const previousVisitTime = new Date(firstVisitTime);
-      const timeDifference = currentTime.getTime() - previousVisitTime.getTime();
-      console.log('time-difference',+ timeDifference)
-      
-      const daysDifference = timeDifference / (1000 * 3600 * 24);
-      
-      if (daysDifference <= 2) {
-        console.log('Time since first visit (in days): ' + daysDifference);
-        return 172800000-timeDifference;
-      } else {
-        console.log('Subsequent visit is more than 2 days from first visit.');
-        return null;
-      }
-    }
-  } else {
-    // Browser doesn't support localStorage
-    console.log('Sorry, your browser does not support local storage.');
-    return null;
-  }
-}
 export const doPasswordsMatch = (password: string, confirmPassword: string) => {
   return password === confirmPassword;
 };
-
 
 export const canInvest = (investmentAmount:number, managers:any) =>{
   if (!managers || managers.length === 0) {
@@ -103,9 +15,10 @@ export const canInvest = (investmentAmount:number, managers:any) =>{
   const minMinInvestment = Math.min(...managers.map((manager:any) => manager.minimumInvestmentAmount));
   return investmentAmount < minMinInvestment;
 }
+
 export const findManagerWithHighestMinInvestment = (managers: ManagerType[], amount: number): ManagerType | null => {
   let highestMinInvestmentManager: ManagerType | null = null;
-  let highestMinInvestment = -Infinity;
+  let highestMinInvestment = 0;
 
   managers.forEach((manager) => {
     if (manager.minimumInvestmentAmount <= amount && manager.minimumInvestmentAmount > highestMinInvestment) {
@@ -116,6 +29,7 @@ export const findManagerWithHighestMinInvestment = (managers: ManagerType[], amo
 
   return highestMinInvestmentManager;
 };
+
 export const getGreeting = (): string => {
   const currentTime = new Date().getHours();
 
@@ -128,3 +42,134 @@ export const getGreeting = (): string => {
   }
 };
 
+export const createInvestment = async (managerId: number, investorId: number, navigate: (path: string) => void) => {
+  const data = {
+    managerId: managerId,
+    investorId: investorId
+  }
+
+  try {
+    const authorizationData = localStorage.getItem('cassockJwtToken');
+    const response = await postData(createInvestmentRoute, data, authorizationData);
+    if (response.status === 200) {
+      localStorage.setItem('cassockManagers', JSON.stringify(response.data.managers))
+      localStorage.setItem('cassockManagers', JSON.stringify(response.data.investement))
+      navigate('/invest'); 
+    } else {
+      alert('unable to create a new investment at this time')
+  } 
+}catch (error) {
+    console.error('Error creating investment:', error);
+  }
+};
+
+export const patchInvestment =async (data:InvestmentType, navigate: (path: string) => void) =>{
+  try {
+    const authorizationData = localStorage.getItem('cassockJwtToken');
+    const response = await patchItem(patchInvestmentRoute, data, authorizationData);
+    if (response.status === 200) {
+      localStorage.setItem('cassockDepositWallet', JSON.stringify(response.data.wallet))
+      navigate('/invest-payment'); 
+    } else {
+      alert('unable to create a new investment at this time')
+  } 
+}catch (error) {
+ console.error(error)
+}
+}
+
+
+export const createManager= async (data:ManagerType, navigate: (path: string) => void) => {
+  try {
+    const authorizationData = localStorage.getItem('cassockJwtToken');
+    const response = await postData(createManagerUrl, data, authorizationData);
+    if (response.status === 201) {
+    alert('manager added succesfully')
+    window.location.reload();
+    } else {
+      alert('unable to create a manager at this time')
+  } 
+}catch (error) {
+    console.error('Error creating investment:', error);
+  }
+};
+
+export const patchManager=async ( data:EditManagerType,navigate: (path: string) => void) =>{
+  try {
+    const authorizationData = localStorage.getItem('cassockJwtToken');
+    const response = await patchItem(patchManagerRoute, data, authorizationData);
+    if (response.status === 200) {
+      alert('manager updated succesfully')
+     navigate('/admin/manager')
+    } else {
+      alert('unable to update the manager at this time')
+  } 
+}catch (error) {
+ console.error(error)
+}
+}
+
+export const deleteManager = async (id:number) => {
+const url =`${deleteManagerRoute}/${id}`
+  try {
+    const authorizationData = localStorage.getItem('cassockJwtToken');
+    const response = await deleteItem(url,authorizationData);
+    if (response.status === 200) {
+      alert('manager deleted succesfully')
+      window.location.reload();
+    } else {
+      alert('unable to delete manager at this time')
+  } 
+}catch (error) {
+ console.error(error)
+}
+
+}
+
+export const createWallet= async (data:WalletType,navigate: (path: string) => void) => {
+  try {
+    const authorizationData = localStorage.getItem('cassockJwtToken');
+    const response = await postData(createWalletRoute, data, authorizationData);
+    if (response.status === 201) {
+    alert('wallet added succesfully')
+    window.location.reload();
+    } else {
+      alert('unable to create a wallet at this time')
+  } 
+}catch (error) {
+    console.error('Error creating investment:', error);
+  }
+};
+
+export const patchWallet=async ( data:EditWalletType, navigate: (path: string) => void) =>{
+  try {
+    const authorizationData = localStorage.getItem('cassockJwtToken');
+    const response = await patchItem(patchWalletRoute, data, authorizationData);
+    if (response.status === 200) {
+      alert('wallet updated succesfully')
+      navigate('/admin/wallet')
+      
+    } else {
+      alert('unable to update the wallet at this time')
+  } 
+}catch (error) {
+ console.error(error)
+}
+}
+
+export const deleteWallet= async (id:number) => {
+const url =`${deleteWalletRoute}/${id}`
+  try {
+    const authorizationData = localStorage.getItem('cassockJwtToken');
+    const response = await deleteItem(url,authorizationData);
+    if (response.status === 200) {
+      alert('manager deleted succesfully')
+      window.location.reload();
+    } else {
+      alert('unable to delete manager at this time')
+  } 
+}catch (error) {
+ console.error(error)
+}
+
+}
