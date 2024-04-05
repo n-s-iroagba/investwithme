@@ -1,14 +1,12 @@
 express = require('express')
-const Investorcontroller = require('./controllers/Investorcontroller')
-const investorController = require('./controllers/Investorcontroller')
+
+const investorController = require('./controllers/investorcontroller')
 const adminController = require('./controllers/adminController')
 const authController = require('./controllers/authController')
 
 router = express.Router()
 
 router.get("/", investorController.index)
-
-
 
 
 router.post("/login", authController.login)
@@ -44,15 +42,6 @@ router.post('/new-password',)
  router.patch('patch-promo',)
  router.delete('/delete-promo/:id',)
 
-
-
-
-
-
-// router.post("/adminlogin", controller.Adminlogin)
-,
-
-// router.patch("/investor/:id",controller.deleteInvestor)
-
+ router.get('/get-notifications/:id', )
 
 module.exports = router

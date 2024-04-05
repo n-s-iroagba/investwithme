@@ -49,6 +49,8 @@ app.use('/get-wallets',routes)
 app.use('/patch-wallet',routes)
 app.use('/delete-wallet/:id',routes)
 
+app.use('/get-notifications/:id',routes)
+
 sequelize.sync()
   .then(() => console.log('model formed'))
   .catch(err => console.log(err));

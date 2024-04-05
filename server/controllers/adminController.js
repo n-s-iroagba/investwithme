@@ -36,8 +36,9 @@ module.exports = {
   
       investor.hasInvested = true;
       investment.amountDeposited += investmentAmount; // Use += to add the amount
-      investment.dueDate = moment(investment.dueDate).add(2, 'weeks').toDate();
       investment.investmentDate = new Date();
+      // const dueDat = new Date(currentDate);
+      // dueDate.setDate(dueDate.getDate() + 14);
   
       if (investor.refereeId) {
         const referral = await Referral.findOne({

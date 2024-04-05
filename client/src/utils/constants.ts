@@ -31,6 +31,8 @@ export const createPromoUrl = `${domain}/create-promo`
 export const getPromoUrl = `${domain}/get-promo`
 export const patchPromoUrl = `${domain}/patch-promo`
 export const deletePromoRoute = `${domain}/delete-promo`
+
+export const getNotificationsRoute = `${domain}/get-notifications`
 export const messages = [
     {
       time: `10 min ago`,
