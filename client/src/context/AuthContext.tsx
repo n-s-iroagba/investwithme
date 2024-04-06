@@ -1,7 +1,8 @@
 import React, { createContext, useState } from "react";
-import { doPasswordsMatch } from "../utils/auth";
-import { postData } from "../utils/api";
-import { AdminData, AuthContextType, InvestorData } from "./AuthTypes";
+import { decodePasswordChangeToken, doPasswordsMatch } from "../utils/auth";
+import { postData } from "../utils/api"
+import { AdminData, AuthContextType, InvestorData, NewPasswordData } from "./AuthTypes";
+import { newPasswordRoute } from "../utils/constants";
 
 export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [passwordValidityMessage, setPasswordValidityMessage] = useState<string[]>([]);
@@ -28,8 +29,12 @@ export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({ c
     country: '',
     bank: '',
     timezone: '',
-    referralCode:''
+    referralCode: ''
   })
+  const [newPasswordData, setNewPasswordData] = useState<NewPasswordData>({
+    password: '',
+    confirmPassword: ''
+  });
 
   const handleSubmit = async (data: AdminData | InvestorData, event: React.FormEvent<HTMLFormElement>, domain: string, navigateToVerifyEmailPage: () => void) => {
     event.preventDefault();
@@ -39,33 +44,33 @@ export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({ c
     const passwordCorrect = checkIfUserEnteredPasswordCorrectly(password)
     const passwordMatch = checkIfPasswordsMatch(password, confirmPassword)
     let secretCodeMatch: boolean = false;
-    let shouldSubmit:boolean = true //flag to check if form details are good enough to be submitted
+    let shouldSubmit: boolean = true //flag to check if form details are good enough to be submitted
     if ('secretCode' in data) {
       secretCodeMatch = data.secretCode === process.env.REACT_APP_ADMIN_SECRET_KEY ? true : false
     }
     if (form.checkValidity() === false || !passwordCorrect || !passwordMatch || !secretCodeMatch) {
       setValidated(true)
-      shouldSubmit=false
+      shouldSubmit = false
       event.stopPropagation();
     }
 
-    if (shouldSubmit){
-    setSubmitting('submitting')
-    try {
-      const response = await postData(domain, data)
-      if (response.statusText === 'Created') {
-        console.log(response.data)
-        localStorage.setItem('cassockEmailVerificationToken', JSON.stringify(response.data))
-        navigateToVerifyEmailPage()
+    if (shouldSubmit) {
+      setSubmitting('submitting')
+      try {
+        const response = await postData(domain, data)
+        if (response.statusText === 'Created') {
+          console.log(response.data)
+          localStorage.setItem('cassockEmailVerificationToken', JSON.stringify(response.data))
+          navigateToVerifyEmailPage()
+        }
+      } catch (error: any) {
+        setErrorMessage('we are sorry, we cannot register you at this time')
+        setSubmitting('');
+        console.error(error)
+        if ('secretCode' in data && !secretCodeMatch) {
+          setErrorMessage('The secret code provided is wrong')
+        }
       }
-    } catch (error: any) {
-    setErrorMessage('we are sorry, we cannot register you at this time')
-      setSubmitting('');
-      console.error(error)
-      if ('secretCode' in data && !secretCodeMatch){
-        setErrorMessage('The secret code provided is wrong')
-      }
-    }
     }
   };
 
@@ -90,15 +95,15 @@ export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({ c
   };
 
   const handlePasswordChange = (
-    data: AdminData | InvestorData,
+    data: AdminData | InvestorData | NewPasswordData,
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-    setState: React.Dispatch<React.SetStateAction<InvestorData | AdminData>>
+    setState: React.Dispatch<React.SetStateAction<InvestorData | AdminData | NewPasswordData>>
   ) => {
     handleChange(data, e, setState);
     validatePassword(e.target.value);
   };
 
-  const handleChange = (data: AdminData | InvestorData, e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, setState: React.Dispatch<React.SetStateAction<InvestorData | AdminData>>) => {
+  const handleChange = (data: AdminData | InvestorData | NewPasswordData, e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, setState: React.Dispatch<React.SetStateAction<InvestorData | AdminData | NewPasswordData>>) => {
     e.preventDefault();
     setState({
       ...data,
@@ -128,7 +133,7 @@ export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({ c
     setPasswordValidityMessage(tempPasswordState)
   }
 
-  const handleConfirmPasswordsChange = (data: AdminData | InvestorData, e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, setState: React.Dispatch<React.SetStateAction<InvestorData | AdminData>>) => {
+  const handleConfirmPasswordsChange = (data: AdminData | InvestorData | NewPasswordData, e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, setState: React.Dispatch<React.SetStateAction<InvestorData | AdminData | NewPasswordData>>) => {
     handleChange(data, e, setState);
     if (!doPasswordsMatch(data.password, e.target.value)) {
       setIsPasswordsMatch(false);
@@ -141,32 +146,88 @@ export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({ c
     setPasswordType(passwordType === 'password' ? 'text' : 'password');
   };
 
-  const authContextValue: AuthContextType = {
-    setAdminData,
-    adminData,
-    submitting,
-    isPasswordsMatch,
-    errorMessage,
-    setErrorMessage,
-    validated,
-    setValidated,
-    handlePasswordChange,
-    handleConfirmPasswordsChange,
-    checkIfPasswordsMatch,
-    showPassword,
-    handleSubmit,
-    handleChange,
-    passwordType,
-    passwordValidityMessage,
-    setInvestorData,
-    investorData,
+
+  const handleChangePassword = async (data: NewPasswordData, event: React.FormEvent<HTMLFormElement>, navigate: (path: string) => void) => {
+
+    event.preventDefault();
+    const form = event.currentTarget
+    const password = data.password
+    const confirmPassword = data.confirmPassword
+    const passwordCorrect = checkIfUserEnteredPasswordCorrectly(password)
+    const passwordMatch = checkIfPasswordsMatch(password, confirmPassword)
+    let shouldSubmit: boolean = true //flag to check if form details are good enough to be submitted
+
+
+    setSubmitting('submitting')
+  
+      if (form.checkValidity() === false || !passwordCorrect || !passwordMatch) {
+        setValidated(true)
+        shouldSubmit = false
+        event.stopPropagation();
+      }
+      if (shouldSubmit) {
+        setSubmitting('submitting');
+        try {
+
+          const decodedToken: { id: string, role: string } | null = decodePasswordChangeToken();
+          if (!decodedToken) {
+            throw new Error('illegal request')
+          }
+          else {
+            const response = await postData(`${newPasswordRoute}/${decodedToken.id}`, { ...data, password });
+            console.log(response);
+
+            if (response.status === 403) {
+              localStorage.setItem('cassockEmailVerificationToken', JSON.stringify(response.data));
+              navigate('/verify-email');
+            } else if (response.status === 400) {
+              navigate('/signup');
+            } else {
+              localStorage.setItem('cassockJwtToken', JSON.stringify(response.data));
+              if (decodedToken.role === 'admin') {
+                navigate('/admin/dashboard');
+              } else {
+                navigate('/dashboard');
+              }
+            }
+          }
+        } catch (error) {
+          setErrorMessage('Sorry, you cannot login at this time. We are maintaining our servers due to heavy traffic.');
+          console.error(error);
+          setSubmitting('');
+        }
+      }
+    }
+  
+    const authContextValue: AuthContextType = {
+      setAdminData,
+      adminData,
+      submitting,
+      isPasswordsMatch,
+      errorMessage,
+      setErrorMessage,
+      validated,
+      setValidated,
+      handlePasswordChange,
+      handleConfirmPasswordsChange,
+      checkIfPasswordsMatch,
+      showPassword,
+      handleSubmit,
+      handleChange,
+      passwordType,
+      passwordValidityMessage,
+      setInvestorData,
+      investorData,
+      newPasswordData,
+      setNewPasswordData,
+      handleChangePassword,
+    };
+
+    return (
+      <AuthContext.Provider value={authContextValue}>
+        {children}
+      </AuthContext.Provider>
+    );
   };
 
-  return (
-    <AuthContext.Provider value={authContextValue}>
-      {children}
-    </AuthContext.Provider>
-  );
-};
-
-export const AuthContext = createContext<AuthContextType | undefined>(undefined);
+  export const AuthContext = createContext<AuthContextType | undefined>(undefined);

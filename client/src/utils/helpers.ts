@@ -1,8 +1,11 @@
 import { deleteItem, patchItem, postData } from "./api";
 import { EditManagerType, EditWalletType, InvestmentType, ManagerType, WalletType } from "./types";
-import { createInvestmentRoute, patchInvestmentRoute,createManagerUrl, patchManagerRoute, deleteManagerRoute, createWalletRoute, patchWalletRoute, deleteWalletRoute} from "./constants";
+import { createInvestmentUrl, patchInvestmentUrl,createManagerUrl, patchManagerUrl, deleteManagerRoute, createWalletUrl, patchWalletUrl, deleteWalletRoute} from "./constants";
 
-
+export const isLargeScreen = () => {
+  const mediaQuery = window.matchMedia('(min-width: 768px)');
+  return mediaQuery.matches;
+}
 
 export const doPasswordsMatch = (password: string, confirmPassword: string) => {
   return password === confirmPassword;
@@ -50,7 +53,7 @@ export const createInvestment = async (managerId: number, investorId: number, na
 
   try {
     const authorizationData = localStorage.getItem('cassockJwtToken');
-    const response = await postData(createInvestmentRoute, data, authorizationData);
+    const response = await postData(createInvestmentUrl, data, authorizationData);
     if (response.status === 200) {
       localStorage.setItem('cassockManagers', JSON.stringify(response.data.managers))
       localStorage.setItem('cassockManagers', JSON.stringify(response.data.investement))
@@ -66,7 +69,7 @@ export const createInvestment = async (managerId: number, investorId: number, na
 export const patchInvestment =async (data:InvestmentType, navigate: (path: string) => void) =>{
   try {
     const authorizationData = localStorage.getItem('cassockJwtToken');
-    const response = await patchItem(patchInvestmentRoute, data, authorizationData);
+    const response = await patchItem(patchInvestmentUrl, data, authorizationData);
     if (response.status === 200) {
       localStorage.setItem('cassockDepositWallet', JSON.stringify(response.data.wallet))
       navigate('/invest-payment'); 
@@ -97,7 +100,7 @@ export const createManager= async (data:ManagerType, navigate: (path: string) =>
 export const patchManager=async ( data:EditManagerType,navigate: (path: string) => void) =>{
   try {
     const authorizationData = localStorage.getItem('cassockJwtToken');
-    const response = await patchItem(patchManagerRoute, data, authorizationData);
+    const response = await patchItem(patchManagerUrl, data, authorizationData);
     if (response.status === 200) {
       alert('manager updated succesfully')
      navigate('/admin/manager')
@@ -129,7 +132,7 @@ const url =`${deleteManagerRoute}/${id}`
 export const createWallet= async (data:WalletType,navigate: (path: string) => void) => {
   try {
     const authorizationData = localStorage.getItem('cassockJwtToken');
-    const response = await postData(createWalletRoute, data, authorizationData);
+    const response = await postData(createWalletUrl, data, authorizationData);
     if (response.status === 201) {
     alert('wallet added succesfully')
     window.location.reload();
@@ -144,7 +147,7 @@ export const createWallet= async (data:WalletType,navigate: (path: string) => vo
 export const patchWallet=async ( data:EditWalletType, navigate: (path: string) => void) =>{
   try {
     const authorizationData = localStorage.getItem('cassockJwtToken');
-    const response = await patchItem(patchWalletRoute, data, authorizationData);
+    const response = await patchItem(patchWalletUrl, data, authorizationData);
     if (response.status === 200) {
       alert('wallet updated succesfully')
       navigate('/admin/wallet')
@@ -172,4 +175,15 @@ const url =`${deleteWalletRoute}/${id}`
  console.error(error)
 }
 
+}
+export const getPromoRemainingTime = (date: string, duration: number) => {
+  const now = new Date();
+  const promoDate = new Date(date).getTime() + duration;
+  
+  if (isNaN(promoDate)) {
+    throw new Error('Invalid date format. Please provide a valid date string.');
+  }
+  
+  const timeDifference = promoDate - now.getTime(); 
+  return timeDifference;
 }

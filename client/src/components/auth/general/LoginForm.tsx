@@ -91,7 +91,7 @@ const LoginForm: React.FC = () => {
             <Form.Control.Feedback type="invalid">Please enter your password.</Form.Control.Feedback>
           </Form.Group>
         </Row>
-        <div className='d-flex justify-content-evenly w-100 pb-5'>
+        <div className='d-flex justify-content-evenly w-100 py-5'>
           <button className='button-styles w-50 text-light' type={submitted ? 'button' : 'submit'}>
             {submitted ? <Spinner animation='border' size='sm' /> : 'Submit'}
           </button>

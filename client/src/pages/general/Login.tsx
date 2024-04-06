@@ -22,7 +22,8 @@ const Login:React.FC=()=>{
  <LoginOption
             title='Forgot password?'
             buttonText='Forgot password'
-             route='forgot-password' />
+             route='forgot-password'
+             dontShowLogo={true} />
  </div>
  </div>
   )

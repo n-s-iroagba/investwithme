@@ -19,9 +19,14 @@ export interface AdminData {
     timezone: string
     referralCode:string
   }
-
+export interface NewPasswordData{
+  password: string;
+  confirmPassword: string;
+}
 export interface AuthContextType {
     adminData:AdminData
+    newPasswordData:NewPasswordData,
+    setNewPasswordData: React.Dispatch<React.SetStateAction<NewPasswordData>>,
     submitting: string;
     isPasswordsMatch: boolean;
     errorMessage: string;
@@ -36,12 +41,12 @@ export interface AuthContextType {
     handlePasswordChange: (
     data:AdminData|InvestorData,
       e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-      setState: React.Dispatch<React.SetStateAction<InvestorData|AdminData>>
+      setState: React.Dispatch<React.SetStateAction<InvestorData|AdminData|NewPasswordData>>
     ) => void;
     handleConfirmPasswordsChange: (
         data:AdminData,
       e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-      setState: React.Dispatch<React.SetStateAction<InvestorData|AdminData>> 
+      setState: React.Dispatch<React.SetStateAction<InvestorData|AdminData|NewPasswordData>> 
     ) => void;
     checkIfPasswordsMatch: (
       password: string,
@@ -49,6 +54,7 @@ export interface AuthContextType {
     ) => boolean;
     showPassword: () => void;
     handleSubmit:(data:AdminData,event: React.FormEvent<HTMLFormElement>,domain:string,callback:()=>void)=>void;
-    handleChange:(data:AdminData, event:  React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,setState: React.Dispatch<React.SetStateAction<InvestorData|AdminData>> )=>void
+    handleChange:(data:AdminData, event:  React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,setState: React.Dispatch<React.SetStateAction<InvestorData|AdminData|NewPasswordData>> )=>void
+    handleChangePassword:(data: NewPasswordData, event: React.FormEvent<HTMLFormElement>, navigate: (path: string) => void) =>void
    
   }

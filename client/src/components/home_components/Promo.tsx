@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { getTimeSinceFirstVisit } from '../../utils/helpers';
+import { getPromoRemainingTime } from '../../utils/helpers';
 import { GetStartedButton } from '../general/Button';
+import { PromoType } from '../../utils/types';
 
-const Promo: React.FC = () => {
+const Promo: React.FC<{promo:PromoType}>= ({promo}) => {
   const [countdown, setCountdown] = useState<number | null>(null);
 
   useEffect(() => {
-    const remainingHours: number | null = getTimeSinceFirstVisit();
+    const remainingHours: number | null = getPromoRemainingTime(promo.startDate,promo.durationInDays);
     console.log(remainingHours)
     if (typeof remainingHours === 'number') {
       setCountdown(remainingHours);
@@ -17,7 +18,7 @@ const Promo: React.FC = () => {
 
       return () => clearInterval(timer);
     }
-  }, []);
+  }, [promo.durationInDays, promo.startDate, setCountdown]);
 
   const formatTime = (time: number): string => {
     const days = Math.floor(time /86400000);
@@ -43,7 +44,8 @@ const Promo: React.FC = () => {
       <div className='primary-line mb-2'></div>
       </div>
       <div className='text-light primary-background py-3'>
-      <h5 className='mb-4'>If you invest before the timer runs out your return of investment will be increased by 17% no matter the investement tier you choose. So you make extra profits</h5>
+      <h5 className='mb-4'>{` We decided to reward you as early as possible,investing before the timer expires results in a ${promo.bonusPercentage} boost in your return on investment,
+       independent of the chosen investment tier.`} </h5>
       <h6>
         {formatTime(countdown)}
       </h6>

@@ -1,3 +1,4 @@
+
 import { AdminAuthorizationData, AdminDecodedToken, AuthorizationData, DecodedToken } from "./types";
 import { jwtDecode } from "jwt-decode";
 
@@ -19,4 +20,14 @@ import { jwtDecode } from "jwt-decode";
 
   export const doPasswordsMatch = (password: string, confirmPassword: string) => {
     return password === confirmPassword;
+  };
+  
+  
+  export const decodePasswordChangeToken = () => {
+    const token: string | null = localStorage.getItem('cassockPasswordChangeToken');
+    if (!token)
+    return null
+    const decoded :{id:string,role:string} |null=jwtDecode(token)
+  return decoded
+   
   };

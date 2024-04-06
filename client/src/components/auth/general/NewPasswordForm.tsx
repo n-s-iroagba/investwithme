@@ -1,78 +1,35 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import { useNavigate} from 'react-router-dom'
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
-
 import { InputGroup, Spinner } from 'react-bootstrap';
 import { required } from './required';
 import '../../styles.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import ErrorMessage from '../../general/ErrorMessage';
-import { loginUrl } from '../../../utils/constants';
-import { postData } from '../../../utils/api';
 import PasswordStrengthMeter from './PasswordStrengthMeter';
 import { AuthContext } from '../../../context/AuthContext';
 
-
-
 const NewPasswordForm: React.FC = ()=>{
   const navigate = useNavigate()
+ const { newPasswordData,
+  setNewPasswordData,
+  submitting,
+  validated,
+  handleConfirmPasswordsChange,
+  handleChangePassword,
+  passwordType,
+  showPassword,
+  isPasswordsMatch,
+  errorMessage,
+handlePasswordChange,
+  passwordValidityMessage
+} = useContext<any>(AuthContext)
 
-  const [submitting, setSubmitting] = useState(false)
- const [validated,setValidated] = useState(false)
-  const [data, setData] = useState({
-    password: "",
-    confirmPassword: "",
-  })
-
-
-  const {
-
-    handleConfirmPasswordsChange,
-    handlePasswordChange,
-    passwordType,
-    showPassword,
-    isPasswordsMatch,
-    errorMessage,
-    setErrorMessage,
-    passwordValidityMessage
-  } = useContext<any>(AuthContext)//
-
- 
-
-   const login =()=>{
-    setSubmitting(true);
-    try{
-    const response = postData(loginUrl,data)
-    console.log(response)
-    if (response.status === 403){
-      localStorage.setItem('cassockEmailVerificationToken', JSON.stringify(response.data))
-      navigate('/verify-email')
-    }else if (response.status === 400){
-      navigate('/signup')
-    }else{
-      localStorage.setItem('cassockAuthToken', JSON.stringify(response.data))
-      navigate('/verify-email')
-    }
-   }catch(e){
-      setErrorMessage('sorry you cannot login at this time, we are maintaining our servers due to heavy traffic')
-      setSubmitting(false)
-      console.error(e)
-   }
-  }
-
-   const handleChange = (e:any)=>{
-    setData({...data, [e.target.name]:e.target.value})
-
-   }
-
- 
-    
   return (
     <div className="d-flex justify-content-center align-items-center flex-column my-3">
-      <Form className="form py-5 " noValidate validated={validated} onSubmit={(e) => login()}>
-    
+      <Form className="form py-5 " noValidate validated={validated} onSubmit={(e) => handleChangePassword(newPasswordData, e, navigate)}>
       <Form.Group className='mb-4' as={Col} lg="12" controlId="validationFormik04">
           <Form.Label className='mb-0'>Password{required}</Form.Label>
           <InputGroup>
@@ -80,8 +37,8 @@ const NewPasswordForm: React.FC = ()=>{
               required
               type={passwordType}
               name='password'
-              value={data.password}
-              onChange={(e) =>  handlePasswordChange(data, e, setData)}
+              value={newPasswordData.password}
+              onChange={(e) => handlePasswordChange(newPasswordData, e, setNewPasswordData)}
               className=" custom-input bg-transparent form-control text-light"
 
             />
@@ -89,7 +46,7 @@ const NewPasswordForm: React.FC = ()=>{
               <FontAwesomeIcon icon={passwordType === 'text' ? faEye : faEyeSlash} />
             </InputGroup.Text>
           </InputGroup>
-          <PasswordStrengthMeter password={data.password} />
+          <PasswordStrengthMeter password={newPasswordData.password} />
           <div className='d-flex flex-column'>
             {
               Array.isArray(passwordValidityMessage) && passwordValidityMessage.length > 0 && (
@@ -100,7 +57,7 @@ const NewPasswordForm: React.FC = ()=>{
             }
           </div>
         </Form.Group>
-        <br/>
+        <br />
 
         <Form.Group as={Col} lg="12" controlId="validationFormik04">
           <Form.Label className='mb-0'>Confirm password{required}</Form.Label>
@@ -109,8 +66,8 @@ const NewPasswordForm: React.FC = ()=>{
               required
               type={passwordType}
               name="confirmPassword"
-              value={data.confirmPassword}
-              onChange={(e) =>handleConfirmPasswordsChange(data, e, setData)}
+              value={newPasswordData.confirmPassword}
+              onChange={(e) => handleConfirmPasswordsChange(newPasswordData, e, setNewPasswordData)}
               className=" custom-input  bg-transparent form-control text-light "
             />
             <InputGroup.Text onClick={() => showPassword()}>

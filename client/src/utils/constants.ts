@@ -5,6 +5,7 @@ export const companyName = `Cassock`
 
 export const loginUrl =  `${domain}/login`
 export const resendVerificationTokenRoute = `${domain}/resend-verification-token`
+export const newPasswordRoute = `${domain}/new-password`
 
 export const createAdminUrl = `${domain}/create-admin`
 
@@ -15,7 +16,7 @@ export const deleteInvestorRoute = `${domain}/delete-investor`
 
 export const createInvestmentUrl = `${domain}/create-investment`
 export const patchInvestmentUrl = `${domain}/patch-investment`
-export const getInvestmentUrl = `${domain}/get-investment`
+export const getInvestmentRoute = `${domain}/get-investment`
 
 export const createManagerUrl = `${domain}/create-manager`
 export const patchManagerUrl = `${domain}/patch-manager`
@@ -24,8 +25,8 @@ export const deleteManagerRoute = `${domain}/delete-manager`
 
 export const createWalletUrl = `${domain}/create-wallet`
 export const patchWalletUrl = `${domain}/patch-wallet`
-export const deleteWalletUrl = `${domain}/delete-wallet`
-export const getWalletsRoute = `${domain}/get-wallets`
+export const deleteWalletRoute = `${domain}/delete-wallet`
+export const getWalletsUrl = `${domain}/get-wallets`
 
 export const createPromoUrl = `${domain}/create-promo`
 export const getPromoUrl = `${domain}/get-promo`

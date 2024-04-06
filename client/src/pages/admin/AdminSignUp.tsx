@@ -13,7 +13,7 @@ const AdminSignUp: React.FC = () => {
             title='Already have an account?'
             buttonText='Login'
              icon = {faUser}
-             route='admin/login' />
+             route='login' />
             <Information text='Welcome to the admin registeration page, please note there can only be one admin.' head='Account Details' icon={faUser} />
             <AdminSignUpForm />
             </div>

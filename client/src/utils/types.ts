@@ -1,5 +1,10 @@
 
-
+export interface PromoType{
+  id:number;
+  startDate: string,
+  bonusPercentage:number,
+  durationInDays:number,
+}
 
 
 

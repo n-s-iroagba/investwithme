@@ -52,10 +52,9 @@ const SignUpForm: React.FC = () => {
       .then((data) => {
         console.log('countries' + data)
         setCountries(data.countries);
-        const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-        setInvestorData({...investorData,timezone:tz})
+       
       });
-  });
+  },[ setCountries,]);
 
   return (
 

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import '../../components/styles.css'
 import Header from "../../components/home_components/Header";
 import {TickerTape, } from "react-ts-tradingview-widgets";
@@ -16,8 +16,20 @@ import Referrals from "../../components/home_components/Referrals";
 import Chart from "../../components/home_components/Chart";
 import Promo from "../../components/home_components/Promo";
 import InvestmentCards from "../../components/home_components/InvestmentCards";
+import { PromoType } from "../../utils/types";
 
 const Home:React.FC = ()=>{
+const [promo,setPromo] = useState <PromoType|null>(null)
+useEffect(()=>{
+    const receivedpromo:PromoType ={
+        id: 1,
+        startDate: new Date('2021-01-01').toDateString(),
+        durationInDays: 30,
+        bonusPercentage: 100
+    }
+    setPromo(receivedpromo)
+
+}, [])
 
     return <div>
         <Header/>
@@ -28,7 +40,8 @@ const Home:React.FC = ()=>{
          <Awards/>
          <SecurityAssurance/>
          <Steps/>
-         <Promo/>
+
+        {promo && <Promo promo= {promo}/>}
          <InvestmentCards/>
          <Referrals/>
          <Chart/>
