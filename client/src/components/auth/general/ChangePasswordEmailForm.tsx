@@ -1,50 +1,41 @@
-import React, { useContext } from 'react';
+import React, { useState } from 'react';
 import { useNavigate} from 'react-router-dom'
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
-import { InputGroup, Spinner } from 'react-bootstrap';
-import { createAdminUrl } from '../../../utils/constants';
+import {  Spinner } from 'react-bootstrap';
+
 import { required } from './required';
-import PasswordStrengthMeter from './PasswordStrengthMeter';
+
 import '../../styles.css'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+
 import ErrorMessage from '../../general/ErrorMessage';
-import { AuthContext } from '../../../context/AuthContext';
 
 
 
 const ChangePasswordEmailForm: React.FC = () => {
-
+const [validated, setValidated] = useState<boolean>(true)
+const [submitting, setSubmiting] = useState<boolean>(false)
+const [email, setEmail] = useState<string>('')
+const [errorMessage,setErrorMessage] = useState<string>('')
   const navigate = useNavigate()
 
-  const {
-    submitting,
-    adminData,
-    validated,
-    setAdminData,
-    handleSubmit,
-    handleChange,
-    handleConfirmPasswordsChange,
-    handlePasswordChange,
-    passwordType,
-    showPassword,
-    isPasswordsMatch,
-    errorMessage,
-    passwordValidityMessage
-  } = useContext<any>(AuthContext)// used 'any' type because code was buggy when using <AuthContextType|undefined>
- 
- const navigateToVerifyEmailPage=()=>{
-      navigate('/verify-email')
-    }
+
 const navigateToLogin=()=>{
       navigate('/login')
     }
+const handleSubmit = ()=>{
+  setValidated(false)
+  setSubmiting(true)
+  setErrorMessage('sorry we cannot proceed with your request at this time')
+}
+const handleChange = (e:any)=>{
+  setEmail(e.target.value)
+}
     
   return (
     <div className="d-flex justify-content-center align-items-center flex-column my-3">
-      <Form className="form py-5 " noValidate validated={validated} onSubmit={(e) => handleSubmit(adminData, e, createAdminUrl,navigateToVerifyEmailPage)}>       
+      <Form className="form py-5 " noValidate validated={validated} onSubmit={handleSubmit}>       
         <Row>
           <Form.Group as={Col} lg="12" controlId="validationFormik04">
             <Form.Label className='mb-0'>Email{required}</Form.Label>
@@ -52,8 +43,8 @@ const navigateToLogin=()=>{
               type="email"
               required
               name="email"
-              value={adminData.email}
-              onChange={(e) => handleChange(adminData, e, setAdminData)}
+              value={email}
+              onChange={handleChange}
               className=" custom-input bg-transparent form-control text-light"
             />
             <Form.Control.Feedback></Form.Control.Feedback>
@@ -62,8 +53,8 @@ const navigateToLogin=()=>{
         <br />       
         <Form.Group>
         <div className='d-flex justify-content-evenly w-100 pb-5'>
-          <button className='button-styles w-50 text-light' type={submitting === 'submitting' ? 'button' : 'submit'}>
-            {submitting === 'submitting' ? <Spinner animation='border' size='sm' /> : 'Submit'}
+          <button className='button-styles w-50 text-light' type={submitting ? 'button' : 'submit'}>
+            {submitting ? <Spinner animation='border' size='sm' /> : 'Submit'}
           </button>
           <button className='button-styles text-light w-50' onClick={() => navigateToLogin()}> Back to Login</button>
         </div>

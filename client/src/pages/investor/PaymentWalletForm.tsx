@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { WalletType } from '../../utils/types';
-import '../styles.css'
+import '../../components/styles.css'
 import Information from '../../components/general/Information';
 import { SmallModal } from '../../components/investor/ConfirmationModal';
 import { faDollarSign } from '@fortawesome/free-solid-svg-icons';

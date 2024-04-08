@@ -12,9 +12,7 @@ import { MiniFooter } from '../../components/home_components/Footer'
 const Dashboard: React.FC = () => {
   const navigate = useNavigate();
   const [authorised, setAuthorised] = useState<boolean>(false);
-  const id = 1
-  const [username, setUsername] = useState<string>('');
-  const [role,setRole] = useState<string>('');
+
 
   useEffect(() => { 
     const authorised = true

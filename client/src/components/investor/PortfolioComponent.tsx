@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
-import { InvestmentType } from '../../utils/types';
 import PortfolioCard from './PortfolioCard';
 import { Chart, registerables } from 'chart.js';
 import { Chart as ReactChartJs } from 'react-chartjs-2';
@@ -9,30 +8,24 @@ import { Chart as ReactChartJs } from 'react-chartjs-2';
 const PortfolioComponent: React.FC = () => {
   const [investment, setInvestment] = useState({
     id: 1,
-
-    commenceDate: new Date().toISOString(),
+    commenceDate: '',
     amount: 2000,
     earnings: 1000,
-    amountDeposited: 0, // Initialize before calculating deposits
-    profit: 0, // Initialize before calculating profits
+    amountDeposited: 0,
+    profit: 0,
     wallet: {
-      type: 'Savings',
-      address: '1A1z2zX3zC4zV5vBqw',
+      network: '',
+      blockchain:'',
+      address: '',
+      currency: '',
     },
-    dueDate: new Date(2024, 10, 31).toISOString(), // Adjust due date as needed
-    deposits: [
-      {
-        date: new Date(2024, 10, 31).toISOString(), // Adjust deposit dates
-        amount: 500,
-      },
-    ],
+    dueDate: '',
     investmentManager: 'Acme Investments',
     percentageYield: 140,
+    referrals: [{ amountReceived: 0, EarningOnSingleReferral: 0 }],
 
   })
-  const [referral, setReferral] = useState({
-    bonusAmount: 100,
-  })
+
   Chart.register(...registerables)
 
   const device_counts = {
@@ -49,7 +42,27 @@ const PortfolioComponent: React.FC = () => {
       hoverBackgroundColor: '#1a6e41'
     }]
   };
+ useEffect(()=>{
+  setInvestment({
+    id: 1,
 
+    commenceDate: new Date().toISOString(),
+    amount: 2000,
+    earnings: 1000,
+    amountDeposited: 0, // Initialize before calculating deposits
+    profit: 0, // Initialize before calculating profits
+    wallet: {
+      network: 'erc',
+      blockchain:'BTC',
+      address: 'ala.flaejsqw;',
+      currency: 'BTC',
+    },
+    dueDate: '', // Adjust due date as needed
+    investmentManager: 'Acme Investments',
+    percentageYield: 140,
+    referrals:[{amountReceived:200,EarningOnSingleReferral:100}]
+  })
+ }, [])
 
   return (<div className='mx-3'>
     <h1 className='text-center my-3'>My Portfolio</h1>

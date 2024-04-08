@@ -3,7 +3,7 @@ import Home from "./pages/general/Home"
 import Dashboard from "./pages/investor/Dashboard";
 
 import InvestmentGuide from "./pages/investor/InvestmentGuide";
-import Payments from './pages/investor/Payments'
+
 import AboutUs from "./pages/general/AboutUs";
 import Login from "./pages/general/Login";
 import EmailVerified from "./pages/general/EmailVerifiedPage";
@@ -27,6 +27,7 @@ import Referral from "./pages/investor/Referral";
 import AdminManager from "./pages/admin/AdminManager";
 import AdminWallets from "./pages/admin/AdminWallets";
 import Notifications from "./pages/investor/Notification";
+import PaymentWalletForm from "./pages/investor/PaymentWalletForm";
 
 
 
@@ -92,8 +93,8 @@ element: <Email />
 },
 
 {
-    path:'/invest-payment',
-    element: <Payments />
+    path:'/invest/payment',
+    element: <PaymentWalletForm />
 },
 {
     path:'/referral',

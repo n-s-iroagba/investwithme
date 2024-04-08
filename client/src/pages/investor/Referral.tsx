@@ -1,41 +1,41 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Col, Form, Row } from 'react-bootstrap';
+import { Form} from 'react-bootstrap';
 import Information from '../../components/general/Information';
-import { faHandHoldingDollar, faUsers } from '@fortawesome/free-solid-svg-icons';
-import PortfolioCard from '../../components/investor/PortfolioCard';
+import { faUsers } from '@fortawesome/free-solid-svg-icons';
+
 
 
 const TextWithCopy: React.FC = () => {
  const [code, setCode] = useState('')
  const [link,setLink] = useState('')
- const [copied, setCopied] = useState(false)
+
 
  const navigate = useNavigate()
 
-  // const fetchTextFromBackend = async () => {
-  //   try {
-  //     const response = await fetch('your-backend-url');
-  //     const data = await response.text();
-  //     setText(data);
-  //   } catch (error) {
-  //     console.error('Error fetching text:', error);
-  //   }
-  // };
+  const fetchTextFromBackend = async () => {
+    try {
+      const response:any = await fetch('your-backend-url');
+      const data = await response.data
+      setCode(data.code);
+      setLink(data.link)
+    } catch (error) {
+      console.error('Error fetching text:', error);
+    }
+  };
 
-  // useEffect(() => {
-  //   fetchTextFromBackend(); // Fetch text when component mounts
-  // }, []);
+  useEffect(() => {
+    fetchTextFromBackend(); 
+  }, []);
 
 
   const handleCopyClick = () => {
     alert('Text copied to clipboard!');
-    navigator.clipboard.writeText(code); // Copy text to clipboard
-  };
-
+    navigator.clipboard.writeText(code); 
+  }
   const handleCopyClickLink = () => {
     alert('Text copied to clipboard!');
-    navigator.clipboard.writeText(link); // Copy text to clipboard
+    navigator.clipboard.writeText(link); 
   };
 
   return (
@@ -50,7 +50,6 @@ const TextWithCopy: React.FC = () => {
             value={code}
         className=" custom-input bg-transparent form-control text-light"
           />
-        {copied && <Form.Control.Feedback></Form.Control.Feedback>}
         </Form.Group>
 
       <div className='d-flex justify-content-evenly w-100 pb-5'>
@@ -65,7 +64,6 @@ const TextWithCopy: React.FC = () => {
             value={link}
         className=" custom-input bg-transparent form-control text-light"
           />
-        {copied && <Form.Control.Feedback></Form.Control.Feedback>}
         </Form.Group>
 
       <div className='d-flex justify-content-evenly w-100 pb-5'>
