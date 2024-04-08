@@ -13,17 +13,17 @@ import { ManagerType,} from '../../utils/types';
 
 export const GetStartedButton:React.FC =()=>{
   const navigate = useNavigate()
-    return<button onClick={()=>navigate('/invest/managers')} className='button-styles'><div>Invest with this manager</div><div ><FontAwesomeIcon icon={faDollarSign} beatFade/></div></button>
+    return<button onClick={()=>navigate('/invest/managers')} className='button-styles'><div>Get Started</div><div ><FontAwesomeIcon icon={faDollarSign} beatFade/></div></button>
 }
 export const ViewCerficateButton:React.FC =()=>{
 
-  return<button  className='button-styles'><div>Invest with this manager</div><div ><FontAwesomeIcon icon={faFile} beatFade/></div></button>
+  return<button  className='button-styles'><div>View Certificate of Incoporation</div><div ><FontAwesomeIcon icon={faFile} beatFade/></div></button>
 
 }
 
 
 export const ContactButton:React.FC =()=>{
-  return<button className='button-styles'><div>Invest with this manager</div><div ><FontAwesomeIcon icon={faEnvelope} beatFade/></div></button>
+  return<button className='button-styles'><div>Get In Touch</div><div ><FontAwesomeIcon icon={faEnvelope} beatFade/></div></button>
 }
 
 export const ResendVerificationTokenButton:React.FC<{function:any}> =(props)=>{
