@@ -1,12 +1,12 @@
 import { createBrowserRouter } from "react-router-dom";
 import Home from "./pages/general/Home"
 import Dashboard from "./pages/investor/Dashboard";
-import InvestmentCards from "./pages/investor/InvestmentManagers"
+
 import InvestmentGuide from "./pages/investor/InvestmentGuide";
 import Payments from './pages/investor/Payments'
 import AboutUs from "./pages/general/AboutUs";
 import Login from "./pages/general/Login";
-import EmailVerified from "./pages/general/EmailVerified";
+import EmailVerified from "./pages/general/EmailVerifiedPage";
 import VerifyEmail from "./pages/general/VerifyEmail";
 import AdminDashboard from "./pages/admin/AdminDashboard"
 
@@ -83,8 +83,8 @@ element: <Email />
 },
 
 {
-    path:'/invest-managers',
-    element: <InvestmentCards />,
+    path:'/invest/managers',
+    element: <InvestmentManagers/>,
 },
 {
     path:'/invest',

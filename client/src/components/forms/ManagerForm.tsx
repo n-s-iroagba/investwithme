@@ -1,18 +1,34 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState} from 'react';
 import { Col, Form, Row, Spinner } from 'react-bootstrap';
 import ErrorMessage from '../general/ErrorMessage';
 import { required } from '../auth/general/required';
-
 import ReactCrop, { type Crop } from 'react-image-crop'
 import 'react-image-crop/dist/ReactCrop.css';
-import { EditManagerType } from '../../utils/types';
-// const sharp = require('sharp')
+import { ManagerType } from '../../utils/types';
+import { createManager, hasEmptyKey, patchManager } from '../../utils/helpers';
 
-const ManagerForm: React.FC<{ details: EditManagerType }> = ({ details }) => {
-  const [managerData, setManagerData] = useState<EditManagerType>(details);
+
+
+const ManagerForm: React.FC<{ patch: boolean }> = ({ patch }) => {
+  const initialManagerData = patch
+    ? JSON.parse(localStorage.getItem('cassockManager') || 'null') || {
+        firstName: '',
+        lastName: '',
+        minimumInvestmentAmount: 0,
+        percentageYield: 0,
+      }
+    : {
+        firstName: '',
+        lastName: '',
+        minimumInvestmentAmount: 0,
+        percentageYield: 0,
+      };
+
+  const [managerData, setManagerData] = useState<ManagerType>(initialManagerData);
   const [submitting, setSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [files, setFiles] = useState<any>(null)
+  const [validated,setValidated] = useState(true)
   const [crop, setCrop] = useState<Crop>({
     unit: 'px', // Can be 'px' or '%'
     x: 25,
@@ -20,7 +36,7 @@ const ManagerForm: React.FC<{ details: EditManagerType }> = ({ details }) => {
     width: 150,
     height: 150,
   })
-  const [imageRef, setImageRef] = useState<HTMLImageElement | null>(null);
+
 
 
 
@@ -85,7 +101,7 @@ const ManagerForm: React.FC<{ details: EditManagerType }> = ({ details }) => {
     }
   };
 
-  
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setManagerData((prevData) => ({
@@ -98,25 +114,40 @@ const ManagerForm: React.FC<{ details: EditManagerType }> = ({ details }) => {
     if (e.target.files) {
       setFiles(e.target.files[0]);
     }
-  
+
   }
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(files);
-    // setSubmitting(true);
+    let shouldNotSubmit = hasEmptyKey(managerData)||managerData.image == null
+    try {
+      if (shouldNotSubmit) {
+        setValidated(false);
+      } else {
+        setSubmitting(true);
+        setValidated(true);
+        if (patch) {
+          await patchManager(managerData);
+        } else {
+          await createManager(managerData);
+        }
+      }
+    } catch (error) {
+      console.log(error);
+      setErrorMessage('Sorry we can not complete your request at this time');
+    }
   };
 
   return (
     <div className="d-flex justify-content-center align-content-center mt-5 px-2">
       {files && (
-          <ReactCrop circularCrop aspect={1} crop={crop} onChange={c => setCrop(c)}>
-          <img src={URL.createObjectURL(files)} alt='as'/>
+        <ReactCrop circularCrop aspect={1} crop={crop} onChange={c => setCrop(c)}>
+          <img src={URL.createObjectURL(files)} alt='as' />
           <button onClick={done}>Done</button>
         </ReactCrop>
-           
-          )}
-      <Form className="form py-5" noValidate onSubmit={handleSubmit}>
+
+      )}
+      <Form className="form py-5" noValidate validated={validated} onSubmit={handleSubmit}>
         <Row className="mb-3">
           <Form.Group as={Col} controlId="validationFormik01">
             <Form.Label className="mb-0">
@@ -194,7 +225,7 @@ const ManagerForm: React.FC<{ details: EditManagerType }> = ({ details }) => {
 
         <div className="d-flex justify-content-evenly w-100">
           <button className="button-styles w-50 text-light" type={submitting ? 'submit' : 'submit'}>
-            submitttt
+          {submitting ? <Spinner animation='border' size='sm' /> : 'Submit'}
           </button>
           <button className="button-styles text-light w-50">Home</button>
         </div>

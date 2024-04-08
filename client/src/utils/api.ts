@@ -4,7 +4,7 @@ import axios, { AxiosResponse } from 'axios';
 
 export const postData = async (url: string, data: any, authorizationData: string | null = null) => {
   const headers: { [key: string]: string } = {
-    'Content-Type': 'application/json'
+    'Content-Type': 'application/json',
   };
 
   if (authorizationData) {

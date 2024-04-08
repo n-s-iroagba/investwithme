@@ -14,8 +14,7 @@ export const topUpUrl = `${domain}/top-up`
 export const payUrl = `${domain}/pay`
 export const deleteInvestorRoute = `${domain}/delete-investor`
 
-export const createInvestmentUrl = `${domain}/create-investment`
-export const patchInvestmentUrl = `${domain}/patch-investment`
+export const createInvestmentRoute = `${domain}/create-investment`
 export const getInvestmentRoute = `${domain}/get-investment`
 
 export const createManagerUrl = `${domain}/create-manager`

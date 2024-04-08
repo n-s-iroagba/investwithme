@@ -1,4 +1,5 @@
 
+
 export interface PromoType{
   id:number;
   startDate: string,
@@ -15,12 +16,19 @@ export interface EditWalletType{
   network:string,
   currency:string
 }
-export interface DepositsType{
-    id?:number
-    date:string,
-    amount:number,
-}
 
+export interface CreateInvestmentType{
+  wallet:WalletType,
+
+  amount:number
+   id:number
+  manager:ManagerType
+}
+export interface InvestmentEntryType{
+  investment:CreateInvestmentType
+  managers:ManagerType[]
+  wallets:WalletType[]
+}
 export interface InvestmentType{
     id?:number,
     name:string
@@ -30,15 +38,23 @@ export interface InvestmentType{
     profit:number,
     wallet:WalletType,
     dueDate:string,
-    deposits:DepositsType[]
     investmentManager:string
     percentageYield:number
 }
 
 
+
+export interface TransactionType{
+  id?:number,
+  amount:string,
+  date:string,
+  participantAccount:string
+}
+
 export interface NotificationType{
   id:number
-  title:string
+  title:'Earnings'|'Bonus Payout'|'How To Deposit'|'Referral Registration'|'Referral imbursement'|'Bonus imbursement'|
+  'Investment Deposit Received'|'Incomplete Investment Deposit'|'Investment Paused' |'Investment Continued'|'Promo'|'Promo Extension'
   message:string
 }
 
@@ -49,7 +65,7 @@ export interface WalletType{
   currency:string
 }
 export interface ManagerType {
-  id: number,
+  id?: number,
     firstName: string,
     lastName: string,
     minimumInvestmentAmount: number
@@ -59,30 +75,21 @@ export interface ManagerType {
     qualification: string
   }
 
-export interface EditManagerType {
-  id?:number
-    firstName: string,
-    lastName: string,
-    minimumInvestmentAmount: number
-    percentageYield: number
-    duration:number
-    image: any,
-    qualification: string
-  }
 export interface DecodedToken {
     id: string;
-    role: string;
+    role: 'admin'|'investor';
     hasInvested?:boolean;
     name:string
-  }
-export interface AdminDecodedToken{
-    id: string;
-    role: string;
-    name:string 
-}
+    verificationStatus:'verified'|'verifying'
+    email:string
+  }   
+
 export interface AdminAuthorizationData{
     authorised:boolean;
     name:string
+    verificationStatus:'verified'|'verifying'
+    role:'admin'
+    email:string
 }
 
 export interface AuthorizationData extends DecodedToken {

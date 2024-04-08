@@ -8,7 +8,7 @@ import { ManagerType } from '../../utils/types';
 import '../../components/styles.css'
 
 const AdminInvestmentManagersCard: React.FC = () => {
-    const investorId = 1
+    
     const managerData:ManagerType[] = [
         {
             id: 1,
@@ -62,7 +62,7 @@ const AdminInvestmentManagersCard: React.FC = () => {
                             qualification={data.qualification}
                             minimumInvestmentAmount={`$${data.minimumInvestmentAmount}`}
                             duration={`${data.duration} weeks`}
-                            button={<MoveToPatchManager data={data} />}
+                            button={<MoveToPatchManager manager={data} />}
                             deleteButton={<button className='red-button'>Delete Manager</button>}
                         />
  <Form.Group as={Col} controlId="validationFormik01">

@@ -9,7 +9,7 @@ const NewInvestment:React.FC = ()=>{
     <div className='auth-page-items'>
  
           <Information center= {true}text='Fill the form below to get started.' head='Create a portfolio' icon={faHandHoldingDollar} />
-        <NewInvestmentForm/>
+        <NewInvestmentForm username={""} investorId={0}/>
         
         </div>
         </div>

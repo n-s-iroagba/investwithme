@@ -4,26 +4,17 @@ import { Col, Row } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 import '../../components/styles.css'
+import { NotificationType } from '../../utils/types';
 
 
 const Notifications = () =>{
-    const notifications= [
-        {
-          id: 1,
-          title: 'New Message',
-          message: 'You have received a new message.'
-        },
-        {
-          id: 2,
-          title: 'Reminder',
-          message: 'Dont forget to submit your assignment.'
-        },
-        {
-          id: 3,
-          title: 'Meeting Reminder',
-          message: 'You have a meeting at 2 PM today.'
-        }
-      ];
+    const notifications:NotificationType[] = [
+      {
+        id:1,
+        title: 'Bonus Payout',
+        message: 'You have received a new message.'
+      },
+      ]
     return(
       <div className='primary-background full-height' style={{ padding: '0%' }}>
       <div className='d-flex w-100 flex-column align-items-center'>

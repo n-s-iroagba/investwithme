@@ -1,13 +1,13 @@
 import React from 'react';
 import { Row, Col } from 'react-bootstrap';
 import { InvestmentTiersCard } from '../../components/general/InvestmentTiersCard';
-import { InvestButton } from '../../components/general/Button';
+import {  SelectManagerButton } from '../../components/general/Button';
 
 import { MiniFooter } from '../../components/home_components/Footer';
 import { ManagerType } from '../../utils/types';
 
 const InvestmentManagers: React.FC = () => {
-    const investorId = 1
+  
     const managerData:ManagerType[] = [
         {
             id: 1,
@@ -60,7 +60,7 @@ const InvestmentManagers: React.FC = () => {
                             qualification={data.qualification}
                             minimumInvestmentAmount={`$${data.minimumInvestmentAmount}`}
                             duration={`${data.duration} weeks`}
-                            button={<InvestButton managerId={data.id} investorId={investorId} />}
+                            button={<SelectManagerButton managerId={data.id} />}
 
                         />
                     </Col>

@@ -34,7 +34,7 @@ const Dashboard: React.FC = () => {
   }
 
   const icons = [faQuestion,faHandHoldingDollar,faWallet,faMoneyBill,faMoneyBillTransfer,faUserFriends ];
-  const actions: string[] = ['how-to-guide', 'invest-managers','portfolio','withdraw','transactions',`referral`];
+  const actions: string[] = ['how-to-guide', 'invest/managers','portfolio','withdraw','transactions',`referral`];
   const texts: string[] = ['How-to guides', 'Invest','Portfolio','Withdraw','Transactions','Refer and Earn'];
 
   return (

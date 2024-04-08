@@ -2,31 +2,30 @@ import React, { useEffect, useState } from 'react';
 import Information from '../../components/general/Information';
 import { faMailchimp } from '@fortawesome/free-brands-svg-icons';
 import { useNavigate } from 'react-router-dom';
-import { getData} from '../../utils/api';
- import { verifyToken } from '../../utils/auth';
-import { resendVerificationTokenUrl } from '../../utils/constants';
+import { getData } from '../../utils/api';
+import { getAuthData,} from '../../utils/auth';
+import { resendVerificationTokenRoute } from '../../utils/constants';
+
 
 const VerifyEmail = () => {
   const [counter, setCounter] = useState(0);
   const navigate = useNavigate();
   const [token, setToken] = useState<any>(null);
 
-
   useEffect(() => {
     let storedCounter: number | null = parseInt(localStorage.getItem('cassocktime') || '0', 10);
     if (!storedCounter || isNaN(storedCounter)) {
-      storedCounter = 5; 
+      storedCounter = 5;
     }
     setCounter(storedCounter);
 
-    const storedToken = localStorage.getItem('cassockEmailVerificationToken');
-    console.log (storedToken)
-    if (!storedToken||storedToken===null) {
+    const storedToken = localStorage.getItem('cassockJwtToken');
+    if (!storedToken || storedToken === null) {
       navigate('/signup');
     } else {
-      const decodedToken = verifyToken(storedToken);
-      console.log(decodedToken);
-      if (decodedToken?.status !== 'email-verification') {
+      const decodedToken = getAuthData(storedToken);
+    
+      if (decodedToken && decodedToken.verificationStatus ==='verifying') {
         navigate('/login');
       } else {
         setToken(decodedToken);
@@ -37,11 +36,11 @@ const VerifyEmail = () => {
       setCounter((prevCounter) => Math.max(0, prevCounter - 1));
     }, 1000);
 
-    return () => clearInterval(interval); 
+    return () => clearInterval(interval);
   }, [navigate]);
 
   const verifyAndUpdateToken = async () => {
-    const response = await getData(`${resendVerificationTokenUrl}/${token?.id}`);
+    const response = await getData(`${resendVerificationTokenRoute}/${token?.id}`);
     if (response) {
       setCounter(600);
       localStorage.setItem('cassockEmailVerificationToken', response.data.data);
@@ -57,21 +56,15 @@ const VerifyEmail = () => {
 
   return (
     <div className="d-flex flex-column justify-content-center align-items-center mt-5 mb-5">
-      {counter > 0 ? (
-        <>
-          <Information head='Verify your Email Address' text="Kindly open your registration email and verify email address." icon={faMailchimp} />
-          <p className='py-0 text-nowrap'>Token will expire in {formatTime(counter)} seconds</p>
-        </>
-      ) : (
-        <>
-          <Information head='Verify your Email Address' text="The token we sent is expired, kindly click the button to get a new token" icon={faMailchimp} />
-          <div className='button-width-narrower my-3'>
-            <button className='button-styles' onClick={verifyAndUpdateToken}>Resend Token</button>
-          </div>
-        </>
-      )}
+      <Information head='Email has already been verified' text="Email has been previously verified, login to access account" icon={faMailchimp} />
+      <div className='button-width-narrower my-3'>
+        {counter <= 0 ? formatTime(counter) : <button className='button-styles' onClick={verifyAndUpdateToken}>Resend Token</button>}
+      </div>
     </div>
   );
 };
 
 export default VerifyEmail;
+
+
+

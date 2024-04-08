@@ -1,6 +1,6 @@
 import { deleteItem, patchItem, postData } from "./api";
-import { EditManagerType, EditWalletType, InvestmentType, ManagerType, WalletType } from "./types";
-import { createInvestmentUrl, patchInvestmentUrl,createManagerUrl, patchManagerUrl, deleteManagerRoute, createWalletUrl, patchWalletUrl, deleteWalletRoute} from "./constants";
+import { CreateInvestmentType, ManagerType, WalletType } from "./types";
+import { createManagerUrl, patchManagerUrl, deleteManagerRoute, createWalletUrl, patchWalletUrl, deleteWalletRoute, createInvestmentRoute} from "./constants";
 
 export const isLargeScreen = () => {
   const mediaQuery = window.matchMedia('(min-width: 768px)');
@@ -44,45 +44,32 @@ export const getGreeting = (): string => {
     return 'Good evening';
   }
 };
-
-export const createInvestment = async (managerId: number, investorId: number, navigate: (path: string) => void) => {
-  const data = {
-    managerId: managerId,
-    investorId: investorId
-  }
+export const createInvestment = async (data: CreateInvestmentType, investorId: number) => {
+  const createInvestmentUrl = `${createInvestmentRoute}/${investorId}`;
 
   try {
     const authorizationData = localStorage.getItem('cassockJwtToken');
-    const response = await postData(createInvestmentUrl, data, authorizationData);
-    if (response.status === 200) {
-      localStorage.setItem('cassockManagers', JSON.stringify(response.data.managers))
-      localStorage.setItem('cassockManagers', JSON.stringify(response.data.investement))
-      navigate('/invest'); 
-    } else {
-      alert('unable to create a new investment at this time')
-  } 
-}catch (error) {
-    console.error('Error creating investment:', error);
-  }
+    return await postData(createInvestmentUrl, data, authorizationData);
+  }catch (error:any) {
+    console.error(error)
+    throw new Error(error.message)
+   }
+  
 };
 
-export const patchInvestment =async (data:InvestmentType, navigate: (path: string) => void) =>{
-  try {
-    const authorizationData = localStorage.getItem('cassockJwtToken');
-    const response = await patchItem(patchInvestmentUrl, data, authorizationData);
-    if (response.status === 200) {
-      localStorage.setItem('cassockDepositWallet', JSON.stringify(response.data.wallet))
-      navigate('/invest-payment'); 
-    } else {
-      alert('unable to create a new investment at this time')
-  } 
-}catch (error) {
- console.error(error)
-}
-}
+export const hasEmptyKey = (obj: { [key: string]: any }): boolean => {
+  for (const key in obj) {
+    if (obj[key] === '') {
+      return true;
+    }
+  }
+  return false;
+};
 
 
-export const createManager= async (data:ManagerType, navigate: (path: string) => void) => {
+
+
+export const createManager= async (data:ManagerType) => {
   try {
     const authorizationData = localStorage.getItem('cassockJwtToken');
     const response = await postData(createManagerUrl, data, authorizationData);
@@ -92,24 +79,28 @@ export const createManager= async (data:ManagerType, navigate: (path: string) =>
     } else {
       alert('unable to create a manager at this time')
   } 
-}catch (error) {
-    console.error('Error creating investment:', error);
-  }
+}catch (error:any) {
+  console.error(error)
+  throw new Error(error.message)
+ }
+
 };
 
-export const patchManager=async ( data:EditManagerType,navigate: (path: string) => void) =>{
+export const patchManager=async ( data:ManagerType) =>{
   try {
     const authorizationData = localStorage.getItem('cassockJwtToken');
     const response = await patchItem(patchManagerUrl, data, authorizationData);
     if (response.status === 200) {
       alert('manager updated succesfully')
-     navigate('/admin/manager')
+      window.location.reload();
     } else {
       alert('unable to update the manager at this time')
   } 
-}catch (error) {
- console.error(error)
-}
+}catch (error:any) {
+  console.error(error)
+  throw new Error(error.message)
+ }
+
 }
 
 export const deleteManager = async (id:number) => {
@@ -123,13 +114,15 @@ const url =`${deleteManagerRoute}/${id}`
     } else {
       alert('unable to delete manager at this time')
   } 
-}catch (error) {
- console.error(error)
-}
+}catch (error:any) {
+  console.error(error)
+  throw new Error(error.message)
+ }
+
 
 }
 
-export const createWallet= async (data:WalletType,navigate: (path: string) => void) => {
+export const createWallet= async (data:WalletType) => {
   try {
     const authorizationData = localStorage.getItem('cassockJwtToken');
     const response = await postData(createWalletUrl, data, authorizationData);
@@ -139,24 +132,26 @@ export const createWallet= async (data:WalletType,navigate: (path: string) => vo
     } else {
       alert('unable to create a wallet at this time')
   } 
-}catch (error) {
-    console.error('Error creating investment:', error);
-  }
+}catch (error:any) {
+  console.error(error)
+  throw new Error(error.message)
+ }
 };
 
-export const patchWallet=async ( data:EditWalletType, navigate: (path: string) => void) =>{
+export const patchWallet=async ( data:WalletType) =>{
   try {
     const authorizationData = localStorage.getItem('cassockJwtToken');
     const response = await patchItem(patchWalletUrl, data, authorizationData);
     if (response.status === 200) {
       alert('wallet updated succesfully')
-      navigate('/admin/wallet')
+      window.location.reload();
       
     } else {
       alert('unable to update the wallet at this time')
   } 
-}catch (error) {
+}catch (error:any) {
  console.error(error)
+ throw new Error(error.message)
 }
 }
 
@@ -171,8 +166,9 @@ const url =`${deleteWalletRoute}/${id}`
     } else {
       alert('unable to delete manager at this time')
   } 
-}catch (error) {
+}catch (error:any) {
  console.error(error)
+ throw new Error(error.message)
 }
 
 }
@@ -187,3 +183,6 @@ export const getPromoRemainingTime = (date: string, duration: number) => {
   const timeDifference = promoDate - now.getTime(); 
   return timeDifference;
 }
+export const findManagerById = (managersArray:ManagerType[], idToFind:number) => {
+  return managersArray.find((manager) => manager.id === idToFind);
+};
