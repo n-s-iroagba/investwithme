@@ -1,21 +1,24 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
+import '../styles.css'
+import { faDollarSign } from '@fortawesome/free-solid-svg-icons';
+import { useNavigate } from 'react-router-dom';
 
-interface WithdrawalStatusProps {
-  getWithdrawalStatus: () => 'investedButNotDue' | 'notYetInvested' | 'dueForWithdrawal';
-}
+const WithdrawalDashboard: React.FC = () => {
 
-const WithdrawalDashboard: React.FC<WithdrawalStatusProps> = ({ getWithdrawalStatus }) => {
-  const status = getWithdrawalStatus();
+const navigate = useNavigate()
+
+  const status:string = 'notYetInvested'
 
   const renderMessage = () => {
     switch (status) {
       case 'investedButNotDue':
-        return <p>Invested</p>;
+        return  <p>You can not make withdrawals not until your pay out day</p>
       case 'notYetInvested':
         return (
           <div>
             <p>No investment yet</p>
-            <button onClick={handleInvest}>Invest</button>
+            <button  onClick= {()=>navigate('/invest/managers')}className='button-styles'><div>Invest</div><div ><FontAwesomeIcon icon={faDollarSign} beatFade/></div></button>
           </div>
         );
       case 'dueForWithdrawal':
@@ -25,19 +28,13 @@ const WithdrawalDashboard: React.FC<WithdrawalStatusProps> = ({ getWithdrawalSta
     }
   };
 
-  const handleInvest = () => {
-    // Logic for handling investment
-    console.log('Investing...');
-  };
-
   const handleWithdraw = () => {
-    // Logic for handling withdrawal
     console.log('Withdrawing...');
   };
 
   return (
     <div>
-      <h2>Withdrawal Status</h2>
+      <h2>Withdrawal</h2>
       {renderMessage()}
     </div>
   );

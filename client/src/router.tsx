@@ -28,6 +28,7 @@ import AdminManager from "./pages/admin/AdminManager";
 import AdminWallets from "./pages/admin/AdminWallets";
 import Notifications from "./pages/investor/Notification";
 import PaymentWalletForm from "./pages/investor/PaymentWalletForm";
+import WithdrawalDashboard from "./components/investor/WithdrawalDashboard";
 
 
 
@@ -76,6 +77,10 @@ element: <Email />
 {
     path:'/dashboard',
     element: <Dashboard/>,
+},
+{
+    path:'/withdraw',
+    element: <WithdrawalDashboard/>,
 },
 
 {

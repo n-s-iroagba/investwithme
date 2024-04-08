@@ -49,15 +49,15 @@ const PortfolioComponent: React.FC = () => {
     commenceDate: new Date().toISOString(),
     amount: 2000,
     earnings: 1000,
-    amountDeposited: 0, // Initialize before calculating deposits
-    profit: 0, // Initialize before calculating profits
+    amountDeposited: 0,
+    profit: 0, 
     wallet: {
       network: 'erc',
       blockchain:'BTC',
       address: 'ala.flaejsqw;',
       currency: 'BTC',
     },
-    dueDate: '', // Adjust due date as needed
+    dueDate: '', 
     investmentManager: 'Acme Investments',
     percentageYield: 140,
     referrals:[{amountReceived:200,EarningOnSingleReferral:100}]
