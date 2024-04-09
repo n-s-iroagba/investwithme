@@ -21,11 +21,10 @@ export interface CreateInvestmentType{
   wallet:WalletType,
 
   amount:number
-   id:number
   manager:ManagerType
 }
 export interface InvestmentEntryType{
-  investment:CreateInvestmentType
+
   managers:ManagerType[]
   wallets:WalletType[]
 }
@@ -47,14 +46,16 @@ export interface InvestmentType{
 export interface TransactionType{
   id?:number,
   amount:string,
-  date:string,
+  type:'Debit'|'Credit'
   participantAccount:string
+  narration:'Referral bonus imbursement'|'Bonus payout'|'Investment Deposit'
+  date:string
 }
 
 export interface NotificationType{
   id:number
-  title:'Earnings'|'Bonus Payout'|'How To Deposit'|'Referral Registration'|'Referral imbursement'|'Bonus imbursement'|
-  'Investment Deposit Received'|'Incomplete Investment Deposit'|'Investment Paused' |'Investment Continued'|'Promo'|'Promo Extension'
+  title:'Earnings'|'Bonus Payout'|'How To Deposit'|'Referral Registration'|'Referral bonus imbursement'|'Bonus imbursement'|
+  'Investment Deposit'|'Incomplete Investment Deposit'|'Investment Paused' |'Investment Continued'|'Promo'|'Promo Extension'|'Incomplete Deposit'
   message:string
 }
 

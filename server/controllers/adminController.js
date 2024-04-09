@@ -1,81 +1,9 @@
 
-const {PROMO_PERCENT,INVESTMENT_TENURE,REFERRAL_BONUS_PERCENT} = require('../config')
+const {PROMO_PERCENT,INVESTMENT_TENURE,REFERRAL_BONUS_PERCENT, COMPANY_NAME} = require('../config')
 const {Investor,Manager,DepositWallet,Referral,Investment,Transaction,Notification} = require('../model');
-const moment = require('moment');
-
+const { sendReferralBonusEmail, sendCompleteInvestmentDepositReceivedEmail, sendIncompleteInvestmentDepositReceivedEmail } = require('../service');
+const {findManagerWithHighestMinInvestment} =require('../helpers')
 module.exports = {
-  topUp: async (req, res) => {
-    try {
-      const { walletAddress, amount } = req.body;
-      let investmentAmount = amount + (amount * PROMO_PERCENT);
-  
-      // Fetch wallet, investment, investor, and manager
-      const wallet = await DepositWallet.findOne({
-        where: { address: walletAddress },
-        include: [{ model: Investment, include: [{ model: Investor }] }],
-      });
-  
-      if (!wallet) {
-        return res.status(404).json({ message: 'Wallet not found' });
-      }
-  
-      const investment = wallet.Investment;
-      const investor = investment.Investor;
-      if (!investment || !investor) {
-        return res.status(404).json({ message: 'Investment or Investor not found' });
-      }
-
-      if(investor.hasInvested) {
-        investmentAmount = amount
-      }
-  
-      const manager = await Manager.findByPk(investment.managerId);
-      if (!manager) {
-        return res.status(404).json({ message: 'Manager not found' });
-      }
-  
-      investor.hasInvested = true;
-      investment.amountDeposited += investmentAmount; // Use += to add the amount
-      investment.investmentDate = new Date();
-      // const dueDat = new Date(currentDate);
-      // dueDate.setDate(dueDate.getDate() + 14);
-  
-      if (investor.refereeId) {
-        const referral = await Referral.findOne({
-          where: {
-            referredId: investor.id,
-            refereeInvestorId: investor.refereeId,
-          },
-        });
-  
-        if (referral) {
-          referral.amountReceived = investmentAmount * REFERRAL_BONUS_PERCENT;
-          await referral.save();
-          // Add logic for sending referral bonus mail, creating transaction, and notification
-        }
-      }
-  
-      
-  
-      if (investment.amountDeposited === investment.amount) {
-        // sendNewInvestmentMail(manager, investmentAmount, 0, investor, false);
-      } else if (investment.amountDeposited > investment.amount) {
-        investment.amount = investment.amountDeposited; // Update investment amount
-        // ChangeManager,and incrementPercent
-        // sendNewInvestmentMail(manager, investmentAmount, 0, investor, false);
-      } else {
-        // sendLowerInvestmentMail(manager, investmentAmount, 0, investor, true);
-      }
-      //Transaction
-      //Notification
-      await investment.save();
-      return res.status(200).json('done');
-    } catch (error) {
-      console.error('Error in topUp function:', error);
-      return res.status(500).json({ error: 'Internal server error' });
-    }
-  },
-  
   
   payInvestors: async (req, res) => {
     try {

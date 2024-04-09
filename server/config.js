@@ -24,6 +24,7 @@ const TOKEN_EXPIRATION_TIME = '10 minutes'
 
  const PROMO_PERCENT = 0.15
  const REFERRAL_BONUS_PERCENT = 0.15
+ const howToInvestMessage = 'aaafkkfnasljfnal'//implement
  module.exports={
     COMPANY_REFERRAL_EMAIL,
     COMPANY_VERIFICATION_EMAIL,
@@ -42,5 +43,8 @@ const TOKEN_EXPIRATION_TIME = '10 minutes'
     JWT_SECRET,
     PROMO_PERCENT,
     REFERRAL_BONUS_PERCENT,
-    INVESTMENT_TENURE
+    INVESTMENT_TENURE,
+    howToInvestMessage
 }
+
+

@@ -33,7 +33,6 @@ const NewInvestmentForm:React.FC<{username:string,investorId:number}> = ({userna
       qualification: ''
     }
     const [investmentData,setInvestmentData] = useState< CreateInvestmentType>({
-      id:1,
         amount: 0,
         wallet: {
         network: '',
@@ -51,26 +50,7 @@ const NewInvestmentForm:React.FC<{username:string,investorId:number}> = ({userna
 
   
     useEffect(() =>{
-      const investmentEntry = {
-        id: 1,
-        amount: 5000,
-        wallet: {
-          network: 'Mainnet',
-          address: '0x9876543210987654321098765432109876543210',
-          currency: 'ETH',
-          blockchain: 'Ethereum',
-        },
-        manager: {
-          id: 123,
-          firstName: 'John',
-          lastName: 'Doe',
-          minimumInvestmentAmount: 1000,
-          percentageYield: 8,
-          duration: 24,
-          image: 'path/to/manager-image.jpg',
-          qualification: 'Certified Financial Analyst',
-        },
-      };
+ 
       const wallet1: WalletType = {
         blockchain: 'Ethereum',
         address: '0x1234567890abcdef',
@@ -92,7 +72,6 @@ const NewInvestmentForm:React.FC<{username:string,investorId:number}> = ({userna
         currency: 'BNB',
       };
       
-      // Sample data for ManagerType
       const manager1: ManagerType = {
         id: 1,
         firstName: 'John',
@@ -128,7 +107,7 @@ const NewInvestmentForm:React.FC<{username:string,investorId:number}> = ({userna
       
    
       const data:InvestmentEntryType = 
-        { investment: investmentEntry,
+        {
           managers: [manager1, manager2, manager3],
           wallets: [wallet1, wallet2, wallet3],
         }

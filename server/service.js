@@ -32,11 +32,11 @@ const sendVerificationEmail = async (user, verificationToken) => {
   }
 };
 
-
-const sendReferalCompletedMail= async(refreeInvestor,newInvestor)=>{
+const sendHowToInvestMail= async(investor)=>{
+  //Correct the mails
   let mailOptions = {
         from: COMPANY_REFERRAL_EMAIL,
-        to: refreeInvestor.email,
+        to: investor.email,
         subject: 'Referral Mail',
         text: `Dear ${refreeInvestor.firstName},\n\n Thank you for referring to ${newInvestor.lastName}, ${newInvestor.firstName}. Your referral bonus shall be credited to ${COMPANY_NAME} most recent investement acoount,
         when the referred investor makes the first deposit.
@@ -50,41 +50,108 @@ const sendReferalCompletedMail= async(refreeInvestor,newInvestor)=>{
  }
 }
 
-const sendPasswordResetEmail=()=>{
-
-
-}
-
-
-
-
-const sendInvestmentReminderEmails = async () => {
-  try {
-    const investors = await Investor.findAll({ where: { hasInvested: false } });
-  
-    for (const investor of investors) {
-      const {firstName, lastName, email,} = investor;
-
-
-        await transporter.sendMail({
-          from: 'your-email@gmail.com',
-          to: email,
-          subject: 'Investment Reminder',
-          text: `Hi ${firstName} ${lastName}, This is a friendly reminder to invest in our platform.`,
-          html: `<p>Hi ${firstName} ${lastName},</p><p>This is a friendly reminder to invest in our platform.</p>`,
-        });
-
-        console.log(`Reminder email sent to ${firstName} ${lastName}`);
-      } else {
-        console.log(`No reminder needed for ${firstName} ${lastName}`);
-      }
-    }
-
-    console.log('Reminder emails sent successfully.');
-  } catch (error) {
-    console.error('Error sending reminder emails:', error);
+const sendReferralBonusEmail = async (referee,investor) => {
+  //correct mail
+  let mailOptions = {
+    from: 'your-email@gmail.com',
+    to: email,
+    subject: 'Investment Reminder',
+    text: details
   }
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.log('Error sending email:', error);
+    } else {
+      console.log('Email sent:', info.response);
+    }
+  });
 };
+
+const sendCompleteInvestmentDepositReceivedEmail = async (investor,investment,manager) => {
+  //correct mail
+  let mailOptions = {
+    from: 'your-email@gmail.com',
+    to: email,
+    subject: 'Investment Reminder',
+    text: `Dear ${name},\n\nThis is a reminder for you to make your investment.\n\nBest,\nYour Company`
+  }
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.log('Error sending email:', error);
+    } else {
+      console.log('Email sent:', info.response);
+    }
+  });
+};
+const sendIncompleteInvestmentDepositReceivedEmail = async (investor,investment,manager) => {
+  //correct mail
+  let mailOptions = {
+    from: 'your-email@gmail.com',
+    to: email,
+    subject: 'Investment Reminder',
+    text: `Dear ${name},\n\nThis is a reminder for you to make your investment.\n\nBest,\nYour Company`
+  }
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.log('Error sending email:', error);
+    } else {
+      console.log('Email sent:', info.response);
+    }
+  });
+};
+
+// const sendReferalCompletedMail= async(refreeInvestor,newInvestor)=>{
+//   let mailOptions = {
+//         from: COMPANY_REFERRAL_EMAIL,
+//         to: refreeInvestor.email,
+//         subject: 'Referral Mail',
+//         text: `Dear ${refreeInvestor.firstName},\n\n Thank you for referring to ${newInvestor.lastName}, ${newInvestor.firstName}. Your referral bonus shall be credited to ${COMPANY_NAME} most recent investement acoount,
+//         when the referred investor makes the first deposit.
+//        \n Thank you ${newInvestor.firstName}`
+//   }
+//   try{
+//       await transporter.sendMail(mailOptions)
+//       }catch (error) {
+//         console.error('Error sending verification email:', error);
+//         throw(new Error(error))
+//  }
+// }
+
+// const sendPasswordResetEmail=()=>{
+
+
+// }
+
+
+
+
+// const sendInvestmentReminderEmails = async () => {
+//   try {
+//     const investors = await Investor.findAll({ where: { hasInvested: false } });
+  
+//     for (const investor of investors) {
+//       const {firstName, lastName, email,} = investor;
+
+
+//         await transporter.sendMail({
+//           from: 'your-email@gmail.com',
+//           to: email,
+//           subject: 'Investment Reminder',
+//           text: `Hi ${firstName} ${lastName}, This is a friendly reminder to invest in our platform.`,
+//           html: `<p>Hi ${firstName} ${lastName},</p><p>This is a friendly reminder to invest in our platform.</p>`,
+//         });
+
+//         console.log(`Reminder email sent to ${firstName} ${lastName}`);
+//       } else {
+//         console.log(`No reminder needed for ${firstName} ${lastName}`);
+//       }
+//     }
+
+//     console.log('Reminder emails sent successfully.');
+//   } catch (error) {
+//     console.error('Error sending reminder emails:', error);
+//   }
+// };
 
 
 
@@ -205,19 +272,5 @@ const sendInvestmentReminderEmails = async () => {
 //   }
 // }
 
-// const sendReferralEarningsEmail = async (email,details) => {
-//   let mailOptions = {
-//     from: 'your-email@gmail.com',
-//     to: email,
-//     subject: 'Investment Reminder',
-//     text: details
-//   }
-//   transporter.sendMail(mailOptions, (error, info) => {
-//     if (error) {
-//       console.log('Error sending email:', error);
-//     } else {
-//       console.log('Email sent:', info.response);
-//     }
-//   });
-// };
-module.exports = { sendPasswordResetEmail,sendVerificationEmail,sendReferalCompletedMail};
+
+module.exports = {sendVerificationEmail,sendHowToInvestMail,sendReferralBonusEmail, sendCompleteInvestmentDepositReceivedEmail, sendIncompleteInvestmentDepositReceivedEmail};

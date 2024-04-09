@@ -184,8 +184,8 @@ const DepositWallet = sequelize.define("depositWallet", {
     }
 });
 
-Investment.hasOne(DepositWallet,{
-    foreignKey:'investmentId',
+Investor.hasOne(DepositWallet,{
+    foreignKey:'investorId',
     onDelete:'CASCADE'
 })
 
@@ -201,14 +201,18 @@ const Transaction = sequelize.define('transaction', {
       type:Sequelize.FLOAT,
       allowNull: false,
     },
-    subject: {
+    participatingAccound: {
       type:Sequelize.STRING,
       allowNull: false,
       validate: {
         isIn: [['Your Wallet', COMPANY_NAME]],
       },
     },
-    time: {
+  narration: {
+      type:Sequelize.STRING,
+      allowNull: false,
+    },
+    date: {
       type:Sequelize.DATE,
       defaultValue:Sequelize.NOW,
     },
@@ -238,13 +242,15 @@ const Transaction = sequelize.define('transaction', {
       allowNull: false,
       primaryKey: true,
     },
-    amountRecieved: {
+    amount: {
       type: Sequelize.DOUBLE,
-      allowNull: true,
+      allowNull: false,
+      defaultValue: 0.0,
     },
-    profit: {
-      type: Sequelize.DOUBLE,
-      allowNull: true,
+    duePayment: {
+      type: Sequelize.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
     },
   });
   
@@ -257,10 +263,19 @@ const Transaction = sequelize.define('transaction', {
     foreignKey: 'referredId',
     onDelete: 'CASCADE', 
   });
-  
+  DepositWallet.hasOne(Referral,{
+    foreignKey: 'walletId',
+    onDelete: 'CASCADE', 
+  });
 
-   const Notification = sequelize.define('Notification', {
-    header: {
+   const Notification = sequelize.define('notifications', {
+    id: {
+      type: Sequelize.INTEGER,
+      autoIncrement: true,
+      allowNull: false,
+      primaryKey: true,
+    },
+    title: {
       type:Sequelize.STRING,
       allowNull: false,
     
@@ -276,7 +291,29 @@ const Transaction = sequelize.define('transaction', {
     foreignKey: 'investorId',
     onDelete: 'CASCADE', 
   });
+  const PromoNotification = sequelize.define('promoNotifications', {
+    id: {
+      type: Sequelize.INTEGER,
+      autoIncrement: true,
+      allowNull: false,
+      primaryKey: true,
+    },
+    title: {
+      type:Sequelize.STRING,
+      allowNull: false,
+    
+    },
+    message: {
+      type:Sequelize.STRING,
+      allowNull: false,
+    
+    },
+  });
 
+  Investor.hasMany(PromoNotification, {
+    foreignKey: 'investorId',
+    onDelete: 'CASCADE', 
+  });
 
 
 
@@ -367,4 +404,4 @@ sequelize.sync()
   .catch(err => {
     console.error('Unable to sync User model:', err);
   });
-module.exports =  {Investor,Admin,Manager,AdminWallet,DepositWallet,Referral,Investment,Transaction,Notification}
+module.exports =  {Investor,Admin,Manager,AdminWallet,DepositWallet,Referral,Investment,Transaction,Notification,PromoNotification}
