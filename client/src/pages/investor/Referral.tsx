@@ -70,7 +70,18 @@ const TextWithCopy: React.FC = () => {
         <button onClick={handleCopyClickLink} className='button-styles w-50 text-light'>
          Copy Link
         </button>
+      </div>
+      <Form.Group className='mb-4 border-0 border-top border-white'>
+        <Form.Label className='mb-0'>Referrer</Form.Label>
+        </Form.Group>
+        <Form.Group className='my-4 border-0 border-top border-white'>
+        <Form.Label className='mb-0'>Referrals</Form.Label>
+        </Form.Group>
+        <div className='d-flex justify-content-evenly w-100 pb-5'>
+       
         <button className='button-styles text-light w-50' onClick={() => navigate('/dashboard')}> Back to Dashboard</button>
+        
+      
       </div>
     </Form>
     </div>

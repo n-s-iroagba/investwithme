@@ -48,10 +48,7 @@ export const SelectManagerButton: React.FC<{managerId?:number}> = ({ managerId }
 
   return (
     <button onClick={handleInvestClick} className='button-styles'>
-      <div>Invest with this manager</div>
-      <div>
-        <FontAwesomeIcon icon={faDollarSign} className='mr-2' />
-      </div>
+      Invest with this Manager
     </button>
   );
 };

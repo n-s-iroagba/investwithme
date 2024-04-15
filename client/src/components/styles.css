@@ -67,6 +67,11 @@ div .round-card{
 .full-height{
     height: 100vh;
 }
+.notification{
+    position: absolute;
+    top:0%;
+    right: 0%;
+}
 
 .green{
     background:var(--primary-color) ;
@@ -277,6 +282,7 @@ div .card-primary-background {
     flex-direction: column;
     align-items: center;
     justify-content: space-evenly;
+    position: relative;
  
     height: 120px;
     @media (min-width: 640px) and (max-width: 991px) {

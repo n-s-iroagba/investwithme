@@ -33,19 +33,20 @@ const Dashboard: React.FC = () => {
 
   const icons = [faQuestion,faHandHoldingDollar,faWallet,faMoneyBill,faMoneyBillTransfer,faUserFriends ];
   const actions: string[] = ['how-to-guide', 'invest/managers','portfolio','withdraw','transactions',`referral`];
-  const texts: string[] = ['How-to guides', 'Invest','Portfolio','Withdraw','Transactions','Refer and Earn'];
+  const texts: string[] = ['How-to guides', 'Invest','Earnings','Withdraw','Transactions','Refer and Earn'];
 
   return (
     <div className='primary-background d-flex flex-column dashboard align-items-center py-5' >
+      <div className='text-light mb-3'>Logo</div>
       <DashboardBar newNotification={true} username={'nnamdoskolo'} />
    
-        <Row className="d-flex justify-content-center align-items-center w-100 gx-3 gy-3 mt-3">
+        <Row className="d-flex justify-content-center align-items-center w-100 gx-1 gy-1 mt-1">
           {texts.map((text, index) => (
             <Col xs={4}>
               <DashboardNav action={() => navigate('/' + actions[index])} text={text} icon={icons[index]} />
             </Col>
           ))}
-           <Col xs={4}>  <button className='mt-3 button-styles text-light'>Logout</button></Col>
+           <Col xs={6}>  <button className='mt-5 button-styles text-light'>Logout</button></Col>
         </Row>
         <MiniFooter primaryVariant={true}/>
     </div>

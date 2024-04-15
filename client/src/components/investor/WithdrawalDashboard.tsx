@@ -8,17 +8,22 @@ const WithdrawalDashboard: React.FC = () => {
 
 const navigate = useNavigate()
 
-  const status:string = 'notYetInvested'
+  const status:string = 'investedButNotDue'
 
   const renderMessage = () => {
     switch (status) {
       case 'investedButNotDue':
-        return  <p>You can not make withdrawals not until your pay out day</p>
+
+        return <div className='d-flex flex-column align-items-center'>
+         <p>You can not make withdrawals not until your pay out day</p>
+         <p>Your payout day is xxxx</p>
+        <button  onClick= {()=>navigate('/dashboard')}className='button-styles button-width-narrower'><div>Dashboard</div><div ></div></button>
+        </div> 
       case 'notYetInvested':
         return (
-          <div>
+          <div className='d-flex flex-column align-items-center'>
             <p>No investment yet</p>
-            <button  onClick= {()=>navigate('/invest/managers')}className='button-styles'><div>Invest</div><div ><FontAwesomeIcon icon={faDollarSign} beatFade/></div></button>
+            <button  onClick= {()=>navigate('/invest/managers')}className='button-styles button-width-narrower'><div>Invest</div><div ><FontAwesomeIcon icon={faDollarSign} beatFade/></div></button>
           </div>
         );
       case 'dueForWithdrawal':
@@ -33,8 +38,9 @@ const navigate = useNavigate()
   };
 
   return (
-    <div>
-      <h2>Withdrawal</h2>
+    
+    <div className='d-flex flex-column  py-5 align-items-center primary-background full-height text-light'>
+      <h2 className='mb-5'>Withdrawal</h2>
       {renderMessage()}
     </div>
   );

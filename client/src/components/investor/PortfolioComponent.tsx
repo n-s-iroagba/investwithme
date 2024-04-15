@@ -6,13 +6,14 @@ import { Chart as ReactChartJs } from 'react-chartjs-2';
 
 
 const PortfolioComponent: React.FC = () => {
-  const [investment, setInvestment] = useState({
+  const [investmentData, setInvestmentData] = useState({
     id: 1,
-    commenceDate: '',
+    commenceDate:'',
     amount: 2000,
     earnings: 1000,
-    amountDeposited: 0,
-    profit: 0,
+    amountDeposited: 1800,
+    durationInDays: 14,
+    numberOfDeposits:0,
     wallet: {
       network: '',
       blockchain:'',
@@ -20,37 +21,66 @@ const PortfolioComponent: React.FC = () => {
       currency: '',
     },
     dueDate: '',
-    investmentManager: 'Acme Investments',
-    percentageYield: 140,
-    referrals: [{ amountReceived: 0, EarningOnSingleReferral: 0 }],
+    manager: {firstName:'al;jgdafa;l',lastName:'lafafapje'},
+    dailyEarningPercentage: 140,
+    referral: { totalAmount: 0, count: 0 },
 
   })
 
+  const createMultiplicationObject = (commenceDate: string, number: number): Record<string, number> => {
+    const startDate = new Date(commenceDate);
+    const currentDate = new Date();
+  
+    const daysDifference = Math.ceil((currentDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)); // Number of days between commence date and current date
+  
+    const resultObject: Record<string, number> = {};
+  
+    for (let i = 1; i <= daysDifference; i++) {
+      const currentDate = new Date(startDate);
+      currentDate.setDate(startDate.getDate() + i - 1); // Set the date to the current day in the loop
+      const key = currentDate.toISOString().split('T')[0]; // Get the date in 'YYYY-MM-DD' format
+      const value = number * i; // Calculate the value as multiplication of the number by the day index
+      resultObject[key] = value;
+    }
+  
+    return resultObject;
+  };
+
+  const formatStartDate = (dateString: string): string => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-GB');
+  };
+  
+  const formatEndDate = (dateString: string, numberOfDays: number): string => {
+    const startDate = new Date(dateString);
+    const endDate = new Date(startDate.getTime() + numberOfDays * 24 * 60 * 60 * 1000);
+    return endDate.toLocaleDateString('en-GB');
+  };
+
+
+
   Chart.register(...registerables)
 
-  const device_counts = {
-    "Desktop": 28,
-    "Mobile": 36,
-    "null": 11
-  }
+  const chartObject =createMultiplicationObject(investmentData.commenceDate, investmentData.dailyEarningPercentage*investmentData.amountDeposited/100);
   const processedData = {
-    labels: Object.keys(device_counts),
+    labels: Object.keys(chartObject),
     datasets: [{
-      data: Object.values(device_counts),
+      label:'Porfolio Growth',
+      data: Object.values(chartObject),
       backgroundColor: `#1a6e41`,
       height: '100%',
-      hoverBackgroundColor: '#1a6e41'
-    }]
+    }],
   };
  useEffect(()=>{
-  setInvestment({
+  setInvestmentData({
     id: 1,
 
-    commenceDate: new Date().toISOString(),
+    commenceDate: '2024-04-08T16:20:09Z',
     amount: 2000,
     earnings: 1000,
-    amountDeposited: 0,
-    profit: 0, 
+    amountDeposited: 1800,
+    durationInDays: 14,
+      numberOfDeposits:1,
     wallet: {
       network: 'erc',
       blockchain:'BTC',
@@ -58,88 +88,105 @@ const PortfolioComponent: React.FC = () => {
       currency: 'BTC',
     },
     dueDate: '', 
-    investmentManager: 'Acme Investments',
-    percentageYield: 140,
-    referrals:[{amountReceived:200,EarningOnSingleReferral:100}]
+    manager: {firstName:'al;jgdafa;l',lastName:'lafafapje'},
+    dailyEarningPercentage: 14,
+    referral: { totalAmount: 444, count: 8},
+
   })
  }, [])
 
-  return (<div className='mx-3'>
-    <h1 className='text-center my-3'>My Portfolio</h1>
+  return (<div className='w-100'>
+  
 
     <Row className=''>
       <Col lg={6}>
 
-        <PortfolioCard title={'Earnings'} mainText={`$${investment.earnings}`} subText={`${1 + (investment.earnings / investment.amount)}X total amount invested`} primaryBackground={true} />
+        <PortfolioCard title={'Earnings'} mainText={`$${investmentData.earnings}`} subText={`${(1 + (investmentData.earnings / investmentData.amountDeposited)).toFixed(2)}X total amount invested`} primaryBackground={true} />
 
         <ReactChartJs type="line" data={processedData} />
       </Col>
 
       <Col xs={12} md={6} lg={3}>
-        <div>
-          <PortfolioCard title={'Total Amount Invested'} mainText={`$${investment.amount}`} subText='No deposits yet' primaryBackground={true} />
-          <PortfolioCard title={'Expected Invesment Earnings'} mainText={`$${investment.amount * (investment.percentageYield / 100)}`} subText={`${1 + (investment.earnings / investment.amount)}X total amount invested`} />
-          <PortfolioCard title={'Percentage earned'} mainText={`${(investment.earnings / investment.amount) * 100}%1`} subText='in X days' />
-        </div>
-      </Col>
+  <div>
+    <PortfolioCard
+      title={'Total Amount Invested'}
+      mainText={`$${investmentData.amountDeposited}`}
+      subText={investmentData.amountDeposited !== 0 ? `Total investmentData amount: $${investmentData.amount}` : 'No investmentData deposit yet'}
+      primaryBackground={true}
+    />
+    <PortfolioCard
+      title={'Expected InvestmentData Earnings'}
+      mainText={`$${(investmentData.amount * (investmentData.dailyEarningPercentage / 100) * investmentData.durationInDays).toFixed(2)}`}
+      subText={investmentData.amountDeposited !== 0 ? `${((investmentData.amountDeposited * investmentData.durationInDays * investmentData.dailyEarningPercentage / 100) / investmentData.amountDeposited).toFixed(2)}X of portfolio amount ($${investmentData.amount})` : ''}
+    />
+    <PortfolioCard
+      title={'Percentage earned'}
+      mainText={investmentData.amountDeposited !== 0 ? `${(investmentData.earnings * 100 / investmentData.amountDeposited).toFixed(2)}%` : 'N/A'}
+      subText={investmentData.amountDeposited !== 0 ? `In ${(Math.floor((new Date().getTime() - new Date(investmentData.commenceDate).getTime()) / (1000 * 60 * 60 * 24)))} days` : ''}
+    />
+  </div>
+</Col>
 
-      <Col xs={12} md={6} lg={3}>
-        <div>
-          <PortfolioCard title={'Daily earning percentage'} mainText={`$${investment.percentageYield / 14}%`} subText={`capital grows by ${1 + investment.percentageYield / 14}X`} />
-          <PortfolioCard title={'Expected earning percentage'} mainText={`${investment.percentageYield}%`} subText='In 14 days' primaryBackground={true} />
-          <PortfolioCard title={'Start date'} mainText={`23-03-2024`} subText='since first deposit' primaryBackground={true} />
-        </div>
-      </Col>
+<Col xs={12} md={6} lg={3}>
+  <div>
+    <PortfolioCard
+      title={'Daily earning percentage'}
+      mainText={investmentData.dailyEarningPercentage !== 0 ? `$${investmentData.dailyEarningPercentage}%` : 'No investmentData yet'}
+      subText={investmentData.dailyEarningPercentage !== 0 ? `capital grows by ${1 + investmentData.dailyEarningPercentage / 14}X` : 'No investmentData yet'}
+    />
+    <PortfolioCard
+      title={'Expected earning percentage'}
+      mainText={investmentData.dailyEarningPercentage !== 0 ? `${investmentData.dailyEarningPercentage * investmentData.durationInDays}%` : 'No investmentData yet'}
+      subText={investmentData.dailyEarningPercentage !== 0 ? 'In 14 days' : 'No investmentDatas yet'}
+      primaryBackground={true}
+    />
+    <PortfolioCard title={'Start date'} mainText={formatStartDate(investmentData.commenceDate)} subText={investmentData.dailyEarningPercentage !== 0 ? 'Date of first deposit' : 'No investmentDatas yet'} primaryBackground={true} />
+  </div>
+</Col>
+
     </Row>
     <Row className='mx-1 green round-card-bottom mt-2 py-4'>
 
-      <h4 className='text-center text-light'>Referrals and Payout</h4>
+      <h4 className='text-center text-light'>Referral and Payout</h4>
 
-
-
-      <Col xs={12} lg={3}>
-        <div className='text-light'>Referral Bonus:</div>
-        <div className='text-light  pb-2'><strong>$300</strong></div>
-
-      </Col>
-      <Col xs={12} lg={3}>
-        <div className='text-light'>Referral Bonus Earning:</div>
-        <div className=' text-light  pb-2'><strong>$300</strong></div>
+      <Col xs={12} lg={4}>
+        <div className='text-light  text-center'>Referral Bonus Earning:</div>
+        <div className=' text-light  text-center'><strong>${investmentData.referral.totalAmount}</strong></div>
+        <div className=' text-light  text-center'><small >from {investmentData.referral.count} referral</small></div>
 
       </Col>
-      <Col className='py-2'xs={12} lg={3}>
-        <div className='text-light'>Total Payout:</div>
-        <div className='text-light'><strong>$300</strong></div>
-        <div className=' text-light'><small >*Invested Capital + Investment Earnings + Referral Bonus + Referral Bonus Earnings. </small></div>
+      <Col xs={12} lg={4}>
+        <div className='text-light  text-center'>Expected Total Payout:</div>
+        <div className='text-light text-center'><strong>${`${investmentData.amount +(investmentData.amount*investmentData.dailyEarningPercentage * investmentData.durationInDays) }`}</strong></div>
+        <div className=' text-light  text-center'><small >*Invested Capital + InvestmentData Earnings </small></div>
 
       </Col>
-      <Col className='py-2' xs={12} lg={3}>
-        <div className='text-light'>Pay Out Date:</div>
-        <div className='text-light '><strong>12-04-2024</strong></div>
-
+      <Col className='' xs={12} lg={4}>
+        <div className='text-light text-center'>Pay Out Date:</div>
+        <div className='text-light text-center '><strong>{formatEndDate(investmentData.commenceDate, investmentData.durationInDays)}</strong></div>
       </Col>
 
 
     </Row>
-    <Row className='mx-1 border-0 border-top border-white text-light green pb-5'>
+    <Row className='mx-1 border-0 border-top border-white text-light green pb-5 '>
 
 
       <h4 className='text-center text-light my-4 '>Other Details</h4>
 
 
       <Col xs={12} lg={4}>
-        <div className='text-light'>Payment Wallet BlockChain:</div>
-        <div className='text-light  pb-2'><strong>BINANCE</strong></div>
+        <div className='text-light text-center'>Payment Wallet BlockChain:</div>
+        <div className='text-light   text-center pb-2'><strong>{investmentData.wallet.blockchain}</strong></div>
 
       </Col>
       <Col xs={12} lg={4}>
-        <div className='text-light'>Payment Wallet Address:</div>
-        <div className='text-light  pb-2'><strong>pa;RQE;ORJQWE;RK'W;ETIRKFQGW;IOR</strong></div>
+        <div className='text-light  text-center'>Payment Wallet Address:</div>
+        <div className='text-light  text-center pb-2'><strong>{investmentData.wallet.address}</strong></div>
 
       </Col>
       <Col xs={12} lg={4}>
-        <div className='text-light'>Investment Manager:</div>
-        <div className='text-light  pb-2'><strong>Annabel Kojovic</strong></div>
+        <div className='text-light  text-center'>InvestmentData Manager:</div>
+        <div className='text-light  text-center  pb-2'><strong>{investmentData.manager.firstName} {investmentData.manager.lastName}</strong></div>
 
       </Col>
 

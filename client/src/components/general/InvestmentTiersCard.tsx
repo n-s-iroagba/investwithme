@@ -17,7 +17,7 @@ export const InvestmentTiersCard: React.FC<InvestmentTiersType> = ({
   deleteButton,
 }) => {
   return (
-    <div className="px-4">
+    <div className="px-2">
       <Card bg="light" text="black" className="w-100">
         <Card.Header className="background-secondary">
           <Card.Title className="text-center">{percentageYield}</Card.Title>
@@ -28,7 +28,7 @@ export const InvestmentTiersCard: React.FC<InvestmentTiersType> = ({
           </div>
           <Card.Title className=" text-center w-100">{firstName + ' ' + lastName}</Card.Title>
         <div className="w-100 d-flex flex-column align-items-center">
-        <div className="w-75 ">
+        <div className="w-100 ">
        <Card.Text className='d-flex  align-items-center mb-0'><p className=' card-label-width-wide' >Minimum Amount:</p> <p >{minimumInvestmentAmount}</p></Card.Text>
        <Card.Text className='d-flex align-items-center mb-0'><p className='card-label-width-wide ' >Duration:</p> <p >{duration} </p></Card.Text>
        </div>

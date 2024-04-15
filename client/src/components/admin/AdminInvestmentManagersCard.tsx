@@ -1,11 +1,34 @@
-import React from 'react';
-import { Row, Col,Form } from 'react-bootstrap';
+import React, { useState } from 'react';
+import { Row, Col,Form, Modal } from 'react-bootstrap';
 import { InvestmentTiersCard } from '../../components/general/InvestmentTiersCard';
 import {  MoveToPatchManager } from '../../components/general/Button';
 
 import { MiniFooter } from '../../components/home_components/Footer';
 import { ManagerType } from '../../utils/types';
 import '../../components/styles.css'
+
+
+const DeleteManagerModal:React.FC<{propShow:boolean}>= ({propShow})=>{
+    const [show, setShow] = useState(propShow);
+  
+    const handleClose = () => setShow(false);  
+    return (
+      <>
+  
+        <Modal
+          show={show}
+          onHide={handleClose}
+          backdrop="static"
+          keyboard={false}
+        >
+          <Modal.Header closeButton>
+            <Modal.Title></Modal.Title>
+          </Modal.Header>
+          
+        </Modal>
+      </>
+    );
+  }
 
 const AdminInvestmentManagersCard: React.FC = () => {
     
@@ -65,19 +88,7 @@ const AdminInvestmentManagersCard: React.FC = () => {
                             button={<MoveToPatchManager manager={data} />}
                             deleteButton={<button className='red-button'>Delete Manager</button>}
                         />
- <Form.Group as={Col} controlId="validationFormik01">
-                                <div className="mb-0 text-light">
-                                    First name
-                                </div>
-                                <Form.Control
-                                    required
-                                    type="text"
-                                    name="firstName"
-                                    value={'adfadgd'}
-                                    
-                                    className="text-light custom-input bg-transparent form-control"
-                                />
-                            </Form.Group>
+
 
 
 

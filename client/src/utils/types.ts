@@ -48,7 +48,7 @@ export interface TransactionType{
   amount:string,
   type:'Debit'|'Credit'
   participantAccount:string
-  narration:'Referral bonus imbursement'|'Bonus payout'|'Investment Deposit'
+  narration:'Referral bonus imbursement'|'Promo bonus imbursement'|'Investment Deposit'
   date:string
 }
 

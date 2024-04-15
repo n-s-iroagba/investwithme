@@ -4,17 +4,14 @@ import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import {  Spinner } from 'react-bootstrap';
-
 import { required } from './required';
-
 import '../../styles.css'
-
 import ErrorMessage from '../../general/ErrorMessage';
 
 
 
 const ChangePasswordEmailForm: React.FC = () => {
-const [validated, setValidated] = useState<boolean>(true)
+const [validated, setValidated] = useState<boolean>(false)
 const [submitting, setSubmiting] = useState<boolean>(false)
 const [email, setEmail] = useState<string>('')
 const [errorMessage,setErrorMessage] = useState<string>('')

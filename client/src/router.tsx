@@ -29,6 +29,10 @@ import AdminWallets from "./pages/admin/AdminWallets";
 import Notifications from "./pages/investor/Notification";
 import PaymentWalletForm from "./pages/investor/PaymentWalletForm";
 import WithdrawalDashboard from "./components/investor/WithdrawalDashboard";
+import InvestorsDashboard from "./pages/admin/InvestorsDashboard";
+import AdminReferral from "./pages/admin/AdminRefferal";
+import AdminPrivateRoute from "./components/auth/admin/AdminPrivateRoute";
+import Promotion from "./pages/admin/Promotion";
 
 
 
@@ -82,7 +86,10 @@ element: <Email />
     path:'/withdraw',
     element: <WithdrawalDashboard/>,
 },
-
+{
+    path:'/admin/investor-dashboard',
+    element: <InvestorsDashboard/>,
+},
 {
     path:'/investment-guide',
     element: <InvestmentGuide />,
@@ -117,7 +124,7 @@ element: <Email />
 },
 {
     path:'/admin/dashboard',
-    element: <AdminDashboard name={""} />,
+    element: <AdminPrivateRoute Component={AdminDashboard}/>
 },
 
 {
@@ -133,6 +140,15 @@ element: <Email />
     element: <AdminManager />
 },
 {
+    path:'/admin/promo',
+    element: <Promotion/>
+},
+{
+    path:'/admin/investor-dashboard',
+    element: <InvestorsDashboard />
+},
+
+{
     path:'/admin/wallets',
     element: <AdminWallets/>
 },
@@ -144,5 +160,10 @@ element: <Email />
 {
     path:'/new-password',
     element: <NewPassword />
+},
+
+{
+    path:'/admin/referral',
+    element: <AdminReferral />
 },
 ])

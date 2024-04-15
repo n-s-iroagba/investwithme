@@ -3,6 +3,7 @@ import AdminSignUpForm from '../../components/auth/admin/AdminSignUpForm'
 import Information from '../../components/general/Information'
 import { faUser } from '@fortawesome/free-solid-svg-icons'
 import { LoginOption } from '../../components/auth/general/AuthOption'
+import { MiniFooter } from '../../components/home_components/Footer'
 
 const AdminSignUp: React.FC = () => {
 
@@ -14,8 +15,9 @@ const AdminSignUp: React.FC = () => {
             buttonText='Login'
              icon = {faUser}
              route='login' />
-            <Information text='Welcome to the admin registeration page, please note there can only be one admin.' head='Account Details' icon={faUser} />
+            <Information text='Welcome to the admin registeration page, please note there can only be one admin.' head='Account Details' icon={faUser} center={true} />
             <AdminSignUpForm />
+            <MiniFooter/>
             </div>
         </div>
     )
