@@ -9,7 +9,7 @@ import { createManager, hasEmptyKey, patchManager } from '../../utils/helpers';
 
 
 
-const ManagerForm: React.FC<{ patch: boolean }> = ({ patch }) => {
+const ManagerForm: React.FC<{ patch?: boolean }> = ({ patch }) => {
   const initialManagerData = patch
     ? JSON.parse(localStorage.getItem('cassockManager') || 'null') || {
         firstName: '',
@@ -28,7 +28,7 @@ const ManagerForm: React.FC<{ patch: boolean }> = ({ patch }) => {
   const [submitting, setSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [files, setFiles] = useState<any>(null)
-  const [validated,setValidated] = useState(true)
+  const [validated,setValidated] = useState(false)
   const [crop, setCrop] = useState<Crop>({
     unit: 'px', // Can be 'px' or '%'
     x: 25,

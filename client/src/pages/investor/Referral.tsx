@@ -6,7 +6,7 @@ import { faUsers } from '@fortawesome/free-solid-svg-icons';
 
 
 
-const TextWithCopy: React.FC = () => {
+const Referrals: React.FC = () => {
  const [code, setCode] = useState('')
  const [link,setLink] = useState('')
 
@@ -28,7 +28,8 @@ const TextWithCopy: React.FC = () => {
     fetchTextFromBackend(); 
   }, []);
 
-
+ const referrals = ['a','c']
+ const referrer ='aa'
   const handleCopyClick = () => {
     alert('Text copied to clipboard!');
     navigator.clipboard.writeText(code); 
@@ -72,14 +73,20 @@ const TextWithCopy: React.FC = () => {
         </button>
       </div>
       <Form.Group className='mb-4 border-0 border-top border-white'>
-        <Form.Label className='mb-0'>Referrer</Form.Label>
+        <Form.Label className='mb-0'>Referrer:</Form.Label>
+        <div>{referrer}</div>
         </Form.Group>
         <Form.Group className='my-4 border-0 border-top border-white'>
-        <Form.Label className='mb-0'>Referrals</Form.Label>
+        <Form.Label className='mb-0'>Referrals:</Form.Label>
+        {
+          referrals.map((referral)=>(
+            <div>{referral}</div>
+          ))
+        }
         </Form.Group>
         <div className='d-flex justify-content-evenly w-100 pb-5'>
        
-        <button className='button-styles text-light w-50' onClick={() => navigate('/dashboard')}> Back to Dashboard</button>
+        <button className='button-styles text-light w-50' onClick={() => navigate('/dashboard')}> Dashboard</button>
         
       
       </div>
@@ -88,4 +95,4 @@ const TextWithCopy: React.FC = () => {
   );
 };
 
-export default TextWithCopy;
+export default Referrals;

@@ -70,7 +70,7 @@ div .round-card{
 .notification{
     position: absolute;
     top:0%;
-    right: 0%;
+    right: -2%;
 }
 
 .green{
@@ -155,7 +155,16 @@ div .card-primary-background {
 }
 }
 .transaction{
-    background-color: rgba(250, 250, 250, 0.1);
+    background-color: rgba(250, 250, 250, 0.1);   
+}
+
+.transaction-small{
+
+    @media screen and (max-width: 767px) {
+        font-size: xx-small;
+    
+}
+
 }
 
 .form .custom {

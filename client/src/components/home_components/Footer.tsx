@@ -5,7 +5,7 @@ import { SocialMediaButton } from '../general/Button';
 import { companyName } from '../../utils/constants';
 
 export const MiniFooter: React.FC<{ primaryVariant?: boolean }> = ({ primaryVariant }) => {
-  const baseClassName = 'border-0 border-top text-center pt-5 mt-5';
+  const baseClassName = 'border-0 border-top text-center py-3 mt-5';
   const lightClassName = 'text-light w-100';
   const darkClassName = 'text-dark w-100 border-black';
 

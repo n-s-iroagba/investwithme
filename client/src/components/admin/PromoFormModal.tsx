@@ -25,6 +25,8 @@ useEffect(()=>{
     setPromoData({ ...promoData, [name]: value });
   };
  const onHide = () => {
+  setModalShow(false)
+  window.location.reload()
 
  }
   const handleSubmit = (e:any) => {
@@ -37,7 +39,7 @@ useEffect(()=>{
   };
 
   return (
-    <Modal show={show} onHide={onHide}>
+    <Modal show={modalShow} onHide={onHide}>
       <Modal.Header closeButton>
         <Modal.Title>Create Promo</Modal.Title>
       </Modal.Header>

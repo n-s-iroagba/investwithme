@@ -24,7 +24,7 @@ const AdminManager: React.FC = () => {
        <>
           <button className='button-styles button-width-narrow' onClick={handleToggle}>View Managers</button>
 
-          <ManagerForm patch={true} />
+          <ManagerForm/>
           </>
     
       }

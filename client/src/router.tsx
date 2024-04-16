@@ -33,6 +33,9 @@ import InvestorsDashboard from "./pages/admin/InvestorsDashboard";
 import AdminReferral from "./pages/admin/AdminRefferal";
 import AdminPrivateRoute from "./components/auth/admin/AdminPrivateRoute";
 import Promotion from "./pages/admin/Promotion";
+import PatchManager from "./pages/admin/PatchManager";
+import Bonus from "./pages/admin/Bonus";
+import Investors from "./pages/admin/Investors";
 
 
 
@@ -153,6 +156,22 @@ element: <Email />
     element: <AdminWallets/>
 },
 {
+    path:'/admin/referrals',
+    element: <AdminReferral/>
+},
+{
+    path:'/admin/bonus',
+    element: <Bonus/>
+},
+{
+    path:'/admin/investors',
+    element: <Investors/>
+},
+{
+    path:'/patch-manager',
+    element: <PatchManager/>
+},
+{
     path:'/enter-email',
     element: <Email />
 },
@@ -162,8 +181,5 @@ element: <Email />
     element: <NewPassword />
 },
 
-{
-    path:'/admin/referral',
-    element: <AdminReferral />
-},
+
 ])

@@ -4,6 +4,7 @@ import { MiniFooter } from '../../components/home_components/Footer'
 import '../../components/styles.css'
 
 import { Modal, Form, Button } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 
 interface ModalFormProps {
     show: boolean;
@@ -100,6 +101,7 @@ const InvestorsDashboard = ()=>{
     const [addInvestementShow,setAddInvestmentShow] = useState<boolean>(false)
     const [addPromoShow,setAddPromoShow] = useState<boolean>(false)
     const [addReferralShow,setAddReferralShow] = useState<boolean>(false)
+    const navigate = useNavigate()
     const handleInvestmentShow = ()=>{
 
         setAddInvestmentShow(true)
@@ -112,9 +114,9 @@ const InvestorsDashboard = ()=>{
             <SuccessModal message={''} propShow={true}/>
             <h1>Investors Dashboard</h1>
             <button className="text-light mb-2 button-styles button-width-narrow mt-4 border-0 border-bottom " onClick={()=>handleInvestmentShow()}> Add investor Amount</button>
-            <button className="text-light mb-2 button-styles button-width-narrow mt-4 border-0 border-bottom " onClick={()=> console.log(addInvestementShow)}> Pay Promo Bonus</button>
-            <button className="text-light mb-2 button-styles button-width-narrow mt-4 border-0 border-bottom "> Pay Referral Bonus</button>
-            <button className="text-light mb-2 button-styles button-width-narrow mt-4 border-0 border-bottom "> View Investors</button>
+            <button className="text-light mb-2 button-styles button-width-narrow mt-4 border-0 border-bottom " onClick={()=>navigate('/admin/bonus')}> Pay Promo Bonus</button>
+            <button className="text-light mb-2 button-styles button-width-narrow mt-4 border-0 border-bottom " onClick={()=>navigate('/admin/referrals')}> Pay Referral Bonus</button>
+            <button className="text-light mb-2 button-styles button-width-narrow mt-4 border-0 border-bottom " onClick={()=>navigate('/admin/investors')}> View Investors</button>
         </div>
         <MiniFooter primaryVariant/>
 

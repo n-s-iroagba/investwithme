@@ -42,7 +42,7 @@ const InvestmentManagers: React.FC = () => {
     ];
 
     return (
-        <div className='primary-background px-3'>
+        <div className='primary-background px-3 full-height'>
             <Row className='gy-4 gx-1'>
                 <Col xs={12}>
                     <h3 className='text-center mt-4 text-light'>

@@ -6,6 +6,7 @@ import {  MoveToPatchManager } from '../../components/general/Button';
 import { MiniFooter } from '../../components/home_components/Footer';
 import { ManagerType } from '../../utils/types';
 import '../../components/styles.css'
+import DeleteModal from './DeleteModal';
 
 
 const DeleteManagerModal:React.FC<{propShow:boolean}>= ({propShow})=>{
@@ -31,7 +32,8 @@ const DeleteManagerModal:React.FC<{propShow:boolean}>= ({propShow})=>{
   }
 
 const AdminInvestmentManagersCard: React.FC = () => {
-    
+    const [idToBeDeleted, setIdToBeDeleted] = useState(0)
+    const [showDeleteModal,setShowDeleteModal]= useState(false)
     const managerData:ManagerType[] = [
         {
             id: 1,
@@ -65,6 +67,12 @@ const AdminInvestmentManagersCard: React.FC = () => {
         }
     ];
 
+  
+      const handleDelete =(index:number) =>{
+        setShowDeleteModal(true)
+        setIdToBeDeleted(managerData[index].id)
+      }
+
     return (
         <>
             {managerData.length > 0?
@@ -75,9 +83,10 @@ const AdminInvestmentManagersCard: React.FC = () => {
                     </h3>
                 </Col>
 
-                {managerData.map((data,) => (
-                    <Col key={data.id} xs={12} md={6} lg={4}>
+                {managerData.map((data,index) => (
+                    <Col xs={12} md={6} lg={4}>
                         <InvestmentTiersCard
+                         key={data.id}
                             percentageYield={`${data.percentageYield}% RETURN ON INVESTMENT`}
                             image={data.image}
                             firstName={data.firstName}
@@ -86,7 +95,7 @@ const AdminInvestmentManagersCard: React.FC = () => {
                             minimumInvestmentAmount={`$${data.minimumInvestmentAmount}`}
                             duration={`${data.duration} weeks`}
                             button={<MoveToPatchManager manager={data} />}
-                            deleteButton={<button className='red-button'>Delete Manager</button>}
+                            deleteButton={<button className='red-button' onClick={()=>handleDelete(index)}>Delete Manager</button>}
                         />
 
 
@@ -95,6 +104,7 @@ const AdminInvestmentManagersCard: React.FC = () => {
 
                     </Col>
                 ))}
+                 <DeleteModal id={idToBeDeleted} show={showDeleteModal} entity='manager'/>
             </Row>
             :
             <h3 className='text-center mt-4 text-light'>

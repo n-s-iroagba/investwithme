@@ -2,48 +2,6 @@ import { deleteItem, patchItem, postData } from "./api";
 import { CreateInvestmentType, ManagerType, WalletType } from "./types";
 import { createManagerUrl, patchManagerUrl, deleteManagerRoute, createWalletUrl, patchWalletUrl, deleteWalletRoute, createInvestmentRoute} from "./constants";
 
-export const isLargeScreen = () => {
-  const mediaQuery = window.matchMedia('(min-width: 768px)');
-  return mediaQuery.matches;
-}
-
-export const doPasswordsMatch = (password: string, confirmPassword: string) => {
-  return password === confirmPassword;
-};
-
-export const canInvest = (investmentAmount:number, managers:any) =>{
-  if (!managers || managers.length === 0) {
-    return false;
-  }
-  const minMinInvestment = Math.min(...managers.map((manager:any) => manager.minimumInvestmentAmount));
-  return investmentAmount < minMinInvestment;
-}
-
-export const findManagerWithHighestMinInvestment = (managers: ManagerType[], amount: number): ManagerType | null => {
-  let highestMinInvestmentManager: ManagerType | null = null;
-  let highestMinInvestment = 0;
-
-  managers.forEach((manager) => {
-    if (manager.minimumInvestmentAmount <= amount && manager.minimumInvestmentAmount > highestMinInvestment) {
-      highestMinInvestment = manager.minimumInvestmentAmount;
-      highestMinInvestmentManager = manager;
-    }
-  });
-
-  return highestMinInvestmentManager;
-};
-
-export const getGreeting = (): string => {
-  const currentTime = new Date().getHours();
-
-  if (currentTime >= 0 && currentTime < 12) {
-    return 'Good morning';
-  } else if (currentTime >= 12 && currentTime < 18) {
-    return 'Good afternoon';
-  } else {
-    return 'Good evening';
-  }
-};
 export const createInvestment = async (data: CreateInvestmentType, investorId: number) => {
   const createInvestmentUrl = `${createInvestmentRoute}/${investorId}`;
 
@@ -56,18 +14,6 @@ export const createInvestment = async (data: CreateInvestmentType, investorId: n
    }
   
 };
-
-export const hasEmptyKey = (obj: { [key: string]: any }): boolean => {
-  for (const key in obj) {
-    if (obj[key] === '') {
-      return true;
-    }
-  }
-  return false;
-};
-
-
-
 
 export const createManager= async (data:ManagerType) => {
   try {
@@ -148,7 +94,7 @@ export const patchWallet=async ( data:WalletType) =>{
       
     } else {
       alert('unable to update the wallet at this time')
-  } 
+  }
 }catch (error:any) {
  console.error(error)
  throw new Error(error.message)
@@ -165,24 +111,15 @@ const url =`${deleteWalletRoute}/${id}`
       window.location.reload();
     } else {
       alert('unable to delete manager at this time')
-  } 
+  }
+  return response.status
 }catch (error:any) {
  console.error(error)
  throw new Error(error.message)
 }
 
 }
-export const getPromoRemainingTime = (date: string, duration: number) => {
-  const now = new Date();
-  const promoDate = new Date(date).getTime() + duration;
-  
-  if (isNaN(promoDate)) {
-    throw new Error('Invalid date format. Please provide a valid date string.');
-  }
-  
-  const timeDifference = promoDate - now.getTime(); 
-  return timeDifference;
+export const getNewbies = ()=>{
+  return []
 }
-export const findManagerById = (managersArray:ManagerType[], idToFind:number) => {
-  return managersArray.find((manager) => manager.id === idToFind);
-};
+

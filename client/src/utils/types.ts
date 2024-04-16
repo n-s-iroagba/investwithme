@@ -26,7 +26,7 @@ export interface CreateInvestmentType{
 export interface InvestmentEntryType{
 
   managers:ManagerType[]
-  wallets:WalletType[]
+  wallets:EditWalletType[]
 }
 export interface InvestmentType{
     id?:number,
@@ -45,7 +45,7 @@ export interface InvestmentType{
 
 export interface TransactionType{
   id?:number,
-  amount:string,
+  amount:number,
   type:'Debit'|'Credit'
   participantAccount:string
   narration:'Referral bonus imbursement'|'Promo bonus imbursement'|'Investment Deposit'
@@ -66,7 +66,7 @@ export interface WalletType{
   currency:string
 }
 export interface ManagerType {
-  id?: number,
+  id: number,
     firstName: string,
     lastName: string,
     minimumInvestmentAmount: number

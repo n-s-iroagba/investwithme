@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import '../../components/styles.css'
 import AdminWallet from '../../components/admin/AdminWallet';
+import WalletForm from '../../components/forms/WalletForm';
+import { MiniFooter } from '../../components/home_components/Footer';
 const AdminWallets: React.FC = () => {
   const [showManagers, setShowManagers] = useState<boolean>(true)
 
@@ -9,24 +11,22 @@ const AdminWallets: React.FC = () => {
    
   }
   return (
-  <div className='primary-background px-3 pt-5'>
+  <div className='primary-background px-3 pt-5 full-height'>
             <div className='d-flex flex-column align-items-center'>
       {showManagers ?
-
-
           <>
-          <button className='button-styles button-width-narrow' onClick={handleToggle}>Add Manager</button>
+          <button className='button-styles button-width-narrow' onClick={handleToggle}>Add Wallet</button>
 
           <AdminWallet />
           </>
         :
        <>
-          <button className='button-styles button-width-narrow' onClick={handleToggle}>View Managers</button>
+          <button className='button-styles button-width-narrow' onClick={handleToggle}>View Wallets</button>
 
-         {/* <WalletForm/> */}
+         <WalletForm/> 
           </>
-    
       }
+      <MiniFooter primaryVariant/>
           </div>
     </div >)
 

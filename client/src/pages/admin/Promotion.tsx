@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Card } from 'react-bootstrap'
 import PromoFormModal from '../../components/admin/PromoFormModal'
+import { MiniFooter } from '../../components/home_components/Footer'
 
 
 const Promotion = () => {
@@ -28,26 +29,27 @@ const Promotion = () => {
       }, [])
       
     return (
-        <div>{promo.id === 0?
+        <div className='d-flex pt-5 flex-column align-items-center text-light primary-background full-height'>{promo.id === 0?
             (<div>
                 <PromoFormModal show={showAddPromoModal}/>
                 <h4>No active promo</h4>
-                <button onClick={()=>setShowAddPromoModal(true)}>Create Promo</button>
+                <button className='button-styles button-width-narrow mt-4' onClick={()=>setShowAddPromoModal(true)}>Create Promo</button>
             </div>):
             (
             <div className='px-1'>
-                <Card className={` shade  round-card my-1 w-100`}>
+                <h4 className='text-center'>Promo</h4>
+                <Card className={` shade`}>
                     <Card.Body>
-                        <Card.Text >From : {promo.startDate}</Card.Text>
-                        <Card.Title>To: {promo.endDate}</Card.Title>
-                        <button className='button-styles'>Extend Promo</button>
-                        <button>Delete Promo</button>
+                        <Card.Title className='mb-4'>From : {promo.startDate}</Card.Title>
+                        <Card.Title className='mb-4'>To: {promo.endDate}</Card.Title>
+                        <button className='button-styles mb-4'>Extend Promo</button>
                     </Card.Body>
                 </Card>
             </div>
             )
-
-         }</div>
+         }
+           <MiniFooter primaryVariant/>
+         </div>
     )
 
 }
