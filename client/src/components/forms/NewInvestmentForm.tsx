@@ -4,21 +4,20 @@ import { required } from '../auth/general/required'
 import ErrorMessage from '../general/ErrorMessage'
 import { useNavigate } from 'react-router-dom'
 import '../styles.css'
-import { CreateInvestmentType, ManagerType, InvestmentEntryType, EditWalletType } from '../../utils/types'
-
-import { findManagerWithHighestMinInvestment, findManagerById, createInvestment } from '../../utils/helpers'
+import { CreateInvestmentType, ManagerType, WalletType } from '../../utils/types'
+import { findManagerWithHighestMinInvestment, findManagerById,} from '../../utils/utils'
+import { createInvestment, getAdminWallets, getManagers } from '../../utils/helpers'
 import Select from 'react-select';
 const WAValidator = require('multicoin-address-validator')
 
 
-const NewInvestmentForm: React.FC<{ username: string, investorId: number }> = ({ username, investorId }) => {
+const NewInvestmentForm: React.FC<{ username: string,}> = ({ username}) => {
   const [submitting, setSubmitting] = useState(false)
 
-  const [wallets, setWallets] = useState<EditWalletType[]>([]);
+  const [wallets, setWallets] = useState<WalletType[]>([]);
   const [walletVerified, setWalletVerified] = useState<boolean>(true)
-  const [filteredCurrencywallets, setFilteredCurrencyWallets] = useState<EditWalletType[]>([]);
-  const [filteredBlockchainWallets, setFilteredBlockchainWallets] = useState<EditWalletType[]>([]);
-  const [filteredNetworkWallets, setFilteredNetworWallets] = useState<EditWalletType[]>([]);
+  const [filteredCurrencywallets, setFilteredCurrencyWallets] = useState<WalletType[]>([]);
+  const [filteredBlockchainWallets, setFilteredBlockchainWallets] = useState<WalletType[]>([]);
   const [validated, setValidated] = useState<boolean>(false);
   const [smallAmount, setSmallAmount] = useState<boolean>(false);
   const [tooBigManager, setTooBigManager] = useState<boolean>(false);
@@ -46,87 +45,20 @@ const NewInvestmentForm: React.FC<{ username: string, investorId: number }> = ({
   const [managers, setManagers] = useState<ManagerType[]>([])
   const [errorMessage, setErrorMessage] = useState('')
   const navigate = useNavigate();
-  const managerId = localStorage.getItem('cassockInvestmentManagerId');
+  const managerId = localStorage.getItem('cassockNewInvestmentInitmanagerId');
 
 
   useEffect(() => {
 
-    const wallet1 = {
-      id: 1,
-      blockchain: 'Ethereum',
-      address: '0x1234567890abcdef',
-      network: 'Mainnet',
-      currency: 'ETH',
-    };
-
-    const wallet2 = {
-      id: 2,
-      blockchain: 'Bitcoin',
-      address: 'bc1q2w3e4r5t6y7u8i9o0p',
-      network: 'Testnet',
-      currency: 'BTC',
-    };
-
-    const wallet3 = {
-      id: 3,
-      blockchain: 'Binance Smart Chain',
-      address: '0xa1b2c3d4e5f6g7h8i9j0k',
-      network: 'Testnet',
-      currency: 'BNB',
-    };
-
-    const manager1: ManagerType = {
-      id: 1,
-      firstName: 'John',
-      lastName: 'Doe',
-      minimumInvestmentAmount: 1000,
-      percentageYield: 5,
-      duration: 12,
-      image: 'path/to/image1.jpg',
-      qualification: 'Certified Financial Analyst',
-    };
-
-    const manager2: ManagerType = {
-      id: 2,
-      firstName: 'Jane',
-      lastName: 'Smith',
-      minimumInvestmentAmount: 500,
-      percentageYield: 7,
-      duration: 18,
-      image: 'path/to/image2.jpg',
-      qualification: 'Chartered Accountant',
-    };
-
-    const manager3: ManagerType = {
-      id: 3,
-      firstName: 'Alice',
-      lastName: 'Johnson',
-      minimumInvestmentAmount: 2000,
-      percentageYield: 6,
-      duration: 24,
-      image: 'path/to/image3.jpg',
-      qualification: 'Financial Planner',
-    };
-
-
-    const data: InvestmentEntryType =
-    {
-      managers: [manager1, manager2, manager3],
-      wallets: [wallet1, wallet2, wallet3],
-    }
-
-    if (data) {
-      const manager = findManagerById(data.managers, Number(managerId))
+    const retrievedWallets = getAdminWallets()
+    const retrievedManagers = getManagers()
+      const manager = findManagerById(retrievedManagers, Number(managerId))
       if (manager) {
         setInvestmentData({ ...investmentData, manager: manager })
       }
-      setManagers(data.managers)
-
-      setWallets(data.wallets)
-    }
-  }, [investmentData, managerId])
-
-
+      setManagers(retrievedManagers)
+      setWallets(retrievedWallets)
+  }, [managerId, investmentData])
 
   const handleAmountChange = (e: any) => {
     const manager = findManagerWithHighestMinInvestment(managers, e.target.value)
@@ -145,6 +77,7 @@ const NewInvestmentForm: React.FC<{ username: string, investorId: number }> = ({
       setSmallAmount(true)
     }
   }
+
   const handleManagerChange = (e: any) => {
     const manager = e.label
     if (investmentData.amount < manager.minimumAmount) {
@@ -182,7 +115,7 @@ const NewInvestmentForm: React.FC<{ username: string, investorId: number }> = ({
 
   };
 
-  const handleNetworkChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleNetworkChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const { value } = e.target;
     setInvestmentData(prevData => ({
       ...prevData,
@@ -191,8 +124,6 @@ const NewInvestmentForm: React.FC<{ username: string, investorId: number }> = ({
         network: value
       }
     }));
-    const newfilteredWallets = filteredBlockchainWallets.filter(wallet => wallet.blockchain === e.target.value);
-    setFilteredNetworWallets(newfilteredWallets);
   };
 
   const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -230,11 +161,11 @@ const NewInvestmentForm: React.FC<{ username: string, investorId: number }> = ({
     if (shouldSubmit) {
       setSubmitting(true);
       try {
-        const response = await createInvestment(investmentData, Number(investorId));
+        const response = await createInvestment(investmentData);
         if (response && response.status === 200) {
           console.log(response.data);
           localStorage.setItem('cassockPaymentWallet', JSON.stringify(response.data.wallet));
-          navigate('/investment/payment');
+          navigate('/invest/payment');
         }
       } catch (error: any) {
         setErrorMessage('We are sorry, we cannot create new Investment portfolio at this time');
@@ -302,7 +233,7 @@ const NewInvestmentForm: React.FC<{ username: string, investorId: number }> = ({
               <Form.Label>Network {required}</Form.Label>
               <Form.Select onChange={(e) => handleNetworkChange(e)}>
                 <option value="">Choose...</option>
-                {filteredCurrencywallets.map((wallet) => (
+                {filteredBlockchainWallets.map((wallet) => (
                   <option key={wallet.id} value={wallet.network}>
                     {wallet.network}
                   </option>
@@ -332,7 +263,7 @@ const NewInvestmentForm: React.FC<{ username: string, investorId: number }> = ({
           <button className='button-styles w-50 text-light' type={submitting ? 'submit' : 'submit'}>
             {submitting ? <Spinner animation='border' size='sm' /> : 'Submit'}
           </button>
-          <button className='button-styles text-light w-50' onClick={() => navigate('/dashboard')}> Back to Dashboard</button>
+          <button className='button-styles text-light w-50' onClick={() => navigate('/dashboard')}> Dashboard</button>
         </div>
       </Form>
       <ErrorMessage message={errorMessage} />

@@ -9,8 +9,7 @@ export interface PromoType{
 
 
 
-export interface EditWalletType{
-  id:number
+export interface CreateWalletType{
   blockchain:string,
   address:string
   network:string,
@@ -18,15 +17,10 @@ export interface EditWalletType{
 }
 
 export interface CreateInvestmentType{
-  wallet:WalletType,
+  wallet:CreateWalletType,
 
   amount:number
   manager:ManagerType
-}
-export interface InvestmentEntryType{
-
-  managers:ManagerType[]
-  wallets:EditWalletType[]
 }
 
 export interface InvestmentType{

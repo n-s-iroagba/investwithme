@@ -1,21 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
 import { WalletType } from '../../utils/types';
 import '../../components/styles.css'
 import Information from '../../components/general/Information';
-import { SmallModal } from '../../components/investor/ConfirmationModal';
 import { faDollarSign } from '@fortawesome/free-solid-svg-icons';
+import SuccessModal from '../../components/general/SuccessModal';
+import { FormControl } from 'react-bootstrap';
+import { MiniFooter } from '../../components/home_components/Footer';
 
 
 const PaymentWalletForm: React.FC = () => {
-  const [wallet,setWallet] = useState<WalletType>({
-    address:'no address available',
-    blockchain:'not available',
-    currency:'not available',
-    network:'not available'
+  const [wallet, setWallet] = useState<WalletType>({
+    id: 0,
+    address: 'no address available',
+    blockchain: 'not available',
+    currency: 'not available',
+    network: 'not available'
   })
-  const [showModal,setShowModal] = useState<boolean>(false)
+  const [showModal, setShowModal] = useState<boolean>(false)
 
   const handleCopyToClipboard = async () => {
     try {
@@ -25,49 +27,65 @@ const PaymentWalletForm: React.FC = () => {
       console.error('Error copying text:', error);
     }
   };
- useEffect(() => {
-  const storedWallet = localStorage.getItem('cassockPaymentWallet');
-  
-  if (storedWallet) {
-    setWallet(JSON.parse(storedWallet));
-    setShowModal(true);
-  }
- }, [])
+  useEffect(() => {
+    const storedWallet = localStorage.getItem('cassockPaymentWallet');
+
+    if (storedWallet) {
+      setWallet(JSON.parse(storedWallet));
+      setShowModal(true);
+    }
+  }, [])
 
   return (
-   <>
-   <SmallModal show={showModal} message={'Porfolio successfully created'}/>
-   <Information head={'Proceed to make your deposit'} text={'Copy the wallet address and make a transfer, be sure to take note of the currency, blockchain and network'} icon={faDollarSign}/>
-    <Form className="form pt-5 pb-1">
-    <Form.Group controlId="paymentWalletForm">
-        <Form.Label>Currency</Form.Label>
-        <div>{wallet.currency}</div>
-    </Form.Group>
-    <Form.Group controlId="paymentWalletForm">
-        <Form.Label>Blockchain</Form.Label>
-        <div>{wallet.blockchain}</div>
-    </Form.Group>
-    <Form.Group controlId="paymentWalletForm">
-        <Form.Label>Network</Form.Label>
-        <div>{wallet.network}</div>
-    </Form.Group>
-      <Form.Group controlId="paymentWalletForm">
-        <Form.Label>Copy Payment Address</Form.Label>
-        <Form.Control
-          type="text"
-          value={wallet.address}
-          className='text-light custom-input bg-transparent form-control'
-          placeholder="Enter text to copy"
-        />
-        <Form.Text className="text-muted">
-          Click the button to copy the text to the clipboard.
-        </Form.Text>
-      </Form.Group>
-      <Button variant="primary" onClick={handleCopyToClipboard} disabled={wallet.address === 'no address available'}>
-        Copy to Clipboard
-      </Button>
-    </Form>
-    </>
+    <div className='d-flex flex-column pt-3 align-items-center'>
+      <SuccessModal propShow={showModal} message={'Porfolio successfully created'} />
+      <Information center head={'Proceed to make your deposit'} text={'Copy the wallet address and make a transfer, be sure to take note of the currency, blockchain and network'} icon={faDollarSign} />
+      <Form className="form py-5">
+        <Form.Group className='mb-4'>
+          <Form.Label>Currency:</Form.Label>
+          <FormControl
+            value={wallet.currency}
+            className='px-0 text-center text-light custom-input bg-transparent form-control'
+
+          />
+        </Form.Group>
+
+        <Form.Group className='mb-4'>
+          <Form.Label>Blockchain</Form.Label>
+          <FormControl
+            value={wallet.blockchain}
+            className='px-0 text-center text-light custom-input bg-transparent form-control'
+          />
+        </Form.Group>
+
+        <Form.Group  className='mb-4'>
+          <Form.Label>Network</Form.Label>
+          <FormControl
+            value={wallet.network}
+            className='px-0 text-center text-light custom-input bg-transparent '
+
+          />
+        </Form.Group>
+        <Form.Group  className='mb-4'>
+          <Form.Label>Copy Payment Address</Form.Label>
+          <Form.Control
+            type="text"
+            value={wallet.address}
+            className='px-0 text-center text-light  bg-transparent form-control'
+            placeholder="Enter text to copy"
+          />
+          <Form.Text className="text-light">
+            Click the button to copy the text to the clipboard.
+          </Form.Text>
+        </Form.Group>
+        <div className='d-flex justify-content-center'>
+        <button className='button-styles button-width-narrow' onClick={handleCopyToClipboard} disabled={wallet.address === 'no address available'}>
+          Copy to Clipboard
+        </button>
+        </div>
+      </Form>
+      <MiniFooter/>
+    </div>
   );
 };
 

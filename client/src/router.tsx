@@ -105,7 +105,7 @@ element: <Email />
 },
 {
     path:'/invest',
-    element: <NewInvestment />,
+    element:  <PrivateRoute Component={NewInvestment}/>
 },
 
 {

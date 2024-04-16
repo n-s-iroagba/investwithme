@@ -2,7 +2,8 @@ import { deleteItem, patchItem, postData } from "./api";
 import { CreateInvestmentType, ManagerType, WalletType } from "./types";
 import { createManagerUrl, patchManagerUrl, deleteManagerRoute, createWalletUrl, patchWalletUrl, deleteWalletRoute, createInvestmentRoute} from "./constants";
 
-export const createInvestment = async (data: CreateInvestmentType, investorId: number) => {
+export const createInvestment = async (data: CreateInvestmentType) => {
+  const investorId =1
   const createInvestmentUrl = `${createInvestmentRoute}/${investorId}`;
 
   try {
@@ -129,11 +130,51 @@ export const logOut = (navigate:(path:string)=>void)=>{
 }
 export const getManagers = ()=>{
   return [
- //returns array
+   {
+      id: 1,
+        firstName: 'string',
+        lastName: 'string',
+        minimumInvestmentAmount: 0,
+        percentageYield: 159,
+        duration:2,
+        image: '',
+        qualification: 'string'
+      },
+      {
+        id: 2,
+        firstName: 'Jane',
+        lastName: 'Smith',
+        minimumInvestmentAmount: 500,
+        percentageYield: 7,
+        duration: 18,
+        image: 'path/to/image2.jpg',
+        qualification: 'Chartered Accountant',
+      }
   ]
 }
 export const getAdminWallets = ()=>{
-  return [
+  return [   {
+    id: 1,
+    blockchain: 'Ethereum',
+    address: '0x1234567890abcdef',
+    network: 'Mainnet',
+    currency: 'ETH',
+  },
+   {
+    id: 2,
+    blockchain: 'Bitcoin',
+    address: 'bc1q2w3e4r5t6y7u8i9o0p',
+    network: 'Testnet',
+    currency: 'BTC',
+  },
+
+ {
+    id: 3,
+    blockchain: 'Binance Smart Chain',
+    address: '0xa1b2c3d4e5f6g7h8i9j0k',
+    network: 'Testnet',
+    currency: 'BNB',
+  }
       ]
 
  //returns array
