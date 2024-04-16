@@ -4,7 +4,7 @@ import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import '../styles.css';
 import { Col, Row } from 'react-bootstrap';
 import { faBell } from '@fortawesome/free-solid-svg-icons';
-import { getGreeting } from '../../utils/helpers';
+import { getGreeting } from '../../utils/utils';
 import { numberWithCommas } from '../../utils/utils';
 
 export const DashboardBar: React.FC<{ username: string, newNotification: boolean, balance: number }> = (props) => {
@@ -42,7 +42,7 @@ const DashboardNav: React.FC<{ notifIcon?: IconProp, icon: IconProp; text: strin
     <div>
       <div onClick={props.action} className="dash-nav" >
         {props.notifIcon &&
-          <FontAwesomeIcon className='notification text-danger' icon={props.notifIcon} />
+          <FontAwesomeIcon className='notification text-danger' icon={props.notifIcon} beat/>
         }
         <FontAwesomeIcon className="nav-icon" icon={props.icon} />
         <p className="dashbutton-text text-wrap">{props.text}</p>

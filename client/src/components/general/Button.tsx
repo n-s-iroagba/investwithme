@@ -54,43 +54,5 @@ export const SelectManagerButton: React.FC<{managerId?:number}> = ({ managerId }
 };
 
 
-export const MoveToPatchManager: React.FC<{ manager: ManagerType }> = ({ manager }) => {
-  const navigate = useNavigate();
-
-  const handleInvestClick = () => {
-    localStorage.setItem('cassockManager', JSON.stringify(manager));
-    navigate('/patch-manager');
-  };
-
-  return (
-    <button onClick={handleInvestClick} className='button-styles'>
-      <div>Invest with this manager</div>
-      <div><FontAwesomeIcon icon={faDollarSign} beatFade /></div>
-    </button>
-  );
-};
-
-// export const MoveToPatchWallet:React.FC<{managerId:WalletType}> =({managerId})=>{
-//   localStorage.setItem('cassockWallet',JSON.stringify(managerId))
-
-//   const navigate = useNavigate()
-//   return <button onClick={()=>navigate('/patch-wallet')} className='button-styles'><div>Invest with this manager</div><div ><FontAwesomeIcon icon={faDollarSign} beatFade/></div></button>;
-// }
-
-// export const DeleteManagerButton:React.FC<{managerId:number}> =({managerId})=>{
-//   const navigate = useNavigate()
-//   return <button onClick={()=>deleteManager(managerId,navigate)} className='button-styles'><div>Invest with this manager</div><div ><FontAwesomeIcon icon={faDollarSign} beatFade/></div></button>;
-// }
 
 
-
-// export const EditInvestmentButton:React.FC<{investorId:number,managerId:InvestmentType}> =({investorId,managerId})=>{
-//   const navigate = useNavigate()
-//   return <button onClick={()=>patchInvestment(investorId,managerId,navigate)} className='button-styles'><div>Invest with this manager</div><div ><FontAwesomeIcon icon={faDollarSign} beatFade/></div></button>;
-// }
-
-
-// export const DeleteManagerButton:React.FC<{managerId:number}> =({managerId})=>{
-//   const navigate = useNavigate()
-//   return <button onClick={()=>deleteManager(managerId,navigate)} className='button-styles'><div>Invest with this manager</div><div ><FontAwesomeIcon icon={faDollarSign} beatFade/></div></button>;
-// }

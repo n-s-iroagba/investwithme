@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getPromoRemainingTime } from '../../utils/helpers';
+import { getPromoRemainingTime } from '../../utils/utils';
 import { GetStartedButton } from '../general/Button';
 import { PromoType } from '../../utils/types';
 

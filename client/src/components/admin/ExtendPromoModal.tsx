@@ -1,17 +1,19 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 
 interface ExtendPromoFormModalProps {
     show: boolean;
-    onHide: () => void;
 }
 
-const ExtendPromoFormModal: React.FC<ExtendPromoFormModalProps> = ({ show, onHide }) => {
+const ExtendPromoFormModal: React.FC<ExtendPromoFormModalProps> = ({ show}) => {
     const [formData, setFormData] = useState({
         days: '1',
         details: '',
     });
-
+    const [modalShow, setModalShow] = useState<boolean>(show)
+useEffect(()=>{
+setModalShow(show)
+}, [show])
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
@@ -25,9 +27,13 @@ const ExtendPromoFormModal: React.FC<ExtendPromoFormModalProps> = ({ show, onHid
         setFormData({ days: '1', details: '' });
         onHide(); // Close the modal
     };
+    const onHide = () =>{
+        setModalShow(false);
+        window.location.reload()
+    }
 
     return (
-        <Modal show={show} onHide={onHide}>
+        <Modal show={modalShow} onHide={onHide}>
             <Modal.Header closeButton>
                 <Modal.Title>Extend Promo</Modal.Title>
             </Modal.Header>
@@ -49,19 +55,7 @@ const ExtendPromoFormModal: React.FC<ExtendPromoFormModalProps> = ({ show, onHid
  
                         </Form.Control>
                     </Form.Group>
-
-                    <Form.Group controlId="formDetails">
-                        <Form.Label>Additional Details</Form.Label>
-                        <Form.Control
-                            as="textarea"
-                            rows={3}
-                            name="details"
-                            value={formData.details}
-                            onChange={handleChange}
-                            placeholder="Enter additional details..."
-                        />
-                    </Form.Group>
-
+                    <br/>
                     <Button variant="primary" type="submit">
                         Extend Promo
                     </Button>

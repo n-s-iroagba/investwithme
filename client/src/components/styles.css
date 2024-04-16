@@ -5,6 +5,9 @@
         background-color: var(--secondary-color);
     
 }
+.notification-wrapper{
+    position:relative;
+}
 .button-styles {
     align-items: center;
     background-color: var(--secondary-color);

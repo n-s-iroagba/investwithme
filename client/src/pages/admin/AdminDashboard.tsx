@@ -6,7 +6,7 @@ import { AdminDashboardBar } from '../../components/general/DashboardNav';
 import { MiniFooter } from '../../components/home_components/Footer';
 import { useNavigate } from 'react-router-dom';
 import '../../components/styles.css';
-import { getNewbies } from '../../utils/helpers';
+import { getNewbies, logOut } from '../../utils/helpers';
 
 
 const AdminDashboard: React.FC<{ name: string }> = ({ name }) => {
@@ -32,11 +32,11 @@ const AdminDashboard: React.FC<{ name: string }> = ({ name }) => {
               ) : (
                 <DashboardNav action={() => navigate('/' + actions[index])} text={text} icon={icons[index]} />
               )}
-         
+
           </Col>
         ))}
         <Col xs={12} md={6}>
-          <button className='mt-5 button-styles text-light'>Logout</button>
+          <button className='mt-5 button-styles text-light'onClick={()=>logOut(navigate)}>Logout</button>
         </Col>
       </Row>
       <MiniFooter primaryVariant={true} />

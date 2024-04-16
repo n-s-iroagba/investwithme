@@ -28,6 +28,7 @@ export interface InvestmentEntryType{
   managers:ManagerType[]
   wallets:EditWalletType[]
 }
+
 export interface InvestmentType{
     id?:number,
     name:string
@@ -41,8 +42,31 @@ export interface InvestmentType{
     percentageYield:number
 }
 
-
-
+export interface AdminInvestorType {
+  id: number;
+  firstName: string;
+  lastName: string;
+  hasInvested: boolean;
+  withdrawalDate: string;
+  completeDeposit: boolean;
+  dueForWithdrawal: boolean;
+}
+export interface ReferralType{
+  firstName: string;
+  lastName: string;
+  walletAddress: string;
+  amount: number;
+  currency: string;
+  id: number;
+};
+export interface BonusType {
+  firstName: string;
+  lastName: string;
+  walletAddress: string;
+  amount: number;
+  currency: string;
+  id: number;
+}
 export interface TransactionType{
   id?:number,
   amount:number,
@@ -60,6 +84,7 @@ export interface NotificationType{
 }
 
 export interface WalletType{
+  id:number,
   blockchain:string,
   address:string
   network:string,
@@ -80,7 +105,7 @@ export interface DecodedToken {
     id: string;
     role: 'admin'|'investor';
     hasInvested?:boolean;
-    name:string
+    username:string
     verificationStatus:'verified'|'verifying'
     email:string
   }   

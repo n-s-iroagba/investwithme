@@ -17,7 +17,7 @@ export const InvestmentTiersCard: React.FC<InvestmentTiersType> = ({
   deleteButton,
 }) => {
   return (
-    <div className="px-2">
+   
       <Card bg="light" text="black" className="w-100">
         <Card.Header className="background-secondary">
           <Card.Title className="text-center">{percentageYield}</Card.Title>
@@ -37,7 +37,7 @@ export const InvestmentTiersCard: React.FC<InvestmentTiersType> = ({
        {deleteButton && <div className="w-100 py-3 d-flex justify-content-center"><div className="w-75">{deleteButton}</div></div>}
         </Card.Body>
       </Card>
-    </div>
+   
   );
 };
 

@@ -7,31 +7,24 @@ const AdminManager: React.FC = () => {
 
   const handleToggle = () => {
     setShowManagers(!showManagers)
-   
   }
   return (
-  <div className='primary-background px-3 pt-5'>
-            <div className='d-flex flex-column align-items-center'>
-      {showManagers ?
-
-
+    <div className='primary-background px-3 pt-5'>
+      <div className='d-flex flex-column align-items-center'>
+        {showManagers ?
           <>
-          <button className='button-styles button-width-narrow' onClick={handleToggle}>Add Manager</button>
-
-          <AdminInvestmentManagersCard />
+            <button className='button-styles button-width-narrow' onClick={handleToggle}>Add Manager</button>
+            <AdminInvestmentManagersCard />
           </>
-        :
-       <>
-          <button className='button-styles button-width-narrow' onClick={handleToggle}>View Managers</button>
+          :
+          <>
+            <button className='button-styles button-width-narrow' onClick={handleToggle}>View Managers</button>
 
-          <ManagerForm/>
+            <ManagerForm />
           </>
-    
-      }
-          </div>
-    </div >)
-
+        }
+      </div>
+    </div>
+    )
 }
-
-
 export default AdminManager;

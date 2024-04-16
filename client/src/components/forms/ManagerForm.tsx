@@ -5,7 +5,10 @@ import { required } from '../auth/general/required';
 import ReactCrop, { type Crop } from 'react-image-crop'
 import 'react-image-crop/dist/ReactCrop.css';
 import { ManagerType } from '../../utils/types';
-import { createManager, hasEmptyKey, patchManager } from '../../utils/helpers';
+import { createManager, patchManager } from '../../utils/helpers';
+import { hasEmptyKey} from '../../utils/utils'
+import { useNavigate } from 'react-router-dom';
+
 
 
 
@@ -30,15 +33,13 @@ const ManagerForm: React.FC<{ patch?: boolean }> = ({ patch }) => {
   const [files, setFiles] = useState<any>(null)
   const [validated,setValidated] = useState(false)
   const [crop, setCrop] = useState<Crop>({
-    unit: 'px', // Can be 'px' or '%'
+    unit: 'px', 
     x: 25,
     y: 25,
     width: 150,
     height: 150,
   })
-
-
-
+ const navigate = useNavigate()
 
   const getCroppedBlob = async (file: File, crop: Crop): Promise<Blob> => {
     return new Promise((resolve, reject) => {
@@ -127,7 +128,7 @@ const ManagerForm: React.FC<{ patch?: boolean }> = ({ patch }) => {
         setSubmitting(true);
         setValidated(true);
         if (patch) {
-          await patchManager(managerData);
+          await patchManager(managerData,navigate);
         } else {
           await createManager(managerData);
         }

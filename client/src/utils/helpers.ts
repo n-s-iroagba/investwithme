@@ -32,13 +32,13 @@ export const createManager= async (data:ManagerType) => {
 
 };
 
-export const patchManager=async ( data:ManagerType) =>{
+export const patchManager=async ( data:ManagerType,navigate:(path:string)=>void) =>{
   try {
     const authorizationData = localStorage.getItem('cassockJwtToken');
     const response = await patchItem(patchManagerUrl, data, authorizationData);
     if (response.status === 200) {
       alert('manager updated succesfully')
-      window.location.reload();
+     navigate('/admin/managers')
     } else {
       alert('unable to update the manager at this time')
   } 
@@ -120,6 +120,55 @@ const url =`${deleteWalletRoute}/${id}`
 
 }
 export const getNewbies = ()=>{
-  return []
+  return [//returns array
+
+  ]
+}
+export const logOut = (navigate:(path:string)=>void)=>{
+ navigate('/')
+}
+export const getManagers = ()=>{
+  return [
+ //returns array
+  ]
+}
+export const getAdminWallets = ()=>{
+  return [
+      ]
+
+ //returns array
+
+
 }
 
+export const getInvestmentNewbies =() =>{
+  return ['referral']
+}
+
+export const getCurrencies =() =>{
+return['EUR']
+}
+
+export const getPromo=()=>{
+  return  {
+    id: 1,
+    startDate: new Date('2021-01-01').toDateString(),
+    durationInDays: 30,
+  };
+}
+export const getUnpaidReferrals =()=>{
+  return [
+    //referallType
+  
+  ]
+}
+export const getBonus = () =>{
+  return[
+    //BOnusType
+  ]
+}
+export const getInvestors = ()=>{
+      //AdminInvestorType
+  return[ 
+  ]
+}

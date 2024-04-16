@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { Card } from 'react-bootstrap'
 import PromoFormModal from '../../components/admin/PromoFormModal'
 import { MiniFooter } from '../../components/home_components/Footer'
+import { getPromo } from '../../utils/helpers'
+import ExtendPromoFormModal from '../../components/admin/ExtendPromoModal'
 
 
 const Promotion = () => {
@@ -11,12 +13,9 @@ const Promotion = () => {
         endDate:''
     })
     const [showAddPromoModal, setShowAddPromoModal] = useState(false)
+    const [showEditPromoModal, setShowEditPromoModal] = useState(false)
     useEffect(() => {
-        const receivedpromo = {
-          id: 0,
-          startDate: new Date('2021-01-01').toDateString(),
-          durationInDays: 30,
-        };
+        const receivedpromo = getPromo()
     
         const endDate = new Date(receivedpromo.startDate);
         endDate.setDate(endDate.getDate() + receivedpromo.durationInDays);
@@ -36,16 +35,17 @@ const Promotion = () => {
                 <button className='button-styles button-width-narrow mt-4' onClick={()=>setShowAddPromoModal(true)}>Create Promo</button>
             </div>):
             (
-            <div className='px-1'>
-                <h4 className='text-center'>Promo</h4>
-                <Card className={` shade`}>
-                    <Card.Body>
-                        <Card.Title className='mb-4'>From : {promo.startDate}</Card.Title>
-                        <Card.Title className='mb-4'>To: {promo.endDate}</Card.Title>
-                        <button className='button-styles mb-4'>Extend Promo</button>
-                    </Card.Body>
-                </Card>
-            </div>
+            <>
+            <ExtendPromoFormModal show={showEditPromoModal} /><div className='px-1'>
+            <h4 className='text-center'>Promo</h4>
+            <Card className={` shade`}>
+              <Card.Body>
+                <Card.Title className='mb-4'>From : {promo.startDate}</Card.Title>
+                <Card.Title className='mb-4'>To: {promo.endDate}</Card.Title>
+                <button className='button-styles mb-4'onClick={()=>setShowEditPromoModal(true)}>Extend Promo</button>
+              </Card.Body>
+            </Card>
+          </div></>
             )
          }
            <MiniFooter primaryVariant/>

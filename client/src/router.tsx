@@ -30,7 +30,7 @@ import Notifications from "./pages/investor/Notification";
 import PaymentWalletForm from "./pages/investor/PaymentWalletForm";
 import WithdrawalDashboard from "./components/investor/WithdrawalDashboard";
 import InvestorsDashboard from "./pages/admin/InvestorsDashboard";
-import AdminReferral from "./pages/admin/AdminRefferal";
+import AdminReferral from "./pages/admin/AdminReferral";
 import AdminPrivateRoute from "./components/auth/admin/AdminPrivateRoute";
 import Promotion from "./pages/admin/Promotion";
 import PatchManager from "./pages/admin/PatchManager";
