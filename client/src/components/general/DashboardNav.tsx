@@ -7,7 +7,7 @@ import { faBell } from '@fortawesome/free-solid-svg-icons';
 import { getGreeting } from '../../utils/utils';
 import { numberWithCommas } from '../../utils/utils';
 
-export const DashboardBar: React.FC<{ username: string, newNotification: boolean, balance: number }> = (props) => {
+export const DashboardBar: React.FC<{ username: string, numberOfNewNotifications: number, balance: number }> = (props) => {
   return (
     <Row className="d-flex text-light align-items-center w-100">
       <Col className='text-light' xs={9}>
@@ -15,10 +15,10 @@ export const DashboardBar: React.FC<{ username: string, newNotification: boolean
         <h6 className='text-wrap'>{props.username}</h6>
       </Col>
       <Col xs={3} className="d-flex justify-content-center align-items-center mb-3">
-        {props.newNotification ? <div className=' d-flex justify-content-center'><FontAwesomeIcon className='h-100' icon={faBell} beatFade /><div className='rounded-circle bg-danger px-1 py-1'>+{1}</div></div> : <FontAwesomeIcon icon={faBell} />}
+        {props.numberOfNewNotifications>0 ? <div className=' d-flex justify-content-center'><FontAwesomeIcon className='h-100' icon={faBell} beatFade /><div className='rounded-circle bg-danger px-1 py-1'>+{props.numberOfNewNotifications}</div></div> : <FontAwesomeIcon icon={faBell} beat/>}
       </Col>
       <Col xs={8}>
-        <small>*Balance: {numberWithCommas(props.balance)}</small>
+        <small>*Balance: ${numberWithCommas(props.balance)}</small>
       </Col>
     </Row>
   );

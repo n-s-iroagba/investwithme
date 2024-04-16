@@ -9,7 +9,7 @@ import '../../components/styles.css';
 import { getNewbies, logOut } from '../../utils/helpers';
 
 
-const AdminDashboard: React.FC<{ name: string }> = ({ name }) => {
+const AdminDashboard: React.FC<{ username: string }> = ({ username }) => {
   const navigate = useNavigate();
   const icons = [faUser, faWallet, faUser, faHandHoldingDollar];
   const actions: string[] = ['admin/managers', 'admin/wallets', 'admin/investor-dashboard', 'admin/promo'];
@@ -23,7 +23,7 @@ const AdminDashboard: React.FC<{ name: string }> = ({ name }) => {
   return (
     <div className='primary-background full-height px-5 py-4'>
       <div className='d-flex justify-content-center align-items-center mb-4'>Logo</div>
-      <AdminDashboardBar username={name} />
+      <AdminDashboardBar username={username} />
       <Row className="d-flex justify-content-center gy-2 gx-2">
         {texts.map((text, index) => (
           <Col key={text} xs={6} sm={4} md={3}>

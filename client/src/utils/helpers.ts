@@ -172,3 +172,9 @@ export const getInvestors = ()=>{
   return[ 
   ]
 }
+export const getNumberOfNewNotifications=()=>{
+  return 5;
+}
+export const getAccountBalance =()=>{
+  return 5000
+}

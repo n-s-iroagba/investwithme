@@ -21,10 +21,12 @@ const TransactionComponent: React.FC<{transaction:TransactionType}> = ({ transac
               
             </Col>
           </Row>
-          <div className='d-flex transaction-small justify-content-between'>
-          <div><small>{transaction.narration}</small></div>
-          <div><small className='text-light'>{transaction.date}</small></div>
-          </div>
+          <Row className='d-flex transaction-small'>
+          <Col xs={9}><small>*{transaction.narration}</small></Col>
+           
+          <Col><small className='text-light'>{transaction.date}</small></Col>
+          
+          </Row>
           </div>
   );
 };

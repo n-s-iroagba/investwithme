@@ -36,6 +36,7 @@ import Promotion from "./pages/admin/Promotion";
 import PatchManager from "./pages/admin/PatchManager";
 import Bonus from "./pages/admin/Bonus";
 import Investors from "./pages/admin/Investors";
+import PrivateRoute from "./components/auth/general/PrivateRoute";
 
 
 
@@ -83,7 +84,7 @@ element: <Email />
 },
 {
     path:'/dashboard',
-    element: <Dashboard/>,
+    element:  <PrivateRoute Component={Dashboard}/>,
 },
 {
     path:'/withdraw',
