@@ -5,7 +5,7 @@ import { faDollarSign, faEnvelope, faFile,} from '@fortawesome/free-solid-svg-ic
 import'../styles.css'
 import { faFacebook } from '@fortawesome/free-brands-svg-icons';
 import { useNavigate } from 'react-router-dom';
-import { ManagerType,} from '../../utils/types';
+
 
 
 
@@ -38,20 +38,7 @@ export const  SocialMediaButton:React.FC = ()=>{
 }
 
 
-export const SelectManagerButton: React.FC<{managerId?:number}> = ({ managerId }) => {
-  const navigate = useNavigate();
 
-  const handleInvestClick = () => {
-    localStorage.setItem('cassockNewInvestmentInitmanagerId', JSON.stringify(managerId));
-    navigate('/invest'); 
-  };
-
-  return (
-    <button onClick={handleInvestClick} className='button-styles'>
-      Invest with this Manager
-    </button>
-  );
-};
 
 
 

@@ -1,12 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
-import { EditWalletType } from '../../utils/types';
+import { WalletType } from '../../utils/types';
 
-const EditWalletModal:React.FC<{data:EditWalletType,show:boolean}>= ({ data, show }) => {
+const EditWalletModal:React.FC<{data:WalletType,show:boolean}>= ({ data, show }) => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [showModal, setShowModal]= useState(false);
-  const [walletData, setWalletData]= useState<EditWalletType>({});
+  const [walletData, setWalletData]= useState<WalletType>({
+    id:0,
+    blockchain:"",
+    network:'',
+    currency:'',
+    address:'',
+  });
 
   useEffect(() => {
     setShowModal(show);

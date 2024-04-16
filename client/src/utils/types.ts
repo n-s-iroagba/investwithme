@@ -23,18 +23,31 @@ export interface CreateInvestmentType{
   manager:ManagerType
 }
 
-export interface InvestmentType{
-    id?:number,
-    name:string
-    commenceDate:string,
-    amount:string,
-    amountDeposited:number,
-    profit:number,
-    wallet:WalletType,
-    dueDate:string,
-    investmentManager:string
-    percentageYield:number
-}
+export interface PortfolioDataType {
+  id: number;
+  commenceDate: string;
+  amount: number;
+  earnings: number;
+  amountDeposited: number;
+  durationInDays: number;
+  numberOfDeposits: number;
+  wallet: {
+    network: string;
+    blockchain: string;
+    address: string;
+    currency: string;
+  };
+  dueDate: string;
+  manager: {
+    firstName: string;
+    lastName: string;
+  };
+  dailyEarningPercentage: number;
+  referral: {
+    totalAmount: number;
+    count: number;
+  };
+};
 
 export interface AdminInvestorType {
   id: number;

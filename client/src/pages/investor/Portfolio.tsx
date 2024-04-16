@@ -1,12 +1,23 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PortfolioComponent from '../../components/investor/PortfolioComponent';
 import { Button, Form, Modal } from 'react-bootstrap';
+import { PortfolioDataType } from '../../utils/types';
+import { getPorfolioData } from '../../utils/helpers';
+import { useNavigate } from 'react-router-dom';
 
 
 
 const Portfolio:React.FC = ()=>{
     const [selectedOption, setSelectedOption] = useState('');
     const [showModal, setShowModal] = useState(false);
+    const [portfolioData,setPortfolioData] = useState<PortfolioDataType|null>(null)
+    const navigate = useNavigate()
+
+    useEffect(() =>{
+      const data = getPorfolioData()
+      setPortfolioData(data)
+
+    }, [])
 
     const handleSelectChange = (event:any) => {
       setSelectedOption(event.target.value);
@@ -24,7 +35,10 @@ const Portfolio:React.FC = ()=>{
  return(
 <div className='d-flex flex-column align-items-center'>
     <h1 className='text-center my-2'>My Portfolio</h1>
-<button className='mb-3 button-styles text-light button-width-narrow' onClick={()=>setShowModal(true)}>Extend Investment Duration</button>
+{portfolioData?<button className='mb-3 button-styles text-light button-width-narrow' onClick={()=>setShowModal(true)}>Extend Investment Duration</button>
+:
+<button className='mb-3 button-styles text-light button-width-narrow' onClick={()=>navigate('/invest/managers')}>Invest</button>
+}
 <Modal show={showModal}>
       <Modal.Header closeButton>
         <Modal.Title>Extend Your Investment Duration</Modal.Title>
@@ -45,7 +59,7 @@ const Portfolio:React.FC = ()=>{
         </Form>
       </Modal.Body>
     </Modal>
-<PortfolioComponent/>
+<PortfolioComponent data={portfolioData}/>
 </div>
 
  )

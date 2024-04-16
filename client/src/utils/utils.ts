@@ -80,3 +80,33 @@ export const findManagerWithHighestMinInvestment = (managers: ManagerType[], amo
 
   return highestMinInvestmentManager;
 };
+
+export const formatStartDate = (dateString: string): string => {
+  const date = new Date(dateString);
+  return date.toLocaleDateString('en-GB');
+};
+
+export const formatEndDate = (dateString: string, numberOfDays: number): string => {
+  const startDate = new Date(dateString);
+  const endDate = new Date(startDate.getTime() + numberOfDays * 24 * 60 * 60 * 1000);
+  return endDate.toLocaleDateString('en-GB');
+};
+
+export const createMultiplicationObject = (commenceDate: string, number: number): Record<string, number> => {
+  const startDate = new Date(commenceDate);
+  const currentDate = new Date();
+
+  const daysDifference = Math.ceil((currentDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)); // Number of days between commence date and current date
+
+  const resultObject: Record<string, number> = {};
+
+  for (let i = 1; i <= daysDifference; i++) {
+    const currentDate = new Date(startDate);
+    currentDate.setDate(startDate.getDate() + i - 1); // Set the date to the current day in the loop
+    const key = currentDate.toISOString().split('T')[0]; // Get the date in 'YYYY-MM-DD' format
+    const value = number * i; // Calculate the value as multiplication of the number by the day index
+    resultObject[key] = value;
+  }
+
+  return resultObject;
+};

@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { Col, Form, Spinner } from 'react-bootstrap';
 import ErrorMessage from '../general/ErrorMessage';
-import { WalletType} from '../../utils/types';
+import { CreateWalletType, WalletType} from '../../utils/types';
 import { required } from '../auth/general/required';
-import { createWallet, hasEmptyKey,} from '../../utils/helpers';
+import { createWallet} from '../../utils/helpers';
+import { hasEmptyKey,} from '../../utils/utils';
 
 const WalletForm: React.FC = () => {
 
-  const [walletData, setWalletData] = useState<WalletType>({
+  const [walletData, setWalletData] = useState<CreateWalletType>({
     blockchain: '',
     address: '',
     network: '',
@@ -20,15 +21,16 @@ const WalletForm: React.FC = () => {
   const [submitting, setSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
-  const handleSelect = (value: string | number, name: string) => {
-    setWalletData((prevData: WalletType) => ({
+  const handleSelect = (e:any,name:string) => {
+    const {value} = e.target
+    setWalletData((prevData: CreateWalletType) => ({
       ...prevData,
       [name]: value,
     }));
   };
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>{
+  const handleChange = (e: any) =>{
     const {name, value} = e.target
-    setWalletData((prevData: WalletType) => ({
+    setWalletData((prevData: CreateWalletType) => ({
       ...prevData,
       [name]: value,
     }));

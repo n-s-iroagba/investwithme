@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Card, Col, Row } from 'react-bootstrap';
 import '../styles.css'
-import { EditWalletType, WalletType } from '../../utils/types';
+import { WalletType } from '../../utils/types';
 import EditWalletModal from './EditWalletModal';
 import DeleteModal from './DeleteModal';
 import { getAdminWallets } from '../../utils/helpers';
 
 
-const WalletCard: React.FC<{ wallet: EditWalletType, deleteButton: React.ReactNode, editButton: React.ReactNode, }> = ({ wallet, deleteButton, editButton }) => {
+const WalletCard: React.FC<{ wallet: WalletType, deleteButton: React.ReactNode, editButton: React.ReactNode, }> = ({ wallet, deleteButton, editButton }) => {
 
   return (
     <div className='px-1'>

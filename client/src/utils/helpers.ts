@@ -1,5 +1,5 @@
 import { deleteItem, patchItem, postData } from "./api";
-import { CreateInvestmentType, ManagerType, WalletType } from "./types";
+import { CreateInvestmentType, CreateWalletType, ManagerType, WalletType } from "./types";
 import { createManagerUrl, patchManagerUrl, deleteManagerRoute, createWalletUrl, patchWalletUrl, deleteWalletRoute, createInvestmentRoute} from "./constants";
 
 export const createInvestment = async (data: CreateInvestmentType) => {
@@ -69,7 +69,7 @@ const url =`${deleteManagerRoute}/${id}`
 
 }
 
-export const createWallet= async (data:WalletType) => {
+export const createWallet= async (data:CreateWalletType) => {
   try {
     const authorizationData = localStorage.getItem('cassockJwtToken');
     const response = await postData(createWalletUrl, data, authorizationData);
@@ -218,4 +218,8 @@ export const getNumberOfNewNotifications=()=>{
 }
 export const getAccountBalance =()=>{
   return 5000
+}
+
+export const getPorfolioData=()=>{
+  return null
 }

@@ -14,7 +14,7 @@ import { jwtDecode } from "jwt-decode";
         if (decodedToken.role === 'admin') {
           return {
             authorised: true,
-            name: decodedToken.name,
+            name: decodedToken.username,
             role: decodedToken.role,
             verificationStatus: decodedToken.verificationStatus,
             email: decodedToken.email
