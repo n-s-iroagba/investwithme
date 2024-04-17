@@ -1,5 +1,6 @@
 
 
+
 export interface PromoType{
   id:number;
   startDate: string,
@@ -48,6 +49,12 @@ export interface PortfolioDataType {
     count: number;
   };
 };
+
+export interface CryptoDataType{
+  networks:string[],
+  blockchains:string[],
+  currencies:string[]
+}
 
 export interface AdminInvestorType {
   id: number;

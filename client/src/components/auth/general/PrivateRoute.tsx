@@ -1,12 +1,28 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import AdminSignUp from '../../../pages/admin/AdminSignUp';
+import { getInvestorAuthData } from '../../../utils/auth';
+import { useNavigate } from 'react-router-dom';
 
 const PrivateRoute: React.FC<{ Component: React.FC<any> }> = ({ Component }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(true);
+  const [username,setUsername] = useState<string>('')
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    const authData = getInvestorAuthData()
+    if (authData) {
+      if (authData.role==='investor') {
+        setUsername(authData.username)
+        setIsAuthenticated(true)
+      }
+    }else{
+      navigate('/login')
+    }
+  }, [navigate])
 
   return (
     isAuthenticated ? (
-      <Component username={'Amos'} /> // Pass the name prop to AdminDashboard
+      <Component username={username} /> // Pass the name prop to AdminDashboard
     ) : (
       <AdminSignUp />
     )

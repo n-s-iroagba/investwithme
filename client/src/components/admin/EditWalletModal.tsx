@@ -3,8 +3,7 @@ import { Modal, Button, Form } from 'react-bootstrap';
 import { WalletType } from '../../utils/types';
 
 const EditWalletModal:React.FC<{data:WalletType,show:boolean}>= ({ data, show }) => {
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [error, setError] = useState<string|null>(null);
   const [showModal, setShowModal]= useState(false);
   const [walletData, setWalletData]= useState<WalletType>({
     id:0,
@@ -13,6 +12,7 @@ const EditWalletModal:React.FC<{data:WalletType,show:boolean}>= ({ data, show })
     currency:'',
     address:'',
   });
+  
 
   useEffect(() => {
     setShowModal(show);
@@ -24,13 +24,11 @@ const EditWalletModal:React.FC<{data:WalletType,show:boolean}>= ({ data, show })
     setShowModal(false);
     window.location.reload()
   }
+
   const handleConfirm = () => {
-    if (password === 'admin') {
-      console.log(data);
+
       handleClose();
-    } else {
-      setError('Incorrect password');
-    }
+    setError('Sorry an error occured while attempting to edit wallet')
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

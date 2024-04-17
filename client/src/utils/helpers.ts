@@ -223,3 +223,10 @@ export const getAccountBalance =()=>{
 export const getPorfolioData=()=>{
   return null
 }
+export const getCryptoData = ()=>{
+  return{
+    networks:['erc','btc'],
+    blockchains:['erc','btc'],
+    currencies:['erc','btc']
+  }
+}

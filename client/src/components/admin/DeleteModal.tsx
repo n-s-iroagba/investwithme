@@ -3,13 +3,16 @@ import { Modal, Button, Form } from 'react-bootstrap';
 
 
 const DeleteModal:React.FC<{id:number,show:boolean,entity:'wallet'|'manager'|'investor'}>= ({ id, show,entity }) => {
-  const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [showModal, setShowModal]= useState(false);
+  const [password, setPassword] = useState('');
+  const secretCode =  process.env.REACT_APP_ADMIN_SECRET_KEY
 
   useEffect(() => {
     setShowModal(show);
   }, [show])
+
+  
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
@@ -20,13 +23,14 @@ const DeleteModal:React.FC<{id:number,show:boolean,entity:'wallet'|'manager'|'in
     window.location.reload()
   }
   const handleConfirm = () => {
-    if (password === 'admin') {
+    if (password === secretCode) {
   
       handleClose();
     } else {
       setError('Incorrect password');
     }
   };
+
 
   return (
     <Modal show={showModal} onHide={handleClose}>

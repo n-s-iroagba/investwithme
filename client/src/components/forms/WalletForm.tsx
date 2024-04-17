@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Col, Form, Spinner } from 'react-bootstrap';
 import ErrorMessage from '../general/ErrorMessage';
-import { CreateWalletType, WalletType} from '../../utils/types';
+import { CreateWalletType, CryptoDataType} from '../../utils/types';
 import { required } from '../auth/general/required';
-import { createWallet} from '../../utils/helpers';
+import { createWallet, getCryptoData} from '../../utils/helpers';
 import { hasEmptyKey,} from '../../utils/utils';
+
 
 const WalletForm: React.FC = () => {
 
@@ -14,12 +15,19 @@ const WalletForm: React.FC = () => {
     network: '',
     currency: '',
   });
- const [networks,setNetworks] = useState([])
- const [blockchains,setBlockchains] = useState([])
- const [currencies,setCurrencies] = useState([])
+ const [networks,setNetworks] = useState<string[]>([])
+ const [blockchains,setBlockchains] = useState<string[]>([])
+ const [currencies,setCurrencies] = useState<string[]>([])
   const [validated, setValidated] = useState<boolean>(false);
   const [submitting, setSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+
+useEffect(() => {
+ const cryptoData:CryptoDataType = getCryptoData()
+ setNetworks(cryptoData.networks)
+ setBlockchains(cryptoData.blockchains)
+ setCurrencies(cryptoData.currencies)
+}, [])
 
   const handleSelect = (e:any,name:string) => {
     const {value} = e.target
@@ -86,7 +94,7 @@ const WalletForm: React.FC = () => {
             <Form.Label>Network {required}</Form.Label>
               <Form.Select onChange={(e) => handleSelect(e.target.value, 'currency')} value={walletData.currency}>
                 <option value="">Choose...</option>
-                {currencies.map((network,index) => (
+                {networks.map((network,index) => (
                   <option key={index} value={walletData.network}>
                     {network}
                   </option>

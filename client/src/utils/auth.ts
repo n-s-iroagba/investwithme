@@ -28,6 +28,23 @@ import { jwtDecode } from "jwt-decode";
       
   };
 
+  export const getAdminAuthData = ()=>{
+    return {
+      role:'admin',
+      username:'wakkias'
+    }
+  }
+  export const getInvestorAuthData = ()=>{
+    return {
+      role:'investor',
+      username:'wakkias'
+    }
+  }
+  
+  
+  
+
+
   export const doPasswordsMatch = (password: string, confirmPassword: string) => {
     return password === confirmPassword;
   };
