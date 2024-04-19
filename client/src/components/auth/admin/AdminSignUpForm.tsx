@@ -144,8 +144,8 @@ const navigateToHome=()=>{
 
         <Form.Group>
         <div className='d-flex justify-content-evenly w-100 pb-5'>
-          <button className='button-styles w-50 text-light' type={submitting === 'submitting' ? 'button' : 'submit'}>
-            {submitting === 'submitting' ? <Spinner animation='border' size='sm' /> : 'Submit'}
+          <button className='button-styles w-50 text-light' type={submitting? 'button' : 'submit'}>
+            {submitting? <Spinner animation='border' size='sm' /> : 'Submit'}
           </button>
           <button className='button-styles text-light w-50' onClick={() => navigateToHome()}> Home</button>
         </div>

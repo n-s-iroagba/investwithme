@@ -43,7 +43,7 @@ module.exports = {
 
       const existingInvestor = await Investor.findOne({ where: { email } });
       if (existingInvestor) {
-        return res.status(409).json({ message: 'Investor with this email already exists' });
+        throw new Error(  'Investor with this email already exists' );
       }
 
       password = await encryptPassword(password);
@@ -61,7 +61,7 @@ module.exports = {
           await Notification.create({ investorId: refereeInvestor.id, header: 'Referral', message: `Thank you!\n You just referred ${newInvestor.firstName} ${newInvestor.lastName}. You'd earn ${referralBonusPercent} on the first deposit` });
           await sendReferalCompletedMail(refereeInvestor, newInvestor);
         } else {
-          console.error('Referee investor not found');
+          throw new Error('Referee investor not found');
         }
       }
 
@@ -69,8 +69,8 @@ module.exports = {
       await sendVerificationEmail(newInvestor, token);
       return res.status(201).json(token);
     } catch (error) {
-      console.error('Error registering investor:', error);
-      return res.status(400).json({ error: 'Could not register you at this point, our servers are overloaded' });
+      console.error('Error registering investor:', error.message);
+      throw new Error(error.message);
     }
   },
 
@@ -130,7 +130,7 @@ module.exports = {
         user = await Investor.findOne({ where: { verificationToken: token } });
         userType = 'investor';
         if (!user) {
-          return res.status(400).redirect(EMAIL_VERIFICATION_ERROR_ROUTE);
+          throw new Error('illegal request no such user')
         }
       }
 
@@ -140,7 +140,7 @@ module.exports = {
 
       await user.update({ verified: true, verificationToken: null });
       user.save();
-      console.log(`${userType} after update: ${user}`);
+     
       ;
       if (userType==='admin'){
         const jwToken = createAdminLoginJWT(user)
@@ -151,8 +151,8 @@ module.exports = {
       }
      
     } catch (error) {
-      console.error('Error verifying email:', error);
-      return res.status(500).json({ error: 'An error occurred while verifying your email. Please try again later.' });
+      console.error('Error verifying email:', error.message);
+      throw new Error(error.message)
     }
   },
 
@@ -164,7 +164,7 @@ module.exports = {
       if (!user) {
         user = await Investor.findByPk(id);
         if (!user) {
-          return res.status(404).json('no user found')
+          throw new Error('illegal request no such user')
         }
       }
       const newToken = generateEmailVerificationToken( user.id);
@@ -173,7 +173,7 @@ module.exports = {
       await sendVerificationEmail(user, newToken); // Wait for email to be sent
       return res.status(200).json(newToken); // Return the new token
     } catch (error) {
-      return res.status(400).json({ message: error.message });
+       throw new Error(error.message)
     }
   },
 

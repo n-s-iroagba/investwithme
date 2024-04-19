@@ -26,7 +26,7 @@ export interface AuthContextType {
     adminData:AdminData
     newPasswordData:NewPasswordData,
     setNewPasswordData: React.Dispatch<React.SetStateAction<NewPasswordData>>,
-    submitting: string;
+    submitting: boolean;
     isPasswordsMatch: boolean;
     errorMessage: string;
     passwordType:string;

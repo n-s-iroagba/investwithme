@@ -52,7 +52,7 @@ app.use('/delete-wallet/:id',routes)
 
 app.use('/get-notifications/:id',routes)
 
-sequelize.sync()
+sequelize.sync({force:true})
   .then(() => console.log('model formed'))
   .catch(err => console.log(err));
 

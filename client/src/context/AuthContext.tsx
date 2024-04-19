@@ -7,7 +7,7 @@ import { newPasswordRoute } from "../utils/constants";
 export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [passwordValidityMessage, setPasswordValidityMessage] = useState<string[]>([]);
   const [passwordType, setPasswordType] = useState<string>('password');
-  const [submitting, setSubmitting] = useState<string>('not-submitting');
+  const [submitting, setSubmitting] = useState<boolean>(false);
   const [isPasswordsMatch, setIsPasswordsMatch] = useState<boolean>(true);
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [validated, setValidated] = useState<boolean>(false);
@@ -55,27 +55,24 @@ export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({ c
       shouldSubmit = false
       event.stopPropagation();
     }
+    if ('secretCode' in data && !secretCodeMatch) {
+      setErrorMessage('The secret code provided is wrong')
+    }
 
     if (shouldSubmit) {
-      setSubmitting('submitting')
+      setSubmitting(true)
       try {
         const response = await postData(domain, data)
         if (response.status===201) {
           console.log(response.data)
           localStorage.setItem('cassockEmailVerificationToken', JSON.stringify(response.data))
           navigateToVerifyEmailPage()
-        }else if (response.status === 409) {
-          setErrorMessage('This user is already registered.,kindly login');
-          setSubmitting('not-submitting')
-          return;
         }
       } catch (error: any) {
-        setErrorMessage('we are sorry, we cannot register you at this time')
-        setSubmitting('');
+        setErrorMessage(error.message)
         console.error(error)
-        if ('secretCode' in data && !secretCodeMatch) {
-          setErrorMessage('The secret code provided is wrong')
-        }
+      }finally{
+        setSubmitting(false);
       }
     }
   };
@@ -163,7 +160,17 @@ export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({ c
     const passwordMatch = checkIfPasswordsMatch(password, confirmPassword)
     let shouldSubmit: boolean = true //flag to check if form details are good enough to be submitted
 
+    const token = localStorage.getItem('cassockPasswordChangeToken')
+    let decodedToken: { id: string, role: string, email: string }|null;
+    if (token) {
+       decodedToken = decodePasswordChangeToken(token);
+      if (!decodedToken) {
+        throw new Error('illegal request')
+      }
+     } else {
+        throw new Error('illegal request')
 
+      }
   
 
     if (form.checkValidity() === false || !passwordCorrect || !passwordMatch) {
@@ -172,25 +179,9 @@ export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({ c
       event.stopPropagation();
     }
     if (shouldSubmit) {
-      setSubmitting('submitting');
+      setSubmitting(true);
       try {
-        const token = localStorage.getItem('cassockPasswordChangeToken')
-        if (token) {
-          const decodedToken: { id: string, role: string, email: string }|null = decodePasswordChangeToken(token);
-          if (!decodedToken) {
-            throw new Error('illegal request')
-          }
-          else {
-
-            const response = await postData(`${newPasswordRoute}/${decodedToken.id}`, { password }, token);
-            console.log(response);
-
-            if (response.status === 403) {
-              localStorage.setItem('cassockEmailVerificationToken', JSON.stringify(response.data));
-              navigate('/verify-email');
-            } else if (response.status === 400) {
-              navigate('/signup');
-            } else {
+          const response = await postData(`${newPasswordRoute}/${decodedToken?.id}`, { password }, token);
               localStorage.setItem('cassockJwtToken', JSON.stringify(response.data));
               if (decodedToken.role === 'admin') {
                 navigate('/admin/dashboard');
@@ -198,15 +189,11 @@ export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({ c
                 navigate('/dashboard');
               }
             }
-          }
-        }else {
-          throw new Error('illegal request')
-        }
-      } catch (error:any) {
-        setSubmitting('');
+        catch (error:any) {
         setErrorMessage(error.message);
         console.error(error);
-        
+      }finally{
+        setSubmitting(false);
       }
     }
   }
