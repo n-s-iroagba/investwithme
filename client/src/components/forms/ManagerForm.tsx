@@ -1,5 +1,5 @@
 import React, { useState} from 'react';
-import { Col, Form, Row, Spinner } from 'react-bootstrap';
+import { Col, Form, Modal, Row, Spinner } from 'react-bootstrap';
 import ErrorMessage from '../general/ErrorMessage';
 import { required } from '../auth/general/required';
 import ReactCrop, { type Crop } from 'react-image-crop'
@@ -17,12 +17,14 @@ const ManagerForm: React.FC<{ patch?: boolean }> = ({ patch }) => {
     ? JSON.parse(localStorage.getItem('cassockManager') || 'null') || {
         firstName: '',
         lastName: '',
+        image:'',
         minimumInvestmentAmount: 0,
         percentageYield: 0,
       }
     : {
         firstName: '',
         lastName: '',
+        image:'',
         minimumInvestmentAmount: 0,
         percentageYield: 0,
       };
@@ -32,75 +34,74 @@ const ManagerForm: React.FC<{ patch?: boolean }> = ({ patch }) => {
   const [errorMessage, setErrorMessage] = useState('');
   const [files, setFiles] = useState<any>(null)
   const [validated,setValidated] = useState(false)
+  const [show,setShow] = useState(false)
   const [crop, setCrop] = useState<Crop>({
     unit: 'px', 
     x: 25,
     y: 25,
-    width: 150,
-    height: 150,
+    width: 100,
+    height: 100,
   })
  const navigate = useNavigate()
 
-  const getCroppedBlob = async (file: File, crop: Crop): Promise<Blob> => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
+ const getCroppedBlob = (file: File, crop: Crop): Promise<string | undefined> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
 
-      reader.onload = (event) => {
-        const image = new Image();
-        image.src = event.target?.result as string; // Set the image source here
+    reader.onload = (event) => {
+      const image = new Image();
+      image.src = event.target?.result as string; // Set the image source here
 
-        image.onload = () => {
-          const canvas = document.createElement('canvas');
-          const ctx = canvas.getContext('2d');
+      image.onload = () => {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
 
-          if (!ctx) {
-            reject(new Error('Failed to get 2D context from canvas'));
-            return;
-          }
+        if (!ctx) {
+          reject('Unable to get 2d context');
+          return;
+        }
 
-          canvas.width = crop.width;
-          canvas.height = crop.height;
+        canvas.width = crop.width;
+        canvas.height = crop.height;
 
-          // Use imageRef.current for correct image rendering (optional)
-          // ctx.drawImage(imageRef.current!, crop.x, crop.y, crop.width, crop.height, 0, 0, crop.width, crop.height);
-
-          ctx.drawImage(image, crop.x, crop.y, crop.width, crop.height, 0, 0, crop.width, crop.height); // Use the loaded image
-
-          canvas.toBlob((blob) => {
-            if (!blob) {
-              reject(new Error('Failed to create Blob from canvas'));
-              return;
-            }
-            resolve(blob);
-          }, file.type);
-        };
+        ctx.drawImage(image, crop.x, crop.y, 200, 200, 0, 0, crop.width, crop.height); 
+        const croppedImage = canvas.toDataURL('image/jpeg', 1);
+        resolve(croppedImage);
       };
+    };
 
-      reader.onerror = () => {
-        reject(new Error('Failed to read file'));
-      };
+    reader.onerror = () => {
+      console.error('Error reading file');
+      reject('Error reading file');
+    };
 
-      reader.readAsDataURL(file);
-    });
-  };
+    reader.readAsDataURL(file);
+  });
+};
 
-  const done = async () => {
-    if (!files) {
-      console.error('No file selected for cropping');
-      return;
-    }
+const done = async () => {
+  if (!files) {
+    console.error('No file selected for cropping');
+    return;
+  }
+  setShow(false);
 
-    try {
-      const croppedBlob = await getCroppedBlob(files, crop);
-      setManagerData((prevData) => ({
+  try {
+    const croppedBlob = await getCroppedBlob(files, crop);
+    if(croppedBlob) {
+      console.log(croppedBlob);
+      setManagerData((prevData: ManagerType) => ({
         ...prevData,
         image: croppedBlob,
       }));
       console.log('Image cropped successfully!');
-    } catch (error) {
-      console.error('Error cropping image:', error);
-    }
-  };
+    } 
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+  
 
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -112,6 +113,7 @@ const ManagerForm: React.FC<{ patch?: boolean }> = ({ patch }) => {
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setShow(true)
     if (e.target.files) {
       setFiles(e.target.files[0]);
     }
@@ -142,11 +144,13 @@ const ManagerForm: React.FC<{ patch?: boolean }> = ({ patch }) => {
   return (
     <div className="d-flex justify-content-center align-content-center mt-5 px-2">
       {files && (
-        <ReactCrop circularCrop aspect={1} crop={crop} onChange={c => setCrop(c)}>
-          <img src={URL.createObjectURL(files)} alt='as' />
-          <button onClick={done}>Done</button>
+        <Modal show={show}>
+        <ReactCrop circularCrop aspect={1} crop={crop} onChange={(c) => {setCrop(c)
+        }}>
+          <img  className='w-100' src={URL.createObjectURL(files)} alt='as' />
         </ReactCrop>
-
+        <button onClick={done}>Done</button>
+        </Modal>
       )}
       <Form className="form py-5" noValidate validated={validated} onSubmit={handleSubmit}>
         <Row className="mb-3">
@@ -228,7 +232,7 @@ const ManagerForm: React.FC<{ patch?: boolean }> = ({ patch }) => {
           <button className="button-styles w-50 text-light" type={submitting ? 'submit' : 'submit'}>
           {submitting ? <Spinner animation='border' size='sm' /> : 'Submit'}
           </button>
-          <button className="button-styles text-light w-50">Home</button>
+          <button className="button-styles text-light w-50" onClick={()=>console.log(managerData)}>Home</button>
         </div>
       </Form>
       <ErrorMessage message={errorMessage} />

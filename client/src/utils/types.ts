@@ -111,7 +111,7 @@ export interface ManagerType {
     minimumInvestmentAmount: number
     percentageYield: number
     duration:number
-    image: any,
+    image: string,
     qualification: string
   }
 

@@ -28,7 +28,7 @@ const NewInvestmentForm: React.FC<{ username: string,}> = ({ username}) => {
     minimumInvestmentAmount: 0,
     percentageYield: 0,
     duration: 0,
-    image: null,
+    image: '',
     qualification: ''
   }
   const [investmentData, setInvestmentData] = useState<CreateInvestmentType>({
