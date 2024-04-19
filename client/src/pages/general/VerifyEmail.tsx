@@ -49,8 +49,9 @@ const VerifyEmail = () => {
       setCounter((prevCounter) => Math.max(0, prevCounter - 1));
       const verificationStatus = localStorage.getItem('cassockVerified')
       if (verificationStatus){
+        alert('close')
         setCounter(0)
-        navigate('/already-verified')
+        window.close()
       }
     }, 1000);
 
