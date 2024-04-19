@@ -9,13 +9,17 @@ const PrivateRoute: React.FC<{ Component: React.FC<any> }> = ({ Component }) => 
   const navigate = useNavigate()
 
   useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get('token');
+    if (token) {
+      localStorage.setItem('cassockJwtToken', token);
+      localStorage.setItem('cassockVerified', 'true');
+    }
     const authData = getInvestorAuthData()
     if (authData) {
-      if (authData.role==='investor') {
         setUsername(authData.username)
         setIsAuthenticated(true)
-      }
-    }else{
+      }else{
       navigate('/login')
     }
   }, [navigate])

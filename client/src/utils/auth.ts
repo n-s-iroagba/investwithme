@@ -1,60 +1,43 @@
 
-import { AdminAuthorizationData,DecodedToken } from "./types";
 import { jwtDecode } from "jwt-decode";
+import { AdminDecodedLoginToken, DecodedLoginToken } from './types';
 
 
-
-  export const getAuthData = (token:string): AdminAuthorizationData | DecodedToken| null => {
-
-
-    let decodedToken:  DecodedToken | null = null
-
-      decodedToken = jwtDecode(token);
-      if (decodedToken) {
-        if (decodedToken.role === 'admin') {
-          return {
-            authorised: true,
-            name: decodedToken.username,
-            role: decodedToken.role,
-            verificationStatus: decodedToken.verificationStatus,
-            email: decodedToken.email
-          };
-        } else {
-          return decodedToken;
-        }
-      } else {
-        return null;
-      }
-      
-  };
-
-  export const getAdminAuthData = ()=>{
-    return {
-      role:'admin',
-      username:'wakkias'
-    }
+const decodeLoginToken:()=>AdminDecodedLoginToken|DecodedLoginToken|null = ()=>{
+  const token = localStorage.getItem('cassockJwtToken')
+  if (token)
+  return jwtDecode(token) as AdminDecodedLoginToken|DecodedLoginToken
+  else
+    return null
+}
+export const getAdminAuthData = () => {
+  const decodedToken: AdminDecodedLoginToken | DecodedLoginToken | null = decodeLoginToken();
+  if (decodedToken && decodedToken.role === 'admin') {
+    return decodedToken;
   }
+  return null;
+};
+
   export const getInvestorAuthData = ()=>{
-    return {
-      role:'investor',
-      username:'wakkias'
-    }
+    const decodedToken: AdminDecodedLoginToken | DecodedLoginToken | null = decodeLoginToken();
+  if (decodedToken && decodedToken.role === 'investor') {
+    return decodedToken;
+  }
+  return null;
   }
   
-  
-  
-
-
   export const doPasswordsMatch = (password: string, confirmPassword: string) => {
     return password === confirmPassword;
   };
   
   
-  export const decodePasswordChangeToken = () => {
-    const token: string | null = localStorage.getItem('cassockPasswordChangeToken');
-    if (!token)
-    return null
-    const decoded :{id:string,role:string} |null=jwtDecode(token)
+  export const decodePasswordChangeToken = (token:string) => {
+  
+    const decoded :{id:string,role:string,email:string} |null= jwtDecode(token) as {id:string,role:string,email:string}
   return decoded
-   
   };
+
+  export const getVerificationTokenData = (token:string)=>{
+    const decoded:any= jwtDecode(token)
+    return decoded;
+  }

@@ -126,6 +126,7 @@ export const getNewbies = ()=>{
   ]
 }
 export const logOut = (navigate:(path:string)=>void)=>{
+  localStorage.removeItem('cassockJwtToken')
  navigate('/')
 }
 export const getManagers = ()=>{
@@ -152,37 +153,12 @@ export const getManagers = ()=>{
       }
   ]
 }
-export const getAdminWallets = ()=>{
-  return [   {
-    id: 1,
-    blockchain: 'Ethereum',
-    address: '0x1234567890abcdef',
-    network: 'Mainnet',
-    currency: 'ETH',
-  },
-   {
-    id: 2,
-    blockchain: 'Bitcoin',
-    address: 'bc1q2w3e4r5t6y7u8i9o0p',
-    network: 'Testnet',
-    currency: 'BTC',
-  },
-
- {
-    id: 3,
-    blockchain: 'Binance Smart Chain',
-    address: '0xa1b2c3d4e5f6g7h8i9j0k',
-    network: 'Testnet',
-    currency: 'BNB',
-  }
-      ]
-
- //returns array
-
+export const getAdminWallets:()=>WalletType[] = ()=>{
+  return []
 
 }
 
-export const getInvestmentNewbies =() =>{
+export const getInvestmentNewbies:()=>string[]=() =>{
   return ['referral']
 }
 
@@ -214,7 +190,7 @@ export const getInvestors = ()=>{
   ]
 }
 export const getNumberOfNewNotifications=()=>{
-  return 5;
+  return 1;
 }
 export const getAccountBalance =()=>{
   return 5000

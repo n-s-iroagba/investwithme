@@ -41,7 +41,7 @@ const SignUpForm: React.FC = () => {
     navigate('/')
   }
   const navigateToVerifyEmailPage = () => {
-    navigate('/')
+    navigate('/verify-email')
   }
 
   useEffect(() => {
@@ -50,7 +50,6 @@ const SignUpForm: React.FC = () => {
     )
       .then((response) => response.json())
       .then((data) => {
-        console.log('countries' + data)
         setCountries(data.countries);
        
       });
@@ -58,7 +57,7 @@ const SignUpForm: React.FC = () => {
 
   return (
 
-    <div className="d-flex justify-content-center align-content-center mt-5  px-2 ">
+    <div className="d-flex flex-column justify-content-center align-content-center mt-5  px-2 ">
       <Form className='form py-5' noValidate onSubmit={(e: any) => handleSubmit(investorData, e, createInvestorUrl, navigateToVerifyEmailPage)}>
 
         <Row className="mb-3">
@@ -113,7 +112,6 @@ const SignUpForm: React.FC = () => {
         <Form.Group className='mb-3' controlId="validationFormik04">
           <Form.Label>Country of residence{required}</Form.Label>
           <Select options={countries} onChange={(e: any) => {
-            console.log(e)
             setInvestorData({ ...investorData, country: e.label })
           }} className=' bg-transparent form-control' />
         </Form.Group>
@@ -211,13 +209,14 @@ const SignUpForm: React.FC = () => {
           <Form.Control.Feedback></Form.Control.Feedback>
         </Form.Group>
         </Row>
-        <br />
-        <div className='d-flex justify-content-evenly w-100'>
-          <button className='button-styles w-50 text-light' type={submitting === 'submitting' ? 'submit' : 'submit'}>
+        <Form.Group>
+        <div className='d-flex justify-content-evenly w-100 pb-5'>
+          <button className='button-styles w-50 text-light' type={submitting === 'submitting' ? 'button' : 'submit'}>
             {submitting === 'submitting' ? <Spinner animation='border' size='sm' /> : 'Submit'}
           </button>
           <button className='button-styles text-light w-50' onClick={() => navigateToHome()}> Home</button>
         </div>
+        </Form.Group>
       </Form>
       <ErrorMessage message={errorMessage} />
     </div>

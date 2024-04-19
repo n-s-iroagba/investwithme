@@ -115,28 +115,25 @@ export interface ManagerType {
     qualification: string
   }
 
-export interface DecodedToken {
+export interface DecodedLoginToken {
     id: string;
-    role: 'admin'|'investor';
-    hasInvested?:boolean;
+    role:'investor';
+    hasInvested:boolean;
     username:string
-    verificationStatus:'verified'|'verifying'
+    verificationStatus:boolean
     email:string
   }   
 
-export interface AdminAuthorizationData{
-    authorised:boolean;
-    name:string
-    verificationStatus:'verified'|'verifying'
+export interface AdminDecodedLoginToken{
+    username:string
+    verificationStatus:boolean
     role:'admin'
     email:string
 }
-
-export interface AuthorizationData extends DecodedToken {
-    authorised: boolean;
-  }
-
-
+export interface EmailVerificationToken{
+  id:number,
+  timeOfCreation:string,
+}
   export interface InvestmentTiersType{
     firstName: string,
     lastName: string,

@@ -41,7 +41,7 @@ const LoginForm: React.FC = () => {
       } else if (response.status === 400) {
         navigate('/signup');
       } else {
-        localStorage.setItem('cassockAuthToken', JSON.stringify(response.data));
+        localStorage.setItem('cassockJwtToken', JSON.stringify(response.data));
         navigate('/verify-email');
       }
     } catch (error) {

@@ -37,6 +37,7 @@ import PatchManager from "./pages/admin/PatchManager";
 import Bonus from "./pages/admin/Bonus";
 import Investors from "./pages/admin/Investors";
 import PrivateRoute from "./components/auth/general/PrivateRoute";
+import EmailVerificationError from "./pages/general/EmailVerificationError";
 
 
 
@@ -178,9 +179,12 @@ element: <Email />
 },
 
 {
-    path:'/new-password',
+    path:'/new-password/:token',
     element: <NewPassword />
 },
-
+{
+    path:'/email-verification-error',
+    element: <EmailVerificationError/>
+},
 
 ])

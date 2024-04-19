@@ -28,7 +28,6 @@ export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({ c
     gender: '',
     country: '',
     bank: '',
-    timezone: '',
     referralCode: ''
   })
   const [newPasswordData, setNewPasswordData] = useState<NewPasswordData>({
@@ -37,6 +36,7 @@ export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({ c
   });
 
   const handleSubmit = async (data: AdminData | InvestorData, event: React.FormEvent<HTMLFormElement>, domain: string, navigateToVerifyEmailPage: () => void) => {
+  
     event.preventDefault();
     const form = event.currentTarget
     const password = data.password
@@ -47,6 +47,8 @@ export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({ c
     let shouldSubmit: boolean = true //flag to check if form details are good enough to be submitted
     if ('secretCode' in data) {
       secretCodeMatch = data.secretCode === process.env.REACT_APP_ADMIN_SECRET_KEY ? true : false
+    }else{
+      secretCodeMatch = true
     }
     if (form.checkValidity() === false || !passwordCorrect || !passwordMatch || !secretCodeMatch) {
       setValidated(true)
@@ -58,10 +60,14 @@ export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({ c
       setSubmitting('submitting')
       try {
         const response = await postData(domain, data)
-        if (response.statusText === 'Created') {
+        if (response.status===201) {
           console.log(response.data)
           localStorage.setItem('cassockEmailVerificationToken', JSON.stringify(response.data))
           navigateToVerifyEmailPage()
+        }else if (response.status === 409) {
+          setErrorMessage('This user is already registered.,kindly login');
+          setSubmitting('not-submitting')
+          return;
         }
       } catch (error: any) {
         setErrorMessage('we are sorry, we cannot register you at this time')
@@ -158,23 +164,25 @@ export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({ c
     let shouldSubmit: boolean = true //flag to check if form details are good enough to be submitted
 
 
-    setSubmitting('submitting')
   
-      if (form.checkValidity() === false || !passwordCorrect || !passwordMatch) {
-        setValidated(true)
-        shouldSubmit = false
-        event.stopPropagation();
-      }
-      if (shouldSubmit) {
-        setSubmitting('submitting');
-        try {
 
-          const decodedToken: { id: string, role: string } | null = decodePasswordChangeToken();
+    if (form.checkValidity() === false || !passwordCorrect || !passwordMatch) {
+      setValidated(true)
+      shouldSubmit = false
+      event.stopPropagation();
+    }
+    if (shouldSubmit) {
+      setSubmitting('submitting');
+      try {
+        const token = localStorage.getItem('cassockPasswordChangeToken')
+        if (token) {
+          const decodedToken: { id: string, role: string, email: string }|null = decodePasswordChangeToken(token);
           if (!decodedToken) {
             throw new Error('illegal request')
           }
           else {
-            const response = await postData(`${newPasswordRoute}/${decodedToken.id}`, { ...data, password });
+
+            const response = await postData(`${newPasswordRoute}/${decodedToken.id}`, { password }, token);
             console.log(response);
 
             if (response.status === 403) {
@@ -191,43 +199,47 @@ export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({ c
               }
             }
           }
-        } catch (error) {
-          setErrorMessage('Sorry, you cannot login at this time. We are maintaining our servers due to heavy traffic.');
-          console.error(error);
-          setSubmitting('');
+        }else {
+          throw new Error('illegal request')
         }
+      } catch (error:any) {
+        setSubmitting('');
+        setErrorMessage(error.message);
+        console.error(error);
+        
       }
     }
-  
-    const authContextValue: AuthContextType = {
-      setAdminData,
-      adminData,
-      submitting,
-      isPasswordsMatch,
-      errorMessage,
-      setErrorMessage,
-      validated,
-      setValidated,
-      handlePasswordChange,
-      handleConfirmPasswordsChange,
-      checkIfPasswordsMatch,
-      showPassword,
-      handleSubmit,
-      handleChange,
-      passwordType,
-      passwordValidityMessage,
-      setInvestorData,
-      investorData,
-      newPasswordData,
-      setNewPasswordData,
-      handleChangePassword,
-    };
+  }
 
-    return (
-      <AuthContext.Provider value={authContextValue}>
-        {children}
-      </AuthContext.Provider>
-    );
+  const authContextValue: AuthContextType = {
+    setAdminData,
+    adminData,
+    submitting,
+    isPasswordsMatch,
+    errorMessage,
+    setErrorMessage,
+    validated,
+    setValidated,
+    handlePasswordChange,
+    handleConfirmPasswordsChange,
+    checkIfPasswordsMatch,
+    showPassword,
+    handleSubmit,
+    handleChange,
+    passwordType,
+    passwordValidityMessage,
+    setInvestorData,
+    investorData,
+    newPasswordData,
+    setNewPasswordData,
+    handleChangePassword,
   };
 
-  export const AuthContext = createContext<AuthContextType | undefined>(undefined);
+  return (
+    <AuthContext.Provider value={authContextValue}>
+      {children}
+    </AuthContext.Provider>
+  );
+};
+
+export const AuthContext = createContext<AuthContextType | undefined>(undefined);

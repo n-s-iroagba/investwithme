@@ -5,6 +5,7 @@ export const companyName = `Cassock`
 
 export const loginUrl =  `${domain}/login`
 export const resendVerificationTokenRoute = `${domain}/resend-verification-token`
+export const requestNewPasswordUrl = `${domain}/request-passswordChange`
 export const newPasswordRoute = `${domain}/new-password`
 
 export const createAdminUrl = `${domain}/create-admin`

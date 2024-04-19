@@ -1,20 +1,22 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckCircle } from '@fortawesome/free-solid-svg-icons';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { getAuthData } from '../../utils/auth';
+import {  useNavigate } from 'react-router-dom';
+import {  getInvestorAuthData } from '../../utils/auth';
 
 interface EmailVerifiedProps {
   userEmail: string;
 }
 
 const EmailVerified: React.FC<EmailVerifiedProps> = ({ userEmail }) => {
+  const navigate = useNavigate()
   return (
-    <div className="email-verified-container">
+    <div className="email-verified-container d-flex flex-column align-items-center">
       <FontAwesomeIcon icon={faCheckCircle} className="icon" />
-      <h2>Email Verified</h2>
-      <p>Your email address ({userEmail}) has been successfully verified.</p>
-      <p>You can now login to access your account.</p>
+      <h2 className='text-center'>Email Verified</h2>
+      <p className='text-center'> Your email address ({userEmail}) has been successfully verified.</p>
+      <p className='text-center'>You can now login to access your account.</p>
+      <button className = 'button-styles button-width-narrow' onClick={()=>navigate('/login')}>Login</button>
     </div>
   );
 };
@@ -24,32 +26,21 @@ const EmailVerified: React.FC<EmailVerifiedProps> = ({ userEmail }) => {
 
 const EmailVerifiedPage: React.FC = () => {
     const navigate = useNavigate();
-    const location = useLocation();
-    const emailRef = useRef<string>(''); // Initialize with an empty string
-  
+    const [userEmail,setUserEmail]= useState('')
     useEffect(() => {
-      const queryParams = new URLSearchParams(location.search);
-      const tokenFromQuery = queryParams.get('token');
-      
-      if (tokenFromQuery) {
-        const decodedToken = getAuthData(tokenFromQuery);
-        if (decodedToken) {
-          emailRef.current = decodedToken.email; // Store email in emailRef.current
-        } else {
-          const storedToken = localStorage.getItem('cassockJwtToken');
-          if (storedToken) {
-            navigate('/dashboard');
+         const authData = getInvestorAuthData()
+         if (authData) {
+          const email = authData.email
+           setUserEmail(email)
           } else {
             navigate('/login');
           }
-        }
-      }
-    }, [location.search, navigate]);
+    }, [navigate]);
   
     return (
       <div className="email-verification-page">
-        <h1>Email Verification Success</h1>
-        <EmailVerified userEmail={emailRef.current} />
+        <h1 className='text-center'>Email Verification Success</h1>
+        <EmailVerified userEmail={userEmail} />
       </div>
     );
   };

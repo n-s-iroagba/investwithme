@@ -16,7 +16,6 @@ export interface AdminData {
     gender:string;
     country:string
     bank:string;
-    timezone: string
     referralCode:string
   }
 export interface NewPasswordData{
