@@ -2,36 +2,38 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const JWT_SECRET = 'ababanna'
 
- const createLoginJWT =(user,role)=>{
-    return jwt.sign({ name: user.firstName|user.name, role:role,hasInvested:user.hasInvested }, JWT_SECRET);
-}
-
-const decodeJWT = (token)=>{
-    return jwt.verify(token, JWT_SECRET);
-}
-
 const encryptPassword = (password)=>{
-   return bcrypt.hash(password, 10)
+  return bcrypt.hash(password, 10)
+}
+const decodeJWT = (token)=>{
+  return jwt.verify(token, JWT_SECRET);
 }
 
-const createVerificationJWT =(id)=>{
-    return jwt.sign({ id:id, status:'email-verification'}, JWT_SECRET);
+ const createLoginJWT =(user)=>{
+    return jwt.sign({ id:user.id,email:user.email,username: user.firstName, role:'investor',verified:!user.verificationCode?true:false, hasInvested:user.hasInvested }, JWT_SECRET);
+}
+const createAdminLoginJWT =(user)=>{
+  return jwt.sign({ username: user.name, email:user.email,verified:!user.verificationCode?true:false, role:'admin',}, JWT_SECRET);
 }
 
-const generateEmailVerificationToken = (email) => {
-    return jwt.sign({ email }, JWT_SECRET, { expiresIn: '10m' });
-  }
+const generateEmailVerificationToken =(id)=>{
+    return jwt.sign({ id:id, timeOfCreation: new Date()}, JWT_SECRET);
+}
+
+const generatePasswordResetToken = (id,email,role)=>{
+  return jwt.sign( {id:id,email:email,timeOfCreation: new Date(),role:role},JWT_SECRET);
+}
+
+const createNewPasswordToken = (id,email)=>{
+  return jwt.sign( {id:id,email:email,},JWT_SECRET);
+}
 
 
-
-
-
-// Helper functions (replace with your implementation)
-function verifyPasswordResetToken(token) {
-    // Implement logic to verify and decode the password reset token using a secret key
-  }
-  
-  function generatePasswordResetToken(userId) {
-    // Implement logic to generate a new password change token for the user
-  }
-module.exports ={generatePasswordResetToken, verifyPasswordResetToken,verifyPasswordResetToken,generateEmailVerificationToken,createLoginJWT,decodeJWT,encryptPassword,createVerificationJWT}
+module.exports ={
+  generatePasswordResetToken,
+decodeJWT,
+generateEmailVerificationToken,
+createLoginJWT,
+encryptPassword,
+createNewPasswordToken,
+createAdminLoginJWT}

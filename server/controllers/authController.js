@@ -1,9 +1,15 @@
 
- const {ALREADY_VERIFIED_ROUTE,EMAIL_VERIFICATION_ERROR_ROUTE,ADMIN_CLIENT_DASHBOARD_ROUTE,REQUEST_PASSWORD_RESET,JWT_SECRET,CLIENT_DASHBOARD_ROUTE} = require('../config');
+ const {ALREADY_VERIFIED_ROUTE,EMAIL_VERIFICATION_ERROR_ROUTE,ADMIN_CLIENT_DASHBOARD_ROUTE,NEW_PASSWORD_URL,JWT_SECRET,CLIENT_DASHBOARD_ROUTE,EMAIL_VERIFICATION_ROUTE } = require('../config');
 const { Investor, Admin, Notification, Referral } = require('../model')
-const { encryptPassword, createVerificationJWT,createLoginJWT } = require('../auth')
+const {  generatePasswordResetToken,
+  decodeJWT,
+  generateEmailVerificationToken,
+  createLoginJWT,
+  encryptPassword,
+  createNewPasswordToken,
+  createAdminLoginJWT } = require('../auth')
 
-const { sendVerificationEmail, sendReferalCompletedMail } = require('../service')
+const { sendVerificationEmail, sendReferalCompletedMail,sendPasswordResetEmail } = require('../service')
 const bcrypt = require('bcrypt');
 
 
@@ -19,13 +25,13 @@ module.exports = {
 
       password = await encryptPassword(password);
       const admin = await Admin.create({ name, email, password });
-      const verificationToken = createVerificationJWT(admin.id);
+      const verificationToken = generateEmailVerificationToken( admin.id);
       admin.verificationToken = verificationToken;
       await admin.save();
 
       await sendVerificationEmail(admin, verificationToken);
 
-      return res.status(201).json({ message: 'Admin created successfully', verificationToken });
+      return res.status(201).json(verificationToken);
     } catch (error) {
       return res.status(400).json({ message: error.message });
     }
@@ -33,20 +39,20 @@ module.exports = {
 
   createInvestor: async (req, res) => {
     try {
-      let { firstName, lastName, dateOfBirth, email, password, gender, country, bank, timezone, referralCode } = req.body;
+      let { firstName, lastName, dateOfBirth, email, password, gender, country, bank, referralCode } = req.body;
 
       const existingInvestor = await Investor.findOne({ where: { email } });
       if (existingInvestor) {
-        return res.status(409).json({ error: 'Investor with this email already exists' });
+        return res.status(409).json({ message: 'Investor with this email already exists' });
       }
 
       password = await encryptPassword(password);
-      const newInvestor = await Investor.create({ firstName, lastName, dateOfBirth, email, password, gender, country, bank, timezone });
+      const newInvestor = await Investor.create({ firstName, lastName, dateOfBirth, email, password, gender, country, bank });
       newInvestor.referralCode = newInvestor.id + 2222;
 
-      const token = createVerificationJWT(newInvestor.id);
+      const token = generateEmailVerificationToken( newInvestor.id);
       newInvestor.verificationToken = token;
-
+     
       if (referralCode) {
         const refereeInvestor = await Investor.findOne({ where: { referralCode: referralCode } });
         if (refereeInvestor) {
@@ -85,7 +91,7 @@ module.exports = {
       }
   
       if (!user.verified) {
-        const token = createVerificationJWT(user);
+        const token = generateEmailVerificationToken( user);
         user.verificationToken = token;
         await user.save();
         await sendVerificationEmail(user);
@@ -93,10 +99,15 @@ module.exports = {
       }
       const passwordsMatch = await bcrypt.compare(password, user.password);
       if (passwordsMatch) {
-        const jwToken = createLoginJWT(user,userType);
-        return res.status(200).json({ userType, token: jwToken });
-      } else {
-        return res.status(400).json({ message: 'Wrong password' });
+        let loginToken;
+      if (userType === 'investor') {
+      
+      loginToken = createLoginJWT(user)
+      }else{
+        loginToken = createAdminLoginJWT(user)
+      }
+   
+      return res.status(200).json(loginToken)
       }
     } catch (error) {
       return res.status(400).json({ message: error.message });
@@ -105,10 +116,13 @@ module.exports = {
   
   verifyMail: async (req, res) => {
     const { token } = req.params;
+    const decoded = decodeJWT(token);
     try {
-      const decoded = decodeJWT(token);
-      if (Date.now() >= decoded.exp * 1000) {
-        return res.status(401).json({ error: 'Token expired. Please request a new one.' });
+      let creationTime = new Date(decoded.timeOfCreation);
+      creationTime.setMinutes(creationTime.getMinutes() + 10);
+      
+      if (Date.now() >= creationTime) {
+        return res.status(401).redirect(`${EMAIL_VERIFICATION_ROUTE}/?token=${token}` );;
       }
       let user = await Admin.findOne({ where: { verificationToken: token } });
       let userType = 'admin';
@@ -127,11 +141,15 @@ module.exports = {
       await user.update({ verified: true, verificationToken: null });
       user.save();
       console.log(`${userType} after update: ${user}`);
-      const jwToken = createLoginJWT(user);
-      if (userType==='investor'){
+      ;
+      if (userType==='admin'){
+        const jwToken = createAdminLoginJWT(user)
         return res.redirect(`${ADMIN_CLIENT_DASHBOARD_ROUTE}/?token=${jwToken}`);
+      }else{
+        const jwToken = createLoginJWT(user)
+        return res.redirect(`${CLIENT_DASHBOARD_ROUTE}/?token=${jwToken}`);
       }
-     return res.redirect(`${CLIENT_DASHBOARD_ROUTE}/?token=${jwTtoken}`);
+     
     } catch (error) {
       console.error('Error verifying email:', error);
       return res.status(500).json({ error: 'An error occurred while verifying your email. Please try again later.' });
@@ -139,20 +157,21 @@ module.exports = {
   },
 
   resendVerificationToken: async (req, res) => {
-    const { token } = req.params;
+    const { id } = req.params;
+
     try {
-      let user = await Admin.findOne({ where: { verificationToken: token } });
+      let user = await Admin.findByPk(id);
       if (!user) {
-        user = await Investor.findOne({ where: { verificationToken: token } });
+        user = await Investor.findByPk(id);
         if (!user) {
-          return res.status(400).redirect(EMAIL_VERIFICATION_ERROR_ROUTE);
+          return res.status(404).json('no user found')
         }
       }
-      const newToken = createVerificationJWT(user.id);
+      const newToken = generateEmailVerificationToken( user.id);
       user.verificationToken = newToken;
       user.save();
       await sendVerificationEmail(user, newToken); // Wait for email to be sent
-      return res.status(200).json({ token: newToken }); // Return the new token
+      return res.status(200).json(newToken); // Return the new token
     } catch (error) {
       return res.status(400).json({ message: error.message });
     }
@@ -164,67 +183,83 @@ module.exports = {
     try {
 
       let user = await Admin.findOne({ where: { email } });
+      
+      let role = 'admin'
       if (!user) {
+        console.log(bbbbb)
         user = await Investor.findOne({ where: { email } });
         if (!user) {
           return res.status(404).json({ error: 'User not found.' });
+        }else{
+          role = 'investor'
         }
       }
 
-      const resetToken = generatePasswordResetToken(user);
-      user.passwordResetToken = resetToken;
+      const resetToken = generatePasswordResetToken(user.id,user.email,role);
+      user.changePasswordToken= resetToken;
       user.save();
-      await sendPasswordResetEmail(user, resetToken); // Implement this function to send email with resetToken
+     
+      await sendPasswordResetEmail(user, resetToken); 
 
-      return res.status(201);
+      
+      
+      return res.status(200);
     } catch (error) {
-      return res.status(500).json({ error: 'An error occurred while processing your request.' });
-    }
+      console.log(error.message)
+    
+      return res.status(500).json({ error: error.message });
+     
+  }
   },
-
   confirmMailForPasswordChange: async (req, res) => {
     const { token } = req.params;
+    console.log(token)
     try {
-      const decoded = jwt.verify(token, JWT_SECRET);
-      if (Date.now() >= decoded.exp * 1000) {
-        return res.redirect(REQUEST_PASSWORD_RESET);
-      }
-      let user = await Admin.findOne({ where: { PasswordResetToken: token } });
+      // const decoded = decodeJWT(token);
+      //   let creationTime = new Date(decoded.timeOfCreation);
+      //   creationTime.setMinutes(creationTime.getMinutes() + 10);
+      // if (Date.now() >= decoded.exp * 1000) {
+      //   return res.redirect(REQUEST_PASSWORD_RESET);
+      // }
+  
+      let user = await Admin.findOne({ where: { changePasswordToken: token } });
       if (!user) {
-        user = await Investor.findOne({ where: { PasswordResetToken: token } })
+        user = await Investor.findOne({ where: {changePasswordToken: token } })
         if (!user) {
-          return res.status(400).json({ error: 'Invalid verification token' });
+          throw new Error('no such user')
         }
-        const token = createNewPasswordToken(user.id)
-
-        return res.redirect(`${NEW_PASSWORD_URL}/${token}`)
       }
+      const newtoken = createNewPasswordToken(user.id,user.email)
+      
+
+        return res.redirect(`${NEW_PASSWORD_URL}/?token=${newtoken}`)
     } catch (error) {
-      console.error('Error verifying email:', error);
-      return res.status(500).json({ error: 'An error occurred while verifying your email. Please try again later.' });
+      console.error('Error verifying email:', error.message);
+      return res.status(500).json({ error: error.message});
     }
   },
 
   changePassword: async (req, res) => {
-    const id = request.params
-    const { password } = req.body
+    const {id}= req.params
+    const { password } = req.body;
     try {
       let user = await Admin.findByPk(id)
       let userType = 'admin'
-      if (!user) {
-        user = await Investor.findByPk(id)
-        userType = 'investor'
+    
+        
         if (!user) {
           return res.status(400).json({ error: 'Invalid verification token' });
         }
-      }
-      user.password = await bcrypt.hash(password, 10)
+      
+ 
+        const loginToken = createAdminLoginJWT(user)
+      
       user.save()
-      const loginToken = createLoginToken(user, userType)
       return res.status(201).json(loginToken)
 
     } catch (error) {
-      throw new Error(`Error logging in admin: ${error.message}`);
+      console.error('Error changing password :', error.message);
+      return res.status(500).json({ error: error.message});
     }
   },
 

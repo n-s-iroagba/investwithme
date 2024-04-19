@@ -7,13 +7,15 @@ const COMPANY_VERIFICATION_EMAIL = 'iroagba97@gmail'
 const COMPANY_REFERRAL_EMAIL = 'iroagba97@gmail'
 
 const TOKEN_EXPIRATION_TIME = '10 minutes'
-
+const NEW_PASSWORD_URL = CLIENT_DOMAIN+'new-password'
  const VERIFY_EMAIL_REDIRECT_ROUTE = CLIENT_DOMAIN+'verify-email' 
  const ADMIN_CLIENT_DASHBOARD_ROUTE = CLIENT_DOMAIN+'admin/dashboard'
  const ADMIN_CLIENT_CHANGE_PASSWORD_ROUTE = CLIENT_DOMAIN +'admin/change-password'
  const EMAIL_VERIFICATION_ERROR_ROUTE = CLIENT_DOMAIN + 'email-verification-error'
+ const EMAIL_VERIFICATION_ROUTE = CLIENT_DOMAIN+'verify-email'
  const SERVER_VERIFY_EMAIL_ROUTE = SERVER_DOMAIN+'verify-email'
  const REQUEST_PASSWORD_RESET = CLIENT_DOMAIN+'password-reset'
+ const VERIFY_PASSWORD_RESET_TOKEN_URL = SERVER_DOMAIN+'verify-password-token'
  const JWT_SECRET = 'ababanna'
 
  const CLIENT_DASHBOARD_ROUTE = CLIENT_DOMAIN+'dashboard'
@@ -44,6 +46,9 @@ const TOKEN_EXPIRATION_TIME = '10 minutes'
     PROMO_PERCENT,
     REFERRAL_BONUS_PERCENT,
     INVESTMENT_TENURE,
+    EMAIL_VERIFICATION_ROUTE ,
+    VERIFY_PASSWORD_RESET_TOKEN_URL,
+    NEW_PASSWORD_URL,
     howToInvestMessage
 }
 

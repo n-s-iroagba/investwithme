@@ -1,63 +1,8 @@
 
 const {PROMO_PERCENT,INVESTMENT_TENURE,REFERRAL_BONUS_PERCENT, COMPANY_NAME} = require('../config')
 const {Investor,Manager,DepositWallet,Referral,Investment,Transaction,Notification} = require('../model');
-const { sendReferralBonusEmail, sendCompleteInvestmentDepositReceivedEmail, sendIncompleteInvestmentDepositReceivedEmail } = require('../service');
 const {findManagerWithHighestMinInvestment} =require('../helpers')
 module.exports = {
-  
-  payInvestors: async (req, res) => {
-    try {
-      const { walletAddress } = req.body;
-  
-      const wallet = await DepositWallet.findOne({ where: { address: walletAddress } });
-  
-      if (!wallet) {
-        return res.status(404).json({ message: 'Deposit wallet not found' });
-      }
-  
-      const investor = await Investor.findOne({
-        include: [
-          {
-            model: Investment,
-            include: [
-              {
-                model: DepositWallet,
-                where: { id: wallet.id },
-              },
-            ],
-          },
-        ],
-      });
-  
-      if (!investor) {
-        return res.status(404).json({ message: 'Investor not found' });
-      }
-  
-      const investment = investor.Investment;
-      if (!investment) {
-        return res.status(404).json({ message: 'Investment not found' });
-      }
- 
-      investment.amount -= investment.amount * PROMO_PERCENT;
-      await investment.save();
-  
-      // Implement createTransaction function
-      // await createTransaction(investor.id,investment.amount * PROMO_PERCENT, 'Debit');
-
-      // Implement Notification creation
-      // await Notification.create({ time: new Date(), message: 'hello this is payment notification' });
-  
-      // Implement sendPaymentMail function
-      // await sendPaymentMail(investor, investment.amount * PROMO_PERCENT);
-  
-      return res.status(200).json({ message: 'Payment successful', investment });
-    } catch (error) {
-      console.error('Error occurred:', error.message);
-      return res.status(500).json({ error: 'Internal server error' });
-    }
-  },
-  
-
 
   getAllInvestors: async (_, res) => {
     try {

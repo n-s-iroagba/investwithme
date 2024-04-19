@@ -78,10 +78,6 @@ const Investor = sequelize.define("Investor", {
     type: Sequelize.STRING,
     allowNull: false,
 },
-    timezone:{
-        type:Sequelize.STRING,
-        allowNull:false
-    },
     referralCode:{
       type:Sequelize.INTEGER,
       allowNull:true,
@@ -201,7 +197,7 @@ const Transaction = sequelize.define('transaction', {
       type:Sequelize.FLOAT,
       allowNull: false,
     },
-    participatingAccound: {
+    participatingAccount: {
       type:Sequelize.STRING,
       allowNull: false,
       validate: {
@@ -220,7 +216,7 @@ const Transaction = sequelize.define('transaction', {
       type:Sequelize.STRING,
       allowNull: false,
       validate: {
-        isIn: [['Deposit', 'Credit']],
+        isIn: [['Debit', 'Credit']],
       },
     },
   });
@@ -230,11 +226,6 @@ const Transaction = sequelize.define('transaction', {
     onDelete: 'CASCADE', 
   });
 
-  Investment.Admin.hasMany(Transaction, {
-    foreignKey: 'investmentId',
-    onDelete: 'CASCADE', 
-  });
-  
   const Referral = sequelize.define('Referral', {
     id: {
       type: Sequelize.INTEGER,
@@ -377,7 +368,6 @@ const Admin = sequelize.define('admin', {
     },
     verificationToken:{
         type:Sequelize.STRING,
-        defaultValue:"",
         allowNull:true
     },
     verified: {

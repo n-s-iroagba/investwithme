@@ -11,8 +11,8 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-cron.schedule('0 0 */17 * *', updateInvestmentEarningsAndNotifiy());
-cron.schedule('0 7 * * *', sendInvestmentReminderEmails())
+// cron.schedule('0 0 */17 * *', updateInvestmentEarningsAndNotifiy());
+// cron.schedule('0 7 * * *', sendInvestmentReminderEmails())
 
 app.use('/', routes)
 
@@ -20,7 +20,8 @@ app.use('/login', routes);
 app.use('/verify-email/:token',routes)
 app.use("/resend-verification-token/:id", routes)
 app.use ("/request-passswordChange", routes)
-app.use('/new-password', routes)
+app.use('/new-password/:id', routes)
+app.use("/verify-password-token/:token", routes)
 
 app.use('/create-admin', routes); 
 

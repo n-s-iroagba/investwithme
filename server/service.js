@@ -1,7 +1,7 @@
 const nodemailer = require('nodemailer');
 const moment = require('moment-timezone');
-const { SERVER_VERIFY_EMAIL_ROUTE, COMPANY_NAME, TOKEN_EXPIRATION_TIME, COMPANY_VERIFICATION_EMAIL,COMPANY_REFERRAL_EMAIL } = require('./config');
-const {getVerificationEmailContent} = require('./helpers')
+const { SERVER_VERIFY_EMAIL_ROUTE, COMPANY_NAME, TOKEN_EXPIRATION_TIME, COMPANY_VERIFICATION_EMAIL,COMPANY_REFERRAL_EMAIL,VERIFY_PASSWORD_RESET_TOKEN_URL} = require('./config');
+const {getVerificationEmailContent,getNewPasswordEmailContent} = require('./helpers')
 const Investor = require('./model'); 
 
 const transporter = nodemailer.createTransport({
@@ -31,6 +31,41 @@ const sendVerificationEmail = async (user, verificationToken) => {
     throw new Error('Error sending verification email');
   }
 };
+
+const sendReferalCompletedMail= async(refreeInvestor,newInvestor)=>{
+  let mailOptions = {
+        from: COMPANY_REFERRAL_EMAIL,
+        to: refreeInvestor.email,
+        subject: 'Referral Mail',
+        text: `Dear ${refreeInvestor.firstName},\n\n Thank you for referring to ${newInvestor.lastName}, ${newInvestor.firstName}. Your referral bonus shall be credited to ${COMPANY_NAME} most recent investement acoount,
+        when the referred investor makes the first deposit.
+       \n Thank you ${newInvestor.firstName}`
+  }
+  try{
+      await transporter.sendMail(mailOptions)
+      }catch (error) {
+        console.error('Error sending verification email:', error);
+        throw(new Error(error))
+ }
+}
+
+const sendPasswordResetEmail=async (user, verificationToken) => {
+  const verificationUrl = `${VERIFY_PASSWORD_RESET_TOKEN_URL}/${verificationToken}`;
+  const emailHtmlContent = getNewPasswordEmailContent(verificationUrl, TOKEN_EXPIRATION_TIME, COMPANY_NAME);
+  try {
+    const emailBody = { html: emailHtmlContent };
+    await transporter.sendMail({
+      from: COMPANY_VERIFICATION_EMAIL,
+      to: user.email,
+      subject: `Change your ${COMPANY_NAME} account password`,
+      ...emailBody,
+    });
+  } catch (error) {
+    console.error('Error sending password change email:', error.message);
+    throw new Error(error.message);
+  }
+};
+
 
 const sendHowToInvestMail= async(investor)=>{
   //Correct the mails
@@ -99,28 +134,13 @@ const sendIncompleteInvestmentDepositReceivedEmail = async (investor,investment,
     }
   });
 };
-
-// const sendReferalCompletedMail= async(refreeInvestor,newInvestor)=>{
-//   let mailOptions = {
-//         from: COMPANY_REFERRAL_EMAIL,
-//         to: refreeInvestor.email,
-//         subject: 'Referral Mail',
-//         text: `Dear ${refreeInvestor.firstName},\n\n Thank you for referring to ${newInvestor.lastName}, ${newInvestor.firstName}. Your referral bonus shall be credited to ${COMPANY_NAME} most recent investement acoount,
-//         when the referred investor makes the first deposit.
-//        \n Thank you ${newInvestor.firstName}`
-//   }
-//   try{
-//       await transporter.sendMail(mailOptions)
-//       }catch (error) {
-//         console.error('Error sending verification email:', error);
-//         throw(new Error(error))
-//  }
+// const sendPromoBonusPaymentMail= async (investor, amount) =>{
+//   //implement
 // }
 
-// const sendPasswordResetEmail=()=>{
 
 
-// }
+
 
 
 
@@ -273,4 +293,10 @@ const sendIncompleteInvestmentDepositReceivedEmail = async (investor,investment,
 // }
 
 
-module.exports = {sendVerificationEmail,sendHowToInvestMail,sendReferralBonusEmail, sendCompleteInvestmentDepositReceivedEmail, sendIncompleteInvestmentDepositReceivedEmail};
+module.exports = {
+  sendVerificationEmail,
+  sendReferalCompletedMail,
+  sendPasswordResetEmail,
+
+ 
+};
