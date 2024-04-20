@@ -4,39 +4,38 @@ const { COMPANY_NAME } = require("./config");
 
 
 const Manager = sequelize.define("Manager", {
-    id: {
-        type: Sequelize.INTEGER,
-        autoIncrement: true,
-        allowNull: false,
-        primaryKey: true,
-    },
-    lastName: {
-        type: Sequelize.STRING,
-        allowNull: false,
-    },
-    firstName: {
-        type: Sequelize.STRING,
-        allowNull: false,
-    },
-    image: {
+  id: {
+      type: Sequelize.INTEGER,
+      autoIncrement: true,
+      allowNull: false,
+      primaryKey: true,
+  },
+  lastName: {
       type: Sequelize.STRING,
       allowNull: false,
   },
-    minimumDeposit: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-    },
-
-    returnPercentage: {
-        type: Sequelize.DOUBLE,
-        allowNull: false,
-    },
-    country: {
-        type: Sequelize.STRING,
-        allowNull: false,
-    },
-
+  firstName: {
+      type: Sequelize.STRING,
+      allowNull: false,
+  },
+  image: {
+      type: Sequelize.BLOB('long'), // Use Sequelize.BLOB for binary data like images
+      allowNull: false,
+  },
+  minimumInvestmentAmount: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+  },
+  percentageYield: {
+      type: Sequelize.DOUBLE,
+      allowNull: false,
+  },
+  duration: {
+    type: Sequelize.INTEGER,
+    allowNull: false,
+},
 });
+
 
 const Investor = sequelize.define("Investor", {
     id: {

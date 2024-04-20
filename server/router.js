@@ -1,8 +1,9 @@
 express = require('express')
-
+const multer  = require('multer');
 const investorController = require('./controllers/investorcontroller')
 const adminController = require('./controllers/adminController')
 const authController = require('./controllers/authController')
+const {isAdmin,isInvestor} = require('./auth')
 
 router = express.Router()
 
@@ -24,10 +25,29 @@ router.post('/new-password/:id',authController.changePassword )
  router.patch('/pay',)
  router.delete('/delete-investor/:id',)
 
- router.post("/create-manager", adminController.createManager)
- router.get('/get-managers', )
- router.patch('patch-manager',)
- router.delete('/delete-manager/:id',)
+ router.post("/create-manager", (req, res, next) => {
+    // Log req.body here
+    console.log('req.body:', req.body);
+  
+    adminController.upload(req, res, (err) => {
+      if (err instanceof multer.MulterError) {
+        // A Multer error occurred when uploading.
+        console.error('Multer error:', err);
+        res.status(500).json({ error: 'Error uploading file' });
+      } else if (err) {
+        // An unknown error occurred when uploading.
+        console.error('Unknown error:', err);
+        res.status(500).json({ error: 'Error uploading file' });
+      } else {
+        // Everything went fine, proceed with the route handler.
+        next();
+      }
+    });
+  }, adminController.createManager);
+  
+ router.get('/get-managers',adminController.getAllManagers )
+ router.patch('patch-manager',adminController.patchManager)
+ router.delete('/delete-manager/:id',adminController.deleteManager)
 
  router.post('/create-investment', )
  router.get('/get-investment/:id', )

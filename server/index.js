@@ -4,12 +4,15 @@ const app = express();
 const PORT = 8000;
 const cors = require('cors');
 const routes = require('./router');
+const bodyParser = require('body-parser');
 const {sendInvestmentReminderEmails,updateInvestmentEarningsAndNotifiy} = require('./service');
 const cron = require('node-cron');
 
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(bodyParser.json({ limit: '50mb' }));
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }))
 
 // cron.schedule('0 0 */17 * *', updateInvestmentEarningsAndNotifiy());
 // cron.schedule('0 7 * * *', sendInvestmentReminderEmails())

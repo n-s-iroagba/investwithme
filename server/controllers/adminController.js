@@ -1,9 +1,25 @@
+const multer  = require('multer');
+const path = require('path');
+const fs = require('fs');
 
 const {PROMO_PERCENT,INVESTMENT_TENURE,REFERRAL_BONUS_PERCENT, COMPANY_NAME} = require('../config')
 const {Investor,Manager,DepositWallet,Referral,Investment,Transaction,Notification} = require('../model');
-const {findManagerWithHighestMinInvestment} =require('../helpers')
+const {findManagerWithHighestMinInvestment} =require('../helpers');
+const { duration } = require('moment');
+
+const storage = multer.diskStorage({
+  destination: '../images/',
+  filename: function (req, file, cb) {
+    cb(null, req.body.firstName+req.body.lastName)
+  }
+})
+
 module.exports = {
 
+  upload:multer({
+    storage: storage
+  })
+  .single('image'),
   getAllInvestors: async (_, res) => {
     try {
       const investors = await Investor.findAll();
@@ -105,27 +121,33 @@ module.exports = {
   },
   
 
-
-
   //Manager
   createManager: async (req, res) => {
     const {
       lastName,
       firstName,
-      image,
-      minimumDeposit,
-      returnPercentage,
+      minimumInvestmentAmount,
+      percentageYield,
       country,
+      duration
     } = req.body;
+
+    if (!req.file || !req.file.path) {
+      return res.status(400).json({ error: 'No file uploaded' });
+    }
+    const imagePath = req.file.path; // Get the path of the uploaded image
   
     try {
+      const imageData = fs.readFileSync(imagePath);
+  
       const manager = await Manager.create({
         lastName,
         firstName,
-        image,
-        minimumDeposit,
-        returnPercentage,
+        image: imageData,
+        minimumInvestmentAmount,
+        percentageYield,
         country,
+        duration
       });
   
       return res.status(201).json({ message: 'Manager created successfully', manager });
@@ -135,26 +157,25 @@ module.exports = {
     }
   },
   
+  
   getAllManagers: async (req, res) => {
     try {
       const managers = await Manager.findAll();
-      return res.status(200).json({ managers });
+      return res.status(200).json( managers );
     } catch (error) {
       console.error('Error fetching managers:', error);
       return res.status(500).json({ error: 'Error getting managers from database' });
     }
   },
   
-  updateManager: async (req, res) => {
-    const { id } = req.params;
+  patchManager: async (req, res) => {
+    const { id } = req.body.id;
     try {
       const manager = await Manager.findByPk(id);
       if (!manager) {
         return res.status(404).json({ error: 'Manager not found' });
       } 
-  
       await manager.update(req.body);
-  
       return res.status(200).json({ message: 'Manager updated successfully' });
     } catch (error) {
       console.error('Error updating manager:', error);
@@ -163,20 +184,14 @@ module.exports = {
   },
   
   deleteManager: async (req, res) => {
+    const { id } = req.params;
     try {
-      const { id } = req.params;
       const manager = await Manager.findByPk(id);
-  
-      if (!manager) {
-        return res.status(404).json({ error: 'Manager does not exist in database' });
-      }
-  
       await manager.destroy();
-  
       return res.status(200).json({ message: 'Manager deleted successfully' });
     } catch (error) {
       console.error('Error deleting manager:', error);
-      return res.status(500).json({ error: 'Error deleting manager' });
+      return res.status(500).json({ error: error.messag});
     }
   },
   

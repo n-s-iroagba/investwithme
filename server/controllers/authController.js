@@ -33,7 +33,7 @@ module.exports = {
 
       return res.status(201).json(verificationToken);
     } catch (error) {
-      return res.status(400).json({ message: error.message });
+      return res.status(500).json({ message: error.message });
     }
   },
 
@@ -70,7 +70,8 @@ module.exports = {
       return res.status(201).json(token);
     } catch (error) {
       console.error('Error registering investor:', error.message);
-      throw new Error(error.message);
+      res.status(500).json({ message: error.message });
+
     }
   },
 
@@ -110,7 +111,7 @@ module.exports = {
       return res.status(200).json(loginToken)
       }
     } catch (error) {
-      return res.status(400).json({ message: error.message });
+      return res.status(500).json({ message: error.message });
     }
   },
   
@@ -152,7 +153,7 @@ module.exports = {
      
     } catch (error) {
       console.error('Error verifying email:', error.message);
-      throw new Error(error.message)
+      res.status(500).json({ message: error.message });
     }
   },
 
@@ -173,7 +174,8 @@ module.exports = {
       await sendVerificationEmail(user, newToken); // Wait for email to be sent
       return res.status(200).json(newToken); // Return the new token
     } catch (error) {
-       throw new Error(error.message)
+      res.status(500).json({ message: error.message });
+
     }
   },
 
@@ -205,10 +207,8 @@ module.exports = {
       
       return res.status(200);
     } catch (error) {
-      console.log(error.message)
-    
+      console.error(error)
       return res.status(500).json({ error: error.message });
-     
   }
   },
   confirmMailForPasswordChange: async (req, res) => {

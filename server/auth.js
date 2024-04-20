@@ -28,7 +28,48 @@ const createNewPasswordToken = (id, email) => {
   return jwt.sign({ id: id, email: email, }, JWT_SECRET);
 }
 
+const isAdmin =(req, res, next) => {
+  const token = req.headers['authorization'];
+  if (!token) {
+    return res.status(403).send({ auth: false, message: 'No token provided.' });
+  }
+  jwt.verify(token, JWT_SECRET, (err, decoded) => {
+    if (err) {
+      return res.status(500).send({ auth: false, message: 'Failed to authenticate token.' });
+    }
+    const role = decoded.role;
+    if (role === 'admin'){
+      next();
+    } else {
+      return res.status(403).send({ auth: false, message: 'You are not authorized to access this resource.' });
+    }
+  });
+};
+
+const isInvestor =(req, res, next) => {
+  const token = req.headers['authorization'];
+  if (!token) {
+    return res.status(403).send({ auth: false, message: 'No token provided.' });
+  }
+  jwt.verify(token, JWT_SECRET, (err, decoded) => {
+    if (err) {
+      return res.status(500).send({ auth: false, message: 'Failed to authenticate token.' });
+    }
+    const role = decoded.role;
+    if (role === 'investor'){
+      next();
+    } else {
+      return res.status(403).send({ auth: false, message: 'You are not authorized to access this resource.' });
+    }
+  });
+};
+
+
+
+
 module.exports = {
+  isInvestor,
+  isAdmin,
   generatePasswordResetToken,
   decodeJWT,
   generateEmailVerificationToken,
