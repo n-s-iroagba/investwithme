@@ -50,15 +50,26 @@ const NewInvestmentForm: React.FC<{ username: string,}> = ({ username}) => {
 
   useEffect(() => {
 
-    const retrievedWallets = getAdminWallets()
-    const retrievedManagers = getManagers()
-      const manager = findManagerById(retrievedManagers, Number(managerId))
+    const fetchManagerData = async () => {
+      try {
+        const managerData = await getManagers(); 
+        const walletData = await getAdminWallets()
+        setWallets(walletData )
+        setManagers(managerData);
+      } catch (error:any) {
+        console.error(error);
+        setErrorMessage(error.message);
+      }
+    };
+
+    fetchManagerData(); 
+    const manager = findManagerById(managers, Number(managerId))
       if (manager) {
         setInvestmentData({ ...investmentData, manager: manager })
       }
-      setManagers(retrievedManagers)
-      setWallets(retrievedWallets)
-  }, [managerId, investmentData])
+  }, [investmentData, managerId, managers]);
+      
+
 
   const handleAmountChange = (e: any) => {
     const manager = findManagerWithHighestMinInvestment(managers, e.target.value)

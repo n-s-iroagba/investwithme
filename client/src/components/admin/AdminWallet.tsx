@@ -5,6 +5,7 @@ import { WalletType } from '../../utils/types';
 import EditWalletModal from './EditWalletModal';
 import DeleteModal from './DeleteModal';
 import { getAdminWallets } from '../../utils/helpers';
+import { useNavigate } from 'react-router-dom';
 
 
 const WalletCard: React.FC<{ wallet: WalletType, deleteButton: React.ReactNode, editButton: React.ReactNode, }> = ({ wallet, deleteButton, editButton }) => {
@@ -40,10 +41,22 @@ const AdminWallet = () => {
   const [idToBeDeleted, setIdToBeDeleted] = useState(0)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
 
+  const navigate = useNavigate()
+
   useEffect(() => {
-    const receivedWallets: WalletType[] = getAdminWallets()
-    setWallets(receivedWallets)
-  }, [])
+    const fetchWalletData = async () => {
+      try {
+        const walletData = await getAdminWallets(); 
+        setWallets(walletData);
+      } catch (error) {
+        console.error(error);
+        alert ('an error occured, try again later')
+        // navigate ('/admin/dashboard')
+      }
+    };
+
+    fetchWalletData(); // Call the async function to fetch data
+  }, [navigate]);
 
   const handleEdit = (wallet: WalletType) => {
     setShowModal(true)

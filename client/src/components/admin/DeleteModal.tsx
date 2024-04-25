@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
+import { deleteManager, deleteWallet } from '../../utils/helpers';
 
 
 const DeleteModal:React.FC<{id:number,show:boolean,entity:'wallet'|'manager'|'investor'}>= ({ id, show,entity }) => {
@@ -24,10 +25,18 @@ const DeleteModal:React.FC<{id:number,show:boolean,entity:'wallet'|'manager'|'in
   }
   const handleConfirm = () => {
     if (password === secretCode) {
-  
-      handleClose();
+    if (entity==='manager'){
+      deleteManager(id)
+    }else if(entity==='wallet'){
+      deleteWallet(id)
+
+    }else if (entity==='investor'){
+      deleteInvestor(id)
+    }
+    
+    handleClose();
     } else {
-      setError('Incorrect password');
+      setError('Incorrect secretCode');
     }
   };
 
@@ -35,11 +44,11 @@ const DeleteModal:React.FC<{id:number,show:boolean,entity:'wallet'|'manager'|'in
   return (
     <Modal show={showModal} onHide={handleClose}>
       <Modal.Header closeButton>
-        <Modal.Title>Admin Verification</Modal.Title>
+        <Modal.Title>Delete {entity}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form.Group controlId="adminPassword">
-          <Form.Label>Enter Admin Password:</Form.Label>
+          <Form.Label>Enter Admin Secret Code:</Form.Label>
           <Form.Control
             type="password"
             placeholder="Enter password"
@@ -62,3 +71,7 @@ const DeleteModal:React.FC<{id:number,show:boolean,entity:'wallet'|'manager'|'in
 };
 
 export default DeleteModal;
+function deleteInvestor(id: number) {
+  throw new Error('Function not implemented.');
+}
+

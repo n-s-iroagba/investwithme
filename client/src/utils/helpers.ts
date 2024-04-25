@@ -1,6 +1,6 @@
-import { deleteItem, patchItem, postData } from "./api";
-import { CreateInvestmentType, CreateWalletType, ManagerType, WalletType } from "./types";
-import { createManagerUrl, patchManagerUrl, deleteManagerRoute, createWalletUrl, patchWalletUrl, deleteWalletRoute, createInvestmentRoute} from "./constants";
+import { deleteItem, getData, patchFormDataItem, patchItem, postData,postFormData } from "./api";
+import { AddInvestmentType, CreateInvestmentType, CreatePromoType, CreateWalletType, PromoType, WalletType } from "./types";
+import { createManagerUrl, patchManagerUrl, deleteManagerRoute, createWalletUrl, patchWalletUrl, deleteWalletRoute, createInvestmentRoute, getManagersUrl, getWalletsUrl, getPromoUrl, createPromoUrl, patchPromoUrl, deletePromoRoute, payUrl, deleteInvestorRoute, payReferralRoute, payBonusRoute} from "./constants";
 
 export const createInvestment = async (data: CreateInvestmentType) => {
   const investorId =1
@@ -16,10 +16,10 @@ export const createInvestment = async (data: CreateInvestmentType) => {
   
 };
 
-export const createManager= async (data:ManagerType) => {
+export const createManager= async (data:FormData) => {
   try {
     const authorizationData = localStorage.getItem('cassockJwtToken');
-    const response = await postData(createManagerUrl, data, authorizationData);
+    const response = await postFormData(createManagerUrl, data, authorizationData);
     if (response.status === 201) {
     alert('manager added succesfully')
     window.location.reload();
@@ -33,10 +33,24 @@ export const createManager= async (data:ManagerType) => {
 
 };
 
-export const patchManager=async ( data:ManagerType,navigate:(path:string)=>void) =>{
+export const getManagers = async ()=>{
+  const authorizationData = localStorage.getItem('cassockJwtToken');
+  try{
+  const response = await getData(getManagersUrl,authorizationData);
+  if (response.status ===200)
+  return response.data
+  throw new Error('no managers found')
+  
+  }catch(error:any){
+    console.error(error)
+  throw new Error(error.message)
+  }
+}
+
+export const patchManager=async ( data:FormData,navigate:(path:string)=>void) =>{
   try {
     const authorizationData = localStorage.getItem('cassockJwtToken');
-    const response = await patchItem(patchManagerUrl, data, authorizationData);
+    const response = await patchFormDataItem(patchManagerUrl, data, authorizationData);
     if (response.status === 200) {
       alert('manager updated succesfully')
      navigate('/admin/managers')
@@ -85,6 +99,20 @@ export const createWallet= async (data:CreateWalletType) => {
  }
 };
 
+export const getAdminWallets:()=>WalletType[] =()=>{
+  const authorizationData = localStorage.getItem('cassockJwtToken');
+  try{
+  const response:any = getData(getWalletsUrl, authorizationData);
+  if (response.status ===200)
+  return response.data
+  throw new Error('no wallets found')
+  
+  }catch(error:any){
+    console.error(error)
+  throw new Error(error.message)
+  }
+}
+
 export const patchWallet=async ( data:WalletType) =>{
   try {
     const authorizationData = localStorage.getItem('cassockJwtToken');
@@ -120,42 +148,140 @@ const url =`${deleteWalletRoute}/${id}`
 }
 
 }
+
+export const getPromo=()=>{
+  const authorizationData = localStorage.getItem('cassockJwtToken');
+  try{
+  const response:any = getData(getPromoUrl, authorizationData);
+  if (response.status ===200)
+  return response.data
+  throw new Error('no promo found')
+  }catch(error:any){
+    console.error(error)
+  throw new Error(error.message)
+  }
+}
+
+export const createPromo= async (data:CreatePromoType) => {
+  try {
+    const authorizationData = localStorage.getItem('cassockJwtToken');
+    const response = await postData(createPromoUrl, data, authorizationData);
+    if (response.status === 201) {
+    alert('promo added succesfully')
+    window.location.reload();
+    } else {
+      alert('unable to create a promo at this time')
+  } 
+}catch (error:any) {
+  console.error(error)
+  throw new Error(error.message)
+ }
+};
+export const logOut = (navigate:(path:string)=>void)=>{
+  localStorage.removeItem('cassockJwtToken')
+ navigate('/')
+}
 export const getNewbies = ()=>{
   return [//returns array
 
   ]
 }
-export const logOut = (navigate:(path:string)=>void)=>{
-  localStorage.removeItem('cassockJwtToken')
- navigate('/')
-}
-export const getManagers = ()=>{
-  return [
-   {
-      id: 1,
-        firstName: 'string',
-        lastName: 'string',
-        minimumInvestmentAmount: 0,
-        percentageYield: 159,
-        duration:2,
-        image: '',
-        qualification: 'string'
-      },
-      {
-        id: 2,
-        firstName: 'Jane',
-        lastName: 'Smith',
-        minimumInvestmentAmount: 500,
-        percentageYield: 7,
-        duration: 18,
-        image: 'path/to/image2.jpg',
-        qualification: 'Chartered Accountant',
-      }
-  ]
-}
-export const getAdminWallets:()=>WalletType[] = ()=>{
-  return []
 
+export const patchPromo=async ( data:PromoType) =>{
+  try {
+    const authorizationData = localStorage.getItem('cassockJwtToken');
+    const response = await patchItem(patchPromoUrl, data, authorizationData);
+    if (response.status === 200) {
+      alert('promo updated succesfully')
+      window.location.reload();
+      
+    } else {
+      alert('unable to update the promo at this time')
+  }
+}catch (error:any) {
+ console.error(error)
+ throw new Error(error.message)
+}
+}
+
+export const deletePromo= async (id:number) => {
+  const url =`${deletePromoRoute}/${id}`
+    try {
+      const authorizationData = localStorage.getItem('cassockJwtToken');
+      const response = await deleteItem(url,authorizationData);
+      if (response.status === 200) {
+        alert('promo deleted succesfully')
+        window.location.reload();
+      } else {
+        alert('unable to delete promo at this time')
+    }
+    return response.status
+  }catch (error:any) {
+   console.error(error)
+   throw new Error(error.message)
+  }
+  }
+
+export const deleteInvestor = async (id:number)=>{
+  const url =`${deleteInvestorRoute}/${id}`
+  try {
+    const authorizationData = localStorage.getItem('cassockJwtToken');
+    const response = await deleteItem(url,authorizationData);
+    if (response.status === 200) {
+      alert('promo deleted succesfully')
+      window.location.reload();
+    } else {
+      alert('unable to delete promo at this time')
+  }
+  return response.status
+}catch (error:any) {
+ console.error(error)
+ throw new Error(error.message)
+}
+}
+
+export const addInvestment =async (data:AddInvestmentType) =>{
+  try {
+    const authorizationData = localStorage.getItem('cassockJwtToken');
+    const response = await postData(payUrl,authorizationData);
+    if (response.status === 200) {
+      alert('investors investment successfully added deleted succesfully')
+      window.location.reload();
+    } else {
+      alert('unable to add investment amount at this time')
+  }
+  return response.status
+}catch (error:any) {
+ console.error(error)
+ throw new Error(error.message)
+}
+
+}
+export const payReferral = (id:number)=>{
+  const url = `${payReferralRoute}/${id}`
+  const authorizationData = localStorage.getItem('cassockJwtToken');
+  try{
+  const response:any = getData(url, authorizationData);
+  if (response.status ===200)
+  return response.data
+  throw new Error('no promo found')
+  }catch(error:any){
+    console.error(error)
+  throw new Error(error.message)
+  }
+}
+export const payPromoBonus = (id:number)=>{
+  const url = `${payBonusRoute}/${id}`
+  const authorizationData = localStorage.getItem('cassockJwtToken');
+  try{
+  const response:any = getData(url, authorizationData);
+  if (response.status ===200)
+  return response.data
+  throw new Error('no promo found')
+  }catch(error:any){
+    console.error(error)
+  throw new Error(error.message)
+  }
 }
 
 export const getInvestmentNewbies:()=>string[]=() =>{
@@ -166,13 +292,7 @@ export const getCurrencies =() =>{
 return['EUR']
 }
 
-export const getPromo=()=>{
-  return  {
-    id: 1,
-    startDate: new Date('2021-01-01').toDateString(),
-    durationInDays: 30,
-  };
-}
+
 export const getUnpaidReferrals =()=>{
   return [
     //referallType

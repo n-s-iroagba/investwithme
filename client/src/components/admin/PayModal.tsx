@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
+import { payPromoBonus, payReferral } from '../../utils/helpers';
 
 
 const PayModal:React.FC<{id:number,show:boolean,confirmAmount:number,paymentEntity:'referral'|'promo'}>= ({ id, show,confirmAmount,paymentEntity}) => {
-  const [password, setPassword] = useState('');
+  const [amount, setAmount] = useState<number>(0);
   const [error, setError] = useState('');
   const [showModal, setShowModal]= useState(false);
 
@@ -11,8 +12,9 @@ const PayModal:React.FC<{id:number,show:boolean,confirmAmount:number,paymentEnti
     setShowModal(show);
   }, [show])
 
-  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value);
+  const handleAccountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const inputAmount = parseFloat(e.target.value);
+  setAmount(inputAmount);
   };
   
   const handleClose = ()=>{
@@ -20,27 +22,35 @@ const PayModal:React.FC<{id:number,show:boolean,confirmAmount:number,paymentEnti
     window.location.reload()
   }
   const handleConfirm = () => {
-    if (password === 'admin') {
-  
-      handleClose();
-    } else {
-      setError('Incorrect password');
+    try {
+      if (amount === confirmAmount) {
+        if (paymentEntity === 'referral') {
+          payReferral(id);
+        } else {
+          payPromoBonus(id);
+        }
+        handleClose();
+      } else {
+        setError('Incorrect Account');
+      }
+    } catch (error) {
+      console.error('Error handling confirmation:', error);
     }
   };
-
+  
   return (
     <Modal show={showModal} onHide={handleClose}>
       <Modal.Header closeButton>
         <Modal.Title>Admin Verification</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Form.Group controlId="adminPassword">
-          <Form.Label>Enter Admin Password:</Form.Label>
+        <Form.Group controlId="adminAccount">
+          <Form.Label>Enter the amount you transferred:</Form.Label>
           <Form.Control
-            type="password"
-            placeholder="Enter password"
-            value={password}
-            onChange={handlePasswordChange}
+            type="number"
+            placeholder="Enter amount"
+            value={amount}
+            onChange={handleAccountChange}
           />
           {error && <Form.Text className="text-danger">{error}</Form.Text>}
         </Form.Group>

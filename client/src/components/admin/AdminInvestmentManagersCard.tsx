@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Row, Col } from 'react-bootstrap';
 import { InvestmentTiersCard } from '../../components/general/InvestmentTiersCard';
-import { MiniFooter } from '../../components/home_components/Footer';
 import { ManagerType } from '../../utils/types';
 import '../../components/styles.css';
 import DeleteModal from './DeleteModal';
@@ -32,10 +31,23 @@ const AdminInvestmentManagersCard: React.FC = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [managers, setManagers] = useState<ManagerType[]>([]);
 
+  const navigate = useNavigate()
+
   useEffect(() => {
-    const managerData = getManagers();
-    setManagers(managerData);
-  }, []);
+    const fetchManagerData = async () => {
+      try {
+        const managerData = await getManagers(); 
+        console.log(managerData)// Wait for the data to be fetched
+        setManagers(managerData);
+      } catch (error) {
+        console.error(error);
+        alert ('an error occured, try again later')
+        // navigate ('/admin/dashboard')
+      }
+    };
+
+    fetchManagerData(); // Call the async function to fetch data
+  }, [navigate]);
 
   const handleDelete = (id: number) => {
     setShowDeleteModal(true);
@@ -43,18 +55,18 @@ const AdminInvestmentManagersCard: React.FC = () => {
   };
 
   return (
-    <div className='full-height'>
+    <div>
       {managers.length > 0 ? (
         <>
           <h3 className='text-center mt-4 text-light'>
             Your Managers
           </h3>
-          <Row className='gx-3 mt-2 gy-3'>
+          <Row className=' mt-2 gy-3'>
             {managers.map((manager) => (
-              <Col className={managers.length === 1 ? 'w-100' : ''} xs={12} md={6} lg={6} >
+              <Col xs={12} md={6} lg={4} >
                 <InvestmentTiersCard
                   key={manager.id}
-                  percentageYield={`${manager.percentageYield}% RETURN ON INVESTMENT`}
+                  percentageYield={`${manager.percentageYield}%`}
                   image={manager.image}
                   firstName={manager.firstName}
                   lastName={manager.lastName}
@@ -74,8 +86,6 @@ const AdminInvestmentManagersCard: React.FC = () => {
           No Managers yet, kindly add a manager.
         </h3>
       )}
-
-      <MiniFooter primaryVariant={true} />
     </div>
   );
 };

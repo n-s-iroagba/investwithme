@@ -47,7 +47,7 @@ const pay = ()=>{
         {copied && <Card.Text>Address copied</Card.Text>}
         <br/>
         < button className='button-styles mt-3' onClick={() =>pay() }>
-          Pay Referral
+          Confirm Payment
         </  button>
       </Card.Body>
     </Card>

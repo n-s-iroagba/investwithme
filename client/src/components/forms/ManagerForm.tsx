@@ -18,13 +18,15 @@ const ManagerForm: React.FC<{ patch?: boolean }> = ({ patch }) => {
         firstName: '',
         lastName: '',
         image:'',
+        duration:'',
         minimumInvestmentAmount: 0,
         percentageYield: 0,
       }
     : {
         firstName: '',
         lastName: '',
-        image:'',
+        image: '',
+        duration: '',
         minimumInvestmentAmount: 0,
         percentageYield: 0,
       };
@@ -44,31 +46,59 @@ const ManagerForm: React.FC<{ patch?: boolean }> = ({ patch }) => {
   })
  const navigate = useNavigate()
 
- const getCroppedBlob = (file: File, crop: Crop): Promise<string | undefined> => {
+ function dataURLtoBlob(dataurl: string) {
+  var arr = dataurl.split(',');
+  var match = arr[0].match(/:(.*?);/);
+  if (!match) {
+    throw new Error('Invalid data URL');
+  }
+  var mime = match[1];
+  var bstr = atob(arr[1]);
+  var n = bstr.length;
+  var u8arr = new Uint8Array(n);
+  while(n--){
+    u8arr[n] = bstr.charCodeAt(n);
+  }
+  return new Blob([u8arr], {type: mime});
+}
+
+ const getCroppedBlob = (file: File, crop: Crop)=> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
 
     reader.onload = (event) => {
       const image = new Image();
       image.src = event.target?.result as string; // Set the image source here
-
+    
       image.onload = () => {
         const canvas = document.createElement('canvas');
         const ctx = canvas.getContext('2d');
-
+    
         if (!ctx) {
           reject('Unable to get 2d context');
           return;
         }
-
-        canvas.width = crop.width;
-        canvas.height = crop.height;
-
-        ctx.drawImage(image, crop.x, crop.y, 200, 200, 0, 0, crop.width, crop.height); 
+    
+        const aspectRatio = image.width / image.height;
+    
+        const canvasWidth = crop.width;
+        const canvasHeight = crop.width / aspectRatio;
+    
+        canvas.width = canvasWidth;
+        canvas.height = canvasHeight;
+    
+     
+        ctx.drawImage(image, 0, 0, image.width, image.height, 0, 0, canvasWidth, canvasHeight);
+    
         const croppedImage = canvas.toDataURL('image/jpeg', 1);
-        resolve(croppedImage);
+    
+        
+        const blobImage = dataURLtoBlob(croppedImage);
+    
+        resolve(blobImage);
       };
     };
+    
 
     reader.onerror = () => {
       console.error('Error reading file');
@@ -88,20 +118,17 @@ const done = async () => {
 
   try {
     const croppedBlob = await getCroppedBlob(files, crop);
-    if(croppedBlob) {
-      console.log(croppedBlob);
-      setManagerData((prevData: ManagerType) => ({
+    if (croppedBlob) {
+      setManagerData((prevData) => ({
         ...prevData,
         image: croppedBlob,
       }));
       console.log('Image cropped successfully!');
-    } 
+    }
   } catch (error) {
     console.error(error);
   }
 };
-
-  
 
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -119,30 +146,42 @@ const done = async () => {
     }
 
   }
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    let shouldNotSubmit = hasEmptyKey(managerData)||managerData.image == null
+    let shouldNotSubmit = hasEmptyKey(managerData) || managerData.image === null;
     try {
       if (shouldNotSubmit) {
         setValidated(false);
       } else {
         setSubmitting(true);
         setValidated(true);
+        const formData = new FormData();
+        Object.entries(managerData).forEach(([key, value]) => {
+          formData.append(key, value);
+        });;
+        formData.forEach((value, key) => {
+          console.log(`${key}:`, value);
+        }) // Log FormData object here
         if (patch) {
-          await patchManager(managerData,navigate);
+          await patchManager(formData, navigate);
         } else {
-          await createManager(managerData);
+          await createManager(formData);
         }
       }
-    } catch (error) {
-      console.log(error);
-      setErrorMessage('Sorry we can not complete your request at this time');
+    } catch (error: any) {
+      console.error('Form submission error:', error);
+      setErrorMessage(
+        error.message + '. Sorry we cannot complete your request at this time'
+      );
+    } finally {
+      setSubmitting(false);
     }
   };
+  
+  
 
   return (
-    <div className="d-flex justify-content-center align-content-center mt-5 px-2">
+    <div className="d-flex justify-content-center flex-column align-items-center mt-5 px-2">
       {files && (
         <Modal show={show}>
         <ReactCrop circularCrop aspect={1} crop={crop} onChange={(c) => {setCrop(c)
@@ -205,6 +244,17 @@ const done = async () => {
             className="custom-input bg-transparent form-control text-light"
           />
         </Form.Group>
+        <Form.Group className="mb-4" as={Col} controlId="validationFormik04">
+          <Form.Label className="mb-0">Duration {required}</Form.Label>
+          <Form.Control
+            required
+            type="number"
+            name="duration"
+            value={managerData.duration}
+            onChange={handleChange}
+            className="custom-input bg-transparent form-control text-light"
+          />
+        </Form.Group>
 
         <Form.Group className="mb-4" as={Col} controlId="validationFormik04">
           <Form.Label className="mb-0">Minimum Investment Amount{required}</Form.Label>
@@ -222,6 +272,7 @@ const done = async () => {
           <Form.Label className="mb-0">Manager's picture</Form.Label>
           <Form.Control
             type="file"
+            formEncType='multipart/form-data'
             name="image"
             onChange={handleFileChange}
             className="custom-input text-light bg-transparent form-control"
@@ -229,10 +280,10 @@ const done = async () => {
         </Form.Group>
 
         <div className="d-flex justify-content-evenly w-100">
-          <button className="button-styles w-50 text-light" type={submitting ? 'submit' : 'submit'}>
+          <button className="button-styles w-50 text-light" type={submitting ? 'button' : 'submit'}>
           {submitting ? <Spinner animation='border' size='sm' /> : 'Submit'}
           </button>
-          <button className="button-styles text-light w-50" onClick={()=>console.log(managerData)}>Home</button>
+          <button className="button-styles text-light w-50" onClick={()=>console.log(managerData)}>Dashboard</button>
         </div>
       </Form>
       <ErrorMessage message={errorMessage} />

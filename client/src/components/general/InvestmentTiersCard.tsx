@@ -16,15 +16,28 @@ export const InvestmentTiersCard: React.FC<InvestmentTiersType> = ({
   button,
   deleteButton,
 }) => {
+  
+
+  let imageUrl = '';
+
+  // Check if 'image' is a Buffer before converting to Blob
+  if (image && image.data && Array.isArray(image.data)) {
+    const blob = new Blob([new Uint8Array(image.data)], { type: 'image/jpeg' });
+    imageUrl = URL.createObjectURL(blob);
+  } else {
+    console.error("Invalid image data format.");
+  }
+
   return (
    
       <Card bg="light" text="black" className="w-100">
-        <Card.Header className="background-secondary">
+        <Card.Header  style={{height:'3cm'}}className="background-secondary d-flex flex-column justify-content-center align-items-center">
           <Card.Title className="text-center">{percentageYield}</Card.Title>
+          <Card.Title className="text-center">RETURN ON INVESTMENT</Card.Title>
         </Card.Header>
         <Card.Body>
           <div className="d-flex justify-content-center">
-            <Image src={image} alt="Card Image" roundedCircle />
+            <Image style={{width:'200px',height:'200px'}} src={imageUrl} alt="Card Image"  roundedCircle/>
           </div>
           <Card.Title className=" text-center w-100">{firstName + ' ' + lastName}</Card.Title>
         <div className="w-100 d-flex flex-column align-items-center">

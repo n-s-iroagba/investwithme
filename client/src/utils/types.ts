@@ -111,10 +111,18 @@ export interface ManagerType {
     minimumInvestmentAmount: number
     percentageYield: number
     duration:number
-    image: string,
+    image: any,
     qualification: string
   }
-
+export interface CreatePromoType{
+  from:string
+  to:string
+}
+export interface AddInvestmentType {
+  address:string
+  currency:string
+  amount:number
+}
 export interface DecodedLoginToken {
     id: string;
     role:'investor';
@@ -140,7 +148,7 @@ export interface EmailVerificationToken{
     minimumInvestmentAmount:string,
     percentageYield: string,
     duration:string,
-    image: string,
+    image: any,
     qualification: string
     button: React.ReactNode,
     deleteButton?: React.ReactNode;

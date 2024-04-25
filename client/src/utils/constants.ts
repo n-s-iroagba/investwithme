@@ -11,7 +11,8 @@ export const newPasswordRoute = `${domain}/new-password`
 export const createAdminUrl = `${domain}/create-admin`
 
 export const createInvestorUrl  = `${domain}/create-investor`
-export const topUpUrl = `${domain}/top-up`
+export const payReferralRoute = `${domain}/pay-refferal`
+export const payBonusRoute = `${domain}/pay-bonus`
 export const payUrl = `${domain}/pay`
 export const deleteInvestorRoute = `${domain}/delete-investor`
 

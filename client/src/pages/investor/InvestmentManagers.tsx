@@ -25,10 +25,20 @@ const InvestmentManagers: React.FC = () => {
 const [managers,setManagers] = useState<ManagerType[]>([])
 
 useEffect(()=>{
-    const retrievedManagers:ManagerType[] = getManagers()
-    setManagers(retrievedManagers)
+    const fetchManagerData = async () => {
+        try {
+          const managerData = await getManagers(); 
+          console.log(managerData)// Wait for the data to be fetched
+          setManagers(managerData);
+        } catch (error) {
+          console.error(error);
+          // Handle error fetching managers
+        }
+      };
+  
+      fetchManagerData(); // Call the async function to fetch data
+    }, []);
 
-}, [])
     
    
 

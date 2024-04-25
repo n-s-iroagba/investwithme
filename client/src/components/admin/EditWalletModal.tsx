@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import { WalletType } from '../../utils/types';
+import { patchWallet } from '../../utils/helpers';
 
 const EditWalletModal:React.FC<{data:WalletType,show:boolean}>= ({ data, show }) => {
   const [error, setError] = useState<string|null>(null);
@@ -25,10 +26,13 @@ const EditWalletModal:React.FC<{data:WalletType,show:boolean}>= ({ data, show })
     window.location.reload()
   }
 
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
+    try{
+     patchWallet(data);
 
-      handleClose();
-    setError('Sorry an error occured while attempting to edit wallet')
+    }catch(error:any){
+      setError('Sorry an error occured while attempting to edit wallet')
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -43,11 +47,10 @@ const EditWalletModal:React.FC<{data:WalletType,show:boolean}>= ({ data, show })
   return (
     <Modal show={showModal} onHide={handleClose}>
       <Modal.Header closeButton>
-        <Modal.Title>Edit Wallet Address</Modal.Title>
+        <Modal.Title>Update Wallet Address</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form.Group controlId="adminPassword">
-          <Form.Label>Update Wallet Address</Form.Label>
           <Form.Control
             type="text"
             placeholder="enter new address"

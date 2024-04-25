@@ -42,6 +42,9 @@ div .round-card{
 
    
 }
+.mini-footer{
+    height: 20vh;
+}
 .round-card{
    
     border-top-right-radius: 1.5rem;
@@ -68,7 +71,8 @@ div .round-card{
     height: 100%;
 }
 .full-height{
-    height: 100vh;
+    min-height: 90vh; 
+    height: auto;
 }
 .notification{
     position: absolute;

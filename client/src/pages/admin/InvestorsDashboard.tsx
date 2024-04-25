@@ -1,46 +1,55 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import SuccessModal from '../../components/general/SuccessModal'
 import { MiniFooter } from '../../components/home_components/Footer'
 import '../../components/styles.css'
-
+import CryptoConvert from 'crypto-convert';
 import { Modal, Form, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { faCircleDot } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { getCurrencies, getInvestmentNewbies } from '../../utils/helpers';
+import { addInvestment, getCurrencies, getInvestmentNewbies } from '../../utils/helpers';
+import { AddInvestmentType } from '../../utils/types';
 
 interface ModalFormProps {
   show: boolean;
 }
 
 const AddInvestmentModalForm: React.FC<ModalFormProps> = ({ show }) => {
-  const [formData, setFormData] = useState({
-    amount: '',
-    walletAddress: '',
+  const [formData, setFormData] = useState<AddInvestmentType>({
+    amount: 0,
+    address: '',
     currency: '',
   });
   const [modalShow, setModalShow] = useState<boolean>(false)
   const [currencies, setCurrencies] = useState<string[]>([])
+  const convertRef = useRef<any>(null); // Use useRef to store the convert variable
 
   useEffect(() => {
-    setModalShow(show)
-    const currencyResponse = getCurrencies()
-    setCurrencies(currencyResponse)
-  }, [show])
+    convertRef.current = new CryptoConvert(); // Store the CryptoConvert instance in the ref
+    convertRef.current.ready();
+    setModalShow(show);
+    const currencyResponse = getCurrencies();
+    setCurrencies(currencyResponse);
+  }, [show]);
+
+  const convertCurrency = () => {
+    let newAmount;
+    if (formData.currency === 'BTC') {
+      newAmount = convertRef.current.BTC.USD(formData.currency);
+    }
+    if (newAmount) {
+      setFormData(prevData => ({
+        ...prevData,
+        amount: newAmount,
+      }));
+      return true;
+    }
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    // Add your form submission logic here
-    console.log(formData);
-    // Reset form data after submission (optional)
-    setFormData({ amount: '', walletAddress: '', currency: '' });
-    handleConfirm()
-  }
 
   const handleClose = () => {
     setModalShow(false);
@@ -49,8 +58,26 @@ const AddInvestmentModalForm: React.FC<ModalFormProps> = ({ show }) => {
 
   const handleConfirm = () => {
     localStorage.setItem('cassockCreditedState', 'true')
-    handleClose()
+   
   };
+
+  const handleSubmit =async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try{
+    const converted = convertCurrency()
+    if (converted) {
+     await addInvestment(formData)
+    }
+    handleConfirm()
+ 
+  }catch(error:any){
+    console.error(error)
+    alert('sorry, the amount was not added, contact')
+  }finally{
+    handleClose()
+  }
+  }
+  
 
 
   return (
@@ -84,7 +111,7 @@ const AddInvestmentModalForm: React.FC<ModalFormProps> = ({ show }) => {
               type="text"
               placeholder="Enter wallet address"
               name="walletAddress"
-              value={formData.walletAddress}
+              value={formData.address}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange(e)}
             />
           </Form.Group>

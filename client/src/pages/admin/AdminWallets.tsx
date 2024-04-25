@@ -11,22 +11,26 @@ const AdminWallets: React.FC = () => {
 
   }
   return (
-    <div className='primary-background px-3 pt-5 full-height'>
-      <div className='d-flex flex-column align-items-center'>
-        {showWallets ?
-          <>
-            <button className='button-styles button-width-narrow' onClick={handleToggle}>Add Wallet</button>
-            <AdminWallet />
-          </>
-          :
-          <>
-            <button className='button-styles button-width-narrow' onClick={handleToggle}>View Wallets</button>
-            <WalletForm />
-          </>
-        }
-        <MiniFooter primaryVariant />
-      </div>
-    </div >)
+    <>
+      <div className='primary-background px-3 pt-5 full-height'>
+        <div className='d-flex flex-column align-items-center'>
+          {showWallets ?
+            <>
+              <button className='button-styles button-width-narrow' onClick={handleToggle}>Add Wallet</button>
+              <AdminWallet />
+            </>
+            :
+            <>
+              <button className='button-styles button-width-narrow' onClick={handleToggle}>View Wallets</button>
+              <WalletForm />
+            </>
+          }
+
+        </div>
+      </div >
+      <MiniFooter primaryVariant />
+    </>
+  )
 
 }
 
