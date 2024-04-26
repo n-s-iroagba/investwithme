@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
+import { hasEmptyKey } from '../../utils/utils';
+import { patchPromo } from '../../utils/helpers';
 
 interface ExtendPromoFormModalProps {
     show: boolean;
@@ -7,8 +9,7 @@ interface ExtendPromoFormModalProps {
 
 const ExtendPromoFormModal: React.FC<ExtendPromoFormModalProps> = ({ show}) => {
     const [formData, setFormData] = useState({
-        days: '1',
-        details: '',
+        days: 0,
     });
     const [modalShow, setModalShow] = useState<boolean>(show)
 useEffect(()=>{
@@ -19,14 +20,24 @@ setModalShow(show)
         setFormData({ ...formData, [name]: value });
     };
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        // Add your form submission logic here
-        console.log(formData);
-        // Reset form data after submission (optional)
-        setFormData({ days: '1', details: '' });
-        onHide(); // Close the modal
-    };
+    
+        let shouldNotSubmit = hasEmptyKey(formData); // Assuming hasEmptyKey is defined or imported
+        try {
+          if (shouldNotSubmit) {
+            // Handle validation or show error message
+          } else {
+            // Perform submission
+            await patchPromo(formData); // Assuming createPromo handles the API call correctly
+            setModalShow(false); // Close the modal after successful submission
+          }
+        } catch (error) {
+          console.error(error);
+          // Handle error or show error message
+        }
+      };
+    
     const onHide = () =>{
         setModalShow(false);
         window.location.reload()
@@ -42,16 +53,12 @@ setModalShow(show)
                     <Form.Group controlId="formDays">
                         <Form.Label>Number of Days</Form.Label>
                         <Form.Control
-                            as="select"
+                            type="number"
                             name="days"
                             value={formData.days}
                             onChange={handleChange}
                         >
-                            {Array.from({ length: 30 }, (_, i) => i + 1).map((day) => (
-                                <option key={day} value={day.toString()}>
-                                    {day}
-                                </option>
-                            ))}
+        
  
                         </Form.Control>
                     </Form.Group>

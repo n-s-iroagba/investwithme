@@ -115,8 +115,8 @@ export interface ManagerType {
     qualification: string
   }
 export interface CreatePromoType{
-  from:string
-  to:string
+  startDate:string
+  endDate:string
 }
 export interface AddInvestmentType {
   address:string

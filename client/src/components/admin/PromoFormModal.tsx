@@ -1,41 +1,49 @@
+
 import React, { useEffect, useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
-
+import { createPromo } from '../../utils/helpers'; // Assuming createPromo is correctly defined
+import { hasEmptyKey } from '../../utils/utils';
 
 interface PromoFormModalProps {
-    show: boolean;
-  }
-  
+  show: boolean;
+}
+
 const PromoFormModal: React.FC<PromoFormModalProps> = ({ show }) => {
-    const [promoData, setPromoData] = useState({
-      startDate: '',
-      endDate: '',
-    });
-    const [modalShow, setModalShow] = useState<boolean>(show)
+  const [promoData, setPromoData] = useState({
+    startDate: '',
+    endDate: '',
+  });
+  const [modalShow, setModalShow] = useState<boolean>(show);
 
-useEffect(()=>{
-  console.log(show)
-    setModalShow(show)
-    },[setModalShow,show])
+  useEffect(() => {
+    setModalShow(show);
+  }, [show]);
 
-
-
-  const handleChange = (e:any) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setPromoData({ ...promoData, [name]: value });
   };
- const onHide = () => {
-  setModalShow(false)
-  window.location.reload()
 
- }
-  const handleSubmit = (e:any) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Add your form submission logic here
-    console.log(promoData);
-    // Reset form data after submission (optional)
-    setPromoData({ startDate: '', endDate: '' });
-    onHide(); // Close the modal
+
+    let shouldNotSubmit = hasEmptyKey(promoData); // Assuming hasEmptyKey is defined or imported
+    try {
+      if (shouldNotSubmit) {
+        // Handle validation or show error message
+      } else {
+        // Perform submission
+        await createPromo(promoData); // Assuming createPromo handles the API call correctly
+        setModalShow(false); // Close the modal after successful submission
+      }
+    } catch (error) {
+      console.error(error);
+      // Handle error or show error message
+    }
+  };
+
+  const onHide = () => {
+    setModalShow(false);
   };
 
   return (

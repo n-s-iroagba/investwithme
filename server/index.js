@@ -30,14 +30,21 @@ app.use('/create-admin', routes);
 
 app.use('/create-investor', routes);
 app.use('/get-investors', routes);
-app.use('/top-up', routes);
+app.use('/pay-referral/:id', routes);
+app.use('/pay-bonus/:id', routes);
 app.use('/pay', routes);
 app.use('/delete-investor/:id', routes);
 
 app.use('/create-manager', routes);
 app.use('/patch-manager', routes); 
 app.use('/get-managers', routes);
+app.use('/manager/:id', routes);
 app.use('/delete-manager/:id', routes);
+
+app.use('/create-promo', routes);
+app.use('/patch-promo', routes); 
+app.use('/get-promo', routes);
+app.use('/delete-manager', routes);
 
 app.use('/create-investment',routes)
 app.use('/patch-investment',routes)
@@ -55,7 +62,7 @@ app.use('/delete-wallet/:id',routes)
 
 app.use('/get-notifications/:id',routes)
 
-sequelize.sync({force:true})
+sequelize.sync()
   .then(() => console.log('model formed'))
   .catch(err => console.log(err));
 

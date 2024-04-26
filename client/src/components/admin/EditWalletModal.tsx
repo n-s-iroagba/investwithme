@@ -6,13 +6,7 @@ import { patchWallet } from '../../utils/helpers';
 const EditWalletModal:React.FC<{data:WalletType,show:boolean}>= ({ data, show }) => {
   const [error, setError] = useState<string|null>(null);
   const [showModal, setShowModal]= useState(false);
-  const [walletData, setWalletData]= useState<WalletType>({
-    id:0,
-    blockchain:"",
-    network:'',
-    currency:'',
-    address:'',
-  });
+  const [walletData, setWalletData]= useState<WalletType>(data);
   
 
   useEffect(() => {
@@ -27,8 +21,9 @@ const EditWalletModal:React.FC<{data:WalletType,show:boolean}>= ({ data, show })
   }
 
   const handleConfirm = async () => {
+    console.log(walletData)
     try{
-     patchWallet(data);
+     patchWallet(walletData);
 
     }catch(error:any){
       setError('Sorry an error occured while attempting to edit wallet')

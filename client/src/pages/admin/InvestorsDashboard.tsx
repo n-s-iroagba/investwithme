@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import SuccessModal from '../../components/general/SuccessModal'
 import { MiniFooter } from '../../components/home_components/Footer'
 import '../../components/styles.css'
@@ -22,20 +22,18 @@ const AddInvestmentModalForm: React.FC<ModalFormProps> = ({ show }) => {
   });
   const [modalShow, setModalShow] = useState<boolean>(false)
   const [currencies, setCurrencies] = useState<string[]>([])
-  const convertRef = useRef<any>(null); // Use useRef to store the convert variable
+
 
   useEffect(() => {
-    convertRef.current = new CryptoConvert(); // Store the CryptoConvert instance in the ref
-    convertRef.current.ready();
     setModalShow(show);
     const currencyResponse = getCurrencies();
     setCurrencies(currencyResponse);
   }, [show]);
 
   const convertCurrency = () => {
-    let newAmount;
+    let newAmount:any;
     if (formData.currency === 'BTC') {
-      newAmount = convertRef.current.BTC.USD(formData.currency);
+      newAmount = convert.BTC.USD(formData.currency);
     }
     if (newAmount) {
       setFormData(prevData => ({
@@ -45,7 +43,14 @@ const AddInvestmentModalForm: React.FC<ModalFormProps> = ({ show }) => {
       return true;
     }
   };
+const convert = new CryptoConvert(/*options?*/);
 
+(async function(){
+
+	await convert.ready(); 
+	
+
+})()
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });

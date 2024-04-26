@@ -22,6 +22,7 @@ export const getInvestmentRoute = `${domain}/get-investment`
 export const createManagerUrl = `${domain}/create-manager`
 export const patchManagerUrl = `${domain}/patch-manager`
 export const getManagersUrl = `${domain}/get-managers`
+export const getSingleMangerRoute = `${domain}/manager`
 export const deleteManagerRoute = `${domain}/delete-manager`
 
 export const createWalletUrl = `${domain}/create-wallet`

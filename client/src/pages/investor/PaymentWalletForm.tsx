@@ -72,7 +72,6 @@ const PaymentWalletForm: React.FC = () => {
             type="text"
             value={wallet.address}
             className='px-0 text-center text-light  bg-transparent form-control'
-            placeholder="Enter text to copy"
           />
           <Form.Text className="text-light">
             Click the button to copy the text to the clipboard.

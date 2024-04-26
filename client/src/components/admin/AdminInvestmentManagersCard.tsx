@@ -13,7 +13,7 @@ export const MoveToPatchManager: React.FC<{ manager: ManagerType }> = ({ manager
   const navigate = useNavigate();
 
   const handleInvestClick = () => {
-    localStorage.setItem('cassockManager', JSON.stringify(manager));
+    localStorage.setItem('cassockManager', JSON.stringify(manager.id));
     navigate('/patch-manager');
   };
 
@@ -39,6 +39,7 @@ const AdminInvestmentManagersCard: React.FC = () => {
         const managerData = await getManagers(); 
         console.log(managerData)// Wait for the data to be fetched
         setManagers(managerData);
+        console.log(managerData)
       } catch (error) {
         console.error(error);
         alert ('an error occured, try again later')

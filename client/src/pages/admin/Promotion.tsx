@@ -7,28 +7,32 @@ import ExtendPromoFormModal from '../../components/admin/ExtendPromoModal'
 
 
 const Promotion = () => {
-    const [promo, setPromo] =useState({
-        id:0,
-        startDate:'',
-        endDate:''
-    })
+    const [promo, setPromo] =useState<any>(null
+  )
     const [showAddPromoModal, setShowAddPromoModal] = useState(false)
     const [showEditPromoModal, setShowEditPromoModal] = useState(false)
     useEffect(() => {
-        const receivedpromo = getPromo()
+      const fetchPromoData = async () => {
+        try {
+          const receivedpromo = await getPromo();
+          
+          if (receivedpromo){
+          
     
-        const endDate = new Date(receivedpromo.startDate);
-        endDate.setDate(endDate.getDate() + receivedpromo.durationInDays);
+          setPromo(receivedpromo);
+        }
+        } catch (error) {
+          console.error('Error fetching promo:', error);
+          // Handle the error as needed
+        }
+      };
+      
+      fetchPromoData();
+    }, []);
     
-        setPromo({
-          id: receivedpromo.id,
-          startDate: receivedpromo.startDate,
-          endDate: endDate.toDateString(),
-        });
-      }, [])
       
     return (
-        <div className='d-flex pt-5 flex-column align-items-center text-light primary-background full-height'>{promo.id === 0?
+        <div className='d-flex pt-5 flex-column align-items-center text-light primary-background full-height'>{promo === null?
             (<div>
                 <PromoFormModal show={showAddPromoModal}/>
                 <h4>No active promo</h4>

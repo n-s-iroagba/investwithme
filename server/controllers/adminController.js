@@ -3,7 +3,7 @@ const path = require('path');
 const fs = require('fs');
 
 const {PROMO_PERCENT,INVESTMENT_TENURE,REFERRAL_BONUS_PERCENT, COMPANY_NAME} = require('../config')
-const {Investor,Manager,DepositWallet,Referral,Investment,Transaction,Notification} = require('../model');
+const {Investor,Manager,DepositWallet,Referral,Investment,Transaction,Notification,AdminWallet,Promo} = require('../model');
 const {findManagerWithHighestMinInvestment} =require('../helpers');
 const { duration } = require('moment');
 
@@ -77,25 +77,26 @@ module.exports = {
   getAllWallets: async (req, res) => {
     try {
       const wallets = await AdminWallet.findAll();
-      return res.status(200).json({ wallets });
+      console.log(wallets);
+      return res.status(200).json(wallets);
     } catch (error) {
       console.error('Error fetching wallets:', error);
       return res.status(500).json({ error: 'Error fetching wallets' });
     }
   },
   
-  updateWalletAddressById: async (req, res) => {
-    const { id } = req.params;
-    const { address, blockchain, network } = req.body;
+  patchWallet: async (req, res) => {
+   console.log('hi')
+    const { id,address} = req.body;
+    console.log(address)
     try {
       const wallet = await AdminWallet.findByPk(id);
       if (!wallet) {
         return res.status(404).json({ error: 'Wallet not found' });
       }
   
-      wallet.address = address || wallet.address;
-      wallet.blockchain = blockchain || wallet.blockchain;
-      wallet.network = network || wallet.network;
+      wallet.address = address
+   
       
       await wallet.save();
       return res.status(200).json({ message: 'Wallet address updated successfully', wallet });
@@ -105,7 +106,7 @@ module.exports = {
     }
   },
   
-  deleteWalletAddress: async (req, res) => {
+  deleteWallet: async (req, res) => {
     const { id } = req.params;
     try {
       const wallet = await AdminWallet.findByPk(id);
@@ -167,21 +168,44 @@ module.exports = {
       return res.status(500).json({ error: 'Error getting managers from database' });
     }
   },
-  
-  patchManager: async (req, res) => {
-    const { id } = req.body.id;
+  getSingleManager: async (req, res) => {
+    const {id} = req.params
     try {
       const manager = await Manager.findByPk(id);
-      if (!manager) {
-        return res.status(404).json({ error: 'Manager not found' });
-      } 
-      await manager.update(req.body);
+      return res.status(200).json( manager );
+    } catch (error) {
+      console.error('Error fetching manager:', error);
+      return res.status(500).json({ error: 'Error getting managerfrom database' });
+    }
+  },
+  
+   patchManager: async (req, res) => {
+ 
+    const { id, lastName, firstName, minimumInvestmentAmount, percentageYield, country, duration } = req.body;
+    try {
+     
+      const manager = await Manager.findByPk(id);
+
+    if (!manager) {
+      return res.status(404).json({ error: 'Manager not found' });
+    }
+
+      manager.lastName = lastName;
+      manager.firstName = firstName;
+      manager.minimumInvestmentAmount = minimumInvestmentAmount;
+      manager.percentageYield = percentageYield;
+      manager.country = country;
+      manager.duration = duration;
+      await manager.save();
+  
       return res.status(200).json({ message: 'Manager updated successfully' });
     } catch (error) {
       console.error('Error updating manager:', error);
       return res.status(500).json({ error: 'Error updating manager' });
     }
   },
+  
+  
   
   deleteManager: async (req, res) => {
     const { id } = req.params;
@@ -198,10 +222,10 @@ module.exports = {
 
 //IMPLEMENT ALL BELOW
 createPromo: async (req, res) => {
-  const { title, description, startDate, endDate } = req.body;
+  const {  startDate, endDate } = req.body;
 
   try {
-    const promo = await Promo.create({ title, description, startDate, endDate });
+    const promo = await Promo.create({ startDate, endDate });
 
     // Placeholder: Send email to investors who have not invested yet
     const investors = await Investor.findAll({ where: { hasInvested: false } });
@@ -220,15 +244,23 @@ createPromo: async (req, res) => {
 
 updatePromo: async (req, res) => {
   const { id } = req.params;
-  const { title, description, startDate, endDate } = req.body;
+  const { days } = req.body;
+  console.log('hi')
 
   try {
-    const promo = await Promo.findByPk(id);
+    const promo = await Promo.findOne()
     if (!promo) {
       return res.status(404).json({ error: 'Promo not found' });
     }
 
-    await promo.update({ title, description, startDate, endDate });
+    const dateObject = new Date(promo.endDate);
+
+dateObject.setDate(dateObject.getDate() + days);
+const newDateString = dateObject.toISOString().split('T')[0];
+
+promo.endDate = newDateString
+promo.save();
+
 
     // Placeholder: Send email to investors who have not invested yet
     const investors = await Investor.findAll({ where: { hasInvested: false } });
@@ -245,25 +277,36 @@ updatePromo: async (req, res) => {
   }
 },
 
+getPromo: async (req, res)=>{
+try{
+  const promo = await Promo.findOne()
+  if (promo){
+  return res.status(200).json(promo)
+  }else{
+    return res.status(404).json({message: 'Promo not found'})
+  }
+}catch(error){
+  console.error('Error fetching promo:', error);
+  return res.status(500).json({ error: 'Error getting promo from database' });
+}
+},
 
+deletePromo: async (req, res) => {
+  try{
+    const promo = await Promo.findOne()
+    if (promo){
+      promo.destroy();
+      return res.status(200)
+      }else{
+        return res.status(404).json({message: 'Promo not found'})
+      }
+  }catch(error){
+    console.error('Error deleting promo:', error);
+    return res.status(500).json({ error: 'Error deleting promo from database' });
+  }
+}
 }
 
-const createTransaction = async (id, transactionAmount, type) => {
-  if (type === 'withdrawal') {
-    transactionAmount = -amount;
-  } else if (type !== 'deposit') {
-    return res.status(400).json({ error: 'Invalid transaction type' });
-  }
-  try {
-    const transaction = await Transaction.create({
-      InvestorId: id,
-      amount: transactionAmount,
-      type,
-    });
-  } catch (error) {
-    throw new Error(error)
-  }
-};
 const findManagerForInvestment = async (investmentAmount) => {
   const manager = await Manager.findOne({
     where: {

@@ -15,37 +15,38 @@ const WalletForm: React.FC = () => {
     network: '',
     currency: '',
   });
- const [networks,setNetworks] = useState<string[]>([])
- const [blockchains,setBlockchains] = useState<string[]>([])
- const [currencies,setCurrencies] = useState<string[]>([])
+ const [networks,setNetworks] = useState<string[]>(['ERC'])
+ const [blockchains,setBlockchains] = useState<string[]>(['IEB'])
+ const [currencies,setCurrencies] = useState<string[]>(['AB'])
   const [validated, setValidated] = useState<boolean>(false);
   const [submitting, setSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
 useEffect(() => {
  const cryptoData:CryptoDataType = getCryptoData()
- setNetworks(cryptoData.networks)
- setBlockchains(cryptoData.blockchains)
- setCurrencies(cryptoData.currencies)
+ 
 }, [])
 
-  const handleSelect = (e:any,name:string) => {
-    const {value} = e.target
-    setWalletData((prevData: CreateWalletType) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
+const handleSelect = (e: React.ChangeEvent<HTMLSelectElement>, name: string) => {
+  const { value } = e.target;
+  setWalletData((prevData: CreateWalletType) => ({
+    ...prevData,
+    [name]: value,
+  }));
+  console.log(value)
+};
   const handleChange = (e: any) =>{
-    const {name, value} = e.target
+    const { value} = e.target
     setWalletData((prevData: CreateWalletType) => ({
       ...prevData,
-      [name]: value,
+      address: value,
     }));
+  
   }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    console.log(walletData)
     let shouldNotSubmit = hasEmptyKey(walletData);
     try {
       if (shouldNotSubmit) {
@@ -68,10 +69,10 @@ useEffect(() => {
    
             <Form.Group className="mb-3" controlId="validationFormik04">
               <Form.Label>Currency {required}</Form.Label>
-              <Form.Select onChange={(e) => handleSelect(e.target.value, 'currency')} value={walletData.currency}>
+              <Form.Select onChange={(e) => handleSelect(e, 'currency')} value={walletData.currency}>
                 <option value="">Choose...</option>
                 {currencies.map((currency,index) => (
-                  <option key={index} value={walletData.currency}>
+                  <option key={index} value={currency}>
                     {currency}
                   </option>
                 ))}
@@ -80,10 +81,10 @@ useEffect(() => {
 
             <Form.Group className="mb-3" controlId="validationFormik04">
             <Form.Label>Blockchain {required}</Form.Label>
-              <Form.Select onChange={(e) => handleSelect(e.target.value, 'currency')} value={walletData.currency}>
+              <Form.Select onChange={(e) => handleSelect(e, 'blockchain')} value={walletData.currency}>
                 <option value="">Choose...</option>
                 {blockchains.map((blockchain,index) => (
-                  <option key={index} value={walletData.blockchain}>
+                  <option key={index} value={blockchain}>
                     {blockchain}
                   </option>
                 ))}
@@ -92,10 +93,10 @@ useEffect(() => {
 
             <Form.Group className="mb-3" controlId="validationFormik04">
             <Form.Label>Network {required}</Form.Label>
-              <Form.Select onChange={(e) => handleSelect(e.target.value, 'currency')} value={walletData.currency}>
+              <Form.Select onChange={(e) => handleSelect(e, 'network')} value={walletData.currency}>
                 <option value="">Choose...</option>
                 {networks.map((network,index) => (
-                  <option key={index} value={walletData.network}>
+                  <option key={index} value={network}>
                     {network}
                   </option>
                 ))}

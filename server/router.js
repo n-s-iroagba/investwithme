@@ -21,8 +21,9 @@ router.post('/new-password/:id',authController.changePassword )
 
  router.post("/create-investor", authController.createInvestor)
  router.get('/get-investors', )
- router.patch('/top-up',)
- router.patch('/pay',)
+ router.patch('/pay',investorController.topUp)
+ router.get('/pay-referral/:id',investorController.payReferralBonus)
+ router.get('/pay-bonus/:id',investorController.payPromoBonus)
  router.delete('/delete-investor/:id',)
 
  router.post("/create-manager", (req, res, next) => {
@@ -46,22 +47,23 @@ router.post('/new-password/:id',authController.changePassword )
   }, adminController.createManager);
   
  router.get('/get-managers',adminController.getAllManagers )
- router.patch('patch-manager',adminController.patchManager)
+ router.get('/manager/:id',adminController.getSingleManager)
+ router.patch('/patch-manager',adminController.patchManager)
  router.delete('/delete-manager/:id',adminController.deleteManager)
 
  router.post('/create-investment', )
  router.get('/get-investment/:id', )
  router.patch('/patch-investment',)
 
- router.post('/create-wallet', )
- router.get('/get-wallets', )
- router.patch('patch-wallet',)
- router.delete('/delete-wallet/:id',)
+ router.post('/create-wallet', adminController.createAdminWallet)
+ router.get('/get-wallets',adminController.getAllWallets )
+ router.patch('/patch-wallet',adminController.patchWallet)
+ router.delete('/delete-wallet/:id',adminController.deleteWallet)
 
- router.post('/create-promo', )
- router.get('/get-promo', )
- router.patch('patch-promo',)
- router.delete('/delete-promo/:id',)
+ router.post('/create-promo',adminController.createPromo )
+ router.get('/get-promo', adminController.getPromo)
+ router.patch('/patch-promo',adminController.updatePromo)
+ router.delete('/delete-promo/',adminController.deletePromo)
 
  router.get('/get-notifications/:id', )
 

@@ -13,8 +13,6 @@ const DeleteModal:React.FC<{id:number,show:boolean,entity:'wallet'|'manager'|'in
     setShowModal(show);
   }, [show])
 
-  
-
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
   };
@@ -23,6 +21,7 @@ const DeleteModal:React.FC<{id:number,show:boolean,entity:'wallet'|'manager'|'in
     setShowModal(false);
     window.location.reload()
   }
+
   const handleConfirm = () => {
     if (password === secretCode) {
     if (entity==='manager'){
@@ -36,7 +35,7 @@ const DeleteModal:React.FC<{id:number,show:boolean,entity:'wallet'|'manager'|'in
     
     handleClose();
     } else {
-      setError('Incorrect secretCode');
+      setError('Incorrect secretCode')
     }
   };
 

@@ -1,6 +1,6 @@
 import { deleteItem, getData, patchFormDataItem, patchItem, postData,postFormData } from "./api";
 import { AddInvestmentType, CreateInvestmentType, CreatePromoType, CreateWalletType, PromoType, WalletType } from "./types";
-import { createManagerUrl, patchManagerUrl, deleteManagerRoute, createWalletUrl, patchWalletUrl, deleteWalletRoute, createInvestmentRoute, getManagersUrl, getWalletsUrl, getPromoUrl, createPromoUrl, patchPromoUrl, deletePromoRoute, payUrl, deleteInvestorRoute, payReferralRoute, payBonusRoute} from "./constants";
+import { createManagerUrl, patchManagerUrl, deleteManagerRoute, createWalletUrl, patchWalletUrl, deleteWalletRoute, createInvestmentRoute, getManagersUrl, getWalletsUrl, getPromoUrl, createPromoUrl, patchPromoUrl, deletePromoRoute, payUrl, deleteInvestorRoute, payReferralRoute, payBonusRoute, getSingleMangerRoute} from "./constants";
 
 export const createInvestment = async (data: CreateInvestmentType) => {
   const investorId =1
@@ -46,8 +46,23 @@ export const getManagers = async ()=>{
   throw new Error(error.message)
   }
 }
+export const getSingleManager = async (id:string)=>{
+  const authorizationData = localStorage.getItem('cassockJwtToken');
+  const url = `${getSingleMangerRoute}/${id}`
+  try{
+  const response = await getData(url,authorizationData);
+  if (response.status ===200)
+  return response.data
+  throw new Error('no managers found')
+  
+  }catch(error:any){
+    console.error(error)
+  throw new Error(error.message)
+  }
+}
 
 export const patchManager=async ( data:FormData,navigate:(path:string)=>void) =>{
+  console.log(data)
   try {
     const authorizationData = localStorage.getItem('cassockJwtToken');
     const response = await patchFormDataItem(patchManagerUrl, data, authorizationData);
@@ -99,13 +114,17 @@ export const createWallet= async (data:CreateWalletType) => {
  }
 };
 
-export const getAdminWallets:()=>WalletType[] =()=>{
+export const getAdminWallets = async ()=>{
   const authorizationData = localStorage.getItem('cassockJwtToken');
   try{
-  const response:any = getData(getWalletsUrl, authorizationData);
-  if (response.status ===200)
-  return response.data
-  throw new Error('no wallets found')
+  const response:any = await getData(getWalletsUrl, authorizationData);
+  if (response.status ===200){
+    console.log(response.data)
+    return response.data
+  }else{
+    return []
+  }
+  
   
   }catch(error:any){
     console.error(error)
@@ -126,7 +145,8 @@ export const patchWallet=async ( data:WalletType) =>{
   }
 }catch (error:any) {
  console.error(error)
- throw new Error(error.message)
+ console.log(error)
+ return error
 }
 }
 
@@ -149,13 +169,15 @@ const url =`${deleteWalletRoute}/${id}`
 
 }
 
-export const getPromo=()=>{
+export const getPromo=async ()=>{
   const authorizationData = localStorage.getItem('cassockJwtToken');
   try{
-  const response:any = getData(getPromoUrl, authorizationData);
-  if (response.status ===200)
+  const response:any = await getData(getPromoUrl, authorizationData);
+  if (response.status ===200){
   return response.data
-  throw new Error('no promo found')
+  }else{
+    return null
+  }
   }catch(error:any){
     console.error(error)
   throw new Error(error.message)
@@ -187,7 +209,7 @@ export const getNewbies = ()=>{
   ]
 }
 
-export const patchPromo=async ( data:PromoType) =>{
+export const patchPromo=async ( data:any) =>{
   try {
     const authorizationData = localStorage.getItem('cassockJwtToken');
     const response = await patchItem(patchPromoUrl, data, authorizationData);

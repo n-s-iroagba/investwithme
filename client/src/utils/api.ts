@@ -97,11 +97,13 @@ export const patchItem = async (url: string, data: any, authorizationData: strin
 
 export const patchFormDataItem = async (url: string, formData: FormData, authorizationData: string | null = null) => {
   const headers: { [key: string]: string } = {};
-
+  console.log(url)
   if (authorizationData) {
     headers['Authorization'] = authorizationData;
   }
-
+  formData.forEach((value, key) => {
+    console.log(`${key}:`, value);
+  })
   try {
     const response: AxiosResponse<any> = await axios.patch(url, formData, { headers });
     return response;
