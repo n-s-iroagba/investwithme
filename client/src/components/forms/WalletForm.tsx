@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Col, Form, Spinner } from 'react-bootstrap';
 import ErrorMessage from '../general/ErrorMessage';
-import { CreateWalletType, CryptoDataType} from '../../utils/types';
+import { CreateWalletType} from '../../utils/types';
 import { required } from '../auth/general/required';
-import { createWallet, getCryptoData} from '../../utils/helpers';
+import { createWallet} from '../../utils/helpers';
 import { hasEmptyKey,} from '../../utils/utils';
 
 
@@ -15,15 +15,15 @@ const WalletForm: React.FC = () => {
     network: '',
     currency: '',
   });
- const [networks,setNetworks] = useState<string[]>(['ERC'])
- const [blockchains,setBlockchains] = useState<string[]>(['IEB'])
- const [currencies,setCurrencies] = useState<string[]>(['AB'])
+ const networks = ['ERC']
+ const blockchains = ['IEB']
+ const currencies = ['AB']
   const [validated, setValidated] = useState<boolean>(false);
   const [submitting, setSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
 useEffect(() => {
- const cryptoData:CryptoDataType = getCryptoData()
+
  
 }, [])
 
@@ -64,7 +64,7 @@ const handleSelect = (e: React.ChangeEvent<HTMLSelectElement>, name: string) => 
   };
 
   return (
-    <div className="d-flex justify-content-center align-content-center mt-5 px-2">
+    <div className="d-flex justify-content-center flex-column align-content-center mt-5 px-2">
       <Form className="form py-5" noValidate validated={validated} onSubmit={handleSubmit}>
    
             <Form.Group className="mb-3" controlId="validationFormik04">
@@ -81,7 +81,7 @@ const handleSelect = (e: React.ChangeEvent<HTMLSelectElement>, name: string) => 
 
             <Form.Group className="mb-3" controlId="validationFormik04">
             <Form.Label>Blockchain {required}</Form.Label>
-              <Form.Select onChange={(e) => handleSelect(e, 'blockchain')} value={walletData.currency}>
+              <Form.Select onChange={(e) => handleSelect(e, 'blockchain')} value={walletData.blockchain}>
                 <option value="">Choose...</option>
                 {blockchains.map((blockchain,index) => (
                   <option key={index} value={blockchain}>
@@ -93,7 +93,7 @@ const handleSelect = (e: React.ChangeEvent<HTMLSelectElement>, name: string) => 
 
             <Form.Group className="mb-3" controlId="validationFormik04">
             <Form.Label>Network {required}</Form.Label>
-              <Form.Select onChange={(e) => handleSelect(e, 'network')} value={walletData.currency}>
+              <Form.Select onChange={(e) => handleSelect(e, 'network')} value={walletData.network}>
                 <option value="">Choose...</option>
                 {networks.map((network,index) => (
                   <option key={index} value={network}>
@@ -120,7 +120,7 @@ const handleSelect = (e: React.ChangeEvent<HTMLSelectElement>, name: string) => 
           <button className="button-styles w-50 text-light" type={submitting ? 'submit' : 'submit'}>
             {submitting ? <Spinner animation="border" size="sm" /> : 'Submit'}
           </button>
-          <button className="button-styles text-light w-50">Home</button>
+          <button className="button-styles text-light w-50" onClick={()=>console.log(walletData)}>Home</button>
         </div>
       </Form>
       <ErrorMessage message={errorMessage} />

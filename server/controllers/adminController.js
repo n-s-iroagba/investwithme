@@ -54,8 +54,9 @@ module.exports = {
 
   //Wallet
   createAdminWallet: async (req, res) => {
+    console.log(req)
     try {
-      const { address, blockchain, network } = req.body;
+      const { address, blockchain, network,currency } = req.body;
   
       if (!blockchain || !address) {
         return res.status(400).json({ message: 'Missing required fields' });
@@ -65,6 +66,7 @@ module.exports = {
         address,
         blockchain,
         network,
+        currency,
       });
   
       return res.status(201).json({ message: 'Wallet created successfully', wallet });

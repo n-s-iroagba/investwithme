@@ -32,28 +32,28 @@ module.exports = {
   createInvestment: async (req, res) => {
     const id = req.params.id;
     const { amount, wallet, manager } = req.body;
-  
+  console.log('1')
     try {
     
       if (!amount || !wallet || !manager) {
         return res.status(400).json({ message: 'Missing required fields' });
       }
-  
+      console.log('2')
    
       const investor = await Investor.findByPk(id);
       if (!investor) {
         return res.status(404).json({ message: 'Investor not found' });
       }
-  
+      console.log('3')
  
       if (investor.hasInvested) {
         return res.status(400).json({ message: 'You have already invested previously. Proceed to make a top-up payment.' });
       }
-
+      console.log('5')
       if (investor.Investment) {
         await investor.Investment.destroy();
       }
-  
+      console.log('6')
        await Investment.create({
         amount,
         creationDate: new Date(),

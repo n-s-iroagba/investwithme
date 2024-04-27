@@ -1,8 +1,8 @@
 import { deleteItem, getData, patchFormDataItem, patchItem, postData,postFormData } from "./api";
-import { AddInvestmentType, CreateInvestmentType, CreatePromoType, CreateWalletType, PromoType, WalletType } from "./types";
+import { AddInvestmentType, CreatePromoType, CreateWalletType, WalletType } from "./types";
 import { createManagerUrl, patchManagerUrl, deleteManagerRoute, createWalletUrl, patchWalletUrl, deleteWalletRoute, createInvestmentRoute, getManagersUrl, getWalletsUrl, getPromoUrl, createPromoUrl, patchPromoUrl, deletePromoRoute, payUrl, deleteInvestorRoute, payReferralRoute, payBonusRoute, getSingleMangerRoute} from "./constants";
 
-export const createInvestment = async (data: CreateInvestmentType) => {
+export const createInvestment = async (data:any) => {
   const investorId =1
   const createInvestmentUrl = `${createInvestmentRoute}/${investorId}`;
 

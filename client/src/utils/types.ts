@@ -105,7 +105,7 @@ export interface WalletType{
   currency:string
 }
 export interface ManagerType {
-  id: number,
+    id:number
     firstName: string,
     lastName: string,
     minimumInvestmentAmount: number

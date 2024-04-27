@@ -5,22 +5,23 @@ import ErrorMessage from '../general/ErrorMessage'
 import { useNavigate } from 'react-router-dom'
 import '../styles.css'
 import { CreateInvestmentType, ManagerType, WalletType } from '../../utils/types'
-import { findManagerWithHighestMinInvestment, findManagerById,} from '../../utils/utils'
+import { findManagerWithHighestMinInvestment, findManagerById, } from '../../utils/utils'
 import { createInvestment, getAdminWallets, getManagers } from '../../utils/helpers'
-import Select from 'react-select';
 const WAValidator = require('multicoin-address-validator')
 
 
-const NewInvestmentForm: React.FC<{ username: string,}> = ({ username}) => {
+const NewInvestmentForm: React.FC<{ username: string, }> = ({ username }) => {
   const [submitting, setSubmitting] = useState(false)
 
   const [wallets, setWallets] = useState<WalletType[]>([]);
   const [walletVerified, setWalletVerified] = useState<boolean>(true)
   const [filteredCurrencywallets, setFilteredCurrencyWallets] = useState<WalletType[]>([]);
   const [filteredBlockchainWallets, setFilteredBlockchainWallets] = useState<WalletType[]>([]);
+  const [amount, setAmount] = useState(0)
   const [validated, setValidated] = useState<boolean>(false);
   const [smallAmount, setSmallAmount] = useState<boolean>(false);
   const [tooBigManager, setTooBigManager] = useState<boolean>(false);
+  const [address,setAddress] = useState('')
   const dummyManager = {
     id: 0,
     firstName: '',
@@ -45,34 +46,41 @@ const NewInvestmentForm: React.FC<{ username: string,}> = ({ username}) => {
   const [managers, setManagers] = useState<ManagerType[]>([])
   const [errorMessage, setErrorMessage] = useState('')
   const navigate = useNavigate();
-  const managerId = localStorage.getItem('cassockNewInvestmentInitmanagerId');
 
 
   useEffect(() => {
 
+
     const fetchManagerData = async () => {
       try {
-        const managerData = await getManagers(); 
-        const walletData = await getAdminWallets()
-        setWallets(walletData )
+        const managerData = await getManagers();
+
+        const walletData = await getAdminWallets();
+        console.log(walletData);
+        setWallets(walletData);
         setManagers(managerData);
-      } catch (error:any) {
+        const managerId = localStorage.getItem('cassockNewInvestmentInitmanagerId');
+        const manager = findManagerById(managerData, Number(managerId));
+        if (manager) {
+          setInvestmentData(i => ({ ...i, manager: manager }));
+        }
+      } catch (error: any) {
         console.error(error);
         setErrorMessage(error.message);
       }
     };
 
-    fetchManagerData(); 
-    const manager = findManagerById(managers, Number(managerId))
-      if (manager) {
-        setInvestmentData({ ...investmentData, manager: manager })
-      }
-  }, [investmentData, managerId, managers]);
-      
+    fetchManagerData();
+  }, []);
+
+
+
 
 
   const handleAmountChange = (e: any) => {
+    setAmount(e.target.value)
     const manager = findManagerWithHighestMinInvestment(managers, e.target.value)
+    
     if (manager) {
       setInvestmentData({
         ...investmentData,
@@ -137,24 +145,29 @@ const NewInvestmentForm: React.FC<{ username: string,}> = ({ username}) => {
     }));
   };
 
-  const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target;
-    setWalletVerified(verifyAddress(value))
-    if (walletVerified) {
-      setInvestmentData(prevData => ({
-        ...prevData,
-        wallet: {
-          ...prevData.wallet,
-          address: value
-        }
-      }));
-    }
-  }
-
   const verifyAddress = (address: any) => {
     return WAValidator.validate(address, investmentData.wallet.blockchain)
   }
 
+  const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    try {
+      setAddress(value)
+      setWalletVerified(verifyAddress(value))
+      if (walletVerified) {
+        setInvestmentData(prevData => ({
+          ...prevData,
+          wallet: {
+            ...prevData.wallet,
+            address: value
+          }
+        }));
+      }
+    } catch (e: any) {
+    console.error(e)
+      setErrorMessage('The address provided is invalid');
+    }
+  }
 
   const submitInvestment = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -172,7 +185,12 @@ const NewInvestmentForm: React.FC<{ username: string,}> = ({ username}) => {
     if (shouldSubmit) {
       setSubmitting(true);
       try {
-        const response = await createInvestment(investmentData);
+        const data= {
+          amount: investmentData.amount,
+          wallet: investmentData.wallet,
+          manager: investmentData.manager.id
+        }
+        const response = await createInvestment(data);
         if (response && response.status === 200) {
           console.log(response.data);
           localStorage.setItem('cassockPaymentWallet', JSON.stringify(response.data.wallet));
@@ -199,18 +217,22 @@ const NewInvestmentForm: React.FC<{ username: string,}> = ({ username}) => {
             required
             type="number"
             name="amount"
-            value={investmentData.amount}
-            onChange={handleAmountChange}
+            value={amount}
+            onChange={(e)=>handleAmountChange(e)}
             className=" custom-input bg-transparent form-control text-light"
           />
         </Form.Group>
         <br />
         <Form.Group className='mb-4' as={Col} lg="12" controlId="validationFormik04">
           <Form.Label className='mb-0'>Investment Manager{required}</Form.Label>
-          <Select options={managers} onChange={(e: any) => {
-            console.log(e)
-            handleManagerChange(e)
-          }} className=' bg-transparent form-control' />
+          <Form.Select onChange={(e) => handleManagerChange(e)} value={investmentData.manager.firstName}>
+            <option value={investmentData.manager.id}>{investmentData.manager.firstName} {investmentData.manager.lastName}</option>
+            {managers.map((manager, index) => (
+              <option key={index} value={manager.id}>
+                {manager.firstName} {manager.lastName}
+              </option>
+            ))}
+          </Form.Select>
         </Form.Group>
 
 
@@ -218,10 +240,10 @@ const NewInvestmentForm: React.FC<{ username: string,}> = ({ username}) => {
           <>
             <Form.Group className="mb-3" controlId="validationFormik04">
               <Form.Label>Currency {required}</Form.Label>
-              <Form.Select onChange={(e) => handleCurrencyChange(e)} >
+              <Form.Select onChange={(e) => handleCurrencyChange(e)} value={investmentData.wallet.currency} >
                 <option value="">Choose...</option>
                 {wallets.map((wallet, index) => (
-                  <option key={wallet.id} value={wallet.currency}>
+                  <option key={wallet.id} value={wallet.currency} className='text-dark'>
                     {wallet.currency}
                   </option>
                 ))}
@@ -234,7 +256,7 @@ const NewInvestmentForm: React.FC<{ username: string,}> = ({ username}) => {
                 <option value="">Choose...</option>
                 {filteredCurrencywallets.map((wallet) => (
                   <option key={wallet.id} value={wallet.blockchain}>
-                    {wallet.blockchain}value={wallet.blockchain}
+                    {wallet.blockchain}
                   </option>
                 ))}
               </Form.Select>
@@ -261,7 +283,7 @@ const NewInvestmentForm: React.FC<{ username: string,}> = ({ username}) => {
             required
             type="text"
             name="investmentName"
-            value={investmentData.wallet.address}
+            value={address}
             onChange={handleAddressChange}
             className=" custom-input bg-transparent form-control text-light"
           />

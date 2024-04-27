@@ -46,7 +46,7 @@ app.use('/patch-promo', routes);
 app.use('/get-promo', routes);
 app.use('/delete-manager', routes);
 
-app.use('/create-investment',routes)
+app.use('/create-investment/:id',routes)
 app.use('/patch-investment',routes)
 app.use('/get-investment/:id', routes);
 

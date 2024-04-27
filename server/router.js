@@ -51,7 +51,7 @@ router.post('/new-password/:id',authController.changePassword )
  router.patch('/patch-manager',adminController.patchManager)
  router.delete('/delete-manager/:id',adminController.deleteManager)
 
- router.post('/create-investment', )
+ router.post('/create-investment/:id',investorController.createInvestment )
  router.get('/get-investment/:id', )
  router.patch('/patch-investment',)
 

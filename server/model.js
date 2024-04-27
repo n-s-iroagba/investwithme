@@ -135,7 +135,7 @@ const Investment= sequelize.define("investment", {
     },
     investmentDate:{
       type:Sequelize.DATE,
-      allowNull:false,
+      allowNull:true,
     },
     dueDate:{
         type:Sequelize.DATE,
@@ -316,6 +316,10 @@ const Transaction = sequelize.define('transaction', {
       primaryKey: true,
     },
     address: {
+      type: Sequelize.STRING,
+      allowNull: false,
+    },
+    currency: {
       type: Sequelize.STRING,
       allowNull: false,
     },

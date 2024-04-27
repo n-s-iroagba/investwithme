@@ -67,7 +67,7 @@ export const canInvest = (investmentAmount:number, managers:any) =>{
   return investmentAmount < minMinInvestment;
 }
 
-export const findManagerWithHighestMinInvestment = (managers: ManagerType[], amount: number): ManagerType | null => {
+export const findManagerWithHighestMinInvestment = (managers: ManagerType[], amount: number) => {
   let highestMinInvestmentManager: ManagerType | null = null;
   let highestMinInvestment = 0;
 
@@ -77,8 +77,10 @@ export const findManagerWithHighestMinInvestment = (managers: ManagerType[], amo
       highestMinInvestmentManager = manager;
     }
   });
-
-  return highestMinInvestmentManager;
+  if (highestMinInvestmentManager) {
+    return highestMinInvestmentManager;
+  }
+  return null;
 };
 
 export const formatStartDate = (dateString: string): string => {
