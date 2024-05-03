@@ -3,7 +3,7 @@ const path = require('path');
 const fs = require('fs');
 
 const {PROMO_PERCENT,INVESTMENT_TENURE,REFERRAL_BONUS_PERCENT, COMPANY_NAME} = require('../config')
-const {Investor,Manager,DepositWallet,Referral,Investment,Transaction,Notification,AdminWallet,Promo} = require('../model');
+const {Investor,Manager,Notification,AdminWallet,Promo,Newbies} = require('../model');
 const {findManagerWithHighestMinInvestment} =require('../helpers');
 const { duration } = require('moment');
 
@@ -306,6 +306,20 @@ deletePromo: async (req, res) => {
     console.error('Error deleting promo:', error);
     return res.status(500).json({ error: 'Error deleting promo from database' });
   }
+},
+getNewbies : async  (req, res) => {
+  try{
+    const newbie = await Newbies.findOne()
+    const responseNewbie = newbie
+    newbie.promo = 0
+    newbie.referral = 0
+    newbie.investment=0
+    newbie.save()
+    return res.status(200).json(responseNewbie)
+}catch(error){
+  console.error('Error fetching newbies:', error);
+  return res.status(500).json({ error: 'Error getting newbies from database' });
+}
 }
 }
 

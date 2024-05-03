@@ -355,6 +355,23 @@ const Transaction = sequelize.define('transaction', {
     },
     })
 
+    const Newbies = sequelize.define('newbies', {
+      promo: {
+        type: Sequelize.INTEGER,
+        defaultValue:0,
+        allowNull: false,
+      },
+      referral: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        defaultValue:0
+      },
+      investment: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        defaultValue:0
+      },
+      })
 
 const Admin = sequelize.define('admin', {
     name: {
@@ -407,4 +424,4 @@ sequelize.sync()
   .catch(err => {
     console.error('Unable to sync User model:', err);
   });
-module.exports =  {Investor,Admin,Manager,AdminWallet,DepositWallet,Referral,Investment,Transaction,Notification,PromoNotification,Promo}
+module.exports =  {Investor,Admin,Manager,AdminWallet,DepositWallet,Referral,Investment,Transaction,Notification,PromoNotification,Promo,Newbies}

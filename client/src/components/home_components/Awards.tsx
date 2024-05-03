@@ -1,7 +1,7 @@
 import React from 'react';
 import { Col, Row } from 'react-bootstrap';
 
-const awards = ['a', 'b', 'c', 'd', 'e', 'f'];
+const awards = ['a', 'b', 'c', 'd',];
 
 const Awards: React.FC = () => {
     return (
@@ -11,8 +11,8 @@ const Awards: React.FC = () => {
         <Row className='primary-background'>
   {
     awards.map((award: any, index: number) => (
-      <Col style={{  height: '4cm' }} key={index} xs={12} md={4} lg={4} className='gx-3 d-flex justify-content-center align-items-center border border-white'>
-          <img className='p-1' style={{ width: '100%', height: '100%', maxWidth: '4cm', maxHeight: '3cm' }} src={''} alt='award' />
+      <Col style={{  height: '4cm' }} key={index} xs={12} md={6} lg={3} className='gx-3 d-flex justify-content-center align-items-center border border-white'>
+          <img className='p-1' style={{ width: '100%', height: '100%', maxWidth: '100%', maxHeight: '100%' }} src={''} alt='award' />
       </Col>
     ))
   }

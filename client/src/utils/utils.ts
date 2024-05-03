@@ -34,18 +34,17 @@ export const hasEmptyKey = (obj: { [key: string]: any }): boolean => {
   return false;
 };
 
-export const getPromoRemainingTime = (date: string, duration: number) => {
-  const now = new Date();
-  const promoDate = new Date(date).getTime() + duration;
-  
-  if (isNaN(promoDate)) {
-    throw new Error('Invalid date format. Please provide a valid date string.');
-  }
-  
-  const timeDifference = promoDate - now.getTime(); 
-  return timeDifference;
+export const getPromoRemainingTime = (startDate: string, endDate: string): number => {
+  const startTimestamp = new Date(startDate).getTime(); 
+  const endTimestamp = new Date(endDate).getTime(); 
+  const remainingTime = endTimestamp - startTimestamp;
+
+  return remainingTime; 
 }
 
+export const sortManagers = (managers: ManagerType[]): ManagerType[] => {
+  return managers.sort((a:ManagerType, b:ManagerType) => a.minimumInvestmentAmount - b.minimumInvestmentAmount);
+};
 export const findManagerById = (managersArray:ManagerType[], idToFind:number) => {
   return managersArray.find((manager) => manager.id === idToFind);
 };

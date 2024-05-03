@@ -30,27 +30,7 @@ const AddInvestmentModalForm: React.FC<ModalFormProps> = ({ show }) => {
     setCurrencies(currencyResponse);
   }, [show]);
 
-  const convertCurrency = () => {
-    let newAmount:any;
-    if (formData.currency === 'BTC') {
-      newAmount = convert.BTC.USD(formData.currency);
-    }
-    if (newAmount) {
-      setFormData(prevData => ({
-        ...prevData,
-        amount: newAmount,
-      }));
-      return true;
-    }
-  };
-const convert = new CryptoConvert(/*options?*/);
 
-(async function(){
-
-	await convert.ready(); 
-	
-
-})()
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -69,10 +49,8 @@ const convert = new CryptoConvert(/*options?*/);
   const handleSubmit =async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try{
-    const converted = convertCurrency()
-    if (converted) {
+ 
      await addInvestment(formData)
-    }
     handleConfirm()
  
   }catch(error:any){

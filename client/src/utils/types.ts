@@ -5,7 +5,7 @@ export interface PromoType{
   id:number;
   startDate: string,
   bonusPercentage:number,
-  durationInDays:number,
+  endDate:string,
 }
 
 
@@ -50,11 +50,6 @@ export interface PortfolioDataType {
   };
 };
 
-export interface CryptoDataType{
-  networks:string[],
-  blockchains:string[],
-  currencies:string[]
-}
 
 export interface AdminInvestorType {
   id: number;

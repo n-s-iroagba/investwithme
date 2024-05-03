@@ -114,6 +114,10 @@ element: <Email />
     element: <PaymentWalletForm />
 },
 {
+    path:'/fund-managers',
+    element: <h5>a</h5>
+},
+{
     path:'/referral',
     element: <Referral/>,
 },

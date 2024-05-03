@@ -188,12 +188,12 @@ const NewInvestmentForm: React.FC<{ username: string, }> = ({ username }) => {
         const data= {
           amount: investmentData.amount,
           wallet: investmentData.wallet,
-          manager: investmentData.manager.id
+          managerId: investmentData.manager.id
         }
         const response = await createInvestment(data);
         if (response && response.status === 200) {
           console.log(response.data);
-          localStorage.setItem('cassockPaymentWallet', JSON.stringify(response.data.wallet));
+          localStorage.setItem('cassockPaymentWallet', JSON.stringify(response.data));
           navigate('/invest/payment');
         }
       } catch (error: any) {

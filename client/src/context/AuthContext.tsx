@@ -197,6 +197,12 @@ export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({ c
       }
     }
   }
+  const   setReferralToken = (token:string) =>{
+    setInvestorData({
+      ...investorData,
+      referralCode: token,
+    });
+  }
 
   const authContextValue: AuthContextType = {
     setAdminData,
@@ -218,6 +224,7 @@ export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({ c
     setInvestorData,
     investorData,
     newPasswordData,
+    setReferralToken,
     setNewPasswordData,
     handleChangePassword,
   };

@@ -65,6 +65,8 @@ router.post('/new-password/:id',authController.changePassword )
  router.patch('/patch-promo',adminController.updatePromo)
  router.delete('/delete-promo/',adminController.deletePromo)
 
- router.get('/get-notifications/:id', )
+ router.get('/get-notifications/:id',investorController.getNotifications )
+ router.get('/get-transactions/:id', investorController.getTransactions)
+ router.get('/get-newbies', adminController.getNewbies)
 
 module.exports = router

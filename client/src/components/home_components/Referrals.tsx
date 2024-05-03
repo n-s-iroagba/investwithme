@@ -11,7 +11,7 @@ const Referrals:React.FC =()=>{
         </div>
          <Information head='' text={`Introduce a friend to our investment platform and both of you can reap the rewards
          ! With our Refer a Friend program, you can earn exciting rewards while your friend benefits from expert financial guidance.
-          It's a win-win opportunity to share the wealth and grow together`} icon={faUsers}/> 
+          It's a win-win opportunity to share the wealth and grow together.`} icon={faUsers}/> 
     </div>
 }
 export default Referrals

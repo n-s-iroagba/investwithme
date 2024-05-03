@@ -23,8 +23,8 @@ const [promo,setPromo] = useState <PromoType|null>(null)
 useEffect(()=>{
     const receivedpromo:PromoType ={
         id: 1,
-        startDate: new Date('2021-01-01').toDateString(),
-        durationInDays: 30,
+        startDate: new Date('2024-04-29').toDateString(),
+        endDate: new Date('2024-05-05').toDateString(),
         bonusPercentage: 100
     }
     setPromo(receivedpromo)

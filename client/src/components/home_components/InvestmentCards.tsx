@@ -1,68 +1,62 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Row, Col } from 'react-bootstrap'
 import { InvestmentTiersCard } from '../general/InvestmentTiersCard';
-import { GetStartedButton } from '../general/Button';
+import { SelectManagerButton } from '../general/Button';
+import { ManagerType } from '../../utils/types';
+import { getManagers } from '../../utils/helpers';
+import { sortManagers } from '../../utils/utils';
 
 const InvestmentCards: React.FC = () => {
+const [investmentData,setInvestementData] = useState<ManagerType[]>([])
+useEffect(() => {
+    const fetchManagerData = async () => {
+      try {
+        const managerData = await getManagers(); 
+        const sortedManagers = sortManagers( managerData)
+        setInvestementData(sortedManagers);
 
+        console.log(managerData)
+      } catch (error) {
+        console.error(error);
+        alert ('an error occured, try again later')
+        // navigate ('/admin/dashboard')
+      }
+    };
 
-    const investmentData = [
-        {
-            id: 1,
-            percentageYield: 150,
-            image: "https://via.placeholder.com/150",
-            firstName: "Annabel",
-            qualification:'Chartered Financial Analyst',
-            lastName: "Glasgow",
-            minimumInvestmentAmount: 500,
-            duration: 2,
-        },
-        {
-            id: 2,
-            percentageYield: 150,
-            image: "https://via.placeholder.com/150",
-            firstName: "Annabel",
-            lastName: "Glasgow",
-            qualification:'Chartered Wealth Manager',
-            minimumInvestmentAmount: 500,
-            duration: 2,
-        },
-        {
-            id: 3,
-            percentageYield: 150,
-            image: "https://via.placeholder.com/150",
-            firstName: "Annabel",
-            lastName: "Glasgow",
-            qualification: 'MSc Finance',
-            minimumInvestmentAmount: 500,
-            duration: 2
-        }
-    ];
+    fetchManagerData(); // Call the async function to fetch data
+  }, []);
+   
 
     return (
         <div className='px-3'>
-            <Row className='gy-4 gx-1'>
+         {investmentData.length > 0?
+         <>
+            <Row className='gy-4'>
                 <Col xs={12}>
-                    <h3 className='text-center mt-4 text-light'>
+                    <h3 className='text-center mt-5 mb-2'>
                         Select Your Fund Manager And Investment Tier
                     </h3>
                 </Col>
-
+                <div className='d-flex justify-content-evenly'>
                 {investmentData.map((data, index) => (
                     <Col key={index} xs={12} md={6} lg={4}>
                         <InvestmentTiersCard
-                            percentageYield={`${data.percentageYield}% RETURN ON INVESTMENT`}
+                            percentageYield={`${data.percentageYield}%`}
                             image={data.image}
                             firstName={data.firstName}
                             lastName={data.lastName}
                             qualification={data.qualification}
                             minimumInvestmentAmount={`$${data.minimumInvestmentAmount}`}
                             duration={`${data.duration} weeks`}
-                            button={<GetStartedButton/>}
+                            button={<SelectManagerButton managerId={data.id} />}
                         />
                     </Col>
                 ))}
+                </div>
             </Row>
+            </>
+            :''
+}
         </div>
     );
 

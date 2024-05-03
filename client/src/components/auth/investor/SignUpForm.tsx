@@ -31,6 +31,7 @@ const SignUpForm: React.FC = () => {
     showPassword,
     isPasswordsMatch,
     errorMessage,
+    setReferralToken,
     passwordValidityMessage
   } = useContext<any>(AuthContext)
 
@@ -43,17 +44,29 @@ const SignUpForm: React.FC = () => {
   const navigateToVerifyEmailPage = () => {
     navigate('/verify-email')
   }
-
   useEffect(() => {
     fetch(
       "https://valid.layercode.workers.dev/list/countries?format=select&flags=true&value=code"
     )
-      .then((response) => response.json())
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
       .then((data) => {
         setCountries(data.countries);
-       
+      })
+      .catch((error) => {
+        alert(`Error fetching data: poor network connection`);
       });
-  },[ setCountries,]);
+  
+    const params = new URLSearchParams(window.location.search); // Parse the URL search parameters
+    const tokenFromUrl = params.get('token'); // Get the token from the URL query parameters
+    setReferralToken(tokenFromUrl);
+
+  }, [setReferralToken]);
+  
 
   return (
 

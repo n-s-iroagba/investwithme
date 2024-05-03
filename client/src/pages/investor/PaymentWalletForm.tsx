@@ -29,6 +29,7 @@ const PaymentWalletForm: React.FC = () => {
   };
   useEffect(() => {
     const storedWallet = localStorage.getItem('cassockPaymentWallet');
+    console.log(storedWallet)
 
     if (storedWallet) {
       setWallet(JSON.parse(storedWallet));

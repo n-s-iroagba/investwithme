@@ -51,6 +51,7 @@ export interface AuthContextType {
       password: string,
       confirmatoryPassword: string
     ) => boolean;
+    setReferralToken:(token:string) => void;
     showPassword: () => void;
     handleSubmit:(data:AdminData,event: React.FormEvent<HTMLFormElement>,domain:string,callback:()=>void)=>void;
     handleChange:(data:AdminData, event:  React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,setState: React.Dispatch<React.SetStateAction<InvestorData|AdminData|NewPasswordData>> )=>void

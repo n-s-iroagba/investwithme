@@ -27,12 +27,12 @@ const SecurityAssurance: React.FC = () => {
              We're backed by top financial market operators and we not only meet traditional banking security standards, we exceed them" icon={faBank} />
             </Col>
             <Col lg={6}>
-              <Information head='Deposit Insurance' text="To safeguard our clients' financial interests and eliminate all risk, all deposits are insured securely with HSBC Malta, a reputable and well-established financial institution. This comprehensive insurance coverage ensures that no liability falls upon us in the event of unforeseen circumstances" icon={faBank} />
+              <Information head='Deposit Insurance' text="To safeguard our clients' financial interests and eliminate all risk, all deposits are insured securely under the European Deposit Insurance Scheme. This comprehensive insurance coverage ensures that no liability falls upon us in the event of unforeseen circumstances." icon={faBank} />
             </Col>
           </Row>
           <Row>
             <Col lg={6}>
-              <Information head='Covered by US SEC' text="Trading accounts are held by our partners, a firm duly registered by the Securities and Exchange Commission  in the US" icon={faBank} />
+              <Information head='Covered by US SEC' text="Trading accounts are held by our partners, a firm duly registered by the Securities and Exchange Commission  in the US." icon={faBank} />
             </Col>
             <Col lg={6}>
               <Information head="Secure payments" text="Our payment processor is PADSS & PCIDSS compliant satisfying the highest level of Security Audit available." icon={faBank} />

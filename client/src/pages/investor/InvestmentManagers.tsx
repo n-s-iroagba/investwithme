@@ -3,23 +3,10 @@ import { Row, Col } from 'react-bootstrap';
 import { InvestmentTiersCard } from '../../components/general/InvestmentTiersCard';
 import { MiniFooter } from '../../components/home_components/Footer';
 import { ManagerType } from '../../utils/types';
-import { useNavigate } from 'react-router-dom';
+import { SelectManagerButton } from '../../components/general/Button';
 import { getManagers } from '../../utils/helpers';
 
-export const SelectManagerButton: React.FC<{ managerId?: number }> = ({ managerId }) => {
-    const navigate = useNavigate();
 
-    const handleInvestClick = () => {
-        localStorage.setItem('cassockNewInvestmentInitmanagerId', JSON.stringify(managerId));
-        navigate('/invest');
-    };
-
-    return (
-        <button onClick={handleInvestClick} className='button-styles'>
-            Invest with this Manager
-        </button>
-    );
-};
 
 const InvestmentManagers: React.FC = () => {
 const [managers,setManagers] = useState<ManagerType[]>([])

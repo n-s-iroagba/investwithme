@@ -24,14 +24,15 @@ const Steps: React.FC = () => {
           <p>Attaining financial freedom has never been so easy. Get started in 3 easy steps:</p>
           <Row>
             <Col lg={4}>
-              <Information head='Create an account' text='by filling in the sign-up form and verifying your phone number via SMS or email' icon={faUser} />
+              <Information head='Create an account' text='by filling in the sign-up form and verifying your phone number via SMS or email.' icon={faUser} center/>
             </Col>
             <Col lg={4}>
-              <Information head='Fund your wallet' text='via multiple crypto exchanges including Coinbase etc.' icon={faWallet} />
+              <Information head='Start Investing' text='by selecting a dedicated fund manager to oversee your account.' icon={faBank} center/>
             </Col>
             <Col lg={4}>
-              <Information head='Start Investing' text='by selecting a dedicated fund manager to oversee your account' icon={faBank} />
+              <Information head='Fund your wallet' text='via multiple crypto exchanges including Coinbase etc.' icon={faWallet} center />
             </Col>
+            
           </Row>
         </Col>
       </Row>

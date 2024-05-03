@@ -1,6 +1,6 @@
 import { deleteItem, getData, patchFormDataItem, patchItem, postData,postFormData } from "./api";
 import { AddInvestmentType, CreatePromoType, CreateWalletType, WalletType } from "./types";
-import { createManagerUrl, patchManagerUrl, deleteManagerRoute, createWalletUrl, patchWalletUrl, deleteWalletRoute, createInvestmentRoute, getManagersUrl, getWalletsUrl, getPromoUrl, createPromoUrl, patchPromoUrl, deletePromoRoute, payUrl, deleteInvestorRoute, payReferralRoute, payBonusRoute, getSingleMangerRoute} from "./constants";
+import { createManagerUrl, patchManagerUrl, deleteManagerRoute, createWalletUrl, patchWalletUrl, deleteWalletRoute, createInvestmentRoute, getManagersUrl, getWalletsUrl, getPromoUrl, createPromoUrl, patchPromoUrl, deletePromoRoute, payUrl, deleteInvestorRoute, payReferralRoute, payBonusRoute, getSingleMangerRoute, getTransactionsRoute, getNotificationsRoute} from "./constants";
 
 export const createInvestment = async (data:any) => {
   const investorId =1
@@ -286,7 +286,6 @@ export const payReferral = (id:number)=>{
   const response:any = getData(url, authorizationData);
   if (response.status ===200)
   return response.data
-  throw new Error('no promo found')
   }catch(error:any){
     console.error(error)
   throw new Error(error.message)
@@ -304,6 +303,35 @@ export const payPromoBonus = (id:number)=>{
     console.error(error)
   throw new Error(error.message)
   }
+}
+
+export const getTransaction = async (id:number)=>{
+  const url = `${getTransactionsRoute}/${id}`
+  const authorizationData = localStorage.getItem('cassockJwtToken');
+  try{
+    const response:any = await getData(url, authorizationData);
+    if (response.status ===200)
+    return response.data
+   
+    }catch(error:any){
+      console.error(error)
+    throw new Error(error.message)
+    }
+}
+
+export const getNotifications = async (id:number)=>{
+  const url = `${getNotificationsRoute}/${id}`
+  const authorizationData = localStorage.getItem('cassockJwtToken');
+  try{
+    const response:any = await getData(url, authorizationData);
+  
+    if (response.status ===200)
+    return response.data
+   
+    }catch(error:any){
+      console.error(error)
+    throw new Error(error.message)
+    }
 }
 
 export const getInvestmentNewbies:()=>string[]=() =>{

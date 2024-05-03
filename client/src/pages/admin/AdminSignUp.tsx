@@ -9,7 +9,7 @@ const AdminSignUp: React.FC = () => {
 
     return (
         <div className='px-4 py-4 d-flex flex-column align-items-center'>
-            <div className='auth-page-items'>
+            <div className='auth-page-items full-height'>
             <LoginOption
             title='Already have an account?'
             buttonText='Login'
@@ -17,8 +17,8 @@ const AdminSignUp: React.FC = () => {
              route='login' />
             <Information text='Welcome to the admin registeration page, please note there can only be one admin.' head='Account Details' icon={faUser} center={true} />
             <AdminSignUpForm />
-            <MiniFooter/>
             </div>
+            <MiniFooter/>
         </div>
     )
 }

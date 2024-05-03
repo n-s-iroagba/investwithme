@@ -7,8 +7,8 @@ import { MiniFooter } from '../../components/home_components/Footer'
 
 const SignUp:React.FC = ()=>{
     return(
-        <div className='px-4 py-4 d-flex flex-column align-items-center'>
-        <div className='auth-page-items'>
+        <div className='px-4 d-flex flex-column align-items-center'>
+        <div className=' py-4 auth-page-items full-height'>
         <LoginOption
             title='Already have an account?'
             buttonText='Login'
@@ -16,8 +16,9 @@ const SignUp:React.FC = ()=>{
              route='login' />
               <Information center= {true}text='Kindly fill in the form below to get started.' head='Account Details' icon={faUser} />
         <SignUpForm/>
-      <MiniFooter/>
+     
         </div>
+        <MiniFooter/>
         </div>
     )
 }

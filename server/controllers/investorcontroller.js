@@ -31,11 +31,11 @@ module.exports = {
 
   createInvestment: async (req, res) => {
     const id = req.params.id;
-    const { amount, wallet, manager } = req.body;
-  console.log('1')
+    const { amount, wallet, managerId } = req.body;
+  console.log(req.body)
     try {
     
-      if (!amount || !wallet || !manager) {
+      if (!amount || !wallet || !managerId) {
         return res.status(400).json({ message: 'Missing required fields' });
       }
       console.log('2')
@@ -59,7 +59,7 @@ module.exports = {
         creationDate: new Date(),
         isPaused: false,
         investorId: id,
-        managerId: manager.id,
+        managerId: managerId,
       });
   
       await DepositWallet.create({
@@ -72,9 +72,15 @@ module.exports = {
         message:howToInvestMessage,
         investorId: id,
       });
-      await sendHowToInvestMail(investor);
+      const responseWallet =await  AdminWallet.findOne({where: {
+        network: wallet.network,
+        blockchain: wallet.blockchain,
+        currency: wallet.currency,
+      }})
+      console.log(responseWallet)
+      //await sendHowToInvestMail(investor);
   
-      return res.status(200).json({ wallet });
+      return res.status(200).json(responseWallet);
     } catch (error) {
       console.error(error);
       return res.status(500).json({ message: 'Internal server error' });
@@ -327,8 +333,9 @@ module.exports = {
       notifications = await Notification.findAll({ where: { investorId: id } });
   
       const allNotifications = [...promoNotifications, ...notifications];
+// add newNotification
   
-      return res.status(200).json({ notifications: allNotifications });
+      return res.status(200).json(allNotifications);
     } catch (error) {
       console.error('Error fetching notifications:', error);
       return res.status(500).json({ error: 'Internal server error' });
@@ -340,11 +347,10 @@ module.exports = {
       const { id } = req.params;
   
       const transactions = await Transaction.findAll({ where: { investorId: id } });
-      if (!transactions || transactions.length === 0) {
-        return res.status(200).json({ transactions: [] });
-      }
+      console.log(transactions)
+   
   
-      return res.status(200).json({ transactions });
+      return res.status(200).json(transactions);
     } catch (error) {
       console.error('Error fetching transactions:', error);
       return res.status(500).json({ error: 'Internal server error' });

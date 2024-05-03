@@ -35,6 +35,8 @@ export const getPromoUrl = `${domain}/get-promo`
 export const patchPromoUrl = `${domain}/patch-promo`
 export const deletePromoRoute = `${domain}/delete-promo`
 
+export const getTransactionsRoute = `${domain}/get-transactions`
+
 export const getNotificationsRoute = `${domain}/get-notifications`
 export const messages = [
     {
@@ -241,5 +243,5 @@ export const testimonials = [
    Our expertise in the financial markets ensures that your investments are actively managed, 
    providing you with the opportunity to achieve your financial goals with ease and peace of mind`
 export const howWeDoIt =   `At ${companyName}, our mission is to achieve financial freedom for our investors. 
-We accomplish this by employing skilled and experienced fund managers located across the globe. These experts expertly manage client portfolios, ensuring optimal yields on investments. Additionally, to provide our investors with peace of mind, all funds are securely insured with HSBC bank in Malta. 
+We accomplish this by employing skilled and experienced fund managers spread across the globe. These experts expertly manage client portfolios, ensuring optimal yields on investments. Additionally, to provide our investors with peace of mind, as all deposits are secured under the European Deposit Insurance Scheme. 
 This measure guarantees that we do not default on our liabilities, further solidifying our commitment to the financial well-being of our valued investors.`
