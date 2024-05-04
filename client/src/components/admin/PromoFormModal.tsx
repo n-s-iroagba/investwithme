@@ -1,19 +1,22 @@
 
 import React, { useEffect, useState } from 'react';
-import { Modal, Button, Form } from 'react-bootstrap';
+import { Modal, Button, Form,Spinner } from 'react-bootstrap';
 import { createPromo } from '../../utils/helpers'; // Assuming createPromo is correctly defined
 import { hasEmptyKey } from '../../utils/utils';
+import { CreatePromoType } from '../../utils/types';
 
 interface PromoFormModalProps {
   show: boolean;
 }
 
 const PromoFormModal: React.FC<PromoFormModalProps> = ({ show }) => {
-  const [promoData, setPromoData] = useState({
+  const [promoData, setPromoData] = useState<CreatePromoType>({
     startDate: '',
     endDate: '',
+    bonusPercentage: 0,
   });
   const [modalShow, setModalShow] = useState<boolean>(show);
+  const [submitting, setSubmitting] = useState<boolean>(false);
 
   useEffect(() => {
     setModalShow(show);
@@ -27,18 +30,20 @@ const PromoFormModal: React.FC<PromoFormModalProps> = ({ show }) => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    let shouldNotSubmit = hasEmptyKey(promoData); // Assuming hasEmptyKey is defined or imported
+    let shouldNotSubmit = hasEmptyKey(promoData); 
     try {
       if (shouldNotSubmit) {
-        // Handle validation or show error message
+        alert('form not properly filled')
       } else {
-        // Perform submission
-        await createPromo(promoData); // Assuming createPromo handles the API call correctly
-        setModalShow(false); // Close the modal after successful submission
+     setSubmitting(true);
+        await createPromo(promoData); 
+        setModalShow(false); 
       }
     } catch (error) {
       console.error(error);
-      // Handle error or show error message
+      
+    }finally{
+      setSubmitting(false)
     }
   };
 
@@ -74,9 +79,18 @@ const PromoFormModal: React.FC<PromoFormModalProps> = ({ show }) => {
               min={promoData.startDate}
             />
           </Form.Group>
+          <Form.Group controlId="formEndDate">
+            <Form.Label>Bonus Percentage</Form.Label>
+            <Form.Control
+              type="number"
+              name="bonusPercentage"
+              value={promoData.bonusPercentage}
+              onChange={handleChange}
+            />
+          </Form.Group>
 
           <Button variant="primary" type="submit">
-            Create Promo
+          {submitting? <Spinner animation='border' size='sm' /> :'Create Promo'}
           </Button>
         </Form>
       </Modal.Body>

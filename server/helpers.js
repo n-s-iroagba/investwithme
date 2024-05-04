@@ -58,5 +58,34 @@ const getVerificationEmailContent = (verificationUrl,TOKEN_EXPIRATION_TIME,COMPA
     <p>${COMPANY_NAME} Team</p>
   </body>
   </html>`;
+
   }
-module.exports = {findManagerWithHighestMinInvestment, getVerificationEmailContent,getNewPasswordEmailContent}
+  const formatEndDate = (dateString) => {
+    const date = new Date(dateString);
+    const options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
+    const formattedDate = date.toLocaleDateString('en-US', options);
+    return formattedDate;
+  };
+  
+  const checkInvestmentStatus = async (investment) => {
+    try {
+      const currentDate = new Date();
+      const investmentDate = new Date(investment.investmentDate);
+      const threeDaysLater = new Date(investmentDate);
+      threeDaysLater.setDate(threeDaysLater.getDate() + 3);
+  
+      if (investment.amountDeposited < investment.amount && currentDate > threeDaysLater) {
+        investment.isPaused = true;
+        await investment.save();
+        console.log('Investment paused successfully.');
+      } else {
+        console.log('Investment does not meet the criteria for pausing.');
+      }
+    } catch (error) {
+      console.error('Error checking investment status:', error);
+    }
+  };
+
+  
+
+module.exports = {findManagerWithHighestMinInvestment, getVerificationEmailContent,getNewPasswordEmailContent,formatEndDate,checkInvestmentStatus}

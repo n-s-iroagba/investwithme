@@ -41,7 +41,7 @@ useEffect(()=>{
                 {managers.map((manager) => (
                 <Col  key={manager.id} xs={12} md={6} lg={4}>
                     <InvestmentTiersCard
-                        percentageYield={`${manager.percentageYield}% RETURN ON INVESTMENT`}
+                        percentageYield={`${manager.percentageYield}%`}
                         image={manager.image}
                         firstName={manager.firstName}
                         lastName={manager.lastName}

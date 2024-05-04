@@ -21,6 +21,7 @@ router.post('/new-password/:id',authController.changePassword )
 
  router.post("/create-investor", authController.createInvestor)
  router.get('/get-investors', )
+ router.get('/get-investment-status/:id',investorController.getInvestmentStatus )
  router.patch('/pay',investorController.topUp)
  router.get('/pay-referral/:id',investorController.payReferralBonus)
  router.get('/pay-bonus/:id',investorController.payPromoBonus)
@@ -52,7 +53,7 @@ router.post('/new-password/:id',authController.changePassword )
  router.delete('/delete-manager/:id',adminController.deleteManager)
 
  router.post('/create-investment/:id',investorController.createInvestment )
- router.get('/get-investment/:id', )
+ router.get('/get-investment/:id', investorController.getInvestment)
  router.patch('/patch-investment',)
 
  router.post('/create-wallet', adminController.createAdminWallet)

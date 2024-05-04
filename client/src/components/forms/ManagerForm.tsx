@@ -4,7 +4,7 @@ import ErrorMessage from '../general/ErrorMessage';
 import { required } from '../auth/general/required';
 import ReactCrop, { type Crop } from 'react-image-crop'
 import 'react-image-crop/dist/ReactCrop.css';
-import { ManagerType } from '../../utils/types';
+import { CreateManagerType, ManagerType } from '../../utils/types';
 import { createManager, getSingleManager, patchManager } from '../../utils/helpers';
 import { hasEmptyKey } from '../../utils/utils'
 import { useNavigate } from 'react-router-dom';
@@ -13,8 +13,7 @@ import { useNavigate } from 'react-router-dom';
 
 
 const ManagerForm: React.FC<{ patch?: boolean }> = ({ patch }) => {
-  const initManagerData: ManagerType = {
-    id: 0,
+  const initManagerData:CreateManagerType = {
     firstName: '',
     lastName: '',
     image: '',
@@ -24,8 +23,17 @@ const ManagerForm: React.FC<{ patch?: boolean }> = ({ patch }) => {
     percentageYield: 0,
   };
 
-  const [editedManagerData, setEditedManagerData] = useState<ManagerType>(initManagerData)
-  const [managerData, setManagerData] = useState<ManagerType>(initManagerData);
+  const [editedManagerData, setEditedManagerData] = useState<CreateManagerType>(initManagerData)
+  const [managerData, setManagerData] = useState<ManagerType|CreateManagerType>({
+    id:0,
+    firstName: '',
+    lastName: '',
+    image: '',
+    duration: 0, 
+    qualification: '',
+    minimumInvestmentAmount: 0,
+    percentageYield: 0,
+  });
   const [submitting, setSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [files, setFiles] = useState<any>(null)

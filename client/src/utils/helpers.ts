@@ -1,6 +1,6 @@
 import { deleteItem, getData, patchFormDataItem, patchItem, postData,postFormData } from "./api";
 import { AddInvestmentType, CreatePromoType, CreateWalletType, WalletType } from "./types";
-import { createManagerUrl, patchManagerUrl, deleteManagerRoute, createWalletUrl, patchWalletUrl, deleteWalletRoute, createInvestmentRoute, getManagersUrl, getWalletsUrl, getPromoUrl, createPromoUrl, patchPromoUrl, deletePromoRoute, payUrl, deleteInvestorRoute, payReferralRoute, payBonusRoute, getSingleMangerRoute, getTransactionsRoute, getNotificationsRoute} from "./constants";
+import { createManagerUrl, patchManagerUrl, deleteManagerRoute, createWalletUrl, patchWalletUrl, deleteWalletRoute, createInvestmentRoute, getManagersUrl, getWalletsUrl, getPromoUrl, createPromoUrl, patchPromoUrl, deletePromoRoute, payUrl, deleteInvestorRoute, payReferralRoute, payBonusRoute, getSingleMangerRoute, getTransactionsRoute, getNotificationsRoute, getInvestmentRoute, getInvestmentStatusRoute} from "./constants";
 
 export const createInvestment = async (data:any) => {
   const investorId =1
@@ -265,7 +265,7 @@ export const deleteInvestor = async (id:number)=>{
 export const addInvestment =async (data:AddInvestmentType) =>{
   try {
     const authorizationData = localStorage.getItem('cassockJwtToken');
-    const response = await postData(payUrl,authorizationData);
+    const response = await patchItem(payUrl,data,authorizationData);
     if (response.status === 200) {
       alert('investors investment successfully added deleted succesfully')
       window.location.reload();
@@ -318,7 +318,39 @@ export const getTransaction = async (id:number)=>{
     throw new Error(error.message)
     }
 }
+export const getInvestment = async (id:string)=>{
+  const url = `${getInvestmentRoute}/${id}`
+  const authorizationData = localStorage.getItem('cassockJwtToken');
+  try{
+    const response:any = await getData(url, authorizationData);
+    console.log(response.data)
+    if (response.status ===200){
 
+  
+    return response.data
+    }
+    }catch(error:any){
+      console.error(error)
+    throw new Error(error.message)
+    }
+}
+
+export const getInvestmentStatus = async (id:string)=>{
+  const url = `${getInvestmentStatusRoute}/${id}`
+  const authorizationData = localStorage.getItem('cassockJwtToken');
+  try{
+    const response:any = await getData(url, authorizationData);
+    console.log(response.data)
+    if (response.status ===200){
+
+  
+    return response.data
+    }
+    }catch(error:any){
+      console.error(error)
+    throw new Error(error.message)
+    }
+}
 export const getNotifications = async (id:number)=>{
   const url = `${getNotificationsRoute}/${id}`
   const authorizationData = localStorage.getItem('cassockJwtToken');

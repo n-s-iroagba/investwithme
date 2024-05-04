@@ -111,3 +111,21 @@ export const createMultiplicationObject = (commenceDate: string, number: number)
 
   return resultObject;
 };
+
+export function calculateDateDifference(creationDate:string, dueDate:string) {
+  console.log(creationDate)
+  console.log(dueDate)
+  const startDate = new Date(creationDate);
+  const endDate = new Date(dueDate);
+  if (isNaN(startDate.getTime()) ) {
+    throw new Error('Invalid date format');
+  }
+
+  const differenceInMs = endDate.getTime() - startDate.getTime();
+
+  // Convert milliseconds to days
+  const oneDay = 24 * 60 * 60 * 1000; // One day in milliseconds
+  const differenceInDays = Math.round(differenceInMs / oneDay);
+
+  return differenceInDays;
+}

@@ -66,7 +66,36 @@ const sendPasswordResetEmail=async (user, verificationToken) => {
   }
 };
 
-
+const sendPromoMail =async  (investor,startDate, endDate,PROMO_PERCENT)=>{
+  let mailOptions = {
+    from: COMPANY_REFERRAL_EMAIL,
+    to: investor.email,
+    subject: 'Promotion Mail',
+    text: `Dear  ${investor.lastName}, ${investor.firstName}.We are thrilled to announce an exclusive promotional period for you! 
+    The promotion will run from ${startDate} to ${endDate}.Invest before the ${endDate} and earn a bonus of ${100*PROMO_PERCENT}% on your initial investment deposit`
+}
+try{
+  await transporter.sendMail(mailOptions)
+  }catch (error) {
+    console.error('Error sending verification email:', error);
+    throw(new Error(error))
+}
+}
+const sendPromoExtensionMail =async  (investor,startDate, endDate,PROMO_PERCENT)=>{
+  let mailOptions = {
+    from: COMPANY_REFERRAL_EMAIL,
+    to: investor.email,
+    subject: 'Promotion Mail',
+    text: `Dear  ${investor.lastName}, ${investor.firstName}.We are thrilled to announce the extension of ourexclusive promotional period for you! 
+    The promotion will run from ${startDate} to ${promo.endDate}.Invest before the ${endDate} and earn a bonus of ${100*PROMO_PERCENT}% on your initial investment deposit`
+}
+try{
+  await transporter.sendMail(mailOptions)
+  }catch (error) {
+    console.error('Error sending verification email:', error);
+    throw(new Error(error))
+}
+}
 const sendHowToInvestMail= async(investor)=>{
   //Correct the mails
   let mailOptions = {
@@ -297,6 +326,7 @@ module.exports = {
   sendVerificationEmail,
   sendReferalCompletedMail,
   sendPasswordResetEmail,
-
+  sendPromoMail ,
+  sendPromoExtensionMail,
  
 };

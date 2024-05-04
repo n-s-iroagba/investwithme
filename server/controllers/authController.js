@@ -139,7 +139,7 @@ module.exports = {
         return res.redirect(ALREADY_VERIFIED_ROUTE);
       }
 
-      await user.update({ verified: true, verificationToken: null });
+      await user.update({ verified: true});
       user.save();
      
       ;

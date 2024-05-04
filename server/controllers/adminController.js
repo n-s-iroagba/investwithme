@@ -5,7 +5,7 @@ const fs = require('fs');
 const {PROMO_PERCENT,INVESTMENT_TENURE,REFERRAL_BONUS_PERCENT, COMPANY_NAME} = require('../config')
 const {Investor,Manager,Notification,AdminWallet,Promo,Newbies} = require('../model');
 const {findManagerWithHighestMinInvestment} =require('../helpers');
-const { duration } = require('moment');
+const {sendPromoMail} = require('../service')
 
 const storage = multer.diskStorage({
   destination: '../images/',
@@ -228,13 +228,11 @@ createPromo: async (req, res) => {
 
   try {
     const promo = await Promo.create({ startDate, endDate });
-
-    // Placeholder: Send email to investors who have not invested yet
     const investors = await Investor.findAll({ where: { hasInvested: false } });
     investors.forEach(async (investor) => {
-      // SendEmailFunction(investor.email, `New Promo: ${title}`, `Description: ${description}`);
-      // Placeholder: Create notification for the investor
-      await Notification.create({ investorId: investor.id, message: `New Promo: ${title}` });
+      await sendPromoMail(investor,startDate, endDate,PROMO_PERCENT)
+      await Notification.create({ investorId: investor.id, title:'Promo Notification' , message:`We are thrilled to announce an exclusive promotional period for you! 
+    The promotion will run from ${startDate} to ${endDate}.Invest before the ${endDate} and earn a bonus of ${100*PROMO_PERCENT}% on your initial investment deposit` });
     });
 
     return res.status(201).json({ message: 'Promo created successfully', promo });
@@ -247,8 +245,6 @@ createPromo: async (req, res) => {
 updatePromo: async (req, res) => {
   const { id } = req.params;
   const { days } = req.body;
-  console.log('hi')
-
   try {
     const promo = await Promo.findOne()
     if (!promo) {
@@ -263,13 +259,11 @@ const newDateString = dateObject.toISOString().split('T')[0];
 promo.endDate = newDateString
 promo.save();
 
-
-    // Placeholder: Send email to investors who have not invested yet
     const investors = await Investor.findAll({ where: { hasInvested: false } });
     investors.forEach(async (investor) => {
-      // SendEmailFunction(investor.email, `Updated Promo: ${title}`, `Updated Description: ${description}`);
-      // Placeholder: Create notification for the investor
-      await Notification.create({ investorId: investor.id, message: `Updated Promo: ${title}` });
+      await sendPromoMail(investor,startDate, endDate,PROMO_PERCENT)
+      await Notification.create({ investorId: investor.id, title:'Promo Extension' , message:`We are thrilled to announce the extension of ourexclusive promotional period for you! 
+    The promotion will run from ${promo.startDate} to ${promo.endDate}.Invest before the ${promo.endDate} and earn a bonus of ${100*PROMO_PERCENT}% on your initial investment deposit` });
     });
 
     return res.status(200).json({ message: 'Promo updated successfully', promo });

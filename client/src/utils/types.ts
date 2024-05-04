@@ -7,8 +7,11 @@ export interface PromoType{
   bonusPercentage:number,
   endDate:string,
 }
-
-
+export interface CreatePromoType{
+  startDate: string,
+  bonusPercentage:number,
+  endDate:string,
+}
 
 export interface CreateWalletType{
   blockchain:string,
@@ -17,37 +20,64 @@ export interface CreateWalletType{
   currency:string
 }
 
+export interface WalletType{
+  id:number
+  blockchain:string,
+  address:string
+  network:string,
+  currency:string
+}
+export interface CreateManagerType {
+  firstName: string,
+  lastName: string,
+  minimumInvestmentAmount: number
+  percentageYield: number
+  duration:number
+  image: any,
+  qualification: string
+}
+export interface ManagerType {
+  id:number
+  firstName: string,
+  lastName: string,
+  minimumInvestmentAmount: number
+  percentageYield: number
+  duration:number
+  image: any,
+  qualification: string
+}
 export interface CreateInvestmentType{
   wallet:CreateWalletType,
-
   amount:number
   manager:ManagerType
 }
 
 export interface PortfolioDataType {
-  id: number;
-  commenceDate: string;
-  amount: number;
-  earnings: number;
-  amountDeposited: number;
-  durationInDays: number;
-  numberOfDeposits: number;
-  wallet: {
-    network: string;
-    blockchain: string;
-    address: string;
-    currency: string;
-  };
-  dueDate: string;
-  manager: {
-    firstName: string;
-    lastName: string;
-  };
-  dailyEarningPercentage: number;
-  referral: {
-    totalAmount: number;
-    count: number;
-  };
+  investment:{id: number;
+    investmentDate: string;
+    amount: number;
+    earnings: number;
+    amountDeposited: number;
+    durationInDays: number;
+    dueDate: string;
+    incrementPercent: number;}
+    wallet: {
+      id: number;
+      network: string;
+      blockchain: string;
+      address: string;
+      currency: string;
+    };
+   
+    manager: {
+      firstName: string;
+      lastName: string;
+    };
+   
+    referral: {
+      totalAmount: number;
+      count: number;
+    };
 };
 
 
@@ -88,34 +118,11 @@ export interface TransactionType{
 export interface NotificationType{
   id:number
   title:'Earnings'|'Bonus Payout'|'How To Deposit'|'Referral Registration'|'Referral bonus imbursement'|'Bonus imbursement'|
-  'Investment Deposit'|'Incomplete Investment Deposit'|'Investment Paused' |'Investment Continued'|'Promo'|'Promo Extension'|'Incomplete Deposit'
+  'Investment Deposit'|'Incomplete Investment Deposit'|'Investment Paused' |'Investment Continued'|'Promo Notification'|'Incomplete Deposit'
   message:string
-}
-
-export interface WalletType{
-  id:number,
-  blockchain:string,
-  address:string
-  network:string,
-  currency:string
-}
-export interface ManagerType {
-    id:number
-    firstName: string,
-    lastName: string,
-    minimumInvestmentAmount: number
-    percentageYield: number
-    duration:number
-    image: any,
-    qualification: string
-  }
-export interface CreatePromoType{
-  startDate:string
-  endDate:string
 }
 export interface AddInvestmentType {
   address:string
-  currency:string
   amount:number
 }
 export interface DecodedLoginToken {

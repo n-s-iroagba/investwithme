@@ -1,5 +1,6 @@
-const { howToInvestMessage } = require('../config');
+const { howToInvestMessage,PROMO_PERCENT } = require('../config');
 const { Investor, Manager, DepositWallet, Investment, Referral, AdminWallet, Notification, PromoNotification, Transaction } = require('../model');
+const {findManagerWithHighestMinInvestment,formatEndDate} = require('../helpers')
 
 const { sendReferralBonusEmail, sendCompleteInvestmentDepositReceivedEmail, sendIncompleteInvestmentDepositReceivedEmail,sendPromoBonusPaymentMail} = require('../service');
 const { sendHowToInvestMail } = require('../service');
@@ -7,6 +8,10 @@ const { sendHowToInvestMail } = require('../service');
 module.exports = {
 
   index: async (req, res) => {
+    // await Investment.sync();
+
+    // // Drop the Investment model
+    // await Investment.drop();
     return res.send("hello");
   },
 
@@ -46,26 +51,28 @@ module.exports = {
       }
       console.log('3')
  
-      if (investor.hasInvested) {
-        return res.status(400).json({ message: 'You have already invested previously. Proceed to make a top-up payment.' });
-      }
+      // if (investor.hasInvested) {
+      //   return res.status(400).json({ message: 'You have already invested previously. Proceed to make a top-up payment.' });
+      // }
       console.log('5')
       if (investor.Investment) {
         await investor.Investment.destroy();
       }
       console.log('6')
-       await Investment.create({
+      const investment = await Investment.create({
         amount,
         creationDate: new Date(),
         isPaused: false,
         investorId: id,
         managerId: managerId,
       });
-  
-      await DepositWallet.create({
+
+      const createwallet = await DepositWallet.create({
         ...wallet,
-        InvestorId: investor.id,
+        investorId: investor.id,
       });
+
+      console.log(createwallet)
   
       await Notification.create({
         title: 'How To Invest',
@@ -89,20 +96,28 @@ module.exports = {
   
 
   topUp: async (req, res) => {
+    //incrementPercent
+    //DurationInDays
+    // durationInDays: 15,
+    // incrementPercent:196
     try {
-      const { walletAddress, amount } = req.body;
+      let { address, amount } = req.body;
+      amount = Number(amount)
+      console.log(req.body)
       
       const wallet = await DepositWallet.findOne({
-        where: { address: walletAddress },
-        include: [{ model: Investment, include: [{ model: Investor }] }],
+        where: { address: address },
       });
   
       if (!wallet) {
         return res.status(404).json({ message: 'Wallet not found' });
       }
   
-      const investment = wallet.Investment;
-      const investor = investment.Investor;
+      const investor = await Investor.findByPk(wallet.investorId);
+      console.log(wallet)
+    const investment =await Investment.findOne({where: {investorId:investor.id}})
+    let manager = await Manager.findByPk(investment.managerId)
+    
       if (!investment || !investor) {
         return res.status(404).json({ message: 'Investment or Investor not found' });
       }
@@ -124,9 +139,13 @@ module.exports = {
   
       if (investment.amountDeposited > investment.amount) {
         const managers = await Manager.findAll();
-        const manager = findManagerWithHighestMinInvestment(managers, investment.amountDeposited);
-        investment.manager = manager;
+          manager = findManagerWithHighestMinInvestment(managers, investment.amountDeposited);
+        investment.manager = manager
+      
       }
+      console.log(manager)
+      investment.durationInDays = manager.duration*7;
+      investment.incrementPercent = manager.percentageYield;
       
       await investment.save();
       await investor.save();
@@ -150,11 +169,11 @@ module.exports = {
         `Thank you,\nWe have received your deposit of ${amount}, we look forward to growing wealth with you.\nCheers,` :
         `Thank you,\nWe have received your deposit. However, we wish to notify you that the deposited amount (${investment.amountDeposited}) is lower than the actual required amount (${investment.amount}). Kindly ensure you pay the remaining amount as soon as possible.\nCheers,`;
   
-      if (investment.amountDeposited >= investment.amount) {
-        sendCompleteInvestmentDepositReceivedEmail(investor, investment);
-      } else {
-        sendIncompleteInvestmentDepositReceivedEmail(investor, investment);
-      }
+      // if (investment.amountDeposited >= investment.amount) {
+      //   sendCompleteInvestmentDepositReceivedEmail(investor, investment);
+      // } else {
+      //   sendIncompleteInvestmentDepositReceivedEmail(investor, investment);
+      // }
   
       await Notification.create({
         title: notificationTitle,
@@ -223,7 +242,7 @@ module.exports = {
     await Notification.create({ title:'Bonus Payout', message: 'hello this is payment notification' });
   
     
-    await sendPromoBonusPaymentMail(investor, investment.amount * PROMO_PERCENT);
+    // await sendPromoBonusPaymentMail(investor, investment.amount * PROMO_PERCENT);
   
       return res.status(200).json({ message: 'Payment successful', investment });
     } catch (error) {
@@ -269,25 +288,40 @@ module.exports = {
   
   getInvestment: async (req, res) => {
     const { id } = req.params;
-
+//update investment.amount if amountdeposited > investment.amount
+//add investment earnings default to 0
+//add investmentduration in days from managerduration
     try {
-      const [investment, referrals, manager, wallet] = await Promise.all([
-        Investment.findOne({ where: { investorId: id } }),
-        Referral.findAll({ where: { refereeId: id } }),
-        Manager.findOne({ where: { id: investment.managerId } }),
-        DepositWallet.findOne({ where: { investmentId: investment.id } }),
-      ]);
+        const investment = await Investment.findOne({ where: { investorId: id } });
+        const referrals = await Referral.findAll({ where: { refereeId: id } });
+        const wallet = await DepositWallet.findOne({ where: { investorId: id } });
 
-      if (!investment) {
-        return res.status(404).json({ message: 'Investment not found' });
-      }
+        console.log(investment);
 
-      return res.status(200).json({ investment, referrals, manager, wallet });
+        if (!investment) {
+            return res.status(404).json({ message: 'Investment not found' });
+        }
+
+        let totalCount = 0;
+        let totalAmount = 0;
+
+        referrals.forEach((referral) => {
+            totalCount++;
+            totalAmount += referral.amount;
+        });
+
+        const totalReferrals = { count: totalCount, totalAmount };
+
+        const manager = await Manager.findOne({ where: { id: investment.managerId } });
+        console.log(manager);
+        console.log(investment);
+        console.log(totalReferrals);
+        return res.status(200).json({ investment, referrals: totalReferrals, manager, wallet });
     } catch (error) {
-      console.error('Error in getInvestments:', error);
-      return res.status(500).json({ message: 'Internal server error' });
+        console.error('Error in getInvestments:', error);
+        return res.status(500).json({ message: 'Internal server error' });
     }
-  },
+},
 
   getAllDueReferrals:async (req, res)=>{
     try {
@@ -355,7 +389,43 @@ module.exports = {
       console.error('Error fetching transactions:', error);
       return res.status(500).json({ error: 'Internal server error' });
     }
+  },
+
+  getInvestmentStatus : async (req, res) => {
+    const { id } = req.params;
+  
+    try {
+      const investment = await Investment.findByPk(id);
+      if (!investment) {
+        return res.status(404).json({ error: 'Investment not found' });
+      }
+  
+      if (investment.investmentDate === null) {
+        return res.status(200).json({ status: 'notInvested' });
+      }
+  
+      const endDate = new Date(investment.investmentDate);
+      console.log(endDate);
+      console.log('0')
+     
+      endDate.setDate(endDate.getDate() + 14);
+     console.log(endDate);
+      console.log('1')
+      const currentDate = new Date();
+      console.log(currentDate)
+      console.log('2')
+      if (currentDate <= endDate) {
+        const dueDate = formatEndDate(endDate);
+        return res.status(200).json({ status: 'notDue', date: dueDate });
+      }
+  
+      return res.status(200).json({ status: 'due' });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ error: 'Internal server error' });
+    }
   }
+  
 }
   
   

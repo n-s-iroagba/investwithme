@@ -1,102 +1,77 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Col, Row } from 'react-bootstrap';
 import PortfolioCard from './PortfolioCard';
 import { Chart, registerables } from 'chart.js';
 import { Chart as ReactChartJs } from 'react-chartjs-2';
 import { createMultiplicationObject, formatEndDate, formatStartDate } from '../../utils/utils';
-import { PortfolioDataType } from '../../utils/types';
 
-
-const PortfolioComponent: React.FC<{data:PortfolioDataType|null}> = ({data}) => {
-  const [investmentData, setInvestmentData] = useState({
-    id: 1,
-    commenceDate:new Date().toDateString(),
-    amount: 0,
-    earnings: 0,
-    amountDeposited: 0,
-    durationInDays: 14,
-    numberOfDeposits:0,
-    wallet: {
-      network: '',
-      blockchain:'',
-      address: '',
-      currency: '',
-    },
-    dueDate: '',
-    manager: {firstName:'',lastName:''},
-    dailyEarningPercentage: 0,
-    referral: { totalAmount: 0, count: 0 },
-
-  })
-
-
+const PortfolioComponent: React.FC<{ investmentData: any }> = ({ investmentData }) => {
   Chart.register(...registerables)
 
-  const chartObject =createMultiplicationObject(investmentData.commenceDate, investmentData.dailyEarningPercentage*investmentData.amountDeposited/100);
+  const chartObject = createMultiplicationObject(investmentData.investment.investmentDate, investmentData.investment.incrementPercent * investmentData.investment.amountDeposited / 100);
 
   const processedData = {
     labels: Object.keys(chartObject),
     datasets: [{
-      label:'Porfolio Growth',
+      label: 'Porfolio Growth',
       data: Object.values(chartObject),
       backgroundColor: `#1a6e41`,
       height: '100%',
     }],
   };
- useEffect(()=>{
-  if(data!==null)
-  setInvestmentData(data)
+ 
 
- }, [data])
+
 
   return (<div className='w-100'>
-  
+
 
     <Row className=''>
       <Col lg={6}>
-
-        <PortfolioCard title={'Earnings'} mainText={`$${investmentData.earnings}`} subText={`${(1 + (investmentData.earnings / investmentData.amountDeposited)).toFixed(2)}X total amount invested`} primaryBackground={true} />
-
+        <PortfolioCard title={'Earnings'}
+         mainText={`$${investmentData.investment.earnings}`} 
+         subText={investmentData.investment.earnings > 0 ? `${(1 + (investmentData.investment.earnings / investmentData.investment.amountDeposited)).toFixed(2)}X total amount invested` : `no earnings yet.`}
+          primaryBackground={true} />
         <ReactChartJs type="line" data={processedData} />
       </Col>
 
       <Col xs={12} md={6} lg={3}>
-  <div>
-    <PortfolioCard
-      title={'Total Amount Invested'}
-      mainText={`$${investmentData.amountDeposited}`}
-      subText={investmentData.amountDeposited !== 0 ? `Total investmentData amount: $${investmentData.amount}` : 'No investment yet'}
-      primaryBackground={true}
-    />
-    <PortfolioCard
-      title={'Expected InvestmentData Earnings'}
-      mainText={`$${(investmentData.amount * (investmentData.dailyEarningPercentage / 100) * investmentData.durationInDays).toFixed(2)}`}
-      subText={investmentData.amountDeposited !== 0 ? `${((investmentData.amountDeposited * investmentData.durationInDays * investmentData.dailyEarningPercentage / 100) / investmentData.amountDeposited).toFixed(2)}X of portfolio amount ($${investmentData.amount})` : 'No Investment yet'}
-    />
-    <PortfolioCard
-      title={'Percentage earned'}
-      mainText={investmentData.amountDeposited !== 0 ? `${(investmentData.earnings * 100 / investmentData.amountDeposited).toFixed(2)}%` : 'N/A'}
-      subText={investmentData.amountDeposited !== 0 ? `In ${(Math.floor((new Date().getTime() - new Date(investmentData.commenceDate).getTime()) / (1000 * 60 * 60 * 24)))} days` : 'No investment yet'}
-    />
-  </div>
-</Col>
+        <div>
+          <PortfolioCard
+            title={'Total Amount Invested'}
+            mainText={`$${investmentData.investment.amountDeposited}`}
+            subText={investmentData.investment.amountDeposited !== 0 ? `Total amount deposited: $${investmentData.investment.amount}` : 'No investment yet'}
+            primaryBackground={true}
+          />
+          <PortfolioCard
+            title={'Expected Investment Earnings'}
+            mainText={investmentData.investment.amountDeposited !== 0 ?`$${((investmentData.investment.amount<investmentData.investment.amountDeposited?investmentData.investment.amountDeposited:investmentData.investment.amount )* (investmentData.investment.incrementPercent / 100)).toFixed(2)}`:'no investment yet'}
+            subText={investmentData.investment.amountDeposited !== 0 ? `${((investmentData.investment.amount<investmentData.investment.amountDeposited?investmentData.investment.amountDeposited:investmentData.investment.amount )* (investmentData.investment.incrementPercent / 100)/investmentData.investment.amount).toFixed(2)}X of amount deposited` : 'No Investment yet'}
+          />
+          <PortfolioCard
+            title={'Percentage earned'}
+            mainText={investmentData.investment.amountDeposited !== 0 ? `${(investmentData.investment.earnings * 100 / investmentData.investment.amountDeposited).toFixed(2)}%` : 'No investment yet'}
+            subText={investmentData.investment.amountDeposited !== 0 ? `In ${(Math.floor((new Date().getTime() - new Date(investmentData.investment.investmentDate).getTime()) / (1000 * 60 * 60 * 24)))} days` : 'No investment yet'}
+          />
+        </div>
+      </Col>
 
-<Col xs={12} md={6} lg={3}>
-  <div>
-    <PortfolioCard
-      title={'Daily earning percentage'}
-      mainText={investmentData.dailyEarningPercentage !== 0 ? `$${investmentData.dailyEarningPercentage}%` : 'N/A'}
-      subText={investmentData.dailyEarningPercentage !== 0 ? `capital grows by ${1 + investmentData.dailyEarningPercentage / 14}X` : 'No investment yet'}
-    />
-    <PortfolioCard
-      title={'Expected earning percentage'}
-      mainText={investmentData.dailyEarningPercentage !== 0 ? `${investmentData.dailyEarningPercentage * investmentData.durationInDays}%` : 'N/A'}
-      subText={investmentData.dailyEarningPercentage !== 0 ? 'In 14 days' : 'No investment yet'}
-      primaryBackground={true}
-    />
-    <PortfolioCard title={'Start date'} mainText={formatStartDate(investmentData.commenceDate)} subText={investmentData.dailyEarningPercentage !== 0 ? 'Date of first deposit' : 'No investment yet'} primaryBackground={true} />
-  </div>
-</Col>
+      <Col xs={12} md={6} lg={3}>
+        <div>
+          <PortfolioCard
+            title={'Daily earning percentage'}
+            mainText={investmentData.investment.incrementPercent !== 0 ? `$${(investmentData.investment.incrementPercent/investmentData.investment.durationInDays).toFixed(2)}%` : 'No investment yet'}
+            subText={investmentData.investment.incrementPercent !== 0 ? `capital grows by ${(investmentData.investment.incrementPercent / investmentData.investment.durationInDays).toFixed(2)}X daily` : 'No investment yet'}
+          />
+          <PortfolioCard
+            title={'Expected earning percentage'}
+            mainText={investmentData.investment.incrementPercent !== 0 ? `${((investmentData.investment.amount<investmentData.investment.amountDeposited?investmentData.investment.amountDeposited:investmentData.investment.amount )* (investmentData.investment.incrementPercent / 100)/investmentData.investment.amount).toFixed(2)}%` : 'N/A'}
+            subText={investmentData.investment.incrementPercent !== 0 ? `in ${investmentData.investment.durationInDays} days` : 'No investment yet'}
+            primaryBackground={true}
+          />
+          <PortfolioCard title={'Start date'} mainText={formatStartDate(investmentData.investment.investmentDate)} subText={investmentData.investment.incrementPercent !== 0 ? 'Date of first deposit' : 'No investment yet'} primaryBackground={true} />
+        </div>
+      </Col>
 
     </Row>
     <Row className='mx-1 green round-card-bottom mt-2 py-4'>
@@ -105,19 +80,21 @@ const PortfolioComponent: React.FC<{data:PortfolioDataType|null}> = ({data}) => 
 
       <Col xs={12} lg={4}>
         <div className='text-light  text-center'>Referral Bonus Earning:</div>
-        <div className=' text-light  text-center'><strong>${investmentData.referral.totalAmount}</strong></div>
-        <div className=' text-light  text-center'><small >from {investmentData.referral.count} referral</small></div>
+        <div className=' text-light  text-center'><strong>${investmentData.referrals.totalAmount}</strong></div>
+        <div className=' text-light  text-center'><small >from {investmentData.referrals.count} referrals</small></div>
 
       </Col>
       <Col xs={12} lg={4}>
         <div className='text-light  text-center'>Expected Total Payout:</div>
-        <div className='text-light text-center'><strong>${`${investmentData.amount +(investmentData.amount*investmentData.dailyEarningPercentage * investmentData.durationInDays) }`}</strong></div>
+        <div className='text-light text-center'>
+          <strong>{investmentData.investment.amountDeposited !==0?
+          `$${((investmentData.investment.amount<investmentData.investment.amountDeposited?investmentData.investment.amountDeposited:investmentData.investment.amount )* (investmentData.investment.incrementPercent / 100)).toFixed(2)}`:'No investment yet.'}</strong></div>
         <div className=' text-light  text-center'><small >*Invested Capital + InvestmentData Earnings </small></div>
 
       </Col>
       <Col className='' xs={12} lg={4}>
         <div className='text-light text-center'>Pay Out Date:</div>
-        <div className='text-light text-center '><strong>{formatEndDate(investmentData.commenceDate, investmentData.durationInDays)}</strong></div>
+        <div className='text-light text-center '><strong>{formatEndDate(investmentData.investment.investmentDate,investmentData.investment.durationInDays)}</strong></div>
       </Col>
 
 

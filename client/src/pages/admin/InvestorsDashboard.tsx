@@ -1,21 +1,19 @@
 import React, { useEffect, useState } from 'react'
 import SuccessModal from '../../components/general/SuccessModal'
-import { MiniFooter } from '../../components/home_components/Footer'
-import '../../components/styles.css'
-import CryptoConvert from 'crypto-convert';
 import { Modal, Form, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { faCircleDot } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { addInvestment, getCurrencies, getInvestmentNewbies } from '../../utils/helpers';
-import { AddInvestmentType } from '../../utils/types';
+import { MiniFooter } from '../../components/home_components/Footer';
+
 
 interface ModalFormProps {
   show: boolean;
 }
 
 const AddInvestmentModalForm: React.FC<ModalFormProps> = ({ show }) => {
-  const [formData, setFormData] = useState<AddInvestmentType>({
+  const [formData, setFormData] = useState<any>({
     amount: 0,
     address: '',
     currency: '',
@@ -55,7 +53,7 @@ const AddInvestmentModalForm: React.FC<ModalFormProps> = ({ show }) => {
  
   }catch(error:any){
     console.error(error)
-    alert('sorry, the amount was not added, contact')
+    alert(error.message)
   }finally{
     handleClose()
   }
@@ -93,7 +91,7 @@ const AddInvestmentModalForm: React.FC<ModalFormProps> = ({ show }) => {
             <Form.Control
               type="text"
               placeholder="Enter wallet address"
-              name="walletAddress"
+              name="address"
               value={formData.address}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange(e)}
             />
