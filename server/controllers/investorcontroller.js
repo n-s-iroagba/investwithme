@@ -8,10 +8,6 @@ const { sendHowToInvestMail } = require('../service');
 module.exports = {
 
   index: async (req, res) => {
-    // await Investment.sync();
-
-    // // Drop the Investment model
-    // await Investment.drop();
     return res.send("hello");
   },
 
@@ -144,7 +140,7 @@ module.exports = {
       
       }
       console.log(manager)
-      investment.durationInDays = manager.duration*7;
+      investment.durationIndays= manager.duration*7;
       investment.incrementPercent = manager.percentageYield;
       
       await investment.save();

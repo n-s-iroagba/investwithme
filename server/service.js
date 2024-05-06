@@ -66,6 +66,22 @@ const sendPasswordResetEmail=async (user, verificationToken) => {
   }
 };
 
+const sendPausedInvestmentEmail=async (user, verificationToken) => {
+ 
+  try {
+    const emailBody = { html: emailHtmlContent };
+    await transporter.sendMail({
+      from: COMPANY_VERIFICATION_EMAIL,
+      to: user.email,
+      subject: `Change your ${COMPANY_NAME} account password`,
+      ...emailBody,
+    });
+  } catch (error) {
+    console.error('Error sending password change email:', error.message);
+    throw new Error(error.message);
+  }
+};
+
 const sendPromoMail =async  (investor,startDate, endDate,PROMO_PERCENT)=>{
   let mailOptions = {
     from: COMPANY_REFERRAL_EMAIL,
@@ -328,5 +344,5 @@ module.exports = {
   sendPasswordResetEmail,
   sendPromoMail ,
   sendPromoExtensionMail,
- 
+  sendPausedInvestmentEmail,
 };

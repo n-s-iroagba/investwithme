@@ -40,22 +40,23 @@ const VerifyEmail = () => {
         const currentTime = new Date().getTime();
         const dateObjectTime = dateObject.getTime();
         const minutesDifference = (currentTime - dateObjectTime) / (1000 * 60);
-        if (minutesDifference < 10) {
+        if (minutesDifference > 0) {
           setCounter(600-Math.floor(minutesDifference * 60));
         }
       }
     }
+    console.log('counter:'+counter)
     const interval = setInterval(() => {
       setCounter((prevCounter) => Math.max(0, prevCounter - 1));
       const verificationStatus = localStorage.getItem('cassockVerified')
-      if (verificationStatus){
+      if (verificationStatus==='true'){
         setCounter(0)
         window.close()
       }
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [location.search, navigate]);
+  }, [counter, location.search, navigate]);
 
   const verifyAndUpdateToken = async () => {
   

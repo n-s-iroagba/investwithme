@@ -99,6 +99,10 @@ element: <Email />
     path:'/investment-guide',
     element: <InvestmentGuide />,
 },
+{
+   path:'/reset-password-info',
+   element:<p>check your mail</p>
+},
 
 {
     path:'/invest/managers',

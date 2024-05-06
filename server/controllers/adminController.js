@@ -88,7 +88,6 @@ module.exports = {
   },
   
   patchWallet: async (req, res) => {
-   console.log('hi')
     const { id,address} = req.body;
     console.log(address)
     try {
@@ -261,8 +260,8 @@ promo.save();
 
     const investors = await Investor.findAll({ where: { hasInvested: false } });
     investors.forEach(async (investor) => {
-      await sendPromoMail(investor,startDate, endDate,PROMO_PERCENT)
-      await Notification.create({ investorId: investor.id, title:'Promo Extension' , message:`We are thrilled to announce the extension of ourexclusive promotional period for you! 
+      await sendPromoMail(investor,promo.startDate, promo.endDate,PROMO_PERCENT)
+      await Notification.create({ investorId: investor.id, title:'Promo Extension' , message:`We are thrilled to announce the extension of our exclusive promotional period for you! 
     The promotion will run from ${promo.startDate} to ${promo.endDate}.Invest before the ${promo.endDate} and earn a bonus of ${100*PROMO_PERCENT}% on your initial investment deposit` });
     });
 
@@ -288,19 +287,25 @@ try{
 },
 
 deletePromo: async (req, res) => {
-  try{
-    const promo = await Promo.findOne()
-    if (promo){
-      promo.destroy();
-      return res.status(200)
-      }else{
-        return res.status(404).json({message: 'Promo not found'})
-      }
-  }catch(error){
+  try {
+    const promo = await Promo.findOne();
+    if (!promo) {
+      return res.status(404).json({ message: 'Promo not found' });
+    }
+
+    const currentDate = new Date();
+    const endDate = new Date(promo.endDate);
+
+    if (currentDate > endDate) {
+      await promo.destroy();
+      return res.status(200).json({ message: 'Promo deleted successfully' });
+    } 
+  } catch (error) {
     console.error('Error deleting promo:', error);
     return res.status(500).json({ error: 'Error deleting promo from database' });
   }
 },
+
 getNewbies : async  (req, res) => {
   try{
     const newbie = await Newbies.findOne()

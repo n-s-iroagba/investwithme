@@ -29,7 +29,7 @@ const Admin = sequelize.define('admin', {
       type:Sequelize.STRING,
       allowNull:true
   },
-  verified: {
+  isVerified: {
     type: Sequelize.BOOLEAN,
     defaultValue:false,
     allowNull: false,
@@ -172,6 +172,10 @@ type:Sequelize.BOOLEAN,
 allowNull:true,
 },
 
+isVerified:{
+  type:Sequelize.BOOLEAN,
+  allowNull:true,
+  },
 changePasswordToken:{
       type:Sequelize.STRING,
       allowNull:true

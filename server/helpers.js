@@ -25,7 +25,11 @@ const getVerificationEmailContent = (verificationUrl,TOKEN_EXPIRATION_TIME,COMPA
     <h1 class="text-center">Welcome to ${COMPANY_NAME}!</h1>
     <p  class="text-center">Thank you for signing up. To complete your registration, please click the button below to verify your email address.</p>
     <p  class="text-center">
-      <a href="${verificationUrl}" class="btn btn-primary">Verify Your Email</a>
+    <a href= ${verificationUrl}>
+    <button style="background-color: #007bff; color: #fff; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">
+    Verify Your Email
+  </button>
+</a>
     </p>
     <p>If the button doesn't work, you can copy and paste the following link into your browser:</p>
     <p>${verificationUrl}</p>
@@ -67,7 +71,7 @@ const getVerificationEmailContent = (verificationUrl,TOKEN_EXPIRATION_TIME,COMPA
     return formattedDate;
   };
   
-  const checkInvestmentStatus = async (investment) => {
+  const checkInvestmentStatus = async (investor,investment) => {
     try {
       const currentDate = new Date();
       const investmentDate = new Date(investment.investmentDate);
@@ -76,6 +80,7 @@ const getVerificationEmailContent = (verificationUrl,TOKEN_EXPIRATION_TIME,COMPA
   
       if (investment.amountDeposited < investment.amount && currentDate > threeDaysLater) {
         investment.isPaused = true;
+        await sendPausedInvestmentEmail(investor)
         await investment.save();
         console.log('Investment paused successfully.');
       } else {

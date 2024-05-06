@@ -14,9 +14,13 @@ const WalletCard: React.FC<{ wallet: WalletType, deleteButton: React.ReactNode, 
     <div className='px-1'>
       <Card className={`shade  round-card my-1 w-100`}>
         <Card.Body>
+          <small>Blockchain:</small>
           <Card.Text >{wallet.blockchain}</Card.Text>
-          <Card.Title>{wallet.network}</Card.Title>
+          <small>Network:</small>
+          <Card.Text>{wallet.network}</Card.Text>
+          <small>Currency:</small>
           <Card.Text>{wallet.currency}</Card.Text>
+          <small>Address:</small>
           <Card.Text>{wallet.address}</Card.Text>
           {editButton}
           <br />

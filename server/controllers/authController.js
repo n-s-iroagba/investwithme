@@ -86,12 +86,12 @@ module.exports = {
         user = await Investor.findOne({ where: { email } });
         userType = 'investor';
       }
-  
+      
       if (!user) {
         return res.status(400).json({ message: 'User not found' });
       }
   
-      if (!user.verified) {
+      if (!user.isVerified) {
         const token = generateEmailVerificationToken( user);
         user.verificationToken = token;
         await user.save();
@@ -107,8 +107,8 @@ module.exports = {
       }else{
         loginToken = createAdminLoginJWT(user)
       }
-   
-      return res.status(200).json(loginToken)
+      console.log('loginToken:' +loginToken);
+      return res.status(200).json({user:userType, token:loginToken})
       }
     } catch (error) {
       return res.status(500).json({ message: error.message });
@@ -134,12 +134,12 @@ module.exports = {
           throw new Error('illegal request no such user')
         }
       }
-
-      if (user.verified) {
+      console.log(user)
+      if (user.isVerified) {
         return res.redirect(ALREADY_VERIFIED_ROUTE);
       }
 
-      await user.update({ verified: true});
+      await user.update({ isVerified: true});
       user.save();
      
       ;
@@ -185,10 +185,10 @@ module.exports = {
     try {
 
       let user = await Admin.findOne({ where: { email } });
-      
+     
       let role = 'admin'
       if (!user) {
-        console.log(bbbbb)
+        
         user = await Investor.findOne({ where: { email } });
         if (!user) {
           return res.status(404).json({ error: 'User not found.' });
@@ -202,10 +202,8 @@ module.exports = {
       user.save();
      
       await sendPasswordResetEmail(user, resetToken); 
-
       
-      
-      return res.status(200);
+      return res.status(200).send('password change request successful');
     } catch (error) {
       console.error(error)
       return res.status(500).json({ error: error.message });
@@ -245,17 +243,24 @@ module.exports = {
     try {
       let user = await Admin.findByPk(id)
       let userType = 'admin'
-    
+      if (!user) {
         
+        user = await Investor.findOne({ where: { email } });
         if (!user) {
-          return res.status(400).json({ error: 'Invalid verification token' });
+          return res.status(404).json({ error: 'User not found.' });
+        }else{
+          role = 'investor'
         }
-      
- 
-        const loginToken = createAdminLoginJWT(user)
+      }
+      let loginToken;
+      if (role == 'investor'){
+        loginToken = createLoginJWT(user) 
+      }else{
+      loginToken = createAdminLoginJWT(user)
+      }
       
       user.save()
-      return res.status(201).json(loginToken)
+      return res.status(200).json({user:roke, token:loginToken})
 
     } catch (error) {
       console.error('Error changing password :', error.message);

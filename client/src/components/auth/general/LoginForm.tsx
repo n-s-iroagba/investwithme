@@ -40,12 +40,16 @@ const LoginForm: React.FC = () => {
         navigate('/verify-email');
       } else if (response.status === 400) {
         navigate('/signup');
-      } else {
-        localStorage.setItem('cassockJwtToken', JSON.stringify(response.data));
-        navigate('/verify-email');
+      } else if (response.status === 200) {
+        localStorage.setItem('cassockJwtToken', JSON.stringify(response.data.token));
+        if (response.data.user==='investor'){
+          navigate('/dashboard');
+        }else{
+        navigate('/admin/dashboard');
+        }
       }
-    } catch (error) {
-      setErrorMessage('Sorry, you cannot login at this time. We are maintaining our servers due to heavy traffic.');
+    } catch (error:any) {
+      setErrorMessage(error.message);
       console.error(error);
     }
   };

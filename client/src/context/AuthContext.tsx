@@ -69,7 +69,7 @@ export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({ c
           navigateToVerifyEmailPage()
         }
       } catch (error: any) {
-        setErrorMessage(error.message+' - sorry we can not complete your request,confirm that entered the correct details or try again later')
+        setErrorMessage(error.message)
         console.error(error)
       }finally{
         setSubmitting(false);

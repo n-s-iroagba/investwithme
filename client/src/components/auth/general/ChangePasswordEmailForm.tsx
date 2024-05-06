@@ -35,15 +35,16 @@ const ChangePasswordEmailForm: React.FC = () => {
       } else {
         setSubmiting(true)
         const response = await postData(requestNewPasswordUrl, { email: email })
+        console.log(response)
         if (response.status === 200) {
-          navigate('/passwordchange-info')
+          navigate('/reset-password-info')
         } else if (response.status === 404) {
           setErrorMessage('user with this email not found')
         }
       }
-    }catch (err) {
+    }catch (err:any) {
       console.error(err)
-      setErrorMessage('sorry we cannot proceed with your request at this time')
+      setErrorMessage(err.message)
 
     }
   }

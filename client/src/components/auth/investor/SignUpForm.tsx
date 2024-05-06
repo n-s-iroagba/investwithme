@@ -45,6 +45,7 @@ const SignUpForm: React.FC = () => {
     navigate('/verify-email')
   }
   useEffect(() => {
+    if (!countries.length) {
     fetch(
       "https://valid.layercode.workers.dev/list/countries?format=select&flags=true&value=code"
     )
@@ -58,14 +59,14 @@ const SignUpForm: React.FC = () => {
         setCountries(data.countries);
       })
       .catch((error) => {
-        alert(`Error fetching data: poor network connection`);
+        console.error(error);
       });
-  
+    }
     const params = new URLSearchParams(window.location.search); // Parse the URL search parameters
     const tokenFromUrl = params.get('token'); // Get the token from the URL query parameters
     setReferralToken(tokenFromUrl);
 
-  }, [setReferralToken]);
+  },[countries.length, setReferralToken]);
   
 
   return (
@@ -225,7 +226,7 @@ const SignUpForm: React.FC = () => {
         <Form.Group>
         <div className='d-flex justify-content-evenly w-100 pb-5'>
           <button className='button-styles w-50 text-light' type={submitting === 'submitting' ? 'button' : 'submit'}>
-            {submitting === 'submitting' ? <Spinner animation='border' size='sm' /> : 'Submit'}
+          {submitting? <Spinner animation='border' size='sm' /> : 'Submit'}
           </button>
           <button className='button-styles text-light w-50' onClick={() => navigateToHome()}> Home</button>
         </div>
