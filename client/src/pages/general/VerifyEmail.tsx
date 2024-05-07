@@ -95,8 +95,7 @@ const VerifyEmail = () => {
       <>
         <Information head='Verify your Email Address' text="The token we sent is expired, kindly click the button to get a new token" icon={faMailchimp} center/>
         <div className='button-width-narrower my-3'>
-          <button className='button-styles' onClick={()=>verifyAndUpdateToken()}>{submitting?<Spinner animation='border' size='sm'/>:'Resend Token'}</button>
-          
+          <button className='button-styles' onClick={()=>verifyAndUpdateToken()}>{submitting?<Spinner animation='border' size='sm'/>:'Resend Token'}</button>  
         </div>
       </>
     )}

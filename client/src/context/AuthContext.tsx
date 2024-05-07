@@ -67,6 +67,8 @@ export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({ c
           console.log(response.data)
           localStorage.setItem('cassockEmailVerificationToken', JSON.stringify(response.data))
           navigateToVerifyEmailPage()
+        }else if (response.status === 409){
+          setErrorMessage('This email is already registered')
         }
       } catch (error: any) {
         setErrorMessage(error.message)
@@ -151,52 +153,55 @@ export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({ c
 
 
   const handleChangePassword = async (data: NewPasswordData, event: React.FormEvent<HTMLFormElement>, navigate: (path: string) => void) => {
-
     event.preventDefault();
-    const form = event.currentTarget
-    const password = data.password
-    const confirmPassword = data.confirmPassword
-    const passwordCorrect = checkIfUserEnteredPasswordCorrectly(password)
-    const passwordMatch = checkIfPasswordsMatch(password, confirmPassword)
-    let shouldSubmit: boolean = true //flag to check if form details are good enough to be submitted
-
-    const token = localStorage.getItem('cassockPasswordChangeToken')
-    let decodedToken: { id: string, role: string, email: string }|null;
-    if (token) {
-       decodedToken = decodePasswordChangeToken(token);
-      if (!decodedToken) {
-        throw new Error('illegal request')
-      }
-     } else {
-        throw new Error('illegal request')
-
-      }
+    const form = event.currentTarget;
+    const password = data.password;
+    const confirmPassword = data.confirmPassword;
+    const passwordCorrect = checkIfUserEnteredPasswordCorrectly(password);
+    const passwordMatch = checkIfPasswordsMatch(password, confirmPassword);
+    let shouldSubmit: boolean = true; //flag to check if form details are good enough to be submitted
   
-
-    if (form.checkValidity() === false || !passwordCorrect || !passwordMatch) {
-      setValidated(true)
-      shouldSubmit = false
+    const token = localStorage.getItem('cassockPasswordChangeToken');
+    let decodedToken: { id: string, role: string, email: string } | null = null;
+  
+    if (token) {
+      decodedToken = decodePasswordChangeToken(token);
+      if (!decodedToken) {
+        setErrorMessage('You are not authorized to make this request');
+      }
+    } else {
+      setErrorMessage('You are not authorized to make this request');
+    }
+  
+    if (form.checkValidity() === false || !passwordCorrect || !passwordMatch || !decodedToken) {
+      setValidated(true);
+      shouldSubmit = false;
       event.stopPropagation();
     }
+  
     if (shouldSubmit) {
       setSubmitting(true);
       try {
-          const response = await postData(`${newPasswordRoute}/${decodedToken?.id}`, { password }, token);
-              localStorage.setItem('cassockJwtToken', JSON.stringify(response.data));
-              if (decodedToken.role === 'admin') {
-                navigate('/admin/dashboard');
-              } else {
-                navigate('/dashboard');
-              }
-            }
-        catch (error:any) {
+        if (decodedToken) {
+          console.log(decodedToken)
+          const response = await postData(`${newPasswordRoute}/${decodedToken.id}`, { password }, token);
+          localStorage.setItem('cassockJwtToken', JSON.stringify(response.data));
+          if (decodedToken.role === 'admin') {
+            navigate('/admin/dashboard');
+          } else {
+            navigate('/dashboard');
+          }
+        }
+      } catch (error: any) {
         setErrorMessage(error.message);
         console.error(error);
-      }finally{
+      } finally {
         setSubmitting(false);
       }
     }
-  }
+  };
+  
+  
   const   setReferralToken = (token:string) =>{
     setInvestorData({
       ...investorData,

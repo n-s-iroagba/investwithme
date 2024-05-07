@@ -38,6 +38,7 @@ import Bonus from "./pages/admin/Bonus";
 import Investors from "./pages/admin/Investors";
 import PrivateRoute from "./components/auth/general/PrivateRoute";
 import EmailVerificationError from "./pages/general/EmailVerificationError";
+import PasswordChangeCheckMail from "./pages/general/PasswordChangeCheckMail";
 
 
 
@@ -101,7 +102,7 @@ element: <Email />
 },
 {
    path:'/reset-password-info',
-   element:<p>check your mail</p>
+   element:<PasswordChangeCheckMail/>
 },
 
 {

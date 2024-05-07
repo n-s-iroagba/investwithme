@@ -10,9 +10,6 @@ import ErrorMessage from '../../general/ErrorMessage';
 import { requestNewPasswordUrl } from '../../../utils/constants';
 import { postData } from '../../../utils/api';
 
-
-
-
 const ChangePasswordEmailForm: React.FC = () => {
   const [validated, setValidated] = useState<boolean>(false)
   const [submitting, setSubmiting] = useState<boolean>(false)
@@ -44,8 +41,7 @@ const ChangePasswordEmailForm: React.FC = () => {
       }
     }catch (err:any) {
       console.error(err)
-      setErrorMessage(err.message)
-
+      setErrorMessage('sorry we can not complete your request at this time')
     }
   }
 
