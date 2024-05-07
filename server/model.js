@@ -21,12 +21,11 @@ const Admin = sequelize.define('admin', {
     },
   },
   changePasswordToken:{
-      type:Sequelize.STRING,
-      defaultValue:'',
-      allowNull:true
-  },
+    type:Sequelize.STRING(255),
+    allowNull:true
+},
   verificationToken:{
-      type:Sequelize.STRING,
+      type:Sequelize.STRING(255),
       allowNull:true
   },
   isVerified: {
@@ -158,7 +157,7 @@ country: {
     allowNull:true,
 },
 verificationToken:{
-  type:Sequelize.STRING,
+  type:Sequelize.STRING(255),
   allowNull:true
 },
 
@@ -177,7 +176,7 @@ isVerified:{
   allowNull:true,
   },
 changePasswordToken:{
-      type:Sequelize.STRING,
+      type:Sequelize.STRING(255),
       allowNull:true
   },
 });

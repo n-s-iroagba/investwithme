@@ -43,7 +43,7 @@ module.exports = {
 
       const existingInvestor = await Investor.findOne({ where: { email } });
       if (existingInvestor) {
-        throw new Error(  'Investor with this email already exists' );
+        return res.status(409).json('user already exists');
       }
 
       password = await encryptPassword(password);
@@ -111,7 +111,8 @@ module.exports = {
       return res.status(200).json({user:userType, token:loginToken})
       }
     } catch (error) {
-      return res.status(500).json({ message: error.message });
+      console.error(error);
+      return res.status(500).json(error);
     }
   },
   
@@ -178,14 +179,64 @@ module.exports = {
 
     }
   },
-
-  requestPasswordReset: async (req, res) => {
+  requestPasswordReset:async (req, res) => {
     const { email } = req.body;
-
+  
+    try {
+      let user = await Admin.findOne({ where: { email } });
+      let role = 'admin';
+  
+      if (!user) {
+        user = await Investor.findOne({ where: { email } });
+        if (!user) {
+          return res.status(404).json({ error: 'User not found.' });
+        } else {
+          role = 'investor';
+        }
+      }
+  
+      const resetToken = generatePasswordResetToken(user.id, user.email, role);
+      user.changePasswordToken = resetToken;
+      await user.save();
+  
+      await sendPasswordResetEmail(user, resetToken);
+  
+      return res.status(200).send('Password change request successful');
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ error: error.message });
+    }
+  },
+  
+  confirmMailForPasswordChange: async (req, res) => {
+    const { token } = req.params;
+    console.log(token)
     try {
 
-      let user = await Admin.findOne({ where: { email } });
-     
+      let user = await Admin.findOne({ where: { changePasswordToken: token } });
+
+      if (!user) {
+        user = await Investor.findOne({ where: {changePasswordToken: token } })
+        if (!user) {
+          return res.status(404).json({ error: 'User not found.' });
+        }
+      }
+
+      const newtoken = createNewPasswordToken(user.id,user.email)
+
+      return res.redirect(`${NEW_PASSWORD_URL}/?token=${newtoken}`)
+
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json(error);
+    }
+  },
+
+  changePassword: async (req, res) => {
+    const {id}= req.params
+    const { password } = req.body;
+    try {
+      let user = await Admin.findByPk(id)
       let role = 'admin'
       if (!user) {
         
@@ -196,62 +247,7 @@ module.exports = {
           role = 'investor'
         }
       }
-
-      const resetToken = generatePasswordResetToken(user.id,user.email,role);
-      user.changePasswordToken= resetToken;
-      user.save();
-     
-      await sendPasswordResetEmail(user, resetToken); 
-      
-      return res.status(200).send('password change request successful');
-    } catch (error) {
-      console.error(error)
-      return res.status(500).json({ error: error.message });
-  }
-  },
-  confirmMailForPasswordChange: async (req, res) => {
-    const { token } = req.params;
-    console.log(token)
-    try {
-      // const decoded = decodeJWT(token);
-      //   let creationTime = new Date(decoded.timeOfCreation);
-      //   creationTime.setMinutes(creationTime.getMinutes() + 10);
-      // if (Date.now() >= decoded.exp * 1000) {
-      //   return res.redirect(REQUEST_PASSWORD_RESET);
-      // }
-  
-      let user = await Admin.findOne({ where: { changePasswordToken: token } });
-      if (!user) {
-        user = await Investor.findOne({ where: {changePasswordToken: token } })
-        if (!user) {
-          throw new Error('no such user')
-        }
-      }
-      const newtoken = createNewPasswordToken(user.id,user.email)
-      
-
-        return res.redirect(`${NEW_PASSWORD_URL}/?token=${newtoken}`)
-    } catch (error) {
-      console.error('Error verifying email:', error.message);
-      return res.status(500).json({ error: error.message});
-    }
-  },
-
-  changePassword: async (req, res) => {
-    const {id}= req.params
-    const { password } = req.body;
-    try {
-      let user = await Admin.findByPk(id)
-      let userType = 'admin'
-      if (!user) {
-        
-        user = await Investor.findOne({ where: { email } });
-        if (!user) {
-          return res.status(404).json({ error: 'User not found.' });
-        }else{
-          role = 'investor'
-        }
-      }
+      console.log('role: '+role)
       let loginToken;
       if (role == 'investor'){
         loginToken = createLoginJWT(user) 
@@ -260,7 +256,7 @@ module.exports = {
       }
       
       user.save()
-      return res.status(200).json({user:roke, token:loginToken})
+      return res.status(200).json({user:role, token:loginToken})
 
     } catch (error) {
       console.error('Error changing password :', error.message);
