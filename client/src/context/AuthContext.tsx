@@ -36,7 +36,7 @@ export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({ c
   });
 
   const handleSubmit = async (data: AdminData | InvestorData, event: React.FormEvent<HTMLFormElement>, domain: string, navigateToVerifyEmailPage: () => void) => {
-  
+
     event.preventDefault();
     const form = event.currentTarget
     const password = data.password
@@ -47,7 +47,7 @@ export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({ c
     let shouldSubmit: boolean = true //flag to check if form details are good enough to be submitted
     if ('secretCode' in data) {
       secretCodeMatch = data.secretCode === process.env.REACT_APP_ADMIN_SECRET_KEY ? true : false
-    }else{
+    } else {
       secretCodeMatch = true
     }
     if (form.checkValidity() === false || !passwordCorrect || !passwordMatch || !secretCodeMatch) {
@@ -63,17 +63,17 @@ export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({ c
       setSubmitting(true)
       try {
         const response = await postData(domain, data)
-        if (response.status===201) {
+        if (response.status === 201) {
           console.log(response.data)
           localStorage.setItem('cassockEmailVerificationToken', JSON.stringify(response.data))
           navigateToVerifyEmailPage()
-        }else if (response.status === 409){
+        } else if (response.status === 409) {
           setErrorMessage('This email is already registered')
         }
       } catch (error: any) {
         setErrorMessage(error.message)
         console.error(error)
-      }finally{
+      } finally {
         setSubmitting(false);
       }
     }
@@ -160,10 +160,10 @@ export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({ c
     const passwordCorrect = checkIfUserEnteredPasswordCorrectly(password);
     const passwordMatch = checkIfPasswordsMatch(password, confirmPassword);
     let shouldSubmit: boolean = true; //flag to check if form details are good enough to be submitted
-  
+
     const token = localStorage.getItem('cassockPasswordChangeToken');
     let decodedToken: { id: string, role: string, email: string } | null = null;
-  
+
     if (token) {
       decodedToken = decodePasswordChangeToken(token);
       if (!decodedToken) {
@@ -172,25 +172,35 @@ export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({ c
     } else {
       setErrorMessage('You are not authorized to make this request');
     }
-  
+
+
     if (form.checkValidity() === false || !passwordCorrect || !passwordMatch || !decodedToken) {
       setValidated(true);
       shouldSubmit = false;
       event.stopPropagation();
     }
-  
+
     if (shouldSubmit) {
       setSubmitting(true);
       try {
         if (decodedToken) {
-          console.log(decodedToken)
+          console.log(decodedToken);
           const response = await postData(`${newPasswordRoute}/${decodedToken.id}`, { password }, token);
-          localStorage.setItem('cassockJwtToken', JSON.stringify(response.data));
-          if (decodedToken.role === 'admin') {
-            navigate('/admin/dashboard');
-          } else {
-            navigate('/dashboard');
+          console.log(response);
+          if (response.status === 200) {
+            localStorage.setItem('cassockJwtToken', JSON.stringify(response.data));
+            if (decodedToken.role === 'admin') {
+              navigate('/admin/dashboard');
+            } else {
+              navigate('/dashboard');
+            }
+          } else if (response.status === 201) {
+            localStorage.setItem('cassockEmailVerificationToken', JSON.stringify(response.data))
+            navigate('/verify-email')
           }
+        } else {
+          setErrorMessage('You are not authorized to make this request');
+          setSubmitting(false);
         }
       } catch (error: any) {
         setErrorMessage(error.message);
@@ -200,9 +210,9 @@ export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({ c
       }
     }
   };
-  
-  
-  const   setReferralToken = (token:string) =>{
+
+
+  const setReferralToken = (token: string) => {
     setInvestorData({
       ...investorData,
       referralCode: token,

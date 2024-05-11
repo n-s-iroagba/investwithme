@@ -129,3 +129,12 @@ export function calculateDateDifference(creationDate:string, dueDate:string) {
 
   return differenceInDays;
 }
+export function extractErrorCode(errorMessage:string) {
+  const regex = /status code (\d+)/;
+  const match = errorMessage.match(regex); 
+  if (match && match.length > 1) {
+    return parseInt(match[1]); 
+  }
+  return null;
+}
+

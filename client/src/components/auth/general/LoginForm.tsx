@@ -9,6 +9,7 @@ import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import ErrorMessage from '../../general/ErrorMessage';
 import { loginUrl } from '../../../utils/constants';
 import { postData } from '../../../utils/api';
+import { extractErrorCode } from '../../../utils/utils';
 
 const LoginForm: React.FC = () => {
   const navigate = useNavigate();
@@ -25,32 +26,53 @@ const LoginForm: React.FC = () => {
   const login = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const form = event.currentTarget;
+    
     if (form.checkValidity() === false) {
       setErrorMessage('Please fill in all fields.');
       event.stopPropagation();
       return;
     }
+  
     setValidated(true);
     setSubmitted(true);
+  
     try {
       const response = await postData(loginUrl, data);
+      handleLoginResponse(response);
+    } catch (error) {
+      handleLoginError(error);
+    } finally {
       setSubmitted(false);
-      if (response.status === 403) {
-        localStorage.setItem('cassockEmailVerificationToken', JSON.stringify(response.data));
-        navigate('/verify-email');
-      } else if (response.status === 400) {
-        navigate('/signup');
-      } else if (response.status === 200) {
-        localStorage.setItem('cassockJwtToken', JSON.stringify(response.data.token));
-        if (response.data.user==='investor'){
-          navigate('/dashboard');
-        }else{
-        navigate('/admin/dashboard');
-        }
-      }
-    } catch (error:any) {
-      setErrorMessage(error.message);
-      console.error(error);
+    }
+  };
+const handleLoginResponse = (response:any) => {
+    setSubmitted(false);
+    console.log('RESPONSE', response.status);
+  
+    if (response.status === 201) {
+      localStorage.setItem('cassockEmailVerificationToken', JSON.stringify(response.data));
+      navigate('/verify-email');
+    } else if (response.status === 200) {
+      handleSuccessfulLogin(response.data);
+    }
+  };
+
+  const handleSuccessfulLogin = (data:any) => {
+    localStorage.setItem('cassockJwtToken', JSON.stringify(data.token));
+    const destination = data.user === 'investor' ? '/dashboard' : '/admin/dashboard';
+    navigate(destination);
+  };
+  
+  const handleLoginError = (error:any) => {
+    console.error(error);
+    const code = extractErrorCode(error.message);
+    
+    if (code === 403) {
+      setErrorMessage('Invalid password.');
+    } else if (code === 404) {
+      setErrorMessage('You are not yet registered on our platform.');
+    } else {
+      setErrorMessage('Our server is currently down. Please try again later.');
     }
   };
 

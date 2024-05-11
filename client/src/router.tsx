@@ -86,7 +86,8 @@ element: <Email />
 },
 {
     path:'/dashboard',
-    element:  <PrivateRoute Component={Dashboard}/>,
+    element:  <Dashboard username={""} />,//<PrivateRoute Component={Dashboard}/>,
+     
 },
 {
     path:'/withdraw',

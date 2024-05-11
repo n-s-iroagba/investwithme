@@ -11,10 +11,7 @@ const SignUp:React.FC = ()=>{
     useEffect(() => {
         const urlParams = new URLSearchParams(window.location.search);
         const token = urlParams.get('token');
-        if (token) {
-        
-          localStorage.setItem('cassockPasswordChangeToken', token);
-        }else{
+        if (!token) {
             navigate('/login')
         }
     })

@@ -8,19 +8,33 @@ import { DashboardBar } from '../../components/general/DashboardNav'
 import '../../components/styles.css'
 import { MiniFooter } from '../../components/home_components/Footer'
 import { getAccountBalance, getNumberOfNewNotifications, logOut } from '../../utils/helpers'
-
+import io from 'socket.io-client'
 
 const Dashboard: React.FC<{username:string}>= ({username}) => {
-  const [newNotifications,setNewNotification] = useState(0)
+  const [notifications, setNotifications] = useState([]);
+  const [totalNotifications, setTotalNotifications] = useState(0)
   const [balance,setBalance] = useState(0)
   
+  const socket = io('http://localhost:5000')
   const navigate = useNavigate();
   useEffect(() =>{
-    const notification:number = getNumberOfNewNotifications()
-    setNewNotification(notification)
+   
+    socket.on('connect', () => {
+      console.log('Connected to server');
+      socket.emit('join', 'admin'); // Join as admin
+    });
+
+    socket.on('admin', (data) => {
+      console.log('Notification received:', data);
+      // Handle notification data as needed
+    });
     const receivedbalance:number = getAccountBalance()
     setBalance(receivedbalance)
-  }, [])
+    return () => {
+      socket.disconnect(); // Disconnect socket when component unmounts
+    };
+   
+  }, [socket])
 
   const icons = [faQuestion,faHandHoldingDollar,faWallet,faMoneyBill,faMoneyBillTransfer,faUserFriends ];
   const actions: string[] = ['how-to-guide', 'invest/managers','portfolio','withdraw','transactions',`referral`];
@@ -29,7 +43,7 @@ const Dashboard: React.FC<{username:string}>= ({username}) => {
   return (
     <div className='primary-background d-flex flex-column dashboard align-items-center py-5' >
       <div className='text-light mb-3'>Logo</div>
-      <DashboardBar balance={balance} numberOfNewNotifications={newNotifications} username={username} />
+      <DashboardBar balance={balance} numberOfNewNotifications={0} username={username} />
    
         <Row className="d-flex justify-content-center align-items-center w-100 gx-1 gy-1 mt-1">
           {texts.map((text, index) => (

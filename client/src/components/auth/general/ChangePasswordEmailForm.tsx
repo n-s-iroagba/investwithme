@@ -34,6 +34,7 @@ const ChangePasswordEmailForm: React.FC = () => {
         const response = await postData(requestNewPasswordUrl, { email: email })
         console.log(response)
         if (response.status === 200) {
+          localStorage.setItem('cassockPasswordChangeToken', response.data)
           navigate('/reset-password-info')
         } else if (response.status === 404) {
           setErrorMessage('user with this email not found')

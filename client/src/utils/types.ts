@@ -118,7 +118,7 @@ export interface TransactionType{
 export interface NotificationType{
   id:number
   title:'Earnings'|'Bonus Payout'|'How To Deposit'|'Referral Registration'|'Referral bonus imbursement'|'Bonus imbursement'|
-  'Investment Deposit'|'Incomplete Investment Deposit'|'Investment Paused' |'Investment Continued'|'Promo Notification'|'Incomplete Deposit'
+  'Investment Deposit'|'Incomplete Investment Deposit'|'Investment Paused' |'Investment Continued'|'Promo Notification'
   message:string
 }
 export interface AddInvestmentType {

@@ -4,7 +4,7 @@ import DatePicker from "react-datepicker";
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Select from 'react-select';
-import { useEffect, useState } from 'react';
+import { useEffect, useState,useMemo } from 'react';
 import '../../styles.css';
 import "react-datepicker/dist/react-datepicker.css"
 import { required } from '../general/required';
@@ -16,10 +16,11 @@ import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import ErrorMessage from '../../general/ErrorMessage';
 import { useNavigate } from 'react-router-dom';
 import { createInvestorUrl } from '../../../utils/constants';
-
+import countryList from 'react-select-country-list'
 
 const SignUpForm: React.FC = () => {
   const [startDate, setStartDate] = useState(new Date())
+  const options = useMemo(() => countryList().getData(), [])
   const { investorData,
     submitting,
     setInvestorData,
@@ -35,7 +36,6 @@ const SignUpForm: React.FC = () => {
     passwordValidityMessage
   } = useContext<any>(AuthContext)
 
-  const [countries, setCountries] = useState([]);
   const navigate = useNavigate()
 
   const navigateToHome = () => {
@@ -45,28 +45,11 @@ const SignUpForm: React.FC = () => {
     navigate('/verify-email')
   }
   useEffect(() => {
-    if (!countries.length) {
-    fetch(
-      "https://valid.layercode.workers.dev/list/countries?format=select&flags=true&value=code"
-    )
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        setCountries(data.countries);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-    }
-    const params = new URLSearchParams(window.location.search); // Parse the URL search parameters
-    const tokenFromUrl = params.get('token'); // Get the token from the URL query parameters
+    const params = new URLSearchParams(window.location.search)
+    const tokenFromUrl = params.get('token'); 
     setReferralToken(tokenFromUrl);
 
-  },[countries.length, setReferralToken]);
+  },[setReferralToken]);
   
 
   return (
@@ -82,7 +65,7 @@ const SignUpForm: React.FC = () => {
               type="text"
               name="firstName"
               value={investorData.firstName}
-              onChange={(e) => handleChange(investorData, e, setInvestorData,)} // Use (e)=>handleChange(investorData,e, setInvestorData) here
+              onChange={(e) => handleChange(investorData, e, setInvestorData,)}
               className='text-light custom-input bg-transparent form-control'
             />
             <Form.Control.Feedback></Form.Control.Feedback>
@@ -125,7 +108,7 @@ const SignUpForm: React.FC = () => {
 
         <Form.Group className='mb-3' controlId="validationFormik04">
           <Form.Label>Country of residence{required}</Form.Label>
-          <Select options={countries} onChange={(e: any) => {
+          <Select options={options} onChange={(e: any) => {
             setInvestorData({ ...investorData, country: e.label })
           }} className=' bg-transparent form-control' />
         </Form.Group>

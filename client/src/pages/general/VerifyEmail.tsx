@@ -4,7 +4,6 @@ import { faMailchimp } from '@fortawesome/free-brands-svg-icons';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { getData } from '../../utils/api';
 import { resendVerificationTokenRoute } from '../../utils/constants';
-import { EmailVerificationToken } from '../../utils/types';
 import { getVerificationTokenData } from '../../utils/auth';
 import ErrorMessage from '../../components/general/ErrorMessage';
 import { Spinner } from 'react-bootstrap';
@@ -19,44 +18,52 @@ const VerifyEmail = () => {
   const location = useLocation()
   useEffect(() => {
     const params = new URLSearchParams(location.search);
-    const queryToken = params.get('token')
+    const queryToken = params.get('token');
+  
     if (queryToken) {
-      localStorage.setItem('cassockEmailVerificationToken',queryToken)
+      localStorage.setItem('cassockEmailVerificationToken', queryToken);
       const { origin, pathname } = window.location;
       window.history.replaceState({}, document.title, `${origin}${pathname}`);
     }
+  
     const storedToken = localStorage.getItem('cassockEmailVerificationToken');
+  
     if (!storedToken) {
       navigate('/login');
-    } else {
-      const decodedToken: EmailVerificationToken = getVerificationTokenData(storedToken);
-
-      if (!decodedToken) {
-        navigate('/login');
-      } else {
-        setToken(decodedToken);
-        const dateString = decodedToken.timeOfCreation;
-        const dateObject = new Date(dateString);
-        const currentTime = new Date().getTime();
-        const dateObjectTime = dateObject.getTime();
-        const minutesDifference = (currentTime - dateObjectTime) / (1000 * 60);
-        if (minutesDifference > 0) {
-          setCounter(600-Math.floor(minutesDifference * 60));
-        }
-      }
+      return; 
     }
-    console.log('counter:'+counter)
+  
+    const decodedToken = getVerificationTokenData(storedToken);
+  
+    if (!decodedToken) {
+      navigate('/login');
+      return; 
+    }
+  
+    setToken(decodedToken);
+  
+    const dateString = decodedToken.timeOfCreation;
+    const dateObject = new Date(dateString);
+    const currentTime = new Date().getTime();
+    const dateObjectTime = dateObject.getTime();
+    const minutesDifference = (currentTime - dateObjectTime) / (1000 * 60);
+  
+    if (minutesDifference > 0) {
+      setCounter(600 - Math.floor(minutesDifference * 60));
+    }
+  
     const interval = setInterval(() => {
       setCounter((prevCounter) => Math.max(0, prevCounter - 1));
-      const verificationStatus = localStorage.getItem('cassockVerified')
-      if (verificationStatus==='true'){
-        setCounter(0)
-        window.close()
-      }
+      // const verificationStatus = localStorage.getItem('cassockVerified')
+      // if (verificationStatus==='true'){
+      //   setCounter(0)
+      //   window.close()
+      // }
     }, 1000);
-
+  
     return () => clearInterval(interval);
-  }, [counter, location.search, navigate]);
+  }, [location.search, navigate]);
+  
 
   const verifyAndUpdateToken = async () => {
   
