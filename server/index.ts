@@ -4,7 +4,8 @@ import cron from 'node-cron';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import routes from './router';
-import { Admin } from './types/adminTypes';
+import { Investment } from './types/investorTypes';
+
 
 
 const app = express();
@@ -40,7 +41,7 @@ app.use('/pay', routes);
 app.use('/delete-investor/:id', routes);
 
 app.use('/create-manager', routes);
-app.use('/patch-manager', routes);
+app.use('/patch-manager/:id', routes);
 app.use('/get-managers', routes);
 app.use('/manager/:id', routes);
 app.use('/delete-manager/:id', routes);
@@ -48,7 +49,7 @@ app.use('/delete-manager/:id', routes);
 app.use('/create-promo', routes);
 app.use('/patch-promo', routes);
 app.use('/get-promo', routes);
-app.use('/delete-manager', routes);
+app.use('/delete-promo', routes);
 
 app.use('/create-investment/:id', routes);
 app.use('/patch-investment', routes);
@@ -69,11 +70,10 @@ app.use('/get-notifications/:id', routes);
 app.use('/get-transactions/:id', routes);
 app.use('/get-newbies', routes);
 
-sequelize
-  .sync()
+
+  sequelize.sync({force:true})
   .then(() => console.log('model formed'))
   .catch((err:any) => console.log(err));
-Admin.sync()
 app.listen(PORT, () => {
   console.log(`takum listening on port ${PORT}`);
 });

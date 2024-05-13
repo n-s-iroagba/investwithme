@@ -1,10 +1,10 @@
 import { Request, Response } from 'express';
 import { howToInvestMessage, PROMO_PERCENT, REFERRAL_BONUS_PERCENT } from '../config';
-import { Investor, DepositWallet, Investment, Referral, Notification, Transaction } from '../types/investorTypes';
-import { AdminWallet, Manager } from '../types/adminTypes';
+import { Investor, DepositWallet, Investment, Referral, Notification, Transaction, Manager } from '../types/investorTypes';
+import { AdminWallet } from '../types/adminTypes';
 import { customError, findManagerWithHighestMinInvestment, formatEndDate } from '../helpers';
 import { sendReferralBonusEmail, sendCompleteInvestmentDepositReceivedEmail, sendIncompleteInvestmentDepositReceivedEmail, sendPromoBonusEmail, sendHowToInvestMail, } from '../mailService';
-import { Op} from 'sequelize';
+import { Op } from 'sequelize';
 
 
 
@@ -29,7 +29,7 @@ export const getInvestmentInitiationData = async (req: Request, res: Response): 
     return res.status(200).json({ wallets, managers });
   } catch (error: any) {
     console.error('error in getInvestmentIntiationData function', error);
-    return res.status(error.status).json(error);
+    return res.status(error.status||500).json(error);
   }
 };
 
@@ -105,7 +105,7 @@ export const createInvestment = async (req: Request, res: Response): Promise<Res
 
     console.error('error in CreateInvestmnent function ', error);
 
-    return res.status(error.status).json(error);
+    return res.status(error.status||500).json(error);
   }
 }
 
@@ -130,17 +130,25 @@ export const topUp = async (req: Request, res: Response): Promise<Response> => {
       throw customError(`investor deposit wallet not fount`, 404);
     }
 
-    const investor = await Investor.findByPk(wallet.investment.investorId);
-    if (!investor) {
-      throw customError(`The investor you are trying to credit not found on the database`, 404);
+    const investmentId = wallet.investmentId;
+    if (!investmentId) {
+      throw customError('Investment ID is null', 400);
     }
 
-    const investment = await Investment.findByPk(wallet.investmentId);
+
+    const investment = await Investment.findByPk(investmentId);
     if (!investment) {
-      throw customError(`The investment you are trying to credit not found on the database`, 404);
+      throw customError(`Investment with ID ${investmentId} not found`, 404);
     }
-
-    let manager = await Manager.findByPk(investment.managerId);
+    const investor = investment.investor;
+    if (!investor) {
+      throw customError(`Investor for Investment with ID ${investmentId} not found`, 404)
+    }
+    const managerId = investment.managerId
+    if (!managerId) {
+      throw customError('Manager ID is null', 400);
+    }
+    let manager = await Manager.findByPk(managerId);
     if (!manager) {
       throw customError(`The manager of the investment you are trying to credit not found on the database`, 404);
     }
@@ -218,7 +226,7 @@ export const topUp = async (req: Request, res: Response): Promise<Response> => {
 
   } catch (error: any) {
     console.error('Error in topUp function:', error);
-    return res.status(error.status).json(error);
+    return res.status(error.status||500).json(error);
   }
 }
 
@@ -275,7 +283,7 @@ export const payPromoBonus = async (req: Request, res: Response): Promise<Respon
 
   } catch (error: any) {
     console.error('error in PayPromoBonus function', error);
-    return res.status(error.status).json(error);
+    return res.status(error.status||500).json(error);
   }
 }
 
@@ -292,7 +300,7 @@ export const payReferralBonus = async (req: Request, res: Response): Promise<Res
       throw customError(`The referredInvestor  you are trying to pay bonus has no investment in the database `, 404);;
     }
 
-    let referrerInvestor ;
+    let referrerInvestor;
 
     if (referredInvestor.referrerId) {
       referrerInvestor = await Investor.findByPk(referredInvestor.referrerId);
@@ -303,28 +311,28 @@ export const payReferralBonus = async (req: Request, res: Response): Promise<Res
       throw customError(`The referredInvestor has no referrer`, 404);;
     }
 
-      await Transaction.create({
-        type: 'Credit',
-        amount: referral.amount,
-        date: new Date(),
-        narration: 'Referral bonus reimbursement',
-        participatingAccount: 'Cassock', // Replace COMPANY_NAME with the actual company name
-        investorId: referrerInvestor.id,
-      });
+    await Transaction.create({
+      type: 'Credit',
+      amount: referral.amount,
+      date: new Date(),
+      narration: 'Referral bonus reimbursement',
+      participatingAccount: 'Cassock', // Replace COMPANY_NAME with the actual company name
+      investorId: referrerInvestor.id,
+    });
 
-      await Notification.create({
-        title: 'Referral bonus imbursement',
-        message: `Congratulations! You have earned ${referral.amount} for referring ${referredInvestor.firstName} ${referredInvestor.lastName}. This earned bonus will be added to your investment and will be paid out on the due date of your investment payout.`,
-        investorId: referrerInvestor.id,
-      });
+    await Notification.create({
+      title: 'Referral bonus imbursement',
+      message: `Congratulations! You have earned ${referral.amount} for referring ${referredInvestor.firstName} ${referredInvestor.lastName}. This earned bonus will be added to your investment and will be paid out on the due date of your investment payout.`,
+      investorId: referrerInvestor.id,
+    });
 
-      await sendReferralBonusEmail(referrerInvestor, referredInvestor);
+    await sendReferralBonusEmail(referrerInvestor, referredInvestor);
 
-      return res.status(200).json({ message: 'Referral bonus paid successfully' });
+    return res.status(200).json({ message: 'Referral bonus paid successfully' });
 
-    } catch (error: any) {
+  } catch (error: any) {
     console.error('Error in payReferralBonus function:', error);
-    return res.status(error.status).json(error);
+    return res.status(error.status||500).json(error);
   }
 }
 
@@ -352,15 +360,15 @@ export const getInvestment = async (req: Request, res: Response): Promise<Respon
       ],
     });
     if (!investmentDetails) {
-       throw customError('error pulling out investment Details',400)
+      throw customError('error pulling out investment Details', 400)
     }
     console.log(investmentDetails)
-    if(!investmentDetails.investment){
+    if (!investmentDetails.investment) {
       throw customError('no investment yet', 404)
     }
-    let totalCount = 0;let totalAmount = 0;
+    let totalCount = 0; let totalAmount = 0;
 
-    investmentDetails.referrals &&investmentDetails.referrals.forEach((referral) => {
+    investmentDetails.referrals && investmentDetails.referrals.forEach((referral) => {
       totalCount++;
       totalAmount += referral.amount;
     });
@@ -368,117 +376,117 @@ export const getInvestment = async (req: Request, res: Response): Promise<Respon
     const totalReferrals = { count: totalCount, totalAmount };
 
     return res.status(200).json({
-      referrals:totalReferrals,
-      investment:investmentDetails
+      referrals: totalReferrals,
+      investment: investmentDetails
     });
 
-  } catch (error:any) {
+  } catch (error: any) {
     console.error('Error in getInvestment function:', error);
-    return res.status(error.status).json(error);
+    return res.status(error.status||500).json(error);
   }
 }
 
 export const getAllDueReferrals = async (req: Request, res: Response): Promise<Response> => {
-    try {
-      const referralsWithWallets = await Referral.findAll({
-        where: {
-          amount: {
-            [Op.gt]: 0,
-          }
-        },
-        include: [
-          {
-            model: Investor,
-            include: [
-              {
-                model: Investment,
-                include: [{ model: DepositWallet }],
-              }
-            ],
-          }
-        ],
-      });
-      if (referralsWithWallets.length===0){
-        throw customError('no due referrals found',404)
-      }
-      return res.status(200).json(referralsWithWallets);
-    } catch (error:any) {
-      console.error('Error in getAllDueRefferal function:', error);
-      return res.status(error.status).json(error);
+  try {
+    const referralsWithWallets = await Referral.findAll({
+      where: {
+        amount: {
+          [Op.gt]: 0,
+        }
+      },
+      include: [
+        {
+          model: Investor,
+          include: [
+            {
+              model: Investment,
+              include: [{ model: DepositWallet }],
+            }
+          ],
+        }
+      ],
+    });
+    if (referralsWithWallets.length === 0) {
+      throw customError('no due referrals found', 404)
     }
+    return res.status(200).json(referralsWithWallets);
+  } catch (error: any) {
+    console.error('Error in getAllDueRefferal function:', error);
+    return res.status(error.status||500).json(error);
   }
+}
 
-  export const getInvestorReferrals = async (req: Request, res: Response): Promise<Response> => {
+export const getInvestorReferrals = async (req: Request, res: Response): Promise<Response> => {
+  const { id } = req.params;
+  try {
+    const referrals = await Referral.findAll({ where: { referrerId: id } });
+    return res.status(200).json(referrals);
+  } catch (error: any) {
+    console.error('Error in getInvestorReferral function:', error);
+    return res.status(error.status||500).json(error);
+  }
+}
+
+
+export const getNotifications = async (req: Request, res: Response): Promise<Response> => {
+  try {
     const { id } = req.params;
-    try {
-      const referrals = await Referral.findAll({ where: { referrerId: id } });
-      return res.status(200).json(referrals);
-    } catch (error:any) {
-      console.error('Error in getInvestorReferral function:', error);
-      return res.status(error.status).json(error);
-    }
+
+    const notifications = await Notification.findAll({ where: { investorId: id } });
+
+    return res.status(200).json(notifications);
+  } catch (error: any) {
+    console.error('Error in getNotifications function:', error);
+    return res.status(error.status||500).json(error);
   }
+}
 
+export const getTransactions = async (req: Request, res: Response): Promise<Response> => {
 
-  export const getNotifications = async (req: Request, res: Response): Promise<Response> => {
-    try {
-      const { id } = req.params;
+  try {
+    const { id } = req.params;
 
-     const notifications = await Notification.findAll({ where: { investorId: id } });
+    const transactions = await Transaction.findAll({ where: { investorId: id } });
 
-      return res.status(200).json(notifications);
-    } catch (error:any) {
-      console.error('Error in getNotifications function:', error);
-      return res.status(error.status).json(error);
-    }
+    return res.status(200).json(transactions);
+  } catch (error: any) {
+    console.error('Error in getTransactions function:', error);
+    return res.status(error.status||500).json(error);
   }
-
-export  const  getTransactions = async (req: Request, res: Response): Promise<Response> => {
-      
-      try {
-        const { id } = req.params;
-
-        const transactions = await Transaction.findAll({ where: { investorId: id } });
-
-        return res.status(200).json(transactions);
-      } catch (error:any) {
-        console.error('Error in getTransactions function:', error);
-         return res.status(error.status).json(error);
-    }
-    }
+}
 
 export const getInvestmentStatus = async (req: Request, res: Response): Promise<Response> => {
-      const { id } = req.params;
+  const { id } = req.params;
 
-      try {
-        const investor = await Investor.findByPk(id);
-        if (!investor) {
-          throw customError('Investor not found', 404);
-        }
+  try {
+    const investor = await Investor.findByPk(id);
+    if (!investor) {
+      throw customError('Investor not found', 404);
+    }
 
-        if (!investor.investment||!investor.investment.investmentDate||investor.investment.amountDeposited===0) {
-          return res.status(200).json({ status: 'notInvested', date: '' });
-        }
+    if (!investor.investment || !investor.investment.investmentDate || investor.investment.amountDeposited === 0) {
+      return res.status(200).json({ status: 'notInvested', date: '' });
+    }
 
-        const endDate = new Date(investor.investment.investmentDate);
-    
+    const endDate = new Date(investor.investment.investmentDate);
 
-        endDate.setDate(endDate.getDate() + investor.investment.manager.duration);
-       
-        const currentDate = new Date();
-      
-        if (currentDate <= endDate) {
-          const dueDate = formatEndDate(endDate);
-          return res.status(200).json({ status: 'notDue', date: dueDate });
-        }
 
-        return res.status(200).json({ status: 'due' });
-      } catch (error:any) {
-        console.error(error);
-        return res.status(error.status).json();
-      }
+    investor.investment.manager && endDate.setDate(endDate.getDate() + investor.investment.manager.duration);
+
+    const currentDate = new Date();
+
+    if (currentDate <= endDate) {
+      const dueDate = formatEndDate(endDate);
+      return res.status(200).json({ status: 'notDue', date: dueDate });
+    }
+
+    return res.status(200).json({ status: 'due' });
+  } catch (error: any) {
+    console.error(error);
+    return res.status(error.status||500).json();
+  }
 }
-  
+
 
 
 

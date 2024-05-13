@@ -51,6 +51,9 @@ const AdminWallet = () => {
     const fetchWalletData = async () => {
       try {
         const walletData = await getAdminWallets(); 
+        if (walletData === false) {
+          navigate('/login')
+        }
         setWallets(walletData);
       } catch (error) {
         console.error(error);

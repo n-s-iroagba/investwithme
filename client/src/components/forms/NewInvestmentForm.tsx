@@ -7,6 +7,7 @@ import '../styles.css'
 import { CreateInvestmentType, ManagerType, WalletType } from '../../utils/types'
 import { findManagerWithHighestMinInvestment, findManagerById, } from '../../utils/utils'
 import { createInvestment, getAdminWallets, getManagers } from '../../utils/helpers'
+import { getInvestorAuthData } from '../../utils/auth'
 const WAValidator = require('multicoin-address-validator')
 
 
@@ -46,17 +47,24 @@ const NewInvestmentForm: React.FC<{ username: string, }> = ({ username }) => {
   const [managers, setManagers] = useState<ManagerType[]>([])
   const [errorMessage, setErrorMessage] = useState('')
   const navigate = useNavigate();
-
-
+  let id =''
+  const token = localStorage.getItem('cassockJwtToken');
+  if (token){
+     const tempId:any = getInvestorAuthData()?.id;
+     if (tempId!==undefined){
+       id = tempId
+     }
+  }
   useEffect(() => {
-
 
     const fetchManagerData = async () => {
       try {
         const managerData = await getManagers();
 
         const walletData = await getAdminWallets();
-        console.log(walletData);
+        if (walletData === false) {
+          navigate('/login')
+        }
         setWallets(walletData);
         setManagers(managerData);
         const managerId = localStorage.getItem('cassockNewInvestmentInitmanagerId');
@@ -71,7 +79,7 @@ const NewInvestmentForm: React.FC<{ username: string, }> = ({ username }) => {
     };
 
     fetchManagerData();
-  }, []);
+  }, [navigate]);
 
 
 
@@ -190,7 +198,7 @@ const NewInvestmentForm: React.FC<{ username: string, }> = ({ username }) => {
           wallet: investmentData.wallet,
           managerId: investmentData.manager.id
         }
-        const response = await createInvestment(data);
+        const response = await createInvestment(data,id);
         if (response && response.status === 200) {
           console.log(response.data);
           localStorage.setItem('cassockPaymentWallet', JSON.stringify(response.data));
@@ -305,3 +313,4 @@ const NewInvestmentForm: React.FC<{ username: string, }> = ({ username }) => {
   )
 }
 export default NewInvestmentForm
+

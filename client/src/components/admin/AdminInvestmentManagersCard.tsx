@@ -38,7 +38,7 @@ const AdminInvestmentManagersCard: React.FC = () => {
       try {
         const managerData = await getManagers(); 
         console.log(managerData)// Wait for the data to be fetched
-        setManagers(managerData);
+        managerData && setManagers(managerData);
         console.log(managerData)
       } catch (error) {
         console.error(error);
@@ -46,6 +46,7 @@ const AdminInvestmentManagersCard: React.FC = () => {
         // navigate ('/admin/dashboard')
       }
     };
+  
 
     fetchManagerData(); // Call the async function to fetch data
   }, [navigate]);
@@ -62,9 +63,9 @@ const AdminInvestmentManagersCard: React.FC = () => {
           <h3 className='text-center mt-4 text-light'>
             Your Managers
           </h3>
-          <Row className=' mt-2 gy-3'>
+          <Row className='d-flex justify-content-center mt-2 gy-3'>
             {managers.map((manager) => (
-              <Col xs={12} md={6} lg={4} >
+              <Col xs={12} md={6} lg={3} >
                 <InvestmentTiersCard
                   key={manager.id}
                   percentageYield={`${manager.percentageYield}%`}

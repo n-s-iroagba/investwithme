@@ -5,8 +5,8 @@ import { SocialMediaButton } from '../general/Button';
 import { companyName } from '../../utils/constants';
 
 export const MiniFooter: React.FC<{ primaryVariant?: boolean }> = ({ primaryVariant }) => {
-  const baseClassName = 'border-0 border-top text-center py-3 mini-footer';
-  const lightClassName = 'text-light primary-background w-100';
+  const baseClassName = 'border-0 border-top mt-5 text-center py-3 mini-footer';
+  const lightClassName = 'text-light w-100';
   const darkClassName = 'text-dark w-100 border-black';
 
   const classNames = `${baseClassName} ${primaryVariant ? lightClassName : darkClassName}`;

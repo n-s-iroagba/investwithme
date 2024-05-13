@@ -15,15 +15,15 @@ useEffect(()=>{
     const fetchManagerData = async () => {
         try {
           const managerData = await getManagers(); 
-          console.log(managerData)// Wait for the data to be fetched
+          console.log(managerData)
           setManagers(managerData);
         } catch (error) {
           console.error(error);
-          // Handle error fetching managers
+          alert('You are not authorised to get managers')
         }
       };
   
-      fetchManagerData(); // Call the async function to fetch data
+      fetchManagerData(); 
     }, []);
 
     
@@ -38,7 +38,8 @@ useEffect(()=>{
                     </h3>
                 </Col>
                <Row className='gx-2  gy-2 d-flex justify-content-center'>
-                {managers.map((manager) => (
+                {
+                managers.map((manager:ManagerType) => (
                 <Col  key={manager.id} xs={12} md={6} lg={4}>
                     <InvestmentTiersCard
                         percentageYield={`${manager.percentageYield}%`}

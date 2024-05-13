@@ -4,7 +4,7 @@ import ErrorMessage from '../general/ErrorMessage';
 import { required } from '../auth/general/required';
 import ReactCrop, { type Crop } from 'react-image-crop'
 import 'react-image-crop/dist/ReactCrop.css';
-import { CreateManagerType, ManagerType } from '../../utils/types';
+import { ManagerType } from '../../utils/types';
 import { createManager, getSingleManager, patchManager } from '../../utils/helpers';
 import { hasEmptyKey } from '../../utils/utils'
 import { useNavigate } from 'react-router-dom';
@@ -13,18 +13,8 @@ import { useNavigate } from 'react-router-dom';
 
 
 const ManagerForm: React.FC<{ patch?: boolean }> = ({ patch }) => {
-  const initManagerData:CreateManagerType = {
-    firstName: '',
-    lastName: '',
-    image: '',
-    duration: 0,
-    qualification: '',
-    minimumInvestmentAmount: 0,
-    percentageYield: 0,
-  };
 
-  const [editedManagerData, setEditedManagerData] = useState<CreateManagerType>(initManagerData)
-  const [managerData, setManagerData] = useState<ManagerType|CreateManagerType>({
+  const [managerData, setManagerData] = useState<ManagerType>({
     id:0,
     firstName: '',
     lastName: '',
@@ -55,16 +45,16 @@ const ManagerForm: React.FC<{ patch?: boolean }> = ({ patch }) => {
 
         try {
           const manager = await getSingleManager(id);
-          setManagerData(manager);
+         manager&& setManagerData(manager);
         } catch (error) {
           console.error(error);
           alert('an error occured, try again later')
-          // navigate ('/admin/dashboard')
+          // navigate ('/admin/managers')
         }
       };
     }
     fetchManagerData();
-  });
+  },[patch]);
 
   function dataURLtoBlob(dataurl: string) {
     var arr = dataurl.split(',');
@@ -153,7 +143,8 @@ const ManagerForm: React.FC<{ patch?: boolean }> = ({ patch }) => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setEditedManagerData((prevData) => ({
+    console.log(name, value)
+    setManagerData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
@@ -167,38 +158,26 @@ const ManagerForm: React.FC<{ patch?: boolean }> = ({ patch }) => {
 
   }
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    // Assuming editedManagerData and managerData are already defined
-
-    const updatedManagerData = {
-      ...editedManagerData, // Copy all attributes from editedManagerData
-      firstName: editedManagerData.firstName || managerData.firstName,
-      lastName: editedManagerData.lastName || managerData.lastName,
-      image:  managerData.image,
-      duration: editedManagerData.duration || managerData.duration,
-      qualification: editedManagerData.qualification || managerData.qualification,
-      minimumInvestmentAmount: editedManagerData.minimumInvestmentAmount || managerData.minimumInvestmentAmount,
-      percentageYield: editedManagerData.percentageYield || managerData.percentageYield,
-    };
-    console.log(updatedManagerData)
-    // Now updatedManagerData contains the updated values
 
     e.preventDefault();
     let shouldNotSubmit =(patch && hasEmptyKey(managerData)) || managerData.image === null;
     console.log('shouldNotSubmit', shouldNotSubmit)
+    console.log(managerData)
     try {
       if (shouldNotSubmit) {
         setValidated(false);
+        console.log('shouldSubmit', shouldNotSubmit)
       } else {
         setSubmitting(true);
         setValidated(true);
         const formData = new FormData();
-        Object.entries(updatedManagerData).forEach(([key, value]) => {
+        Object.entries(managerData).forEach(([key, value]) => {
           formData.append(key, value);
         });;
-
+ let id = managerData.id
 
         if (patch) {
-          await patchManager(formData, navigate);
+          await patchManager(formData, navigate,id);
         } else {
           await createManager(formData);
         }
@@ -237,8 +216,7 @@ const ManagerForm: React.FC<{ patch?: boolean }> = ({ patch }) => {
              required ={patch?false:true}
               type="text"
               name="firstName"
-              placeholder={managerData.firstName}
-              value={editedManagerData.firstName}
+              value={managerData.firstName}
               onChange={handleChange}
               className="text-light custom-input bg-transparent form-control"
             />
@@ -251,8 +229,7 @@ const ManagerForm: React.FC<{ patch?: boolean }> = ({ patch }) => {
              required ={patch?false:true}
               type="text"
               name="lastName"
-              placeholder={managerData.lastName}
-              value={editedManagerData.lastName}
+              value={managerData.lastName}
               onChange={handleChange}
               className="text-light custom-input bg-transparent form-control"
             />
@@ -265,8 +242,7 @@ const ManagerForm: React.FC<{ patch?: boolean }> = ({ patch }) => {
               required ={patch?false:true}
             type="text"
             name="qualification"
-            value={editedManagerData.qualification}
-            placeholder={managerData.qualification}
+            value={managerData.qualification}
             onChange={handleChange}
             className="text-light custom-input bg-transparent form-control"
           />
@@ -278,8 +254,7 @@ const ManagerForm: React.FC<{ patch?: boolean }> = ({ patch }) => {
             required
             type="number"
             name="percentageYield"
-            value={editedManagerData.percentageYield}
-            placeholder={String(managerData.percentageYield)}
+            value={managerData.percentageYield}
             onChange={handleChange}
             className="custom-input bg-transparent form-control text-light"
           />
@@ -290,8 +265,7 @@ const ManagerForm: React.FC<{ patch?: boolean }> = ({ patch }) => {
             required
             type="number"
             name="duration"
-            placeholder={managerData.duration + ''}
-            value={editedManagerData.duration}
+            value={managerData.duration + ''}
             onChange={handleChange}
             className="custom-input bg-transparent form-control text-light"
           />
@@ -303,7 +277,7 @@ const ManagerForm: React.FC<{ patch?: boolean }> = ({ patch }) => {
             required
             type="number"
             name="minimumInvestmentAmount"
-            value={editedManagerData.minimumInvestmentAmount}
+            value={managerData.minimumInvestmentAmount}
             onChange={handleChange}
             className="custom-input bg-transparent form-control text-light"
           />

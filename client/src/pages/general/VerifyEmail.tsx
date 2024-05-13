@@ -50,15 +50,17 @@ const VerifyEmail = () => {
   
     if (minutesDifference > 0) {
       setCounter(600 - Math.floor(minutesDifference * 60));
+    }else{
+      setCounter(0)
     }
   
     const interval = setInterval(() => {
       setCounter((prevCounter) => Math.max(0, prevCounter - 1));
-      // const verificationStatus = localStorage.getItem('cassockVerified')
-      // if (verificationStatus==='true'){
-      //   setCounter(0)
-      //   window.close()
-      // }
+      const verificationStatus = localStorage.getItem('cassockVerified')
+      if (verificationStatus==='true'){
+        setCounter(0)
+        window.close()
+      }
     }, 1000);
   
     return () => clearInterval(interval);

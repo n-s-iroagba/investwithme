@@ -39,7 +39,8 @@ export  const createAdmin= async (req: Request, res: Response): Promise<Response
       };
       const existingAdmin = await Admin.findOne({ where: { email } });
       if (existingAdmin) {
-        throw customError( 'Admin already exists',409);
+        console.log(existingAdmin)
+        // throw customError( 'Admin already exists',409);
       }
 
       password = await encryptPassword(password);
@@ -52,7 +53,7 @@ export  const createAdmin= async (req: Request, res: Response): Promise<Response
       return res.status(201).json(verificationToken);
     } catch (error:any) {
       console.error('error in createAdmin function', error)
-      return res.status(error.status).json(error);
+      return res.status(error.status||500).json(error);
     }
   }
 
@@ -64,6 +65,10 @@ export  const createAdmin= async (req: Request, res: Response): Promise<Response
 
       if (existingInvestor) {
         throw customError( 'Investor already exists',409);
+      }
+
+      if (!firstName||!lastName||!dateOfBirth||!email || !password || !gender || !country|| !bank) {
+        throw customError( 'payload is incomplete',403);
       }
 
       password = await encryptPassword(password);
@@ -89,7 +94,7 @@ export  const createAdmin= async (req: Request, res: Response): Promise<Response
       return res.status(201).json(token);
     } catch (error:any) {
       console.error('Error registerInvestor function:', error);
-      res.status(error.status).json(error)
+      res.status(error.status||500).json(error)
     }
   }
 
@@ -135,7 +140,7 @@ export  const createAdmin= async (req: Request, res: Response): Promise<Response
       }
     } catch (error:any) {
       console.error('error in login function',error);
-      return res.status(error.status).json(error);
+      return res.status(error.status||500).json(error);
     }
   }
   
@@ -177,7 +182,7 @@ export  const createAdmin= async (req: Request, res: Response): Promise<Response
       return res.redirect(`${redirectRoute}/?token=${jwToken}`);
     } catch (error:any) {
       console.error('Error verifying email:', error);
-      return res.status(error.status).json(error);
+      return res.status(error.status||500).json(error);
     }
   }
 

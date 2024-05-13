@@ -60,6 +60,8 @@ const handleSelect = (e: React.ChangeEvent<HTMLSelectElement>, name: string) => 
     } catch (error) {
       console.log(error);
       setErrorMessage('Sorry we cannot complete your request at this time');
+    }finally{
+      setSubmitting(false)
     }
   };
 

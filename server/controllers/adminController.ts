@@ -1,10 +1,10 @@
 import fs from 'fs';
 import { PROMO_PERCENT, INVESTMENT_TENURE, REFERRAL_BONUS_PERCENT, COMPANY_NAME } from '../config';
-import { Investment, Investor, Notification, } from '../types/investorTypes';
+import { Investment, Investor, Manager, Notification, } from '../types/investorTypes';
 import { sendPromoExtensionMail, sendPromoMail } from '../mailService';
 import multer from 'multer'
 import { Request, Response } from 'express';
-import { AdminWallet, Manager, Promo } from '../types/adminTypes';
+import { AdminWallet,Promo } from '../types/adminTypes';
 import path from 'path';
 import { customError } from '../helpers';
 
@@ -19,8 +19,7 @@ const storage = multer.diskStorage({
 
 export const upload =multer({
     storage: storage
-  })
-    .single('image')
+  }).single('image')
 
 export const  getAllInvestors= async (req: Request, res: Response): Promise<Response> => {
     try {
@@ -58,11 +57,10 @@ export  const  deleteInvestor= async (req: Request, res: Response) => {
 
   //Wallet
   export  const createAdminWallet= async (req: Request, res: Response): Promise<Response> => {
-    console.log(req)
     try {
       const { address, blockchain, network, currency } = req.body;
 
-      if (!blockchain || !address || network || !currency) {
+      if (!blockchain || !address || !network || !currency) {
         console.log('blockchain', blockchain)
         console.log('address', address)
         console.log('network', network)
@@ -101,6 +99,7 @@ export  const  deleteInvestor= async (req: Request, res: Response) => {
       if (!wallet) {
         throw customError('wallet to be updated not found', 404)
       }
+      console.log(wallet)
       wallet.address = address
       await wallet.save();
       return res.status(200).json({ message: 'Wallet address updated successfully', wallet });
@@ -133,7 +132,7 @@ export  const  deleteInvestor= async (req: Request, res: Response) => {
       firstName,
       minimumInvestmentAmount,
       percentageYield,
-      country,
+      qualification,
       duration
     } = req.body;
 
@@ -153,9 +152,12 @@ export  const  deleteInvestor= async (req: Request, res: Response) => {
         image: imageData,
         minimumInvestmentAmount,
         percentageYield,
+        qualification,
         duration
       });
-
+      if(manager){
+        fs.unlinkSync(imagePath);
+      }
       return res.status(201).json({ message: 'Manager created successfully', manager });
     } catch (error: any) {
       console.error('Error createManager function:', error);
@@ -174,11 +176,24 @@ export  const  deleteInvestor= async (req: Request, res: Response) => {
     }
   }
 
-
-  export  const patchManager= async (req: Request, res: Response): Promise<Response> => {
-
-    const { id, lastName, firstName, minimumInvestmentAmount, percentageYield, duration } = req.body;
+  export  const getSingleManager= async (req: Request, res: Response): Promise<Response> => {
     try {
+      const {id} = req.params 
+      const manager = await Manager.findByPk(id);
+      if(!manager){
+        throw customError(`manager to be updated with id ${id} not found in database`, 404)
+      }
+      return res.status(200).json(manager);
+    } catch (error: any) {
+      console.error('Error in getAllMangers function:', error);
+      return res.status(error.status).json(error);
+    }
+  }
+  export  const patchManager= async (req: Request, res: Response): Promise<Response> => {
+    const {id} = req.params 
+    const { lastName, firstName, minimumInvestmentAmount, percentageYield, duration } = req.body;
+    try {
+     
       const manager = await Manager.findByPk(id);
       if (!manager) {
         throw customError(`manager to be updated with id ${id} not found in database`, 404)
@@ -215,47 +230,53 @@ export  const  deleteInvestor= async (req: Request, res: Response) => {
 
 
   //IMPLEMENT ALL BELOW
-  export  const createPromo= async (req: Request, res: Response): Promise<Response> => {
+  export const createPromo = async (req: Request, res: Response): Promise<Response> => {
     const { startDate, endDate } = req.body;
-
+  
     try {
       const promo = await Promo.create({ startDate, endDate });
       const investors = await Investor.findAll({ where: { hasInvested: false } });
-      investors.forEach(async (investor) => {
-        await sendPromoMail(investor, startDate, endDate, PROMO_PERCENT)
+ 
+      for (const investor of investors) {
+        await sendPromoMail(investor, startDate, endDate, PROMO_PERCENT);
         await Notification.create({
-          investorId: investor.id, title: 'Promo Notification', message: `We are thrilled to announce an exclusive promotional period for you! 
-    The promotion will run from ${startDate} to ${endDate}.Invest before the ${endDate} and earn a bonus of ${100 * PROMO_PERCENT}% on your initial investment deposit`
+          investorId: investor.id,
+          title: 'Promo Notification',
+          message: `We are thrilled to announce an exclusive promotional period for you! 
+          The promotion will run from ${startDate} to ${endDate}. 
+          Invest before ${endDate} and earn a bonus of ${100 * PROMO_PERCENT}% on your initial investment deposit.`
         });
-      });
-
+      }
+  
       return res.status(201).json({ message: 'Promo created successfully', promo });
     } catch (error: any) {
       console.error('Error createPromo:', error);
-      return res.status(error.status).json(error);
+      return res.status(error.status || 500).json({ error: error.message || 'Internal Server Error' });
     }
   }
+  
 
   export  const updatePromo= async (req: Request, res: Response): Promise<Response> => {
-    const { id } = req.params;
-    const { days } = req.body;
+    
+    const {id,days } = req.body;
     try {
       const promo = await Promo.findByPk(id)
       if (!promo) {
         throw customError(`promo to be updated with id ${id}  not found in database`, 404)
       }
-
+     
 
       const dateObject = new Date(promo.endDate);
 
-      dateObject.setDate(dateObject.getDate() + days);
+      dateObject.setDate(dateObject.getDate() + days).toString();
 
 
-      promo.endDate = dateObject
+      promo.endDate = dateObject.toLocaleDateString('en-US')
       promo.save();
 
       const investors = await Investor.findAll({ where: { hasInvested: false } });
-      investors.forEach(async (investor) => {
+   
+      investors.forEach(async (investor:Investor) => {
         await sendPromoExtensionMail(investor, promo.startDate, promo.endDate, PROMO_PERCENT)
         await Notification.create({
           investorId: investor.id, title: 'Promo Extension', message: `We are thrilled to announce the extension of our exclusive promotional period for you! 
@@ -273,6 +294,7 @@ export  const  deleteInvestor= async (req: Request, res: Response) => {
   export  const getPromos= async (req: Request, res: Response): Promise<Response> => {
     try {
       const promos = await Promo.findAll()
+     
      return res.status(200).json(promos)
     } catch (error:any) {
       console.error('Error in getPromos function:', error);

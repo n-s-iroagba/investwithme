@@ -1,6 +1,5 @@
 
 import { CreationOptional, DataTypes, ForeignKey, InferAttributes, InferCreationAttributes, Model, NonAttribute } from 'sequelize';
-import { Manager } from './adminTypes';
 import sequelize from '../orm_setup';
 
 
@@ -20,16 +19,16 @@ declare referrerId: number | null;
 declare hasInvested: boolean | null;
 declare isVerified: boolean | null;
 declare changePasswordToken: string | null;
-declare investment: NonAttribute<Investment>|null;
-declare referrals: NonAttribute<Referral[]>|null;
+declare investment?: NonAttribute<Investment>|null;
+declare referrals?: NonAttribute<Referral[]>|null;
 }
   
 export class Investment extends Model<InferAttributes<Investment>, InferCreationAttributes<Investment>> {
   declare id: CreationOptional<number>;
   declare amount: number;
   declare earnings: number | null;
-  declare amountDeposited: number|0;
-  declare creationDate: Date;
+  declare amountDeposited: number;
+  declare creationDate: Date|null;
   declare investmentDate: Date | null;
   declare isPaused: boolean;
   declare investorId:ForeignKey<Investor['id']>
@@ -37,6 +36,7 @@ export class Investment extends Model<InferAttributes<Investment>, InferCreation
   declare manager: NonAttribute<Manager>
   declare managerId: ForeignKey<Manager['id']>
   declare depositWallet: NonAttribute<DepositWallet>  
+  
   }
 
  export class DepositWallet extends Model<InferAttributes<DepositWallet>, InferCreationAttributes<DepositWallet>>{
@@ -47,7 +47,17 @@ declare investmentId:ForeignKey<Investment['id']>
 declare investment: NonAttribute<Investment>
   declare network: string;
 }
-
+export class Manager extends Model<InferAttributes<Manager>, InferCreationAttributes<Manager>> {
+  declare id: CreationOptional<number>;
+  declare lastName: string;
+  declare firstName: string;
+  declare image: Buffer;
+  declare qualification:string;
+  declare minimumInvestmentAmount: number;
+  declare percentageYield: number;
+  declare duration: number;
+  declare investments: NonAttribute<Investment[]>;
+}
 export class Referral extends Model<InferAttributes<Referral>, InferCreationAttributes<Referral>>  {
 declare id: CreationOptional<number>;
 declare amount: CreationOptional<number>;
@@ -55,6 +65,7 @@ declare referrerId:ForeignKey<Investor['id']>
 declare referrer: NonAttribute<Investor>
 declare referredId :number
 declare hasInvested: boolean|null
+
 }
 
 export class Notification extends Model<InferAttributes<Notification>, InferCreationAttributes<Notification>>   {
@@ -64,6 +75,7 @@ declare title:'Earnings'|'Bonus Payout'|'How To Deposit'|'Referral Registration'
 declare message:string
 declare investorId:ForeignKey<Investor['id']>
 declare investor: NonAttribute<Investor>
+declare read:boolean|null
  }
 
  export class Transaction extends Model<InferAttributes<Transaction>, InferCreationAttributes<Transaction>>  {
@@ -75,6 +87,7 @@ declare date: Date;
 declare type: 'Debit' | 'Credit';
 declare investorId:ForeignKey<Investor['id']>
 declare investor: NonAttribute<Investor>
+declare read:boolean|null
 
 }
 Investor.init(
@@ -169,6 +182,51 @@ DepositWallet.init(
   },
   { sequelize, modelName: 'DepositWallet' }
 );
+Manager.init(
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      allowNull: false,
+      primaryKey: true,
+    },
+    lastName: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    firstName: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    image: {
+      type: DataTypes.BLOB('long'),
+      allowNull: false,
+    },
+    minimumInvestmentAmount: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    percentageYield: {
+      type: DataTypes.DOUBLE,
+      allowNull: false,
+    },
+    duration: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    qualification: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+
+
+  },
+  {
+    sequelize, 
+    modelName: 'Manager', 
+  }
+)
+
 
 Investment.init(
   {
@@ -178,7 +236,7 @@ Investment.init(
       allowNull: false,
       primaryKey: true,
     },
-  
+
     amount: {
       type: DataTypes.INTEGER,
       allowNull: true,
@@ -257,6 +315,10 @@ Notification.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    read: {
+      type: DataTypes.BOOLEAN,
+      
+    },
   },
   { sequelize, modelName: 'Notification' }
 );
@@ -295,6 +357,10 @@ Transaction.init(
       validate: {
         isIn: [['Debit', 'Credit']],
       },
+    },
+    read: {
+      type: DataTypes.BOOLEAN,
+      
     },
   },
   { sequelize, modelName: 'Transaction' }

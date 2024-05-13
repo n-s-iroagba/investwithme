@@ -10,7 +10,6 @@ import {
 } from './config';
 import { getVerificationEmailContent, getNewPasswordEmailContent } from './helpers';
 import { Investment, Investor } from './types/investorTypes';
-import { Manager } from './types/adminTypes';
 
 const transporter = nodemailer.createTransport({
   service: "Gmail",
@@ -36,7 +35,7 @@ export const sendVerificationEmail = async (user: any, verificationToken: string
     });
   } catch (error:any) {
     console.error('Error sending verification email:', error);
-    throw new Error('Error sending verification email');
+   
   }
 };
 
@@ -51,7 +50,7 @@ export const sendReferalCompletedMail = async (refreeInvestor: any, newInvestor:
     await transporter.sendMail(mailOptions);
   } catch (error:any) {
     console.error('Error sending referral completed email:', error);
-    throw new Error(error);
+    
   }
 };
 
@@ -68,7 +67,7 @@ export const sendPasswordResetEmail = async (user: any, verificationToken: strin
     });
   } catch (error:any) {
     console.error('Error sending password reset email:', error.message);
-    throw new Error(error.message);
+   
   }
 };
 
@@ -82,7 +81,7 @@ export const sendPromoMail = async (investor: any, startDate: string, endDate: s
   // Add logic for sending promo mail
 };
 
-export const sendPromoExtensionMail = async (investor: any, startDate: Date, endDate: Date, PROMO_PERCENT: number) => {
+export const sendPromoExtensionMail = async (investor: any, startDate: string, endDate: string, PROMO_PERCENT: number) => {
   // Add logic for sending promo extension mail
 };
 

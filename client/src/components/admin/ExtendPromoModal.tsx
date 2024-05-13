@@ -5,10 +5,12 @@ import { patchPromo } from '../../utils/helpers';
 
 interface ExtendPromoFormModalProps {
     show: boolean;
+    id:number
 }
 
-const ExtendPromoFormModal: React.FC<ExtendPromoFormModalProps> = ({ show}) => {
+const ExtendPromoFormModal: React.FC<ExtendPromoFormModalProps> = ({ show,id}) => {
     const [formData, setFormData] = useState({
+        id:id,
         days: 0,
     });
     const [modalShow, setModalShow] = useState<boolean>(show)

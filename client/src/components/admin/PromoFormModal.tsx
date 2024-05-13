@@ -6,7 +6,7 @@ import { hasEmptyKey } from '../../utils/utils';
 import { CreatePromoType } from '../../utils/types';
 
 interface PromoFormModalProps {
-  show: boolean;
+  show: boolean
 }
 
 const PromoFormModal: React.FC<PromoFormModalProps> = ({ show }) => {

@@ -36,9 +36,10 @@ const Portfolio:React.FC = ()=>{
     useEffect(() => {
       const fetchInvestementData = async () => {
         try {
-          const investment = await getInvestment('1');
-          console.log(investment)
-          setInvestmentData(investment)
+          const response = await getInvestment('1');
+         if (response.status===200){
+          setInvestmentData(response.data)
+         }
         } catch (error) {
           console.error(error);
         };

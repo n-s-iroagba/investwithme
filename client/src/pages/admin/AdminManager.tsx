@@ -10,8 +10,8 @@ const AdminManager: React.FC = () => {
     setShowManagers(!showManagers)
   }
   return (
-    <>
-    <div className='primary-background full-height px-3 pt-5'>
+    <div className='primary-background'>
+    <div className=' full-height px-3 pt-5'>
   
         {showManagers ?
           <>
@@ -30,7 +30,7 @@ const AdminManager: React.FC = () => {
         }
       </div>
       <MiniFooter primaryVariant={true} />
-      </>
+      </div>
   
     )
 }

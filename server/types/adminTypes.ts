@@ -2,6 +2,7 @@ import { CreationOptional, DataTypes, ForeignKey, InferAttributes, InferCreation
 import { Investment } from './investorTypes';
 import sequelize from '../orm_setup';
 
+
 export class Admin extends Model<InferAttributes<Admin>, InferCreationAttributes<Admin>> {
   declare id: CreationOptional<number>;
   declare name: string;
@@ -23,22 +24,13 @@ export class AdminWallet extends Model<InferAttributes<AdminWallet>, InferCreati
 
   }
 
-export class Manager extends Model<InferAttributes<Manager>, InferCreationAttributes<Manager>> {
-  declare id: CreationOptional<number>;
-  declare lastName: string;
-  declare firstName: string;
-  declare image: Buffer;
-  declare minimumInvestmentAmount: number;
-  declare percentageYield: number;
-  declare duration: number;
- declare investments: NonAttribute<Investment []>
- 
-}
+
+
   
 export class Promo extends Model<InferAttributes<Promo>, InferCreationAttributes<Promo>> {
   declare id: CreationOptional<number>;
-    declare startDate: Date;
-    declare endDate: Date;
+    declare startDate: string;
+    declare endDate: string;
 }
 
 AdminWallet.init(
@@ -118,13 +110,14 @@ Admin.init(
       defaultValue: false,
       allowNull: false,
     },
+  
   },
    { sequelize, 
     modelName: 'Admin', 
     validate: {
       async uniqueCheck() {
         const count = await Admin.count();
-        if (count > 0) {
+        if (count > 1) {
           throw new Error('There can only be one admin');
         }
       },
@@ -132,45 +125,6 @@ Admin.init(
   }
 );
 
-Manager.init(
-  {
-    id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
-      allowNull: false,
-      primaryKey: true,
-    },
-    lastName: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    firstName: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    image: {
-      type: DataTypes.BLOB('long'),
-      allowNull: false,
-    },
-    minimumInvestmentAmount: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-    percentageYield: {
-      type: DataTypes.DOUBLE,
-      allowNull: false,
-    },
-    duration: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-
-  },
-  {
-    sequelize, 
-    modelName: 'Manager', 
-  }
-)
 
 Promo.init(
   {

@@ -1,13 +1,11 @@
 import express, { Router } from 'express';
-import multer from 'multer';
-
 import { isAdmin, isInvestor } from './auth';
 import { createInvestment, getInvestment, getInvestmentStatus, getNotifications, getTransactions, index, payPromoBonus, payReferralBonus, topUp } from './controllers/investorController';
-import { createAdminWallet, createManager, createPromo, deleteInvestor, deleteManager, deletePromo, deleteWallet, getAllInvestors, getAllManagers, getAllWallets, getPromos, patchManager, patchWallet, updatePromo } from './controllers/adminController';
+import { createAdminWallet, createManager, createPromo, deleteInvestor, deleteManager, deletePromo, deleteWallet, getAllInvestors, getAllManagers, getAllWallets, getPromos, getSingleManager, patchManager, patchWallet, updatePromo, upload } from './controllers/adminController';
 import { changePassword, confirmMailForPasswordChange, createAdmin, createInvestor, login, requestPasswordReset, resendVerificationToken, verifyMail } from './controllers/authController';
 
 const router: Router = express.Router();
-const upload = multer();
+
 
 router.get('/', index);
 
@@ -27,9 +25,10 @@ router.get('/pay-referral/:id', payReferralBonus);
 router.get('/pay-bonus/:id', payPromoBonus);
 router.delete('/delete-investor/:id', /* Add middleware if needed */deleteInvestor);
 
-router.post('/create-manager', upload.single('file'), createManager);
+router.post('/create-manager', upload, createManager);
 router.get('/get-managers', getAllManagers);
-router.patch('/patch-manager', patchManager);
+router.get('/manager/:id', getSingleManager);
+router.patch('/patch-manager/:id',upload, patchManager);
 router.delete('/delete-manager/:id', deleteManager);
 
 router.post('/create-investment/:id', createInvestment);

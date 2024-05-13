@@ -44,12 +44,14 @@ const SignUpForm: React.FC = () => {
   const navigateToVerifyEmailPage = () => {
     navigate('/verify-email')
   }
+  const params = new URLSearchParams(window.location.search)
+  const tokenFromUrl = params.get('token'); 
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search)
-    const tokenFromUrl = params.get('token'); 
+   
+    if (tokenFromUrl){
     setReferralToken(tokenFromUrl);
-
-  },[setReferralToken]);
+    }
+  },[setReferralToken, tokenFromUrl]);
   
 
   return (

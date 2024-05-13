@@ -1,6 +1,6 @@
 import { sendPausedInvestmentEmail } from "./mailService";
-import { Manager, Promo } from "./types/adminTypes";
-import { Investment, Investor } from "./types/investorTypes";
+import { Promo } from "./types/adminTypes";
+import { Investment, Investor, Manager } from "./types/investorTypes";
 
 export function findManagerWithHighestMinInvestment(managers:Manager[], amount:number):Manager {
   if (managers.length === 0){

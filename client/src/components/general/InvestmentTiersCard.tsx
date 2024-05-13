@@ -14,6 +14,7 @@ export const InvestmentTiersCard: React.FC<InvestmentTiersType> = ({
   minimumInvestmentAmount,
   duration,
   button,
+  qualification,
   deleteButton,
 }) => {
   
@@ -31,7 +32,7 @@ export const InvestmentTiersCard: React.FC<InvestmentTiersType> = ({
   return (
    
       <Card bg="light" text="black" className="w-100">
-        <Card.Header  style={{height:'3cm'}}className="background-secondary d-flex flex-column justify-content-center align-items-center">
+        <Card.Header  className="background-secondary py-2 d-flex flex-column justify-content-center align-items-center">
           <Card.Title className="text-center">{percentageYield}</Card.Title>
           <Card.Title className="text-center">RETURN ON INVESTMENT</Card.Title>
         </Card.Header>
@@ -42,8 +43,9 @@ export const InvestmentTiersCard: React.FC<InvestmentTiersType> = ({
           <Card.Title className=" text-center w-100">{firstName + ' ' + lastName}</Card.Title>
         <div className="w-100 d-flex flex-column align-items-center">
         <div className="w-100 ">
-       <Card.Text className='d-flex  align-items-center mb-0'><p className=' card-label-width-wide' >Minimum Amount:</p> <p >{minimumInvestmentAmount}</p></Card.Text>
-       <Card.Text className='d-flex align-items-center mb-0'><p className='card-label-width-wide ' >Duration:</p> <p >{duration} </p></Card.Text>
+        <Card.Title className='text-center mb-1'>{qualification}</Card.Title>
+       <Card.Text className='d-flex  align-items-center mb-0'><p className=' card-label-width-wide' >Minimum Deposit:</p> <p >{minimumInvestmentAmount}</p></Card.Text>
+       <Card.Text className='d-flex align-items-center mb-0'><p className='card-label-width-wide ' >Investment Period:</p> <p >{duration} </p></Card.Text>
        </div>
       </div>
        <div className="w-100 d-flex justify-content-center"><div className="w-75">{button}</div></div>
