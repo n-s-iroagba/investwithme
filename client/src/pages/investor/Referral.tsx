@@ -21,7 +21,6 @@ const Referrals: React.FC<{id:number}>= ({id}) => {
      
     try {
       const response:any = await getReferralDetails(id);
-      console.log(response)
       if (response){
       const data = response
       setCode(data.referralCode);
