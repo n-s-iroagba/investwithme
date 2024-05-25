@@ -54,11 +54,11 @@ const AdminWallet = () => {
         if (walletData === false) {
           navigate('/login')
         }
-        setWallets(walletData);
+        walletData && setWallets(walletData);
       } catch (error) {
         console.error(error);
         alert ('an error occured, try again later')
-        // navigate ('/admin/dashboard')
+         navigate ('/admin/dashboard')
       }
     };
 
@@ -68,6 +68,7 @@ const AdminWallet = () => {
   const handleEdit = (wallet: WalletType) => {
     setShowModal(true)
     setData(wallet)
+    alert (showModal)
   }
 
   const handleDelete = (id: number) => {

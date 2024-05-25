@@ -17,7 +17,7 @@ import SignUp from "./pages/investor/SignUp";
 
 
 import Portfolio from "./pages/investor/Portfolio";
-import NewInvestment from "./pages/investor/NewInvestment";
+
 
 import Email from "./pages/general/Email";
 import NewPassword from "./pages/general/NewPassword";
@@ -36,9 +36,9 @@ import Promotion from "./pages/admin/Promotion";
 import PatchManager from "./pages/admin/PatchManager";
 import Bonus from "./pages/admin/Bonus";
 import Investors from "./pages/admin/Investors";
-import PrivateRoute from "./components/auth/general/PrivateRoute";
 import EmailVerificationError from "./pages/general/EmailVerificationError";
 import PasswordChangeCheckMail from "./pages/general/PasswordChangeCheckMail";
+import NewInvestment from "./pages/investor/NewInvestment";
 
 
 
@@ -86,7 +86,7 @@ element: <Email />
 },
 {
     path:'/dashboard',
-    element:  <Dashboard username={""} />,//<PrivateRoute Component={Dashboard}/>,
+    element:  <Dashboard username={""} id={1}/>,//<PrivateRoute Component={Dashboard}/>,
      
 },
 {
@@ -112,7 +112,7 @@ element: <Email />
 },
 {
     path:'/invest',
-    element:  <PrivateRoute Component={NewInvestment}/>
+    element:  <NewInvestment username={"Nnamdi"}/>
 },
 
 {
@@ -125,7 +125,7 @@ element: <Email />
 },
 {
     path:'/referral',
-    element: <Referral/>,
+    element: <Referral id={1}/>,
 },
 
 {

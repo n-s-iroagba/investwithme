@@ -2,116 +2,104 @@ import React, { useEffect, useState } from 'react';
 import { Col, Form, Modal, Row, Spinner } from 'react-bootstrap';
 import ErrorMessage from '../general/ErrorMessage';
 import { required } from '../auth/general/required';
-import ReactCrop, { type Crop } from 'react-image-crop'
+import ReactCrop, { type Crop } from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
-import { ManagerType } from '../../utils/types';
+import { ManagerData } from '../../../../common/types';
 import { createManager, getSingleManager, patchManager } from '../../utils/helpers';
-import { hasEmptyKey } from '../../utils/utils'
+import { hasEmptyKey } from '../../utils/utils';
 import { useNavigate } from 'react-router-dom';
 
-
-
-
 const ManagerForm: React.FC<{ patch?: boolean }> = ({ patch }) => {
-
-  const [managerData, setManagerData] = useState<ManagerType>({
-    id:0,
+  const [managerData, setManagerData] = useState<ManagerData>({
+    id: 0,
     firstName: '',
     lastName: '',
     image: '',
-    duration: 0, 
+    duration: 0,
     qualification: '',
     minimumInvestmentAmount: 0,
     percentageYield: 0,
   });
+
   const [submitting, setSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  const [files, setFiles] = useState<any>(null)
-  const [validated, setValidated] = useState(false)
-  const [show, setShow] = useState(false)
+  const [files, setFiles] = useState<File | null>(null);
+  const [validated, setValidated] = useState(false);
+  const [show, setShow] = useState(false);
   const [crop, setCrop] = useState<Crop>({
     unit: 'px',
     x: 25,
     y: 25,
     width: 100,
     height: 100,
-  })
-  const navigate = useNavigate()
+  });
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchManagerData = async () => {
-      const id = localStorage.getItem('cassockManager')
+      const id = localStorage.getItem('cassockManager');
       if (patch && id) {
-
         try {
           const manager = await getSingleManager(id);
-         manager&& setManagerData(manager);
+          if (manager) setManagerData(manager);
+          console.log(manager)
         } catch (error) {
           console.error(error);
-          alert('an error occured, try again later')
-          // navigate ('/admin/managers')
+          setErrorMessage('An error occurred while fetching manager data. Please try again later.');
         }
-      };
-    }
-    fetchManagerData();
-  },[patch]);
+      }
+    };
 
-  function dataURLtoBlob(dataurl: string) {
-    var arr = dataurl.split(',');
-    var match = arr[0].match(/:(.*?);/);
-    if (!match) {
-      throw new Error('Invalid data URL');
-    }
-    var mime = match[1];
-    var bstr = atob(arr[1]);
-    var n = bstr.length;
-    var u8arr = new Uint8Array(n);
+    fetchManagerData();
+  }, [patch]);
+
+  const dataURLtoBlob = (dataurl: string): Blob => {
+    const arr = dataurl.split(',');
+    const mimeMatch = arr[0].match(/:(.*?);/);
+    if (!mimeMatch) throw new Error('Invalid data URL');
+
+    const mime = mimeMatch[1];
+    const bstr = atob(arr[1]);
+    let n = bstr.length;
+    const u8arr = new Uint8Array(n);
     while (n--) {
       u8arr[n] = bstr.charCodeAt(n);
     }
     return new Blob([u8arr], { type: mime });
-  }
+  };
 
-  const getCroppedBlob = (file: File, crop: Crop) => {
+  const getCroppedBlob = (file: File, crop: Crop): Promise<Blob> => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
 
       reader.onload = (event) => {
         const image = new Image();
-        image.src = event.target?.result as string; // Set the image source here
+        image.src = event.target?.result as string;
 
         image.onload = () => {
           const canvas = document.createElement('canvas');
           const ctx = canvas.getContext('2d');
-
           if (!ctx) {
             reject('Unable to get 2d context');
             return;
           }
 
           const aspectRatio = image.width / image.height;
-
           const canvasWidth = crop.width;
           const canvasHeight = crop.width / aspectRatio;
 
           canvas.width = canvasWidth;
           canvas.height = canvasHeight;
-
-
           ctx.drawImage(image, 0, 0, image.width, image.height, 0, 0, canvasWidth, canvasHeight);
 
           const croppedImage = canvas.toDataURL('image/jpeg', 1);
-
-
           const blobImage = dataURLtoBlob(croppedImage);
-
           resolve(blobImage);
         };
       };
 
-
       reader.onerror = () => {
-        console.error('Error reading file');
         reject('Error reading file');
       };
 
@@ -119,31 +107,28 @@ const ManagerForm: React.FC<{ patch?: boolean }> = ({ patch }) => {
     });
   };
 
-  const done = async () => {
+  const handleCropDone = async () => {
     if (!files) {
-      console.error('No file selected for cropping');
+      setErrorMessage('No file selected for cropping.');
       return;
     }
     setShow(false);
 
     try {
       const croppedBlob = await getCroppedBlob(files, crop);
-      if (croppedBlob) {
-        setManagerData((prevData) => ({
-          ...prevData,
-          image: croppedBlob,
-        }));
-        console.log('Image cropped successfully!');
-      }
+      const croppedFile = new File([croppedBlob], files.name, { type: files.type });
+
+      setManagerData((prevData) => ({
+        ...prevData,
+        image: croppedFile,
+      }));
     } catch (error) {
-      console.error(error);
+      setErrorMessage('Error processing the image.');
     }
   };
 
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    console.log(name, value)
     setManagerData((prevData) => ({
       ...prevData,
       [name]: value,
@@ -151,69 +136,67 @@ const ManagerForm: React.FC<{ patch?: boolean }> = ({ patch }) => {
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setShow(true)
+    setShow(true);
     if (e.target.files) {
       setFiles(e.target.files[0]);
     }
+  };
 
-  }
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-
     e.preventDefault();
-    let shouldNotSubmit =(patch && hasEmptyKey(managerData)) || managerData.image === null;
-    console.log('shouldNotSubmit', shouldNotSubmit)
-    console.log(managerData)
-    try {
-      if (shouldNotSubmit) {
-        setValidated(false);
-        console.log('shouldSubmit', shouldNotSubmit)
-      } else {
-        setSubmitting(true);
-        setValidated(true);
-        const formData = new FormData();
-        Object.entries(managerData).forEach(([key, value]) => {
-          formData.append(key, value);
-        });;
- let id = managerData.id
+  console.log(managerData)
+    if (patch && hasEmptyKey(managerData)) {
+      setValidated(false);
+      setErrorMessage('Please fill in all required fields.');
+      return;
+    }
 
-        if (patch) {
-          await patchManager(formData, navigate,id);
+    if (!managerData.image) {
+      setErrorMessage('Please upload a valid image.');
+      return;
+    }
+
+    setSubmitting(true);
+    setValidated(true);
+
+    try {
+      const formData = new FormData();
+      Object.entries(managerData).forEach(([key, value]) => {
+        if (key === 'image' && value instanceof Blob) {
+          formData.append(key, value, (value as File).name);
         } else {
-          await createManager(formData);
+          formData.append(key, value);
         }
+      });
+
+      if (patch && managerData.id) {
+        await patchManager(formData, navigate, managerData.id);
+      } else {
+        await createManager(formData);
       }
     } catch (error: any) {
-      console.error('Form submission error:', error);
-      setErrorMessage(
-        error.message + '. Sorry we cannot complete your request at this time'
-      );
+      setErrorMessage(`Form submission error: ${error.message}. Please try again.`);
     } finally {
       setSubmitting(false);
     }
   };
 
-
-
   return (
     <div className="d-flex justify-content-center flex-column align-items-center mt-5 px-2">
       {files && (
         <Modal show={show}>
-          <ReactCrop circularCrop aspect={1} crop={crop} onChange={(c) => {
-            setCrop(c)
-          }}>
-            <img className='w-100' src={URL.createObjectURL(files)} alt='as' />
+          <ReactCrop circularCrop aspect={1} crop={crop} onChange={(c) => setCrop(c)}>
+            <img className='w-100' src={URL.createObjectURL(files)} alt='Crop Preview' />
           </ReactCrop>
-          <button onClick={done}>Done</button>
+          <button onClick={handleCropDone}>Done</button>
         </Modal>
       )}
       <Form className="form py-5" noValidate validated={validated} onSubmit={handleSubmit}>
         <Row className="mb-3">
           <Form.Group as={Col} controlId="validationFormik01">
-            <Form.Label className="mb-0">
-              First name{required}
-            </Form.Label>
+            <Form.Label className="mb-0">First name{required}</Form.Label>
             <Form.Control
-             required ={patch?false:true}
+              required={patch ? false : true}
               type="text"
               name="firstName"
               value={managerData.firstName}
@@ -222,11 +205,9 @@ const ManagerForm: React.FC<{ patch?: boolean }> = ({ patch }) => {
             />
           </Form.Group>
           <Form.Group as={Col}>
-            <Form.Label className="mb-0">
-              Last name{required}
-            </Form.Label>
-            <Form.Control 
-             required ={patch?false:true}
+            <Form.Label className="mb-0">Last name{required}</Form.Label>
+            <Form.Control
+              required={patch ? false : true}
               type="text"
               name="lastName"
               value={managerData.lastName}
@@ -239,7 +220,7 @@ const ManagerForm: React.FC<{ patch?: boolean }> = ({ patch }) => {
         <Form.Group className="mb-4" as={Col} controlId="validationFormik01">
           <Form.Label className="mb-0">Qualification{required}</Form.Label>
           <Form.Control
-              required ={patch?false:true}
+            required={patch ? false : true}
             type="text"
             name="qualification"
             value={managerData.qualification}

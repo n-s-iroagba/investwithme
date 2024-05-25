@@ -4,7 +4,7 @@ import { Modal, Form, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { faCircleDot } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { addInvestment, getCurrencies, getInvestmentNewbies } from '../../utils/helpers';
+import { addInvestment, getAdminNewbies } from '../../utils/helpers';
 import { MiniFooter } from '../../components/home_components/Footer';
 
 
@@ -16,16 +16,13 @@ const AddInvestmentModalForm: React.FC<ModalFormProps> = ({ show }) => {
   const [formData, setFormData] = useState<any>({
     amount: 0,
     address: '',
-    currency: '',
   });
   const [modalShow, setModalShow] = useState<boolean>(false)
-  const [currencies, setCurrencies] = useState<string[]>([])
+
 
 
   useEffect(() => {
     setModalShow(show);
-    const currencyResponse = getCurrencies();
-    setCurrencies(currencyResponse);
   }, [show]);
 
 
@@ -96,20 +93,6 @@ const AddInvestmentModalForm: React.FC<ModalFormProps> = ({ show }) => {
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange(e)}
             />
           </Form.Group>
-
-          <Form.Group controlId="formCurrency">
-            <Form.Label>Currency</Form.Label>
-            <Form.Control
-              as="select"
-              name="currency"
-              value={formData.currency}
-            >
-              <option value="">Select currency</option>
-              {currencies.map((currency) => (
-                <option key={currency} value={currency}>{currency}</option>
-              ))}
-            </Form.Control>
-          </Form.Group>
           <br />
           <Button variant="primary" type="submit">
             Submit
@@ -127,12 +110,20 @@ const InvestorsDashboard = () => {
   const navigate = useNavigate()
   useEffect(() => {
     const creditedState = localStorage.getItem('cassockCreditedState')
-    if (creditedState) {
-      setShowSuccessModal(true)
-    }
-    const investmentNewbies: string[] = getInvestmentNewbies()
-    console.log(investmentNewbies)
-    setNewbies(investmentNewbies)
+    const fetchNewbies = async () => {
+      if (creditedState) {
+        setShowSuccessModal(true);
+      }
+      try {
+        const investmentNewbies: string[] = await getAdminNewbies(); // Await the promise here
+        console.log(investmentNewbies);
+        investmentNewbies && setNewbies(investmentNewbies);
+      } catch (error) {
+        console.error('Failed to fetch admin newbies:', error);
+      }
+    };
+
+    fetchNewbies();
   }, [])
   const handleInvestmentShow = () => {
 
@@ -147,7 +138,7 @@ const InvestorsDashboard = () => {
         <h1>Investors Dashboard</h1>
         <button className="text-light mb-2 button-styles button-width-narrow mt-4 border-0 border-bottom " onClick={() => handleInvestmentShow()}> Add investor Amount</button>
         {
-          newbies.includes('promo') ?
+          newbies.length&&newbies.includes('promo') ?
             <button className="notification-wrapper text-light mb-2 button-styles button-width-narrow mt-4 border-0 border-bottom " onClick={() => navigate('/admin/bonus')}> Pay Promo Bonus
               <FontAwesomeIcon className='notification text-danger' icon={faCircleDot} beat /></button>
             :
@@ -155,7 +146,7 @@ const InvestorsDashboard = () => {
         }
 
         {
-          newbies.includes('referral') ?
+          newbies.length && newbies.includes('referral') ?
             <button className="notification-wrapper text-light mb-2 button-styles button-width-narrow mt-4 border-0 border-bottom " onClick={() => navigate('/admin/referrals')}> Pay Referral Bonus
               <FontAwesomeIcon className='notification text-danger' icon={faCircleDot} beat />
             </button>

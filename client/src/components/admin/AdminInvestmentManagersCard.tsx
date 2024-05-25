@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Row, Col } from 'react-bootstrap';
 import { InvestmentTiersCard } from '../../components/general/InvestmentTiersCard';
-import { ManagerType } from '../../utils/types';
+import { ManagerData} from '../../../../common/types'
 import '../../components/styles.css';
 import DeleteModal from './DeleteModal';
 import { getManagers } from '../../utils/helpers';
@@ -9,7 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDollarSign } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
 
-export const MoveToPatchManager: React.FC<{ manager: ManagerType }> = ({ manager }) => {
+export const MoveToPatchManager: React.FC<{ manager: ManagerData }> = ({ manager }) => {
   const navigate = useNavigate();
 
   const handleInvestClick = () => {
@@ -29,7 +29,7 @@ export const MoveToPatchManager: React.FC<{ manager: ManagerType }> = ({ manager
 const AdminInvestmentManagersCard: React.FC = () => {
   const [idToBeDeleted, setIdToBeDeleted] = useState(0);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [managers, setManagers] = useState<ManagerType[]>([]);
+  const [managers, setManagers] = useState<ManagerData[]>([]);
 
   const navigate = useNavigate()
 

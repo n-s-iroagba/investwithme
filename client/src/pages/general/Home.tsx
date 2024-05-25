@@ -25,7 +25,7 @@ useEffect(()=>{
         id: 1,
         startDate: new Date('2024-04-29').toDateString(),
         endDate: new Date('2024-05-05').toDateString(),
-        bonusPercentage: 100
+        bonusPercent: 100
     }
     setPromo(receivedpromo)
 

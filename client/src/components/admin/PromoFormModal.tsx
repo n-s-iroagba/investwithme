@@ -13,7 +13,7 @@ const PromoFormModal: React.FC<PromoFormModalProps> = ({ show }) => {
   const [promoData, setPromoData] = useState<CreatePromoType>({
     startDate: '',
     endDate: '',
-    bonusPercentage: 0,
+    bonusPercent: 0,
   });
   const [modalShow, setModalShow] = useState<boolean>(show);
   const [submitting, setSubmitting] = useState<boolean>(false);
@@ -83,8 +83,8 @@ const PromoFormModal: React.FC<PromoFormModalProps> = ({ show }) => {
             <Form.Label>Bonus Percentage</Form.Label>
             <Form.Control
               type="number"
-              name="bonusPercentage"
-              value={promoData.bonusPercentage}
+              name="bonusPercent"
+              value={promoData.bonusPercent}
               onChange={handleChange}
             />
           </Form.Group>

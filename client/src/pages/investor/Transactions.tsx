@@ -3,7 +3,6 @@ import TransactionComponent from '../../components/investor/TransactionComponent
 import Information from '../../components/general/Information';
 import { faMoneyBillTransfer } from '@fortawesome/free-solid-svg-icons';
 import { TransactionType } from '../../utils/types';
-import { getTransaction } from '../../utils/helpers';
 import { useNavigate } from 'react-router-dom';
 
 
@@ -12,19 +11,23 @@ const Transactions: React.FC = () => {
   const navigate = useNavigate()
 
   useEffect(() => {
-    const fetchManagerData = async () => {
+    const fetchTransactions = async () => {
       try {
-        const transactionData = await getTransaction(1);
-        setTransactions(transactionData);
+    
+        const storedTransactions = localStorage.getItem('cassockTransactions');
+        console.log(storedTransactions)
+        const transacts: TransactionType[] = storedTransactions ? JSON.parse(storedTransactions) : [];
+      
+
+        setTransactions(transacts);
+     
       } catch (error) {
-        console.error(error);
-        alert('an error occured, try again later')
-        navigate('/dashboard')
+        console.error('Error loading transactions from localStorage:', error);
       }
     };
-    fetchManagerData();
-  }, [navigate]);
 
+    fetchTransactions();
+  }, []); 
 
   return <div className='pt-5 px-3'>
   <Information text='' head='Transactions' icon={faMoneyBillTransfer} />
@@ -37,7 +40,12 @@ const Transactions: React.FC = () => {
       ))
     )}
   </div>
+  <div className='d-flex justify-content-center'>
+  <button className='mt-5 button-styles button-width-narrow ' onClick={()=>navigate('/dashboard')}>Dashboard</button>
+  </div>
 </div>
 
 }
 export default Transactions; 
+
+

@@ -21,8 +21,8 @@ const AdminDashboard: React.FC<{ username: string }> = ({ username }) => {
   }, [],)
 
   return (
-    <>
-    <div className='primary-background full-height px-5 py-4'>
+    <div className='primary-background'>
+    <div className='full-height px-5 py-4'>
       <div className='d-flex justify-content-center align-items-center mb-4'>Logo</div>
       <AdminDashboardBar username={username} />
       <Row className="d-flex justify-content-center gy-2 gx-2">
@@ -42,7 +42,7 @@ const AdminDashboard: React.FC<{ username: string }> = ({ username }) => {
       </Row>
     </div>
      <MiniFooter primaryVariant={true} />
-     </>
+     </div>
   );
 };
 

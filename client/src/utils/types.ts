@@ -1,15 +1,15 @@
-
+import {ManagerData} from "../../../common/types"
 
 
 export interface PromoType{
   id:number;
   startDate: string,
-  bonusPercentage:number,
+  bonusPercent:number,
   endDate:string,
 }
 export interface CreatePromoType{
   startDate: string,
-  bonusPercentage:number,
+  bonusPercent:number,
   endDate:string,
 }
 
@@ -27,29 +27,12 @@ export interface WalletType{
   network:string,
   currency:string
 }
-export interface CreateManagerType {
-  firstName: string,
-  lastName: string,
-  minimumInvestmentAmount: number
-  percentageYield: number
-  duration:number
-  image: any,
-  qualification: string
-}
-export interface ManagerType {
-  id:number
-  firstName: string,
-  lastName: string,
-  minimumInvestmentAmount: number
-  percentageYield: number
-  duration:number
-  image: any,
-  qualification: string
-}
+
+
 export interface CreateInvestmentType{
   wallet:CreateWalletType,
   amount:number
-  manager:ManagerType
+  manager:ManagerData
 }
 
 export interface PortfolioDataType {
@@ -90,6 +73,9 @@ export interface AdminInvestorType {
   completeDeposit: boolean;
   dueForWithdrawal: boolean;
 }
+export interface ReadableItem {
+  read: boolean|null;
+}
 export interface ReferralType{
   firstName: string;
   lastName: string;
@@ -106,20 +92,23 @@ export interface BonusType {
   currency: string;
   id: number;
 }
-export interface TransactionType{
+
+export interface TransactionType extends ReadableItem {
   id?:number,
   amount:number,
   type:'Debit'|'Credit'
-  participantAccount:string
+  participatingAccount: 'Cassock'|'Your Wallet'
   narration:'Referral bonus imbursement'|'Promo bonus imbursement'|'Investment Deposit'
-  date:string
+  date:Date
+
 }
 
-export interface NotificationType{
+export interface NotificationType extends ReadableItem {
   id:number
   title:'Earnings'|'Bonus Payout'|'How To Deposit'|'Referral Registration'|'Referral bonus imbursement'|'Bonus imbursement'|
   'Investment Deposit'|'Incomplete Investment Deposit'|'Investment Paused' |'Investment Continued'|'Promo Notification'
   message:string
+
 }
 export interface AddInvestmentType {
   address:string

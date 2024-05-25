@@ -4,7 +4,8 @@ import { required } from '../auth/general/required'
 import ErrorMessage from '../general/ErrorMessage'
 import { useNavigate } from 'react-router-dom'
 import '../styles.css'
-import { CreateInvestmentType, ManagerType, WalletType } from '../../utils/types'
+import { CreateInvestmentType, WalletType } from '../../utils/types'
+import { ManagerData } from '../../../../common/types'
 import { findManagerWithHighestMinInvestment, findManagerById, } from '../../utils/utils'
 import { createInvestment, getAdminWallets, getManagers } from '../../utils/helpers'
 import { getInvestorAuthData } from '../../utils/auth'
@@ -44,16 +45,17 @@ const NewInvestmentForm: React.FC<{ username: string, }> = ({ username }) => {
     manager: dummyManager
 
   });
-  const [managers, setManagers] = useState<ManagerType[]>([])
+  const [managers, setManagers] = useState<ManagerData[]>([])
   const [errorMessage, setErrorMessage] = useState('')
   const navigate = useNavigate();
-  let id =''
+  let id ='1'
   const token = localStorage.getItem('cassockJwtToken');
   if (token){
      const tempId:any = getInvestorAuthData()?.id;
      if (tempId!==undefined){
        id = tempId
      }
+    
   }
   useEffect(() => {
 
@@ -62,9 +64,7 @@ const NewInvestmentForm: React.FC<{ username: string, }> = ({ username }) => {
         const managerData = await getManagers();
 
         const walletData = await getAdminWallets();
-        if (walletData === false) {
-          navigate('/login')
-        }
+        console.log(walletData)
         setWallets(walletData);
         setManagers(managerData);
         const managerId = localStorage.getItem('cassockNewInvestmentInitmanagerId');
@@ -206,8 +206,9 @@ const NewInvestmentForm: React.FC<{ username: string, }> = ({ username }) => {
         }
       } catch (error: any) {
         setErrorMessage('We are sorry, we cannot create new Investment portfolio at this time');
-        setSubmitting(false);
         console.error(error);
+      }finally{
+        setSubmitting(false);
       }
     }
   };

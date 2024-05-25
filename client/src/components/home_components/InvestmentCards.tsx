@@ -2,12 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { Row, Col } from 'react-bootstrap'
 import { InvestmentTiersCard } from '../general/InvestmentTiersCard';
 import { SelectManagerButton } from '../general/Button';
-import { ManagerType } from '../../utils/types';
+import { ManagerData } from '../../../../common/types';
 import { getManagers } from '../../utils/helpers';
 import { sortManagers } from '../../utils/utils';
 
 const InvestmentCards: React.FC = () => {
-const [investmentData,setInvestementData] = useState<ManagerType[]>([])
+const [investmentData,setInvestementData] = useState<ManagerData[]>([])
 useEffect(() => {
     const fetchManagerData = async () => {
       try {

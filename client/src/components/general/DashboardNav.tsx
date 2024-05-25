@@ -6,8 +6,10 @@ import { Col, Row } from 'react-bootstrap';
 import { faBell } from '@fortawesome/free-solid-svg-icons';
 import { getGreeting } from '../../utils/utils';
 import { numberWithCommas } from '../../utils/utils';
+import { useNavigate } from 'react-router-dom';
 
-export const DashboardBar: React.FC<{ username: string, numberOfNewNotifications: number, balance: number }> = (props) => {
+export const DashboardBar: React.FC<{ username: string, numberOfNewNotifications: number, deposit: number,earnings:number }> = (props) => {
+  const navigate = useNavigate();
   return (
     <Row className="d-flex text-light align-items-center w-100">
       <Col className='text-light' xs={9}>
@@ -15,10 +17,13 @@ export const DashboardBar: React.FC<{ username: string, numberOfNewNotifications
         <h6 className='text-wrap'>{props.username}</h6>
       </Col>
       <Col xs={3} className="d-flex justify-content-center align-items-center mb-3">
-        {props.numberOfNewNotifications>0 ? <div className=' d-flex justify-content-center'><FontAwesomeIcon className='h-100' icon={faBell} beatFade /><div className='rounded-circle bg-danger px-1 py-1'>+{props.numberOfNewNotifications}</div></div> : <FontAwesomeIcon icon={faBell} beat/>}
+        {props.numberOfNewNotifications>0 ? <div className=' d-flex justify-content-center'><FontAwesomeIcon className='h-100' onClick={()=>navigate('/notifications')} icon={faBell} beatFade /><div className='rounded-circle bg-danger px-1 py-1'>+{props.numberOfNewNotifications}</div></div> : <FontAwesomeIcon icon={faBell} beat/>}
       </Col>
       <Col xs={8}>
-        <small>*Balance: ${numberWithCommas(props.balance)}</small>
+        <small>*Amount Invested: ${numberWithCommas(props.deposit)}</small>
+      </Col>
+      <Col xs={8}>
+        <small>*Earnings: ${numberWithCommas(props.earnings)}</small>
       </Col>
     </Row>
   );
@@ -40,7 +45,7 @@ export const AdminDashboardBar: React.FC<{ username: string }> = (props) => {
 const DashboardNav: React.FC<{ notifIcon?: IconProp, icon: IconProp; text: string; action: () => void }> = (props) => {
   return (
     <div>
-      <div onClick={props.action} className="dash-nav" >
+      <div onClick={props.action} className="w-100 dash-nav" >
         {props.notifIcon &&
           <FontAwesomeIcon className='notification text-danger' icon={props.notifIcon} beat/>
         }

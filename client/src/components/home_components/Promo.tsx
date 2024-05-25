@@ -48,7 +48,7 @@ const Promo: React.FC<{promo?:PromoType}>= ({promo}) => {
               <div className='primary-line mb-2'></div>
             </div>
             <div className='text-light primary-background py-3'>
-              <h5 className='mb-4'>{`We decided to reward you as early as possible, investing before the timer expires results in a ${promo.bonusPercentage}% boost in your return on investment, independent of the chosen investment tier.`}</h5>
+              <h5 className='mb-4'>{`We decided to reward you as early as possible, investing before the timer expires results in a ${promo.bonusPercent}% boost in your return on investment, independent of the chosen investment tier.`}</h5>
               <h6>{formatTime(countdown)}</h6>
               <p>Time remaining until offer close.</p>
               <div className='d-flex justify-content-center'>

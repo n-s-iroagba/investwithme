@@ -56,11 +56,11 @@ const VerifyEmail = () => {
   
     const interval = setInterval(() => {
       setCounter((prevCounter) => Math.max(0, prevCounter - 1));
-      const verificationStatus = localStorage.getItem('cassockVerified')
-      if (verificationStatus==='true'){
-        setCounter(0)
-        window.close()
-      }
+      // const verificationStatus = localStorage.getItem('cassockVerified')
+      // if (verificationStatus==='true'){
+      //   setCounter(0)
+      //   window.close()
+      // }
     }, 1000);
   
     return () => clearInterval(interval);
@@ -78,6 +78,7 @@ const VerifyEmail = () => {
       
       localStorage.setItem('cassockEmailVerificationToken', response.data);
     }
+    alert('new mail successfully sent')
     window.location.reload()
   }catch(error){
     console.error(error)
@@ -98,13 +99,17 @@ const VerifyEmail = () => {
     {counter > 0 ? (
       <>
         <Information head='Verify your Email Address' text="Kindly open your registration email and verify email address." icon={faMailchimp} center/>
-        <p className='py-0 text-nowrap'>Token will expire in {formatTime(counter)} seconds</p>
+        <p className='py-0 text-nowrap mb-3'>Mail token will expire in {formatTime(counter)} seconds</p>
+       <small>Haven't received token yet, resend mail.</small>
+        <div className='button-width-narrower my-1'>
+          <button className='button-styles' onClick={()=>verifyAndUpdateToken()}>{submitting?<Spinner animation='border' size='sm'/>:'Resend Mail'}</button>  
+        </div>
       </>
     ) : (
       <>
-        <Information head='Verify your Email Address' text="The token we sent is expired, kindly click the button to get a new token" icon={faMailchimp} center/>
+        <Information head='Verify your Email Address' text="The mail token we sent is expired, kindly click the button to receive a new mail" icon={faMailchimp} center/>
         <div className='button-width-narrower my-3'>
-          <button className='button-styles' onClick={()=>verifyAndUpdateToken()}>{submitting?<Spinner animation='border' size='sm'/>:'Resend Token'}</button>  
+          <button className='button-styles' onClick={()=>verifyAndUpdateToken()}>{submitting?<Spinner animation='border' size='sm'/>:'Resend Mail'}</button>  
         </div>
       </>
     )}

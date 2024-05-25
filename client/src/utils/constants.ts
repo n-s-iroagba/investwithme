@@ -1,3 +1,4 @@
+// import { serverTopUpInvestmentPath } from "../../../common/constants";
 
 const domain = 'http://localhost:8000';
 
@@ -9,7 +10,7 @@ export const requestNewPasswordUrl = `${domain}/request-passswordChange`
 export const newPasswordRoute = `${domain}/new-password`
 
 export const createAdminUrl = `${domain}/create-admin`
-
+export const etNewbiesAdminUrl =`${domain}/get-admin-newbies`
 export const createInvestorUrl  = `${domain}/create-investor`
 export const payReferralRoute = `${domain}/pay-refferal`
 export const payBonusRoute = `${domain}/pay-bonus`
@@ -37,8 +38,21 @@ export const patchPromoUrl = `${domain}/patch-promo`
 export const deletePromoRoute = `${domain}/delete-promo`
 
 export const getTransactionsRoute = `${domain}/get-transactions`
+export const markTransactionsRoute = `${domain}/mark-transactions`
 
 export const getNotificationsRoute = `${domain}/get-notifications`
+export const markNotificationsRoute = `${domain}/mark-notifications`
+
+export const getPendingBonusUrl = `${domain}/get-pending-bonus`
+export const getPendingReferralUrl = `${domain}/get-pending-referral`
+
+export const getInvestorsUrl = `${domain}/get-investors`
+
+export const getNewbiesAdminUrl = `${domain}/get-newbies`
+
+export const getReferralDetailsRoute = `${domain}/get-referral-details`
+
+export const clientDomain= 'localhost:3000'
 export const messages = [
     {
       time: `10 min ago`,

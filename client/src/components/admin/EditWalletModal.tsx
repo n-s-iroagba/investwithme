@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import { WalletType } from '../../utils/types';
 import { patchWallet } from '../../utils/helpers';
@@ -8,6 +8,10 @@ const EditWalletModal:React.FC<{data:WalletType,show:boolean}>= ({ data, show })
   const [showModal, setShowModal]= useState(show);
   const [walletData, setWalletData]= useState<WalletType>(data);
   
+  useEffect(() => {
+    setShowModal(show);
+    setWalletData(data)
+  }, [data, show])
   const handleClose = ()=>{
     setShowModal(false);
     window.location.reload()

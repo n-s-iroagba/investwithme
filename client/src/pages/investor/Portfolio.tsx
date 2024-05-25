@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import PortfolioComponent from '../../components/investor/PortfolioComponent';
-import { getInvestment } from '../../utils/helpers';
 import { useNavigate } from 'react-router-dom';
 
 
@@ -34,17 +33,11 @@ const Portfolio:React.FC = ()=>{
     const navigate = useNavigate()
 
     useEffect(() => {
-      const fetchInvestementData = async () => {
-        try {
-          const response = await getInvestment('1');
-         if (response.status===200){
-          setInvestmentData(response.data)
-         }
-        } catch (error) {
-          console.error(error);
-        };
+      const investment = localStorage.getItem('cassockInvestment')
+      console.log(investment)
+      if (investment) {
+        setInvestmentData(JSON.parse(investment))
       }
-      fetchInvestementData();
     }, [])
 
    

@@ -1,3 +1,15 @@
+.container {
+    position: relative; /* Ensure the container has a position other than static */
+  }
+
+  .box {
+    position: absolute;
+    top: 2%;
+    right: 2%;
+  }
+
+
+
 .background-secondary {
     background-color: var(--secondary-color);
 }
@@ -263,12 +275,15 @@ div .card-primary-background {
     border-top-right-radius: 0.1cm;
     height: 0.2cm;
     width: 20vw;
+
+    @media (min-width: 15cm){
+        width:12vw
+    }
 }
 
 .secondary-color {
     color: var(--secondary-color);
 }
-
 
 
 

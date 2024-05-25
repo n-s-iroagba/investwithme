@@ -16,7 +16,7 @@ const AdminManager: React.FC = () => {
         {showManagers ?
           <>
           <div className='d-flex justify-content-center'>
-            <button className='button-styles button-width-narrow' onClick={handleToggle}>Add Manager</button>
+            <button className='button-styles button-width-narrow text-light' onClick={handleToggle}>Add Manager</button>
             </div>
             <AdminInvestmentManagersCard />
           </>

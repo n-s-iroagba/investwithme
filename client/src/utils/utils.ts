@@ -1,4 +1,5 @@
-import { ManagerType } from "./types";
+import { NotificationType, TransactionType } from "./types";
+import { ManagerData } from "../../../common/types";
 
 
 export const numberWithCommas = (number:number) => {
@@ -42,10 +43,10 @@ export const getPromoRemainingTime = (startDate: string, endDate: string): numbe
   return remainingTime; 
 }
 
-export const sortManagers = (managers: ManagerType[]): ManagerType[] => {
-  return managers.sort((a:ManagerType, b:ManagerType) => a.minimumInvestmentAmount - b.minimumInvestmentAmount);
+export const sortManagers = (managers: ManagerData[]): ManagerData[] => {
+  return managers.sort((a:ManagerData, b:ManagerData) => a.minimumInvestmentAmount - b.minimumInvestmentAmount);
 };
-export const findManagerById = (managersArray:ManagerType[], idToFind:number) => {
+export const findManagerById = (managersArray:ManagerData[], idToFind:number) => {
   return managersArray.find((manager) => manager.id === idToFind);
 };
 
@@ -66,8 +67,8 @@ export const canInvest = (investmentAmount:number, managers:any) =>{
   return investmentAmount < minMinInvestment;
 }
 
-export const findManagerWithHighestMinInvestment = (managers: ManagerType[], amount: number) => {
-  let highestMinInvestmentManager: ManagerType | null = null;
+export const findManagerWithHighestMinInvestment = (managers: ManagerData[], amount: number) => {
+  let highestMinInvestmentManager: ManagerData | null = null;
   let highestMinInvestment = 0;
 
   managers.forEach((manager) => {
@@ -95,6 +96,8 @@ export const formatEndDate = (dateString: string, numberOfDays: number): string 
 
 export const createMultiplicationObject = (commenceDate: string, number: number): Record<string, number> => {
   const startDate = new Date(commenceDate);
+  console.log('startDate',startDate)
+  console.log('commenceDate',commenceDate)
   const currentDate = new Date();
 
   const daysDifference = Math.ceil((currentDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)); // Number of days between commence date and current date
@@ -138,3 +141,34 @@ export function extractErrorCode(errorMessage:string) {
   return null;
 }
 
+export function countUnreadNotifications(notifications:NotificationType[]) {
+  let unreadCount = 0;
+  
+  for (const notification of notifications) {
+    if (!notification.read) {
+      unreadCount++;
+    }
+  }
+  
+  return unreadCount;
+}
+
+
+export function countUnreadTransactions(transactions:TransactionType[]) {
+  let unreadCount = 0;
+  
+  for (const transaction of transactions) {
+    if (!transaction.read) {
+      unreadCount++;
+    }
+  }
+  
+  return unreadCount;
+}
+
+export function markAsRead(notifications:NotificationType[]|TransactionType[]) {
+  for (let i = 0; i < notifications.length; i++) {
+    notifications[i].read = true;
+  }
+
+}

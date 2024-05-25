@@ -1,6 +1,11 @@
 import { deleteItem, getData, patchFormDataItem, patchItem, postData,postFormData } from "./api";
-import { AddInvestmentType, CreatePromoType, CreateWalletType, ManagerType, WalletType } from "./types";
-import { createManagerUrl, patchManagerUrl, deleteManagerRoute, createWalletUrl, patchWalletUrl, deleteWalletRoute, createInvestmentRoute, getManagersUrl, getWalletsUrl, getPromoUrl, createPromoUrl, patchPromoUrl, deletePromoRoute, payUrl, deleteInvestorRoute, payReferralRoute, payBonusRoute, getSingleMangerRoute, getTransactionsRoute, getNotificationsRoute, getInvestmentRoute, getInvestmentStatusRoute} from "./constants";
+import { AddInvestmentType, CreatePromoType, CreateWalletType, WalletType } from "./types";
+import { ManagerData } from "../../../common/types";
+import { getNewbiesAdminUrl, createManagerUrl, getPendingReferralUrl,getInvestorsUrl,getReferralDetailsRoute,
+  patchManagerUrl, deleteManagerRoute, createWalletUrl, patchWalletUrl, getPendingBonusUrl,
+  deleteWalletRoute, createInvestmentRoute, getManagersUrl, getWalletsUrl, getPromoUrl, createPromoUrl, 
+  patchPromoUrl, deletePromoRoute, payUrl, deleteInvestorRoute, payReferralRoute, payBonusRoute, getSingleMangerRoute, getTransactionsRoute, getNotificationsRoute, getInvestmentRoute, 
+  getInvestmentStatusRoute, markNotificationsRoute} from "./constants";
 
 export const createInvestment = async (data:any,investorId:string) => {
   const createInvestmentUrl = `${createInvestmentRoute}/${investorId}`;
@@ -13,6 +18,26 @@ export const createInvestment = async (data:any,investorId:string) => {
    }
 };
 
+export const getAdminNewbies = async ()=>{
+  try {
+
+    const authorizationData = localStorage.getItem('cassockJwtToken');
+
+    const response = await getData(getNewbiesAdminUrl,authorizationData);
+ 
+    if (response.status === 200 && Array.isArray(response.data)) {
+      return response.data;
+    }
+
+    return [];
+    
+  } catch (error: any) {
+    console.error(error);
+    return error
+  
+  }
+};
+  
 export const createManager= async (data:FormData) => {
   try {
     const authorizationData = localStorage.getItem('cassockJwtToken');
@@ -28,7 +53,7 @@ export const createManager= async (data:FormData) => {
 
 };
 
-export const getManagers = async (): Promise<ManagerType[]> => {
+export const getManagers = async (): Promise<ManagerData[]> => {
   try {
 
     const authorizationData = localStorage.getItem('cassockJwtToken');
@@ -36,7 +61,7 @@ export const getManagers = async (): Promise<ManagerType[]> => {
     const response = await getData(getManagersUrl,authorizationData);
  
     if (response.status === 200 && Array.isArray(response.data)) {
-      return response.data as ManagerType [];
+      return response.data as ManagerData [];
     }
 
     return [];
@@ -65,6 +90,7 @@ export const getSingleManager = async (id:string)=>{
 }
 
 export const patchManager=async ( data:FormData,navigate:(path:string)=>void,id:number) =>{
+  console.log('id is' +id)
   const url = `${patchManagerUrl}/${id}`
   try {
     const authorizationData = localStorage.getItem('cassockJwtToken');
@@ -109,15 +135,16 @@ export const createWallet= async (data:CreateWalletType) => {
 };
 
 export const getAdminWallets = async ()=>{
+
   const authorizationData = localStorage.getItem('cassockJwtToken')||'a'
   try{
   const response:any = await getData(getWalletsUrl, authorizationData);
-  if (response.status ===200){
+  
+  if (response.status ===200 && Array.isArray(response.data)){
     console.log(response.data)
     return response.data
-  }else{
-    return []
   }
+  return []
   }catch(error:any){
     console.error(error)
   }
@@ -271,7 +298,7 @@ export const payPromoBonus = (id:number)=>{
   }
 }
 
-export const getTransaction = async (id:number)=>{
+export const getTransactions = async (id:number)=>{
   const url = `${getTransactionsRoute}/${id}`
   const authorizationData = localStorage.getItem('cassockJwtToken');
   try{
@@ -285,7 +312,7 @@ export const getTransaction = async (id:number)=>{
       alert('unable to get transactions at this time')
     }
 }
-export const getInvestment = async (id:string)=>{
+export const getInvestment = async (id:number)=>{
   const url = `${getInvestmentRoute}/${id}`
   const authorizationData = localStorage.getItem('cassockJwtToken');
   try{
@@ -327,52 +354,67 @@ export const getNotifications = async (id:number)=>{
 }
 export const logOut = (navigate:(path:string)=>void)=>{
   localStorage.removeItem('cassockJwtToken')
+  localStorage.removeItem('cassockId')
  navigate('/')
 }
 
-export const getNewbies = ()=>{
-  return[]
+export const markNoficationsAsRead= async (id:number)=>{
+  const url = `${markNotificationsRoute}/${id}`
+  const authorizationData = localStorage.getItem('cassockJwtToken');
+   const response = await getData(url,authorizationData)
+   if (response.status ===200){
+    return
+    }else{
+      console.log(response)
+    }
+}
+
+export const getBonus = async () =>{
+  const url = getPendingBonusUrl
+  const authorizationData = localStorage.getItem('cassockJwtToken');
+   const response = await getData(url,authorizationData)
+   if (response.status ===200){
+    return response.data
+    }
+      return []
 
 }
-export const getInvestmentNewbies:()=>string[]=() =>{
+
+export const getUnpaidReferrals = async()=>{
+  const url = getPendingReferralUrl
+  const authorizationData = localStorage.getItem('cassockJwtToken');
+   const response = await getData(url,authorizationData)
+   if (response.status ===200){
+    return response.data
+   }
+     return   []
+}
+
+export const getInvestors = async ()=>{
+  const url = getInvestorsUrl
+  const authorizationData = localStorage.getItem('cassockJwtToken');
+   const response = await getData(url,authorizationData)
+   if (response.status ===200){
+    return response.data
+   }
+     return   []
+}
+export const getReferralDetails =async (id:number)=>{
+  const url = `${getReferralDetailsRoute}/${id}`
+  const authorizationData = localStorage.getItem('cassockJwtToken');
+   const response = await getData(url,authorizationData)
+   if (response.status ===200){
+    return  response.data
+   }
+     return null
+}
+
+export const getNewbies:()=>string[]=() =>{
   return ['referral']
 }
 
-export const getCurrencies =() =>{
-return['EUR']
-}
 
 
-export const getUnpaidReferrals =()=>{
-  return [
-    //referallType
-  
-  ]
-}
-export const getBonus = () =>{
-  return[
-    //BOnusType
-  ]
-}
-export const getInvestors = ()=>{
-      //AdminInvestorType
-  return[ 
-  ]
-}
-export const getNumberOfNewNotifications=()=>{
-  return 1;
-}
-export const getAccountBalance =()=>{
-  return 5000
-}
 
-export const getPorfolioData=()=>{
-  return null
-}
-export const getCryptoData = ()=>{
-  return{
-    networks:['erc','btc'],
-    blockchains:['erc','btc'],
-    currencies:['erc','btc']
-  }
-}
+
+

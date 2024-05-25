@@ -3,33 +3,42 @@ import { useNavigate } from 'react-router-dom';
 import { Form} from 'react-bootstrap';
 import Information from '../../components/general/Information';
 import { faUsers } from '@fortawesome/free-solid-svg-icons';
+import { getReferralDetails } from '../../utils/helpers';
+import { clientDomain } from '../../utils/constants';
 
 
 
-const Referrals: React.FC = () => {
+const Referrals: React.FC<{id:number}>= ({id}) => {
  const [code, setCode] = useState('')
  const [link,setLink] = useState('')
+ const [referrer,setReferrer] = useState({firstName:'', lastName:''})
+ const [referred,setReferred] = useState([])
 
 
  const navigate = useNavigate()
-
-  const fetchTextFromBackend = async () => {
+ useEffect(() => {
+  const fetchReferral = async () => {
+     
     try {
-      const response:any = await fetch('your-backend-url');
-      const data = await response.data
-      setCode(data.code);
-      setLink(data.link)
+      const response:any = await getReferralDetails(id);
+      console.log(response)
+      if (response){
+      const data = response
+      setCode(data.referralCode);
+      setLink(`${clientDomain}/signup/${data.referralCode}`)
+      setReferrer(data.referrer)
+      setReferred(data.referred)
+      }
     } catch (error) {
       console.error('Error fetching text:', error);
     }
   };
 
-  useEffect(() => {
-    fetchTextFromBackend(); 
-  }, []);
 
- const referrals = ['a','c']
- const referrer ='aa'
+    fetchReferral(); 
+  }, [id]);
+
+
   const handleCopyClick = () => {
     alert('Text copied to clipboard!');
     navigator.clipboard.writeText(code); 
@@ -72,14 +81,14 @@ const Referrals: React.FC = () => {
          Copy Link
         </button>
       </div>
-      <Form.Group className='mb-4 border-0 border-top border-white'>
+      <Form.Group className='mb-4 border-0 border-bottom border-white'>
         <Form.Label className='mb-0'>Referrer:</Form.Label>
-        <div>{referrer}</div>
+        <div>{referrer.firstName+'   '}{referrer.lastName}</div>
         </Form.Group>
-        <Form.Group className='my-4 border-0 border-top border-white'>
+        <Form.Group className='my-4'>
         <Form.Label className='mb-0'>Referrals:</Form.Label>
         {
-          referrals.map((referral)=>(
+          referred.map((referral:string)=>(
             <div>{referral}</div>
           ))
         }
