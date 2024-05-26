@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import { hasEmptyKey } from '../../utils/utils';
-import { patchPromo } from '../../utils/helpers';
+import { patchPromo } from '../../utils/promoHepler';
+import ErrorMessage from '../general/ErrorMessage';
 
 interface ExtendPromoFormModalProps {
     show: boolean;
@@ -14,6 +15,7 @@ const ExtendPromoFormModal: React.FC<ExtendPromoFormModalProps> = ({ show,id}) =
         days: 0,
     });
     const [modalShow, setModalShow] = useState<boolean>(show)
+    const [errorMessage, setErrorMessage] = useState('')
 useEffect(()=>{
 setModalShow(show)
 }, [show])
@@ -25,18 +27,16 @@ setModalShow(show)
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
     
-        let shouldNotSubmit = hasEmptyKey(formData); // Assuming hasEmptyKey is defined or imported
+        let shouldNotSubmit = hasEmptyKey(formData);
         try {
           if (shouldNotSubmit) {
-            // Handle validation or show error message
           } else {
-            // Perform submission
-            await patchPromo(formData); // Assuming createPromo handles the API call correctly
-            setModalShow(false); // Close the modal after successful submission
+            await patchPromo(formData); 
+            setModalShow(false); 
           }
         } catch (error) {
           console.error(error);
-          // Handle error or show error message
+          setErrorMessage('Error trying to extend promo days');
         }
       };
     
@@ -70,6 +70,7 @@ setModalShow(show)
                     </Button>
                 </Form>
             </Modal.Body>
+            <ErrorMessage message={errorMessage} />
         </Modal>
     );
 };

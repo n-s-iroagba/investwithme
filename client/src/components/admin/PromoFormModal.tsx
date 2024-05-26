@@ -1,9 +1,10 @@
 
 import React, { useEffect, useState } from 'react';
 import { Modal, Button, Form,Spinner } from 'react-bootstrap';
-import { createPromo } from '../../utils/helpers'; // Assuming createPromo is correctly defined
 import { hasEmptyKey } from '../../utils/utils';
 import { CreatePromoType } from '../../utils/types';
+import { createPromo } from '../../utils/promoHepler';
+import ErrorMessage from '../general/ErrorMessage';
 
 interface PromoFormModalProps {
   show: boolean
@@ -17,6 +18,7 @@ const PromoFormModal: React.FC<PromoFormModalProps> = ({ show }) => {
   });
   const [modalShow, setModalShow] = useState<boolean>(show);
   const [submitting, setSubmitting] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>('');
 
   useEffect(() => {
     setModalShow(show);
@@ -41,6 +43,7 @@ const PromoFormModal: React.FC<PromoFormModalProps> = ({ show }) => {
       }
     } catch (error) {
       console.error(error);
+      setErrorMessage('error trying to create promo')
       
     }finally{
       setSubmitting(false)
@@ -93,6 +96,7 @@ const PromoFormModal: React.FC<PromoFormModalProps> = ({ show }) => {
           {submitting? <Spinner animation='border' size='sm' /> :'Create Promo'}
           </Button>
         </Form>
+        <ErrorMessage message={errorMessage} />
       </Modal.Body>
     </Modal>
   );

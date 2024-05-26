@@ -34,14 +34,16 @@ export const createPromo = async (req: Request, res: Response): Promise<Response
       if (!promo) {
         throw customError(`promo to be updated with id ${id}  not found in database`, 404)
       }
-  
+     console.log('days',days)
       const dateObject = new Date(promo.endDate);
-  
-      dateObject.setDate(dateObject.getDate() + days);
-  
-  
-      promo.endDate = dateObject
-      promo.save();
+      console.log('dateObject',dateObject)
+      console.log('date before update', dateObject.getDate())
+      const millisecs = dateObject.getTime()+ days* 24 * 60 * 60 * 1000;
+
+      console.log('date object  updated', dateObject)
+      promo.endDate = new Date (millisecs);
+      console.log('promo date',promo.endDate)
+      await promo.save();
   
       const investors = await Investor.findAll();
       investors.forEach(async (investor) => {

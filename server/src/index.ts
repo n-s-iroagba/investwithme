@@ -73,7 +73,7 @@ app.use('/get-pending-referral', routes)
 
 app.use ('/get-referral-details/:id',routes)
 sequelize
-  .sync({force:true})
+  .sync()
   .then(() => console.log('model formed'))
   .catch((err:any) => console.log(err));
 app.listen(PORT, () => {
