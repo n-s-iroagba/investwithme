@@ -161,7 +161,7 @@ const NewInvestmentForm: React.FC<{ username: string, }> = ({ username }) => {
     const { value } = e.target;
     try {
       setAddress(value)
-      setWalletVerified(true)//(verifyAddress(value))
+      setWalletVerified(verifyAddress(value))
       if (walletVerified) {
         setInvestmentData(prevData => ({
           ...prevData,
