@@ -1,26 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import { WalletType } from '../../utils/types';
-import { patchWallet } from '../../utils/helpers';
+import { patchWallet } from '../../utils/adminWalletHelper';
 
-const EditWalletModal:React.FC<{data:WalletType,show:boolean}>= ({ data, show }) => {
-  const [error, setError] = useState<string|null>(null);
-  const [showModal, setShowModal]= useState(show);
-  const [walletData, setWalletData]= useState<WalletType>(data);
-  
+const EditWalletModal: React.FC<{ data: WalletType, show: boolean }> = ({ data, show }) => {
+  const [error, setError] = useState<string | null>(null);
+  const [showModal, setShowModal] = useState(show);
+  const [walletData, setWalletData] = useState<WalletType>(data);
+
   useEffect(() => {
     setShowModal(show);
     setWalletData(data)
   }, [data, show])
-  const handleClose = ()=>{
+  const handleClose = () => {
     setShowModal(false);
     window.location.reload()
   }
 
   const handleConfirm = async () => {
-    try{
-     patchWallet(walletData);
-    }catch(error:any){
+    try {
+      patchWallet(walletData);
+    } catch (error: any) {
       setError('Sorry an error occured while attempting to edit wallet')
     }
   };

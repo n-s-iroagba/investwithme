@@ -25,7 +25,7 @@ export const createAdminWallet = async (req: Request, res: Response): Promise<Re
     return res.status(201).json({ message: 'Wallet created successfully', wallet });
   } catch (error: any) {
     console.error('Error createWalletAddress function:', error);
-    return res.status(error.status||500).json(error);
+    return res.status(error.status || 500).json(error);
   }
 }
 
@@ -35,7 +35,7 @@ export const getAllWallets = async (req: Request, res: Response): Promise<Respon
     return res.status(200).json(wallets);
   } catch (error: any) {
     console.error('Error in getAllWallets function:', error);
-    return res.status(error.status||500).json(error);
+    return res.status(error.status || 500).json(error);
   }
 }
 
@@ -52,7 +52,7 @@ export const patchWallet = async (req: Request, res: Response): Promise<Response
     return res.status(200).json({ message: 'Wallet address updated successfully', wallet });
   } catch (error: any) {
     console.error('Error in patchWallet function:', error);
-    return res.status(error.status||500).json(error);
+    return res.status(error.status || 500).json(error);
   }
 }
 
@@ -67,7 +67,7 @@ export const deleteWallet = async (req: Request, res: Response): Promise<Respons
     return res.status(200).json({ message: 'Wallet address deleted successfully' });
   } catch (error: any) {
     console.error('Error deleteWallet function:', error);
-    return res.status(error.status||500).json(error);
+    return res.status(error.status || 500).json(error);
   }
 }
 

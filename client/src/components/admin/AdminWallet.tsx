@@ -4,8 +4,9 @@ import '../styles.css'
 import { WalletType } from '../../utils/types';
 import EditWalletModal from './EditWalletModal';
 import DeleteModal from './DeleteModal';
-import { getAdminWallets } from '../../utils/helpers';
+import { getAdminWallets } from '../../utils/adminWalletHelper';
 import { useNavigate } from 'react-router-dom';
+import ErrorMessage from '../general/ErrorMessage';
 
 
 const WalletCard: React.FC<{ wallet: WalletType, deleteButton: React.ReactNode, editButton: React.ReactNode, }> = ({ wallet, deleteButton, editButton }) => {
@@ -35,6 +36,7 @@ const WalletCard: React.FC<{ wallet: WalletType, deleteButton: React.ReactNode, 
 const AdminWallet = () => {
   const [showModal, setShowModal] = useState(false)
   const [wallets, setWallets] = useState<WalletType[]>([])
+  const [errorMessage, setErrorMessage] = useState('')
   const [data, setData] = useState<WalletType>({
     id: 0,
     blockchain: '',
@@ -50,25 +52,24 @@ const AdminWallet = () => {
   useEffect(() => {
     const fetchWalletData = async () => {
       try {
-        const walletData = await getAdminWallets(); 
+        const walletData = await getAdminWallets();
         if (walletData === false) {
           navigate('/login')
         }
         walletData && setWallets(walletData);
       } catch (error) {
         console.error(error);
-        alert ('an error occured, try again later')
-         navigate ('/admin/dashboard')
+        setErrorMessage('Error fetching wallets');
+
       }
     };
 
-    fetchWalletData(); // Call the async function to fetch data
+    fetchWalletData();
   }, [navigate]);
 
   const handleEdit = (wallet: WalletType) => {
     setShowModal(true)
     setData(wallet)
-    alert (showModal)
   }
 
   const handleDelete = (id: number) => {
@@ -87,7 +88,13 @@ const AdminWallet = () => {
               editButton={<button className='button-styles button-width-narrow' onClick={() => handleEdit(wallet)}>Edit</button>} />
           </Col>
         ))
-          : <h2 className='text-light text-centet'> No Wallets Added yet.</h2>
+          : <>
+            <h2 className='text-light text-center'> No Wallets Added yet.</h2>
+            <div className='d-flex justify-content-center'>
+              <button className='button-width-narrow button-styles my-4 text-light' onClick={() => navigate('/admin/dashboard')}>Dashboard</button>
+            </div>
+            <ErrorMessage message={errorMessage} />
+          </>
         }
       </Row>
       <DeleteModal id={idToBeDeleted} show={showDeleteModal} entity='wallet' />
