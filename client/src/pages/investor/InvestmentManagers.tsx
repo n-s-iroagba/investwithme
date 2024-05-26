@@ -4,12 +4,14 @@ import { InvestmentTiersCard } from '../../components/general/InvestmentTiersCar
 import { MiniFooter } from '../../components/home_components/Footer';
 import { ManagerData } from '../../../../common/types';
 import { SelectManagerButton } from '../../components/general/Button';
-import { getManagers } from '../../utils/helpers';
+import { getManagers } from '../../utils/managerHelper';
+import ErrorMessage from '../../components/general/ErrorMessage';
 
 
 
 const InvestmentManagers: React.FC = () => {
 const [managers,setManagers] = useState<ManagerData[]>([])
+const [errorMessage, setErrorMessage]=useState('')
 
 useEffect(()=>{
         const fetchManagerData = async () => {
@@ -20,14 +22,12 @@ useEffect(()=>{
             console.log(managerData)
           } catch (error) {
             console.error(error);
+            setErrorMessage('An error occurred while fetching managers. Please try again later.'); 
           }      
         }
   
       fetchManagerData(); 
     }, []);
-
-    
-   
 
     return (
         <div className='primary-background'>
@@ -57,6 +57,7 @@ useEffect(()=>{
                 </Row>
             </Row>
             </div>
+            <ErrorMessage message={errorMessage} />
             <MiniFooter primaryVariant={true} />
         </div>
     );

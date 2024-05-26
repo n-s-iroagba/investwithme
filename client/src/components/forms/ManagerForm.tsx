@@ -4,8 +4,8 @@ import ErrorMessage from '../general/ErrorMessage';
 import { required } from '../auth/general/required';
 import ReactCrop, { type Crop } from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
-import { ManagerData } from '../../../../common/types';
-import { createManager, getSingleManager, patchManager } from '../../utils/helpers';
+import {ManagerData } from '../../../../common/types';
+import { createManager, getSingleManager, patchManager } from '../../utils/managerHelper';
 import { hasEmptyKey } from '../../utils/utils';
 import { useNavigate } from 'react-router-dom';
 
@@ -113,11 +113,11 @@ const ManagerForm: React.FC<{ patch?: boolean }> = ({ patch }) => {
       return;
     }
     setShow(false);
-
+  
     try {
       const croppedBlob = await getCroppedBlob(files, crop);
       const croppedFile = new File([croppedBlob], files.name, { type: files.type });
-
+  
       setManagerData((prevData) => ({
         ...prevData,
         image: croppedFile,
@@ -169,8 +169,9 @@ const ManagerForm: React.FC<{ patch?: boolean }> = ({ patch }) => {
         }
       });
 
-      if (patch && managerData.id) {
-        await patchManager(formData, navigate, managerData.id);
+      if (patch && managerData) {
+        const manager = managerData as ManagerData;
+        await patchManager(formData, navigate, manager.id);
       } else {
         await createManager(formData);
       }
@@ -188,7 +189,7 @@ const ManagerForm: React.FC<{ patch?: boolean }> = ({ patch }) => {
           <ReactCrop circularCrop aspect={1} crop={crop} onChange={(c) => setCrop(c)}>
             <img className='w-100' src={URL.createObjectURL(files)} alt='Crop Preview' />
           </ReactCrop>
-          <button onClick={handleCropDone}>Done</button>
+          <button onClick={()=>handleCropDone()}>Done</button>
         </Modal>
       )}
       <Form className="form py-5" noValidate validated={validated} onSubmit={handleSubmit}>
@@ -241,7 +242,7 @@ const ManagerForm: React.FC<{ patch?: boolean }> = ({ patch }) => {
           />
         </Form.Group>
         <Form.Group className="mb-4" as={Col} controlId="validationFormik04">
-          <Form.Label className="mb-0">Duration {required}</Form.Label>
+          <Form.Label className="mb-0">Duration of Investment in Weeks {required}</Form.Label>
           <Form.Control
             required
             type="number"
@@ -253,7 +254,7 @@ const ManagerForm: React.FC<{ patch?: boolean }> = ({ patch }) => {
         </Form.Group>
 
         <Form.Group className="mb-4" as={Col} controlId="validationFormik04">
-          <Form.Label className="mb-0">Minimum Investment Amount{required}</Form.Label>
+          <Form.Label className="mb-0">Minimum Investment Amount in USD{required}</Form.Label>
           <Form.Control
             required
             type="number"
