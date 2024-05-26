@@ -4,7 +4,7 @@ import { Investment, Investor } from "../server/src/types/investorTypes";
 export interface CreateManagerPayLoad{
     firstName: string;
     lastName: string;
-    image:  Promise<Blob>;
+    image:  Blob|string|Promise<Blob>;
     duration: number;
     qualification: string;
     minimumInvestmentAmount: number;
@@ -14,7 +14,7 @@ export interface CreateManagerPayLoad{
     id: number;
     firstName: string;
     lastName: string;
-    image: string | Blob;
+    image:  Blob|string|Promise<Blob>;
     duration: number;
     qualification: string;
     minimumInvestmentAmount: number;

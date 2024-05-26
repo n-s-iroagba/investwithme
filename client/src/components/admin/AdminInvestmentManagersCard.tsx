@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Row, Col } from 'react-bootstrap';
 import { InvestmentTiersCard } from '../../components/general/InvestmentTiersCard';
-import { ManagerData} from '../../../../common/types'
+import { ManagerData } from '../../../../common/types'
 import '../../components/styles.css';
 import DeleteModal from './DeleteModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -31,13 +31,13 @@ const AdminInvestmentManagersCard: React.FC = () => {
   const [idToBeDeleted, setIdToBeDeleted] = useState(0);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [managers, setManagers] = useState<ManagerData[]>([]);
-  const [errorMessage, setErrorMessage]=useState('')
+  const [errorMessage, setErrorMessage] = useState('')
   const navigate = useNavigate()
 
   useEffect(() => {
     const fetchManagerData = async () => {
       try {
-        const managerData = await getManagers(); 
+        const managerData = await getManagers();
         managerData && setManagers(managerData);
       } catch (error) {
         console.error(error);
@@ -55,47 +55,47 @@ const AdminInvestmentManagersCard: React.FC = () => {
 
   return (
     <div>
-    {managers.length > 0 ? (
-      <>
-        <h3 className='text-center mt-4 text-light'>
-          Your Managers
-        </h3>
-        <Row className='d-flex justify-content-center mt-2 gy-3'>
-          {managers.map((manager) => (
-            <Col key={manager.id} xs={12} md={6} lg={3}>
-              <InvestmentTiersCard
-                percentageYield={`${manager.percentageYield}%`}
-                image={manager.image}
-                firstName={manager.firstName}
-                lastName={manager.lastName}
-                qualification={manager.qualification}
-                minimumInvestmentAmount={`$${manager.minimumInvestmentAmount}`}
-                duration={`${manager.duration} weeks`}
-                button={<MoveToPatchManager manager={manager} />}
-                deleteButton={
-                  <button className='red-button' onClick={() => handleDelete(manager.id)}>
-                    Delete Manager
-                  </button>
-                }
-              />
-            </Col>
-          ))}
-        </Row>
-        <DeleteModal id={idToBeDeleted} show={showDeleteModal} entity='manager' />
-      </>
-    ) : (
-      <>
-        <h3 className='text-center mt-4 text-light'>
-          No Managers yet, kindly add a manager.
-        </h3>
-        <div className='d-flex justify-content-center mt-5'>
-        <button className='button-styles button-width-narrow text-light' onClick={()=>navigate('/admin/dashboard')}>Dashboard</button>
-        </div>
-        <ErrorMessage message={errorMessage} />
-      </>
-    )}
-  </div>
-);
+      {managers.length > 0 ? (
+        <>
+          <h3 className='text-center mt-4 text-light'>
+            Your Managers
+          </h3>
+          <Row className='d-flex justify-content-center mt-2 gy-3'>
+            {managers.map((manager) => (
+              <Col key={manager.id} xs={12} md={6} lg={3}>
+                <InvestmentTiersCard
+                  percentageYield={`${manager.percentageYield}%`}
+                  image={manager.image}
+                  firstName={manager.firstName}
+                  lastName={manager.lastName}
+                  qualification={manager.qualification}
+                  minimumInvestmentAmount={`$${manager.minimumInvestmentAmount}`}
+                  duration={`${manager.duration} weeks`}
+                  button={<MoveToPatchManager manager={manager} />}
+                  deleteButton={
+                    <button className='red-button' onClick={() => handleDelete(manager.id)}>
+                      Delete Manager
+                    </button>
+                  }
+                />
+              </Col>
+            ))}
+          </Row>
+          <DeleteModal id={idToBeDeleted} show={showDeleteModal} entity='manager' />
+        </>
+      ) : (
+        <>
+          <h3 className='text-center mt-4 text-light'>
+            No Managers yet, kindly add a manager.
+          </h3>
+          <div className='d-flex justify-content-center mt-5'>
+            <button className='button-styles button-width-narrow text-light' onClick={() => navigate('/admin/dashboard')}>Dashboard</button>
+          </div>
+          <ErrorMessage message={errorMessage} />
+        </>
+      )}
+    </div>
+  );
 }
 
 export default AdminInvestmentManagersCard;

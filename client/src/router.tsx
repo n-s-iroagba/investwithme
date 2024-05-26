@@ -45,156 +45,156 @@ import NewInvestment from "./pages/investor/NewInvestment";
 
 export const router = createBrowserRouter([
 
-{
-    path:'/',
-    element: <Home/>
-},
+    {
+        path: '/',
+        element: <Home />
+    },
 
-{
-    path:'/signup',
-    element: <SignUp />,
-},
+    {
+        path: '/signup',
+        element: <SignUp />,
+    },
 
-{
-    path:'/login',
-    element: <Login />
-},
+    {
+        path: '/login',
+        element: <Login />
+    },
 
-{
-    path:'/about-us',
-    element: <AboutUs />
-},
+    {
+        path: '/about-us',
+        element: <AboutUs />
+    },
 
 
 
-{
-    path:'/verify-email',
-    element: <VerifyEmail />
-},
-{
-path:'/forgot-password',
-element: <Email />
-},
+    {
+        path: '/verify-email',
+        element: <VerifyEmail />
+    },
+    {
+        path: '/forgot-password',
+        element: <Email />
+    },
 
-{
-    path:'/new-password',
-    element: <NewPassword />
-},
-{
-    path:'/already-verified',
-    element: <EmailVerified/>,
-},
-{
-    path:'/dashboard',
-    element:  <Dashboard username={""} id={1}/>,//<PrivateRoute Component={Dashboard}/>,
-     
-},
-{
-    path:'/withdraw',
-    element: <WithdrawalDashboard/>,
-},
-{
-    path:'/admin/investor-dashboard',
-    element: <InvestorsDashboard/>,
-},
-{
-    path:'/investment-guide',
-    element: <InvestmentGuide />,
-},
-{
-   path:'/reset-password-info',
-   element:<PasswordChangeCheckMail/>
-},
+    {
+        path: '/new-password',
+        element: <NewPassword />
+    },
+    {
+        path: '/already-verified',
+        element: <EmailVerified />,
+    },
+    {
+        path: '/dashboard',
+        element: <Dashboard username={""} id={1} />,//<PrivateRoute Component={Dashboard}/>,
 
-{
-    path:'/invest/managers',
-    element: <InvestmentManagers/>,
-},
-{
-    path:'/invest',
-    element:  <NewInvestment username={"Nnamdi"}/>
-},
+    },
+    {
+        path: '/withdraw',
+        element: <WithdrawalDashboard />,
+    },
+    {
+        path: '/admin/investor-dashboard',
+        element: <InvestorsDashboard />,
+    },
+    {
+        path: '/investment-guide',
+        element: <InvestmentGuide />,
+    },
+    {
+        path: '/reset-password-info',
+        element: <PasswordChangeCheckMail />
+    },
 
-{
-    path:'/invest/payment',
-    element: <PaymentWalletForm />
-},
-{
-    path:'/fund-managers',
-    element: <h5>a</h5>
-},
-{
-    path:'/referral',
-    element: <Referral id={1}/>,
-},
+    {
+        path: '/invest/managers',
+        element: <InvestmentManagers />,
+    },
+    {
+        path: '/invest',
+        element: <NewInvestment username={"Nnamdi"} />
+    },
 
-{
-    path:'/transactions',
-    element: <Transactions/>
-},
+    {
+        path: '/invest/payment',
+        element: <PaymentWalletForm />
+    },
+    {
+        path: '/fund-managers',
+        element: <h5>a</h5>
+    },
+    {
+        path: '/referral',
+        element: <Referral id={1} />,
+    },
 
-{
-    path:'/admin/signup',
-    element: <AdminSignUp />
-},
-{
-    path:'/admin/dashboard',
-    element: <AdminDashboard username={"ss"}/>
-},
+    {
+        path: '/transactions',
+        element: <Transactions />
+    },
 
-{
-    path:'/portfolio',
-    element: <Portfolio/>
-},
-{
-    path:'/notifications',
-    element: <Notifications/>
-},
-{
-    path:'/admin/managers',
-    element: <AdminManager />
-},
-{
-    path:'/admin/promo',
-    element: <Promotion/>
-},
-{
-    path:'/admin/investor-dashboard',
-    element: <InvestorsDashboard />
-},
+    {
+        path: '/admin/signup',
+        element: <AdminSignUp />
+    },
+    {
+        path: '/admin/dashboard',
+        element: <AdminDashboard username={"ss"} />
+    },
 
-{
-    path:'/admin/wallets',
-    element: <AdminWallets/>
-},
-{
-    path:'/admin/referrals',
-    element: <AdminReferral/>
-},
-{
-    path:'/admin/bonus',
-    element: <Bonus/>
-},
-{
-    path:'/admin/investors',
-    element: <Investors/>
-},
-{
-    path:'/patch-manager',
-    element: <PatchManager/>
-},
-{
-    path:'/enter-email',
-    element: <Email />
-},
+    {
+        path: '/portfolio',
+        element: <Portfolio />
+    },
+    {
+        path: '/notifications',
+        element: <Notifications />
+    },
+    {
+        path: '/admin/managers',
+        element: <AdminManager />
+    },
+    {
+        path: '/admin/promo',
+        element: <Promotion />
+    },
+    {
+        path: '/admin/investor-dashboard',
+        element: <InvestorsDashboard />
+    },
 
-{
-    path:'/new-password/:token',
-    element: <NewPassword />
-},
-{
-    path:'/email-verification-error',
-    element: <EmailVerificationError/>
-},
+    {
+        path: '/admin/wallets',
+        element: <AdminWallets />
+    },
+    {
+        path: '/admin/referrals',
+        element: <AdminReferral />
+    },
+    {
+        path: '/admin/bonus',
+        element: <Bonus />
+    },
+    {
+        path: '/admin/investors',
+        element: <Investors />
+    },
+    {
+        path: '/patch-manager',
+        element: <PatchManager />
+    },
+    {
+        path: '/enter-email',
+        element: <Email />
+    },
+
+    {
+        path: '/new-password/:token',
+        element: <NewPassword />
+    },
+    {
+        path: '/email-verification-error',
+        element: <EmailVerificationError />
+    },
 
 ])

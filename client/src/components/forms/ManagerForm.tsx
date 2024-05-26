@@ -4,7 +4,7 @@ import ErrorMessage from '../general/ErrorMessage';
 import { required } from '../auth/general/required';
 import ReactCrop, { type Crop } from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
-import {ManagerData } from '../../../../common/types';
+import { ManagerData } from '../../../../common/types';
 import { createManager, getSingleManager, patchManager } from '../../utils/managerHelper';
 import { hasEmptyKey } from '../../utils/utils';
 import { useNavigate } from 'react-router-dom';
@@ -113,11 +113,11 @@ const ManagerForm: React.FC<{ patch?: boolean }> = ({ patch }) => {
       return;
     }
     setShow(false);
-  
+
     try {
       const croppedBlob = await getCroppedBlob(files, crop);
       const croppedFile = new File([croppedBlob], files.name, { type: files.type });
-  
+
       setManagerData((prevData) => ({
         ...prevData,
         image: croppedFile,
@@ -144,7 +144,7 @@ const ManagerForm: React.FC<{ patch?: boolean }> = ({ patch }) => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-  console.log(managerData)
+    console.log(managerData)
     if (patch && hasEmptyKey(managerData)) {
       setValidated(false);
       setErrorMessage('Please fill in all required fields.');
@@ -189,7 +189,7 @@ const ManagerForm: React.FC<{ patch?: boolean }> = ({ patch }) => {
           <ReactCrop circularCrop aspect={1} crop={crop} onChange={(c) => setCrop(c)}>
             <img className='w-100' src={URL.createObjectURL(files)} alt='Crop Preview' />
           </ReactCrop>
-          <button onClick={()=>handleCropDone()}>Done</button>
+          <button onClick={() => handleCropDone()}>Done</button>
         </Modal>
       )}
       <Form className="form py-5" noValidate validated={validated} onSubmit={handleSubmit}>
