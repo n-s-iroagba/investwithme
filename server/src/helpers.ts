@@ -1,5 +1,5 @@
 import { REFERRAL_BONUS_PERCENT } from "./config";
-import { payPromoBonus } from "./controllers/investorController";
+import { payPromoBonus } from "./controllers/promoController";
 import { sendCompleteInvestmentDepositReceivedEmail, sendIncompleteInvestmentDepositReceivedEmail, sendPausedInvestmentEmail } from "./mailService";
 import { Manager, Promo } from "./types/adminTypes";
 import { Investment, Investor, Transaction,Notification, Referral, PendingPromo } from "./types/investorTypes";
