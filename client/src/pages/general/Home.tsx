@@ -17,20 +17,25 @@ import Chart from "../../components/home_components/Chart";
 import Promo from "../../components/home_components/Promo";
 import InvestmentCards from "../../components/home_components/InvestmentCards";
 import { PromoType } from "../../utils/types";
+import { getPromo } from "../../utils/promoHepler";
 
 const Home:React.FC = ()=>{
 const [promo,setPromo] = useState <PromoType|null>(null)
 useEffect(()=>{
-    const receivedpromo:PromoType ={
-        id: 1,
-        startDate: new Date('2024-04-29').toDateString(),
-        endDate: new Date('2024-05-05').toDateString(),
-        bonusPercent: 100
-    }
-    setPromo(receivedpromo)
-
-}, [])
-
+    const fetchPromoData = async () => {
+        try {
+          const receivedpromo = await getPromo();
+          
+          receivedpromo && setPromo(receivedpromo);
+        
+        } catch (error) {
+          console.error('Error fetching promo:', error);
+        
+       
+        }
+      };
+      fetchPromoData();
+    },[])
     return <div>
         <Header/>
         <TickerTape colorTheme="light"/>
