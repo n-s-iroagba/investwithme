@@ -26,7 +26,7 @@ declare referrals: NonAttribute<Referral[]>;
 export class Investment extends Model<InferAttributes<Investment>, InferCreationAttributes<Investment>> {
   declare id: CreationOptional<number>;
   declare amount: number;
-  declare earnings: number | null;
+  declare earnings: number;
   declare amountDeposited: number
   declare investmentDate: Date | null;
   declare isPaused: boolean;
@@ -44,6 +44,7 @@ declare investmentId:ForeignKey<Investment['id']>
 declare investment: NonAttribute<Investment>
 declare network: string
 declare blockchain:string
+declare currency: string
  }
 
 export class Referral extends Model<InferAttributes<Referral>, InferCreationAttributes<Referral>>  {
@@ -188,6 +189,10 @@ DepositWallet.init(
       allowNull: false,
     },
     blockchain:{
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    currency:{
       type: DataTypes.STRING,
       allowNull: false,
     },

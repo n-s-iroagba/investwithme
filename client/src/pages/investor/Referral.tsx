@@ -5,14 +5,15 @@ import Information from '../../components/general/Information';
 import { faUsers } from '@fortawesome/free-solid-svg-icons';
 import { getReferralDetails } from '../../utils/helpers';
 import { clientDomain } from '../../utils/constants';
+import { ReferralDetails } from '../../../../common/types';
 
 
 
 const Referrals: React.FC<{id:number}>= ({id}) => {
- const [code, setCode] = useState('')
+ const [code, setCode] = useState<number>(0)
  const [link,setLink] = useState('')
  const [referrer,setReferrer] = useState({firstName:'', lastName:''})
- const [referred,setReferred] = useState([])
+ const [referred,setReferred] = useState<{firstName:string, lastName:string}[]>([])
 
 
  const navigate = useNavigate()
@@ -20,7 +21,7 @@ const Referrals: React.FC<{id:number}>= ({id}) => {
   const fetchReferral = async () => {
      
     try {
-      const response:any = await getReferralDetails(id);
+      const response:ReferralDetails = await getReferralDetails(id);
       if (response){
       const data = response
       setCode(data.referralCode);
@@ -40,7 +41,7 @@ const Referrals: React.FC<{id:number}>= ({id}) => {
 
   const handleCopyClick = () => {
     alert('Text copied to clipboard!');
-    navigator.clipboard.writeText(code); 
+    navigator.clipboard.writeText(code.toString()); 
   }
   const handleCopyClickLink = () => {
     alert('Text copied to clipboard!');
@@ -87,8 +88,8 @@ const Referrals: React.FC<{id:number}>= ({id}) => {
         <Form.Group className='my-4'>
         <Form.Label className='mb-0'>Referrals:</Form.Label>
         {
-          referred.map((referral:string)=>(
-            <div>{referral}</div>
+          referred.map((referral)=>(
+            <div>{referral.firstName + '  '}{referral.lastName}</div>
           ))
         }
         </Form.Group>

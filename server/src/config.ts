@@ -21,11 +21,10 @@ export const JWT_SECRET = 'ababanna'
 export const CLIENT_DASHBOARD_ROUTE = CLIENT_DOMAIN + 'dashboard'
 
 export const ALREADY_VERIFIED_ROUTE = CLIENT_DOMAIN + 'already-verified'
+export const COMPANY_SUPPORT_EMAIL = 'iroagba97@gmail'
 
-export const INVESTMENT_TENURE = 14
-
-export const PROMO_PERCENT = 0.15
 export const REFERRAL_BONUS_PERCENT = 0.15
+
 export const howToInvestMessage = 'aaafkkfnasljfnal'//implement
 
 

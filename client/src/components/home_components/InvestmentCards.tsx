@@ -3,8 +3,9 @@ import { Row, Col } from 'react-bootstrap'
 import { InvestmentTiersCard } from '../general/InvestmentTiersCard';
 import { SelectManagerButton } from '../general/Button';
 import { ManagerData } from '../../../../common/types';
-import { getManagers } from '../../utils/helpers';
+
 import { sortManagers } from '../../utils/utils';
+import { getManagers } from '../../utils/managerHelper';
 
 const InvestmentCards: React.FC = () => {
 const [investmentData,setInvestementData] = useState<ManagerData[]>([])
@@ -18,8 +19,6 @@ useEffect(() => {
         console.log(managerData)
       } catch (error) {
         console.error(error);
-        alert ('an error occured, try again later')
-        // navigate ('/admin/dashboard')
       }
     };
 

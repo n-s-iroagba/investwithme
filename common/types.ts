@@ -53,3 +53,14 @@ export interface InvestorAndInvestment{
   investment:Investment
   investor:Investor
 }
+
+export interface Portfolio{
+  investment:Investment,
+  manager:ManagerData,
+  referrals:{totalAmount:number,count:number}
+}
+export interface ReferralDetails{
+  referred: {firstName:string,lastName:string}[]
+  referrer: {firstName:string,lastName:string}
+  referralCode:number
+}

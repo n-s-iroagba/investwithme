@@ -6,12 +6,13 @@ import {
   TOKEN_EXPIRATION_TIME, 
   COMPANY_VERIFICATION_EMAIL, 
   COMPANY_REFERRAL_EMAIL, 
-  VERIFY_PASSWORD_RESET_TOKEN_URL 
+  VERIFY_PASSWORD_RESET_TOKEN_URL, 
+  COMPANY_SUPPORT_EMAIL
 } from './config';
 import { getVerificationEmailContent, getNewPasswordEmailContent } from './helpers';
-import { Investment, Investor } from './types/investorTypes';
-import { Manager } from './types/adminTypes';
-
+import { DepositWallet, Investment, Investor, Referral } from './types/investorTypes';
+import { Admin, AdminWallet, Manager, Promo } from './types/adminTypes';
+import {getHowToInvestEmailContent, getInvestmentDepositReceivedEmailContent, getInvestmentPausedEmailContent, getInvestmentPausedReminderEmailContent, getInvestmentPromoBonusEmailContent, getInvestmentPromoEmailContent, getReferralBonusEmailContent} from './mailServiceHelpers'
 const transporter = nodemailer.createTransport({
   service: "Gmail",
   host: "smtp.gmail.com",
@@ -23,7 +24,7 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-export const sendVerificationEmail = async (user: any, verificationToken: string) => {
+export const sendVerificationEmail = async (user: Investor|Admin, verificationToken: string) => {
   const verificationUrl = `${SERVER_VERIFY_EMAIL_ROUTE}/${verificationToken}`;
   const emailHtmlContent = getVerificationEmailContent(verificationUrl, TOKEN_EXPIRATION_TIME, COMPANY_NAME);
   try {
@@ -39,11 +40,11 @@ export const sendVerificationEmail = async (user: any, verificationToken: string
   }
 };
 
-export const sendReferalCompletedMail = async (refreeInvestor: any, newInvestor: any) => {
+export const sendReferalCompletedMail = async (refreeInvestor: Investor, newInvestor: Investor) => {
   let mailOptions = {
     from: COMPANY_REFERRAL_EMAIL,
     to: refreeInvestor.email,
-    subject: 'Referral Mail',
+    subject: 'Referral Registeration',
     text: `Dear ${refreeInvestor.firstName},\n\n Thank you for referring to ${newInvestor.lastName}, ${newInvestor.firstName}. Your referral bonus shall be credited to ${COMPANY_NAME} most recent investment account, when the referred investor makes the first deposit.\n\n Thank you ${newInvestor.firstName}`
   };
   try {
@@ -54,7 +55,7 @@ export const sendReferalCompletedMail = async (refreeInvestor: any, newInvestor:
   }
 };
 
-export const sendPasswordResetEmail = async (user: any, verificationToken: string) => {
+export const sendPasswordResetEmail = async (user:Investor|Admin, verificationToken: string) => {
   const verificationUrl = `${VERIFY_PASSWORD_RESET_TOKEN_URL}/${verificationToken}`;
   const emailHtmlContent = getNewPasswordEmailContent(verificationUrl, TOKEN_EXPIRATION_TIME, COMPANY_NAME);
   try {
@@ -70,37 +71,130 @@ export const sendPasswordResetEmail = async (user: any, verificationToken: strin
   }
 };
 
-export const sendPausedInvestmentEmail = async (investor:Investor,investment:Investment) => {
-  // Add logic for sending paused investment email
-};
-export const sendPausedReminderEmail = async (user: any, verificationToken: string) => {
-  // Add logic for sending paused investment email
-};
-export const sendPromoMail = async (investor: any, startDate: string, endDate: string, PROMO_PERCENT: number) => {
-  // Add logic for sending promo mail
-};
-
-export const sendPromoExtensionMail = async (investor: any, startDate: Date, endDate: Date, PROMO_PERCENT: number) => {
-  // Add logic for sending promo extension mail
-};
-
-export const sendHowToInvestMail = async (investor: any) => {
-  // Add logic for sending how to invest mail
+export const sendPausedInvestmentEmail = async (investor: Investor, investment: Investment) => {
+  // Ensure getInvestmentPausedEmailContent is properly called with investor and investment arguments
+  const emailHtmlContent = getInvestmentPausedEmailContent(investor, investment);
+  try {
+    const emailBody = { html: emailHtmlContent };
+    await transporter.sendMail({
+      from: COMPANY_SUPPORT_EMAIL,
+      to: investor.email,
+      subject: `Pause of investment earnings due to Incomplete Deposit`,
+      ...emailBody,
+    });
+  } catch (error: any) {
+    console.error('Error sending paused investment email:', error.message);
+  }
 };
 
-export const sendReferralBonusEmail = async (referee: any, investor: any) => {
-  // Add logic for sending referral bonus email
+export const sendPausedReminderEmail = async (investor: Investor, investment: Investment) => {
+  const emailHtmlContent = getInvestmentPausedReminderEmailContent(investor, investment);
+  try {
+    const emailBody = { html: emailHtmlContent };
+    await transporter.sendMail({
+      from: COMPANY_SUPPORT_EMAIL,
+      to: investor.email,
+      subject: `Reminder concerning paused investment`,
+      ...emailBody,
+    });
+  } catch (error: any) {
+    console.error('Error sending paused investment email:', error.message);
+  }
 };
 
-export const sendPromoBonusEmail = async (investor:Investor,amount:number) => {
-  // Add logic for sending referral bonus email
-};
-export const sendCompleteInvestmentDepositReceivedEmail = async (investor: Investor, investment:Investment) => {
-  // Add logic for sending complete investment deposit received email
+export const sendPromoMail = async (investor:Investor,promo:Promo) => {
+  const emailHtmlContent = getInvestmentPromoEmailContent(investor, promo);
+  try {
+    const emailBody = { html: emailHtmlContent };
+    await transporter.sendMail({
+      from: COMPANY_SUPPORT_EMAIL,
+      to: investor.email,
+      subject: `Promo`,
+      ...emailBody,
+    });
+  } catch (error: any) {
+    console.error('Error sending paused investment email:', error.message);
+  }
 };
 
-export const sendIncompleteInvestmentDepositReceivedEmail = async (investor: Investor, investment:Investment) => {
-  // Add logic for sending incomplete investment deposit received email
+
+
+export const sendPromoExtensionMail = async (investor: Investor, promo:Promo) => {
+  const emailHtmlContent = getInvestmentPromoEmailContent(investor, promo);
+  try {
+    const emailBody = { html: emailHtmlContent };
+    await transporter.sendMail({
+      from: COMPANY_SUPPORT_EMAIL,
+      to: investor.email,
+      subject: `Promo extension`,
+      ...emailBody,
+    });
+  } catch (error: any) {
+    console.error('Error sending paused investment email:', error.message);
+  }
+}
+export const sendHowToInvestMail = async (investor: Investor,  depositWallet: DepositWallet,
+  investment: Investment,
+  adminWallet: AdminWallet) => {
+  const emailHtmlContent = getHowToInvestEmailContent(investor,  depositWallet,investment,adminWallet);
+  try {
+    const emailBody = { html: emailHtmlContent };
+    await transporter.sendMail({
+      from: COMPANY_SUPPORT_EMAIL,
+      to: investor.email,
+      subject: `How to make your deposit`,
+      ...emailBody,
+    });
+  } catch (error: any) {
+    console.error('Error sending paused investment email:', error.message);
+  }
+}
+
+export const sendReferralBonusEmail = async (investor:Investor,referral:Referral) => {
+  const emailHtmlContent = getReferralBonusEmailContent(investor, referral);
+  try {
+    const emailBody = { html: emailHtmlContent };
+    await transporter.sendMail({
+      from: COMPANY_SUPPORT_EMAIL,
+      to: investor.email,
+      subject: `Payment of referral bonus`,
+      ...emailBody,
+    });
+  } catch (error: any) {
+    console.error('Error sending paused investment email:', error.message);
+  }
 };
+
+export const sendPromoBonusEmail = async (investor:Investor,promoAmount:number) => {
+  const emailHtmlContent = getInvestmentPromoBonusEmailContent(investor, promoAmount);
+  try {
+    const emailBody = { html: emailHtmlContent };
+    await transporter.sendMail({
+      from: COMPANY_SUPPORT_EMAIL,
+      to: investor.email,
+      subject: `Payment of deposit Bonus`,
+      ...emailBody,
+    });
+  } catch (error: any) {
+    console.error('Error sending paused investment email:', error.message);
+  }
+}
+export const sendInvestmentDepositReceivedEmail = async (investor: Investor, investment:Investment) => {
+  const emailHtmlContent = getInvestmentDepositReceivedEmailContent(investor, investment);
+  try {
+    const emailBody = { html: emailHtmlContent };
+    await transporter.sendMail({
+      from: COMPANY_SUPPORT_EMAIL,
+      to: investor.email,
+      subject: ` Deposit received`,
+      ...emailBody,
+    });
+  } catch (error: any) {
+    console.error('Error sending paused investment email:', error.message);
+  }
+};
+
+
+
 
 

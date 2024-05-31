@@ -20,11 +20,6 @@ const Login:React.FC=()=>{
              route='signup' />
  <Information center= {true}text='' head='Login' icon={faUser} />
  <LoginForm/>
- <LoginOption
-            title='Forgot password?'
-            buttonText='Forgot password'
-             route='forgot-password'
-             dontShowLogo={true} />
  </div>
  <MiniFooter/>
  </div>

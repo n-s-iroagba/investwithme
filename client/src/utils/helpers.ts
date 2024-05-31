@@ -1,11 +1,18 @@
-import { deleteItem, getData, patchFormDataItem, patchItem, postData,postFormData } from "./api";
-import { AddInvestmentType, CreatePromoType, CreateWalletType, WalletType } from "./types";
-import { CreateManagerPayLoad, ManagerData } from "../../../common/types";
-import { getNewbiesAdminUrl, createManagerUrl, getPendingReferralUrl,getInvestorsUrl,getReferralDetailsRoute,
-  patchManagerUrl, deleteManagerRoute, createWalletUrl, patchWalletUrl, getPendingBonusUrl,
-  deleteWalletRoute, createInvestmentRoute, getManagersUrl, getWalletsUrl, getPromoUrl, createPromoUrl, 
-  patchPromoUrl, deletePromoRoute, payUrl, deleteInvestorRoute, payReferralRoute, payBonusRoute, getSingleMangerRoute, getTransactionsRoute, getNotificationsRoute, getInvestmentRoute, 
-  getInvestmentStatusRoute, markNotificationsRoute} from "./constants";
+import { deleteItem, getData, patchItem, postData,} from "./api";
+import { AddInvestmentType, } from "./types";
+
+import {
+  getPendingReferralUrl,
+  getInvestorsUrl,
+  getReferralDetailsRoute,
+ getPendingBonusUrl,
+createInvestmentRoute,  payUrl,
+ deleteInvestorRoute, payReferralRoute,
+  payBonusRoute, getTransactionsRoute,
+   getNotificationsRoute, getInvestmentRoute, 
+  getInvestmentStatusRoute, 
+  markNotificationsRoute
+} from "./constants";
 
 export const createInvestment = async (data:any,investorId:string) => {
   const createInvestmentUrl = `${createInvestmentRoute}/${investorId}`;
@@ -18,68 +25,6 @@ export const createInvestment = async (data:any,investorId:string) => {
    }
 };
 
- 
-
-
-
-
-export const createPromo= async (data:CreatePromoType) => {
-  try {
-    const authorizationData = localStorage.getItem('cassockJwtToken')||'a';
-    const response = await postData(createPromoUrl, data, authorizationData);
-    if (response.status === 201) {
-    alert('promo added succesfully')
-    window.location.reload();
-    } 
-}catch (error:any) {
-    alert('unable to create a promo at this time')
-    console.error(error)
- }
-};
-
-export const getPromo=async ()=>{
-  const authorizationData = localStorage.getItem('cassockJwtToken')||'a';
-  try{
-  const response:any = await getData(getPromoUrl, authorizationData);
-  if (response.status ===200){
-  return response.data
-  }
-  return []
-  }catch(error:any){
-    console.error(error)
- 
-  }
-}
-
-export const patchPromo=async ( data:any) =>{
-  try {
-    const authorizationData = localStorage.getItem('cassockJwtToken')||'a';
-    const response = await patchItem(patchPromoUrl, data, authorizationData);
-    if (response.status === 200) {
-      alert('promo updated succesfully')
-      window.location.reload();
-    }
-}catch (error:any) {
- console.error(error)
- alert('unable to update the promo at this time try again later')
-}
-}
-
-export const deletePromo= async (id:number) => {
-  const url =`${deletePromoRoute}/${id}`
-    try {
-      const authorizationData = localStorage.getItem('cassockJwtToken')||'a';
-      const response = await deleteItem(url,authorizationData);
-      if (response.status === 200) {
-        alert('promo deleted succesfully')
-        window.location.reload();
-      }
-    return response.status
-  }catch (error:any) {
-   console.error(error)
-   alert('unable to delete promo at this time')
-  }
-  }
 
 export const deleteInvestor = async (id:number)=>{
   const url =`${deleteInvestorRoute}/${id}`
@@ -102,7 +47,7 @@ export const addInvestment =async (data:AddInvestmentType) =>{
     const authorizationData = localStorage.getItem('cassockJwtToken');
     const response = await patchItem(payUrl,data,authorizationData);
     if (response.status === 200) {
-      alert('investors investment successfully added deleted succesfully')
+      alert('investment deposit successfully added succesfully')
       window.location.reload();
   }
 }catch (error:any) {

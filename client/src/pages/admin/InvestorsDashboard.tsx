@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import SuccessModal from '../../components/general/SuccessModal'
 import { Modal, Form, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import { faCircleDot } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { addInvestment, getAdminNewbies } from '../../utils/helpers';
+
+import { addInvestment } from '../../utils/helpers';
 import { MiniFooter } from '../../components/home_components/Footer';
+import { PayInvestorPayLoad } from '../../../../common/types';
 
 
 interface ModalFormProps {
@@ -13,7 +12,7 @@ interface ModalFormProps {
 }
 
 const AddInvestmentModalForm: React.FC<ModalFormProps> = ({ show }) => {
-  const [formData, setFormData] = useState<any>({
+  const [formData, setFormData] = useState< PayInvestorPayLoad>({
     amount: 0,
     address: '',
   });
@@ -50,7 +49,7 @@ const AddInvestmentModalForm: React.FC<ModalFormProps> = ({ show }) => {
  
   }catch(error:any){
     console.error(error)
-    alert(error.message)
+  
   }finally{
     handleClose()
   }
@@ -105,26 +104,9 @@ const AddInvestmentModalForm: React.FC<ModalFormProps> = ({ show }) => {
 
 const InvestorsDashboard = () => {
   const [addInvestementShow, setAddInvestmentShow] = useState<boolean>(false)
-  const [showSuccessModal, setShowSuccessModal] = useState<boolean>(false)
-  const [newbies, setNewbies] = useState<string[]>([])
-  const navigate = useNavigate()
-  useEffect(() => {
-    const creditedState = localStorage.getItem('cassockCreditedState')
-    const fetchNewbies = async () => {
-      if (creditedState) {
-        setShowSuccessModal(true);
-      }
-      try {
-        const investmentNewbies: string[] = await getAdminNewbies(); // Await the promise here
-        console.log(investmentNewbies);
-        investmentNewbies && setNewbies(investmentNewbies);
-      } catch (error) {
-        console.error('Failed to fetch admin newbies:', error);
-      }
-    };
 
-    fetchNewbies();
-  }, [])
+  const navigate = useNavigate()
+
   const handleInvestmentShow = () => {
 
     setAddInvestmentShow(true)
@@ -134,25 +116,14 @@ const InvestorsDashboard = () => {
     <div className='primary-background full-height'>
 
       <div className='col-lg-4 col-md-8 col-xs-12 d-flex flex-column align-items-center w-100 pt-5 text-light '>
-        <SuccessModal message={''} propShow={showSuccessModal} />
         <h1>Investors Dashboard</h1>
         <button className="text-light mb-2 button-styles button-width-narrow mt-4 border-0 border-bottom " onClick={() => handleInvestmentShow()}> Add investor Amount</button>
-        {
-          newbies.length&&newbies.includes('promo') ?
-            <button className="notification-wrapper text-light mb-2 button-styles button-width-narrow mt-4 border-0 border-bottom " onClick={() => navigate('/admin/bonus')}> Pay Promo Bonus
-              <FontAwesomeIcon className='notification text-danger' icon={faCircleDot} beat /></button>
-            :
+      
             <button className="text-light mb-2 button-styles button-width-narrow mt-4 border-0 border-bottom " onClick={() => navigate('/admin/bonus')}> Pay Promo Bonus</button>
-        }
-
-        {
-          newbies.length && newbies.includes('referral') ?
-            <button className="notification-wrapper text-light mb-2 button-styles button-width-narrow mt-4 border-0 border-bottom " onClick={() => navigate('/admin/referrals')}> Pay Referral Bonus
-              <FontAwesomeIcon className='notification text-danger' icon={faCircleDot} beat />
-            </button>
-            :
+        
+       
             <button className="text-light mb-2 button-styles button-width-narrow mt-4 border-0 border-bottom " onClick={() => navigate('/admin/referrals')}> Pay Referral Bonus</button>
-        }
+        
 
         <button className="text-light mb-2 button-styles button-width-narrow mt-4 border-0 border-bottom " onClick={() => navigate('/admin/investors')}> View Investors</button>
       </div>

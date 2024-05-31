@@ -1,11 +1,11 @@
 import { Request, Response } from 'express';
-import { howToInvestMessage, PROMO_PERCENT, REFERRAL_BONUS_PERCENT } from '../config';
-import { Investor, DepositWallet, Investment, Referral, Notification, Transaction, PendingPromo } from '../types/investorTypes';
+import { howToInvestMessage,  } from '../config';
+import { Investor, DepositWallet, Investment, Referral, Notification, } from '../types/investorTypes';
 import { AdminWallet, Manager } from '../types/adminTypes';
-import { changeManager, createDepositNotificationAndTransaction, customError, formatEndDate, handleFirstDepositReferral, handleIsPaused, handlePromo, sendRecieptEmailDependingOnCompletenessOfDepositedAmount } from '../helpers';
-import { sendReferralBonusEmail, sendCompleteInvestmentDepositReceivedEmail, sendIncompleteInvestmentDepositReceivedEmail, sendPromoBonusEmail, sendHowToInvestMail, } from '../mailService';
+import { changeManager, createDepositNotificationAndTransaction, customError,handleFirstDepositReferral, handleIsPaused, handlePromo } from '../helpers';
 import { Op, Sequelize } from 'sequelize';
-import { InvestmentCreationPayLoad, PayInvestorPayLoad } from '../../../common/types';
+import { InvestmentCreationPayLoad, ManagerData, PayInvestorPayLoad, Portfolio } from '../../../common/types';
+import { sendInvestmentDepositReceivedEmail } from '../mailService';
 
 
 
@@ -63,8 +63,12 @@ export const createInvestment = async (req: Request, res: Response): Promise<Res
       throw customError(`Investor with id ${id} is not in the database`, 404);
     }
 
-    if (investor.investment) {
-      await investor.investment.destroy();
+    const investment: Investment | null = await Investment.findOne({where:{
+      investorId:investor.id
+    }});
+
+    if (investment) {
+     await  investment.destroy()
     }
 
     const manager: Manager | null = await Manager.findByPk(managerId)
@@ -78,24 +82,21 @@ export const createInvestment = async (req: Request, res: Response): Promise<Res
       isPaused: false,
       investorId: id as unknown as number,
       managerId: managerId as unknown as number,
+      earnings: 0,
     });
-    console.log('investment created')
-    console.log(newInvestment)
 
-    let depositWallet: DepositWallet = await DepositWallet.create({
+
+     await DepositWallet.create({
       ...wallet,
       investmentId: newInvestment.id,
     });
-    console.log('deposit wallet created')
-    console.log(depositWallet)
 
-    const notification: Notification = await Notification.create({
+
+    await Notification.create({
       title: 'How to invest',
       message: howToInvestMessage,
       investorId: id as unknown as number,
     });
-    console.log('how to invest notification  created')
-    console.log(notification)
 
     const responseWallet: AdminWallet | null = await AdminWallet.findOne({
       where: {
@@ -109,14 +110,13 @@ export const createInvestment = async (req: Request, res: Response): Promise<Res
       throw customError(`The wallet the investor was supposed to pay to is not in the database`, 404);
     }
   
-  
     return res.status(200).json(responseWallet);
 
   } catch (error: any) {
 
     console.error('error in CreateInvestmnent function ', error);
 
-    return res.status(error.status).json(error);
+    return res.status(error.status||500).json(error);
   }
 }
 
@@ -170,7 +170,7 @@ export const topUp = async (req: Request, res: Response): Promise<Response> => {
 
     await investment.save()
 
-    sendRecieptEmailDependingOnCompletenessOfDepositedAmount(investor, investment)
+    await sendInvestmentDepositReceivedEmail(investor, investment) 
 
     if (isFirstDeposit) {
       handlePromo(investor, amount);
@@ -178,14 +178,14 @@ export const topUp = async (req: Request, res: Response): Promise<Response> => {
         handleFirstDepositReferral(investor, amount);
       }
     }
-    console.log('investment', investment)
+   
     if (investment.isPaused) handleIsPaused(investment)
 
     return res.status(200).json({ message: 'successfully credited investor' });
 
   } catch (error: any) {
     console.error('Error in topUp function:', error);
-    return res.status(error.status).json(error);
+    return res.status(error.status||500).json(error);
   }
 }
 
@@ -207,9 +207,9 @@ export const getInvestment = async (req: Request, res: Response): Promise<Respon
       totalCount++;
       totalAmount += referral.amount;
     });
-    const manager = await Manager.findByPk(investment.managerId)
+    const manager = await Manager.findByPk(investment.managerId) as unknown as ManagerData
     const totalReferrals = { count: totalCount, totalAmount: totalAmount };
-    const responseData = {
+    const responseData:Portfolio = {
       referrals: totalReferrals,
       investment: investment,
       manager:manager
@@ -221,6 +221,7 @@ export const getInvestment = async (req: Request, res: Response): Promise<Respon
     return res.status(error.status || 500).json(error);
   }
 }
+
 
 
 

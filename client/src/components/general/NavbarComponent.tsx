@@ -6,7 +6,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { isLargeScreen } from '../../utils/utils';
 import { useNavigate } from 'react-router-dom';
-
+import blacklogo from '../../assets/logo/blacklogo.png';
+import Logo from './Logo';
 const NavbarComponent: React.FC = () => {
   const [iconDisplay,setIconDisplay] = useState<boolean>(true)
 
@@ -36,7 +37,7 @@ const NavbarComponent: React.FC = () => {
       className="bg-body-tertiary px-4"
     >  
      <div>{iconDisplay && <div onClick={()=>navigate('/signup') }><FontAwesomeIcon icon = {faUser}/></div>}</div>
-        <Navbar.Brand>Logo</Navbar.Brand>
+        <Navbar.Brand><Logo logoImage={blacklogo}/></Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ms-auto">

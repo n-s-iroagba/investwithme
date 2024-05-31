@@ -1,6 +1,7 @@
+import { getJSDocReturnTag } from "typescript";
 import { REFERRAL_BONUS_PERCENT } from "./config";
 import { payPromoBonus } from "./controllers/promoController";
-import { sendCompleteInvestmentDepositReceivedEmail, sendIncompleteInvestmentDepositReceivedEmail, sendPausedInvestmentEmail } from "./mailService";
+import {  sendPausedInvestmentEmail } from "./mailService";
 import { Manager, Promo } from "./types/adminTypes";
 import { Investment, Investor, Transaction,Notification, Referral, PendingPromo } from "./types/investorTypes";
 
@@ -50,13 +51,13 @@ export const handlePromo = async (investor: Investor, amount: number): Promise<v
 
 export const handleFirstDepositReferral = async (investor: Investor, amount: number): Promise<void> => {
   if (investor.referrerId === null) {
-      return; // Throw error if referrer ID is null
+      return;
   }
 
   const referral = await Referral.findOne({ where: { referredId: investor.id, referrerId: investor.referrerId } });
 
   if (!referral) {
-      throw customError('Referral not found', 404); // Throw error if referral not found
+     return;
   }
 
   referral.amount = amount * REFERRAL_BONUS_PERCENT;
@@ -64,7 +65,7 @@ export const handleFirstDepositReferral = async (investor: Investor, amount: num
   const referralInvestment = await Investment.findOne({ where: { investorId: investor.referrerId } });
 
   if (!referralInvestment) {
-      throw customError('Referrer investment not found', 404); // Throw error if referrer investment not found
+      return;
   }
   await referral.save();
 };
@@ -92,10 +93,6 @@ export const createDepositNotificationAndTransaction = async (investment:Investm
       investorId: investorId
     });
   }
-
-export const sendRecieptEmailDependingOnCompletenessOfDepositedAmount = async(investor:Investor,investment:Investment) =>{
-    investment.amountDeposited >= investment.amount ? await sendCompleteInvestmentDepositReceivedEmail(investor, investment) : await sendIncompleteInvestmentDepositReceivedEmail(investor, investment);
-}
 
 export const changeManager = async(investment:Investment) => {
   const managers = await Manager.findAll()
@@ -161,7 +158,7 @@ export const getVerificationEmailContent = (verificationUrl:string,TOKEN_EXPIRAT
     <h1 class="text-center">Welcome to ${COMPANY_NAME}!</h1>
     <p  class="text-center">Thank you made a request to change your password. Kindly click the link or buttion below to change your password.</p>
     <p  class="text-center">
-      <a href="${newPasswordUrl}" class="btn btn-primary">Verify Your Email</a>
+      <a href="${newPasswordUrl}" class="btn btn-primary">Change Password</a>
     </p>
     <p>If the button doesn't work, you can copy and paste the following link into your browser:</p>
     <p>${newPasswordUrl}</p>

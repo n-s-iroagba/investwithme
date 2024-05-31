@@ -1,32 +1,33 @@
 import React, { useEffect, useState } from 'react';
 import PortfolioComponent from '../../components/investor/PortfolioComponent';
 import { useNavigate } from 'react-router-dom';
+import { Portfolio } from '../../../../common/types';
+import { Investment } from '../../../../server/src/types/investorTypes';
 
 
 
-const Portfolio:React.FC = ()=>{
+const PortfolioWrapper:React.FC = ()=>{
 
-    const [investmentData, setInvestmentData] = useState({
+    const [investmentData, setInvestmentData] = useState<Portfolio>({
       investment: {
         id: 1,
-        investmentDate: new Date().toDateString(),
+        investmentDate: new Date(),
         amount: 0,
         earnings: 0,
         amountDeposited: 0,
-        durationInDays: 14,
-        incrementPercent: 0,
-        dueDate: '',
+        isPaused: false
+      } as unknown as Investment,
+      manager:{
+        id: 0,
+        firstName: '',
+        lastName: '',
+        image: '',
+        duration: 0,
+        qualification: '',
+        minimumInvestmentAmount: 0,
+        percentageYield: 0,
       },
-      wallet: {
-        id:0,
-        network: '',
-        blockchain: '',
-        address: '',
-        currency: '',
-      },
-      manager: { firstName: '', lastName: '' },
-  
-      referrals: { totalAmount: 0, count: 0 },
+    referrals: { totalAmount: 0, count: 0 },
   
     })
   
@@ -34,7 +35,6 @@ const Portfolio:React.FC = ()=>{
 
     useEffect(() => {
       const investment = localStorage.getItem('cassockInvestment')
-      console.log(investment)
       if (investment) {
         setInvestmentData(JSON.parse(investment))
       }
@@ -51,4 +51,4 @@ const Portfolio:React.FC = ()=>{
 
  )
  }
- export default Portfolio
+ export default PortfolioWrapper

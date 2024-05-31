@@ -5,10 +5,12 @@ import ErrorMessage from '../general/ErrorMessage'
 import { useNavigate } from 'react-router-dom'
 import '../styles.css'
 import { CreateInvestmentType, WalletType } from '../../utils/types'
-import { ManagerData } from '../../../../common/types'
+import { InvestmentCreationPayLoad, ManagerData } from '../../../../common/types'
 import { findManagerWithHighestMinInvestment, findManagerById, } from '../../utils/utils'
-import { createInvestment, getAdminWallets, getManagers } from '../../utils/helpers'
+import { createInvestment } from '../../utils/helpers'
 import { getInvestorAuthData } from '../../utils/auth'
+import { getManagers } from '../../utils/managerHelper'
+import { getAdminWallets } from '../../utils/adminWalletHelper'
 const WAValidator = require('multicoin-address-validator')
 
 
@@ -193,7 +195,7 @@ const NewInvestmentForm: React.FC<{ username: string, }> = ({ username }) => {
     if (shouldSubmit) {
       setSubmitting(true);
       try {
-        const data= {
+        const data:InvestmentCreationPayLoad= {
           amount: investmentData.amount,
           wallet: investmentData.wallet,
           managerId: investmentData.manager.id

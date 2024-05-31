@@ -3,6 +3,7 @@ import { Investor, Referral, Transaction,Notification, Investment, DepositWallet
 import { customError } from '../helpers';
 import { sendReferralBonusEmail } from '../mailService';
 import { Op } from 'sequelize';
+import { ReferralDetails } from '../../../common/types';
 
 
 
@@ -75,7 +76,16 @@ export const getReferralDetails = async (req: Request, res: Response): Promise<R
         referrer = { firstName: '', lastName: '' } as unknown as Investor
       }
     }
-    return res.status(200).json({ referralCode:investor.referralCode,referrer: referrer, referred: referrals });
+    const referred = await Promise.all(
+      referrals.map(async (referral) => {
+        const referredInvestor = await Investor.findByPk(referral.referredId);
+        return {
+          firstName: referredInvestor?.firstName || '',
+          lastName: referredInvestor?.lastName || '',
+        };
+      })
+    );
+    return res.status(200).json({ referralCode:investor.referralCode,referrer: referrer, referred: referred } as ReferralDetails);
   }
   catch (error: any) {
     console.error(error);

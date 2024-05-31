@@ -23,7 +23,7 @@ const InvestorsCard: React.FC<{ firstName: string, lastName: string,amount:numbe
            <Card.Body>
             <Card.Text>Investment Amount: {amount}</Card.Text>
             <Card.Text>Amount currently deposited: {amountDeposited}</Card.Text>
-            <Card.Text>Date of firstDeposit {date?formatStartDate(date.toISOString()):'no deposit made yet'}</Card.Text>
+            <Card.Text>Date of firstDeposit {date?formatStartDate(new Date(date).toISOString()):'no deposit made yet'}</Card.Text>
             <Card.Text></Card.Text>
             <Card.Text></Card.Text>
            </Card.Body> 

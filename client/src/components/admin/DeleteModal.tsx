@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
-import { deleteManager, deleteWallet } from '../../utils/helpers';
+import { deleteWallet } from '../../utils/adminWalletHelper';
+import { deleteInvestor } from '../../utils/helpers';
+import { deleteManager } from '../../utils/managerHelper';
+
 
 
 const DeleteModal:React.FC<{id:number,show:boolean,entity:'wallet'|'manager'|'investor'}>= ({ id, show,entity }) => {
@@ -70,7 +73,4 @@ const DeleteModal:React.FC<{id:number,show:boolean,entity:'wallet'|'manager'|'in
 };
 
 export default DeleteModal;
-function deleteInvestor(id: number) {
-  throw new Error('Function not implemented.');
-}
 

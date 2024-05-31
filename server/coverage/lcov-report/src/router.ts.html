@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>54/54</span>
+                <span class='fraction'>62/62</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>54/54</span>
+                <span class='fraction'>62/62</span>
             </div>
         
             
@@ -117,7 +117,23 @@
 <a name='L52'></a><a href='#L52'>52</a>
 <a name='L53'></a><a href='#L53'>53</a>
 <a name='L54'></a><a href='#L54'>54</a>
-<a name='L55'></a><a href='#L55'>55</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L55'></a><a href='#L55'>55</a>
+<a name='L56'></a><a href='#L56'>56</a>
+<a name='L57'></a><a href='#L57'>57</a>
+<a name='L58'></a><a href='#L58'>58</a>
+<a name='L59'></a><a href='#L59'>59</a>
+<a name='L60'></a><a href='#L60'>60</a>
+<a name='L61'></a><a href='#L61'>61</a>
+<a name='L62'></a><a href='#L62'>62</a>
+<a name='L63'></a><a href='#L63'>63</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -175,9 +191,15 @@
 import multer from 'multer';
 &nbsp;
 import { isAdmin, isInvestor } from './auth';
-import { createInvestment, getInvestment, getInvestmentStatus, getNotifications, getTransactions, index, payPromoBonus, payReferralBonus, topUp } from './controllers/investorController';
-import { createAdminWallet, createManager, createPromo, deleteInvestor, deleteManager, deletePromo, deleteWallet, getAllInvestors, getAllManagers, getAllWallets, getPromos, patchManager, patchWallet, updatePromo } from './controllers/adminController';
 import { changePassword, confirmMailForPasswordChange, createAdmin, createInvestor, login, requestPasswordReset, resendVerificationToken, verifyMail } from './controllers/authController';
+import { createInvestment, getInvestment, index, topUp } from './controllers/investmentController';
+import { deleteInvestor, getAllInvestors } from './controllers/investorController';
+import { getAllDueReferrals, getReferralDetails, payReferralBonus } from './controllers/referralController';
+import { createPromo, deletePromo, getPendingPromo, getPromos, payPromoBonus, updatePromo } from './controllers/promoController';
+import { createManager, patchManager, getAllManagers, getSingleManager, deleteManager } from './controllers/managerController';
+import { createAdminWallet, deleteWallet, getAllWallets, patchWallet } from './controllers/adminWalletControllerr';
+import { getNotifications, getTransactions } from './controllers/notificationAndTransactionController';
+import { getNewbies } from './controllers/newbiesControlller';
 &nbsp;
 const router: Router = express.Router();
 const upload = multer();
@@ -193,21 +215,22 @@ router.post('/new-password/:id', changePassword);
 &nbsp;
 router.post('/create-admin', createAdmin);
 router.post('/create-investor', createInvestor);
-router.get('/get-investors', /* Add middleware if needed */ getAllInvestors);
-router.get('/get-investment-status/:id', getInvestmentStatus);
+router.get('/get-investors',  getAllInvestors);
 router.patch('/pay', topUp);
 router.get('/pay-referral/:id', payReferralBonus);
 router.get('/pay-bonus/:id', payPromoBonus);
-router.delete('/delete-investor/:id', /* Add middleware if needed */deleteInvestor);
+router.delete('/delete-investor/:id', deleteInvestor);
+router.get('/get-pending-bonus', getPendingPromo);
 &nbsp;
-router.post('/create-manager', upload.single('file'), createManager);
+router.post('/create-manager', upload.single('image'), createManager);
 router.get('/get-managers', getAllManagers);
-router.patch('/patch-manager', patchManager);
+router.patch('/patch-manager/:id',upload.single('image'), patchManager);
+router.get('/manager/:id', getSingleManager)
 router.delete('/delete-manager/:id', deleteManager);
 &nbsp;
 router.post('/create-investment/:id', createInvestment);
 router.get('/get-investment/:id', getInvestment);
-router.patch('/patch-investment', /* Add controller function */);
+router.patch('/patch-investment', getPendingPromo);
 router.delete('/delete-investment/:id', /* Add controller function */);
 &nbsp;
 router.post('/create-wallet', createAdminWallet);
@@ -223,7 +246,8 @@ router.delete('/delete-promo/:id', deletePromo);
 router.get('/get-notifications/:id', getNotifications);
 router.get('/get-transactions/:id', getTransactions);
 &nbsp;
-&nbsp;
+router.get('/get-pending-referral`', getAllDueReferrals)
+router.get('/get-referral-details/:id',getReferralDetails)
 export default router;
 &nbsp;</pre></td></tr></table></pre>
 
@@ -232,7 +256,7 @@ export default router;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-05-21T01:53:18.116Z
+                at 2024-05-27T01:09:49.218Z
             </div>
         <script src="../prettify.js"></script>
         <script>

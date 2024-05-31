@@ -10,6 +10,7 @@ import ErrorMessage from '../../general/ErrorMessage';
 import { loginUrl } from '../../../utils/constants';
 import { postData } from '../../../utils/api';
 import { extractErrorCode } from '../../../utils/utils';
+import { LoginOption } from './AuthOption';
 
 const LoginForm: React.FC = () => {
   const navigate = useNavigate();
@@ -83,7 +84,7 @@ const handleLoginResponse = (response:any) => {
 
   return (
     <div className="d-flex justify-content-center align-items-center flex-column mt-2">
-      <Form className="form py-5" noValidate validated={validated} onSubmit={(e) => login(e)}>
+      <Form className="form py-2" noValidate validated={validated} onSubmit={(e) => login(e)}>
         <Row>
           <Form.Group as={Col} lg="12" controlId="email">
             <Form.Label>Email</Form.Label>
@@ -117,12 +118,17 @@ const handleLoginResponse = (response:any) => {
             <Form.Control.Feedback type="invalid">Please enter your password.</Form.Control.Feedback>
           </Form.Group>
         </Row>
-        <div className='d-flex justify-content-evenly w-100 py-5'>
+        <div className='d-flex justify-content-evenly w-100 pt-3'>
           <button className='button-styles w-50 text-light' type={submitted ? 'button' : 'submit'}>
             {submitted ? <Spinner animation='border' size='sm' /> : 'Submit'}
           </button>
           <button className='button-styles text-light w-50' onClick={() => navigate('/')}> Home</button>
         </div>
+        <LoginOption
+            title='Forgot password?'
+            buttonText='Forgot password'
+             route='forgot-password'
+             dontShowLogo={true} />
       </Form>
       <ErrorMessage message={errorMessage} />
     </div>

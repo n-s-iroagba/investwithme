@@ -49,7 +49,6 @@ export const createManager= async (data:FormData) => {
     }
     }catch(error:any){
       console.error(error)
-      alert('unable to fetch the manager you wish to update at this time')
     }
   }
   
