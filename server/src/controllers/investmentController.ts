@@ -1,11 +1,11 @@
-import { Request, Response } from 'express';
+import { Request, response, Response } from 'express';
 import { howToInvestMessage,  } from '../config';
 import { Investor, DepositWallet, Investment, Referral, Notification, } from '../types/investorTypes';
 import { AdminWallet, Manager } from '../types/adminTypes';
 import { changeManager, createDepositNotificationAndTransaction, customError,handleFirstDepositReferral, handleIsPaused, handlePromo } from '../helpers';
 import { Op, Sequelize } from 'sequelize';
 import { InvestmentCreationPayLoad, ManagerData, PayInvestorPayLoad, Portfolio } from '../../../common/types';
-import { sendInvestmentDepositReceivedEmail } from '../mailService';
+import { sendHowToInvestMail, sendInvestmentDepositReceivedEmail } from '../mailService';
 
 
 
@@ -86,7 +86,7 @@ export const createInvestment = async (req: Request, res: Response): Promise<Res
     });
 
 
-     await DepositWallet.create({
+     const depositWallet = await DepositWallet.create({
       ...wallet,
       investmentId: newInvestment.id,
     });
@@ -103,11 +103,13 @@ export const createInvestment = async (req: Request, res: Response): Promise<Res
         currency: wallet.currency,
       }
     });
+
+   
   
     if (!responseWallet) {
       throw customError(`The wallet the investor was supposed to pay to is not in the database`, 404);
     }
-  
+    await sendHowToInvestMail (investor,depositWallet,newInvestment,responseWallet)
     return res.status(200).json(responseWallet);
 
   } catch (error: any) {

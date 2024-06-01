@@ -9,8 +9,8 @@ import {
   VERIFY_PASSWORD_RESET_TOKEN_URL, 
   COMPANY_SUPPORT_EMAIL
 } from './config';
-import { getVerificationEmailContent, getNewPasswordEmailContent } from './helpers';
-import { DepositWallet, Investment, Investor, Referral } from './types/investorTypes';
+import { getVerificationEmailContent, getNewPasswordEmailContent, customError } from './helpers';
+import { DepositWallet, Investment, Investor, Notification, Referral } from './types/investorTypes';
 import { Admin, AdminWallet, Manager, Promo } from './types/adminTypes';
 import {getHowToInvestEmailContent, getInvestmentDepositReceivedEmailContent, getInvestmentPausedEmailContent, getInvestmentPausedReminderEmailContent, getInvestmentPromoBonusEmailContent, getInvestmentPromoEmailContent, getReferralBonusEmailContent} from './mailServiceHelpers'
 const transporter = nodemailer.createTransport({
@@ -200,12 +200,15 @@ export const sendInvestmentReminderEmails = async ()=>{
 
   for (const investor of investors) {
 
-    const investments = await Investment.findAll({
+    const investment = await Investment.findOne({
       where: {
         investorId: investor.id
       }
     })
-    const hasValidInvestment = investments.some(investment => investment.amountDeposited > 0);
+    if(!investment){
+     return
+    }
+    const hasValidInvestment =  investment.amountDeposited > 0
 
     if (!hasValidInvestment) { 
       await sendReminderMail(investor)
@@ -234,25 +237,54 @@ const sendReminderMail =async (investor:Investor) => {
 }
 
 
-export const update = async ()=>{
+export const updateInvestmentEarningsAndNotifiy = async ()=>{
   try{
    const investors = await Investor.findAll();
  
    for (const investor of investors) {
  
-     const investments = await Investment.findAll({
+     const investment = await Investment.findOne({
        where: {
          investorId: investor.id
        }
      })
-     const hasValidInvestment = investments.some(investment => investment.amountDeposited > 0);
+     if(!investment){
+      return
+     }
+     const hasValidInvestment =  investment.amountDeposited > 0
  
-     if (!hasValidInvestment) { 
-       await sendReminderMail(investor)
+     if (hasValidInvestment) { 
+       const manager = await Manager.findByPk(investment.managerId);
+       if (!manager){
+        throw customError('manager not found',404)
+       }
+       investment.earnings += investment.amountDeposited * (manager.percentageYield /(manager.duration * 7* 100));
+       await investment.save()
+       await  Notification.create({
+        title:'Earnings',
+        message: `You've earned a total of ${investment.earnings} in total.,\n Thanks for choosing us.`,
+        investorId: investor.id,
+       })
+       await sendEarningsMail(investor, investment.earnings)
      }
    }
  }catch(error){
    console.error(error)
  }
  }
-
+const  sendEarningsMail =(investor:Investor, earnings:number)=>{
+  const emailHtmlContent = `Dear ${investor.firstName}  ${investor.lastName},\n\nYou've earned a total of ${earnings} in total.,\n Thanks for choosing us.
+   \n\nBest regards,\n
+   Investment Team`
+  try {
+    const emailBody = { html: emailHtmlContent };
+    transporter.sendMail({
+      from: COMPANY_SUPPORT_EMAIL,
+      to: investor.email,
+      subject: `Earnings`,
+      ...emailBody,
+    });
+  } catch (error: any) {
+    console.error('Error sending paused investment email:', error.message);
+  }
+}

@@ -4,7 +4,7 @@ import cron from 'node-cron';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import routes from './router';
-import { sendInvestmentReminderEmails } from './mailService';
+import { sendInvestmentReminderEmails, updateInvestmentEarningsAndNotifiy } from './mailService';
 
 
 export const app = express();
@@ -18,8 +18,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 
-cron.schedule('0 0 * 17 * *', updateInvestmentEarningsAndNotifiy());
- cron.schedule('0 7 * * *', async()=>sendInvestmentReminderEmails());
+cron.schedule('0 0 * 17 * *',async()=> await updateInvestmentEarningsAndNotifiy());
+cron.schedule('0 8 * * *', async()=>await sendInvestmentReminderEmails());
 
 app.use('/', routes);
 
