@@ -208,6 +208,7 @@ export const messages = [
   }
 ];
 
+export const companySupportEmail = 'nothing@cassock.com'
 export const testimonials = [
     {
       name: `Alice Johnson`,

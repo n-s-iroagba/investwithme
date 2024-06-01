@@ -31,7 +31,7 @@ export const InvestmentTiersCard: React.FC<InvestmentTiersType> = ({
 
   return (
 
-    <Card bg="light" text="black" className="w-100">
+    <Card bg="light" text="black" style={{width:'8cm'}}>
       <Card.Header className="background-secondary py-2 d-flex flex-column justify-content-center align-items-center">
         <Card.Title className="text-center">{percentageYield}</Card.Title>
         <Card.Title className="text-center">RETURN ON INVESTMENT</Card.Title>

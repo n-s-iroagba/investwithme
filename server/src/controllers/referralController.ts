@@ -48,8 +48,8 @@ export const payReferralBonus = async (req: Request, res: Response): Promise<Res
       investorId: referrerInvestor.id,
     });
     referral.settled = true
-    referral.save()
-    await sendReferralBonusEmail(referrerInvestor, referredInvestor);
+    await referral.save()
+    await sendReferralBonusEmail(referrerInvestor, referral);
 
     return res.status(200).json({ message: 'Referral bonus paid successfully' });
 

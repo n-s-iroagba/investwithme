@@ -7,7 +7,7 @@ import { ManagerData } from '../../../../common/types';
 import { sortManagers } from '../../utils/utils';
 import { getManagers } from '../../utils/managerHelper';
 
-const InvestmentCards: React.FC<{text:string}> = ({text}) => {
+const InvestmentCards: React.FC<{text?:string}> = ({text}) => {
 const [investmentData,setInvestementData] = useState<ManagerData[]>([])
 useEffect(() => {
     const fetchManagerData = async () => {
@@ -27,18 +27,20 @@ useEffect(() => {
    
 
     return (
-        <div className='px-3'>
+        <div className='d-flex flex-column align-items-center' >
          {investmentData.length > 0?
          <>
-            <Row className='gy-4'>
-                <Col xs={12}>
-                    <h3 className='text-center mt-5 mb-2'>
+        
+                    <h3 className='text-center mt-5 '>
                        {text}
                     </h3>
-                </Col>
-                <div className='d-flex justify-content-evenly'>
+                    {text && <div className='primary-line mb-4'/>}
+         
+                    <Row>
+               
+            
                 {investmentData.map((data, index) => (
-                    <Col key={index} xs={12} md={6} lg={4}>
+                    <Col className=' w-100' key={index} xs={12} md={6} lg={4}>
                         <InvestmentTiersCard
                             percentageYield={`${data.percentageYield}%`}
                             image={data.image}
@@ -51,7 +53,7 @@ useEffect(() => {
                         />
                     </Col>
                 ))}
-                </div>
+         
             </Row>
             </>
             :''

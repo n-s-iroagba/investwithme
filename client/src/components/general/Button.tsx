@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faDollarSign, faEnvelope} from '@fortawesome/free-solid-svg-icons';
+import { faDollarSign} from '@fortawesome/free-solid-svg-icons';
 import'../styles.css'
 import { faFacebook } from '@fortawesome/free-brands-svg-icons';
 import { useNavigate } from 'react-router-dom';
@@ -31,9 +31,7 @@ export const SelectManagerButton: React.FC<{ managerId?: number }> = ({ managerI
   );
 };
 
-export const ContactButton:React.FC =()=>{
-  return<button className='button-styles'><div>Get In Touch</div><div ><FontAwesomeIcon icon={faEnvelope} beatFade/></div></button>
-}
+
 
 export const  SocialMediaButton:React.FC = ()=>{
   return<div>

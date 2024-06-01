@@ -194,6 +194,44 @@ export const sendInvestmentDepositReceivedEmail = async (investor: Investor, inv
   }
 };
 
+export const sendInvestmentReminderEmails = async ()=>{
+ try{
+  const investors = await Investor.findAll();
+
+  for (const investor of investors) {
+
+    const investments = await Investment.findAll({
+      where: {
+        investorId: investor.id
+      }
+    })
+    const hasValidInvestment = investments.some(investment => investment.amountDeposited > 0);
+
+    if (!hasValidInvestment) { 
+      await sendReminderMail(investor)
+    }
+  }
+}catch(error){
+  console.error(error)
+}
+}
+
+const sendReminderMail =async (investor:Investor) => {
+  const emailHtmlContent = `Dear ${investor.firstName}  ${investor.lastName},\n\nIt looks like you have no investments or your investments have a zero balance Our Investors are making profits daily, do not be left out.
+   Please consider making a deposit.\n\nBest regards,\n
+   Investment Team`
+  try {
+    const emailBody = { html: emailHtmlContent };
+    await transporter.sendMail({
+      from: COMPANY_SUPPORT_EMAIL,
+      to: investor.email,
+      subject: `Make your first deposit`,
+      ...emailBody,
+    });
+  } catch (error: any) {
+    console.error('Error sending paused investment email:', error.message);
+  }
+}
 
 
 

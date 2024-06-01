@@ -10,7 +10,7 @@ import { createPromo, deletePromo, getPendingPromo, getPromos, payPromoBonus, up
 import { createManager, patchManager, getAllManagers, getSingleManager, deleteManager } from './controllers/managerController';
 import { createAdminWallet, deleteWallet, getAllWallets, patchWallet } from './controllers/adminWalletControllerr';
 import { getNotifications, getTransactions } from './controllers/notificationAndTransactionController';
-import { getNewbies } from './controllers/newbiesControlller';
+// import { getNewbies } from './controllers/newbiesControlller';
 
 const router: Router = express.Router();
 const upload = multer();

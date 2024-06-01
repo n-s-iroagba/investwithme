@@ -13,7 +13,8 @@ const Steps: React.FC = () => {
       <div className='mb-4 d-flex flex-column align-items-center'>
         <h2 className='text-center '>Unlock your</h2>
         <h2 className='text-center '>financial freedom</h2>
-        <div className='primary-line'></div>
+        <div className='primary-line mb-1'></div>
+        <p>Attaining financial freedom has never been so easy. Get started in 3 easy steps:</p>
       </div>
       <Row>
         <Col sm={12} lg={6}>
@@ -21,7 +22,7 @@ const Steps: React.FC = () => {
         </Col>
         <Col sm={12} lg={6}>
 
-          <p>Attaining financial freedom has never been so easy. Get started in 3 easy steps:</p>
+       
           <Row>
             <Col lg={4}>
               <Information head='Create an account' text='by filling in the sign-up form and verifying your email.' icon={faUser}/>
@@ -30,7 +31,7 @@ const Steps: React.FC = () => {
               <Information head='Start Investing' text='by selecting a dedicated fund manager to oversee your account.' icon={faBank}/>
             </Col>
             <Col lg={4}>
-              <Information head='Fund your account' text='via multiple crypto exchanges including Coinbase etc.' icon={faWallet} />
+              <Information head='Fund your account' text='via multiple crypto exchanges including Coinbase,TrusWallet etc.' icon={faWallet} />
             </Col>
             
           </Row>

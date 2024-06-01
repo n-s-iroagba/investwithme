@@ -2,7 +2,7 @@ import React from 'react';
 import { Row, Col } from 'react-bootstrap';
 import '../styles.css'
 import { SocialMediaButton } from '../general/Button';
-import { companyName } from '../../utils/constants';
+import { companyName, companySupportEmail } from '../../utils/constants';
 
 export const MiniFooter: React.FC<{ primaryVariant?: boolean }> = ({ primaryVariant }) => {
   const baseClassName = 'border-0 border-top text-center w-100 mini-footer';
@@ -62,7 +62,7 @@ const Footer = () => {
                   </Col>
                 </Row>
                 <p className='margin-top'>+44 (0)3308 285 883</p>
-                <p>hello@cassock.com</p>
+                <p>{companySupportEmail}</p>
               </Col>
             </Row>
           </Col>
@@ -71,12 +71,12 @@ const Footer = () => {
            {/* bottom */}
           <Col md={6}>
           <p className="text-md-right">
-              {companyName} is a registered trademake of  {companyName} equity, a registered company in Malta
+              {companyName} is a registered trademake of  {companyName} equity, a registered company in the United States of America
             </p>
             <p className="text-md-right">
               VAT Registration No: 386809347 | Company Registration No: 11101195.
             </p>
-            <p className="text-md-right">Registered Office: 40 Caversham Road, Reading, RG1 7EB</p>
+            <p className="text-md-right">Registered Office: 1015 15th St NW 6th Floor, Washington, DC, 20005, USA.</p>
   
           </Col>
           

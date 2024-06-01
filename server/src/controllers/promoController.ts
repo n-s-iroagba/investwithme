@@ -12,7 +12,7 @@ export const createPromo = async (req: Request, res: Response): Promise<Response
       const promo = await Promo.create({ startDate, endDate, bonusPercent });;
       const investors = await Investor.findAll();
       investors.forEach(async (investor) => {
-        await sendPromoMail(investor, startDate, endDate, bonusPercent)
+        await sendPromoMail(investor,promo)
         await Notification.create({
           investorId: investor.id, title: 'Promo Notification', message: `We are thrilled to announce an exclusive promotional period for you! 
       The promotion will run from ${startDate} to ${endDate}.Invest before the ${endDate} and earn a bonus of ${bonusPercent}% on your initial investment deposit`
@@ -47,7 +47,7 @@ export const createPromo = async (req: Request, res: Response): Promise<Response
   
       const investors = await Investor.findAll();
       investors.forEach(async (investor) => {
-        sendPromoExtensionMail(investor, promo.startDate, promo.endDate, promo.bonusPercent)
+        sendPromoExtensionMail(investor, promo)
         await Notification.create({
           investorId: investor.id, title: 'Promo Extension', message: `We are thrilled to announce the extension of our exclusive promotional period for you! 
       The promotion will run from ${promo.startDate} to ${promo.endDate}.Invest before the ${promo.endDate} and earn a bonus of ${promo.bonusPercent}% on your initial investment deposit`

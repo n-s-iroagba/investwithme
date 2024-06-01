@@ -3,13 +3,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEnvelope, } from '@fortawesome/free-solid-svg-icons'
 import { faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons'
 import { Col, Row } from "react-bootstrap";
-import { ContactButton, SocialMediaButton } from "../general/Button";
+import { SocialMediaButton } from "../general/Button";
+import { companySupportEmail } from "../../utils/constants";
 
 const Contact = () => {
     return (
         <div>
             <div className="d-flex flex-column align-items-center mt-3">
-                <h2>We'll Be Happy To Hear From You.</h2>
+                <h2 className="text-center">We'll Be Happy To Hear From You.</h2>
                 <div className="primary-line mb-3"></div>
             </div>
             <p className="text-center mb-4">Let's talk! We're happy to answer any questions you have.</p>
@@ -18,9 +19,8 @@ const Contact = () => {
                     <div className="d-flex flex-column align-items-center px-4 mb-3">
                         < div ><FontAwesomeIcon icon={faEnvelope} className="my-2 primary-color icon-size" /></div>
                         <div className="text-center">
-                            <p className="text-center">cassock**t@gmail.com</p>
-                            <p>Monday - Fridays</p>
-                            <div className="button-width-narrower"><ContactButton /></div>
+                            <p className="text-center">{companySupportEmail}</p>
+                            <p>We reply immediately in less than 24hrs on week days.</p>
                         </div>
                     </div>
                 </Col>
@@ -36,9 +36,11 @@ const Contact = () => {
                     <div className="d-flex flex-column align-items-center pt-2">
                         < div ><FontAwesomeIcon icon={faMapMarkerAlt} className="my-2 primary-color icon-size" /></div>
                         <div className="text-center">
-                            <p>No.7 your father's village</p>
+                            <p> 1015 15th St NW 6th Floor, Washington, DC, 20005, USA.
+                            </p>
                             <p>Monday - Fridays</p>
-                            <p>UTC Timezone</p>
+                            <p>9am- 3pm</p>
+                            <p>EDT Timezone</p>
                         </div>
                     </div>
                 </Col>

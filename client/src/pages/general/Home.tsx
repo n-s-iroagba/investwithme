@@ -59,10 +59,7 @@ useEffect(()=>{
          <Awards/>
          <SecurityAssurance/>
        
-
-        {promo && <Promo promo= {promo}/>}
-         <InvestmentCards text={'Select your investment tier and porfolio manager'}/>
-         <div className="d-flex flex-column align-items-center">
+         <div className="d-flex flex-column align-items-center mb-4">
          {!isModalOpen?(
       <button className='button-styles button-width-narrow px-3' onClick={handleOpenModal}>
         <div>View Certificate of Incorporation</div>
@@ -89,6 +86,9 @@ useEffect(()=>{
            </div>
       )}
     </div>
+        {promo && <Promo promo= {promo}/>}
+         <InvestmentCards text={'Select your investment tier and porfolio manager'}/>
+      
     <Steps/>
          <Referrals/>
          <Chart/>
