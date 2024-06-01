@@ -18,9 +18,16 @@ import Promo from "../../components/home_components/Promo";
 import InvestmentCards from "../../components/home_components/InvestmentCards";
 import { PromoType } from "../../utils/types";
 import { getPromo } from "../../utils/promoHepler";
-
+import { Button, Modal } from "react-bootstrap";
+import image from '../../assets/awards/US Certificate of Incorporation.jpg'
+import '../../components/styles.css'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faFile } from "@fortawesome/free-solid-svg-icons";
 const Home:React.FC = ()=>{
 const [promo,setPromo] = useState <PromoType|null>(null)
+const [isModalOpen, setIsModalOpen] = useState(false);
+
+
 useEffect(()=>{
     const fetchPromoData = async () => {
         try {
@@ -36,6 +43,13 @@ useEffect(()=>{
       };
       fetchPromoData();
     },[])
+    const handleOpenModal = () => {
+      setIsModalOpen(true);
+    };
+    
+    const handleCloseModal = () => {
+      setIsModalOpen(false);
+    };
     return <div>
         <Header/>
         <TickerTape colorTheme="light"/>
@@ -44,10 +58,38 @@ useEffect(()=>{
          <Testimonial/>
          <Awards/>
          <SecurityAssurance/>
-         <Steps/>
+       
 
         {promo && <Promo promo= {promo}/>}
-         <InvestmentCards/>
+         <InvestmentCards text={'Select your investment tier and porfolio manager'}/>
+         <div className="d-flex flex-column align-items-center">
+         {!isModalOpen?(
+      <button className='button-styles button-width-narrow px-3' onClick={handleOpenModal}>
+        <div>View Certificate of Incorporation</div>
+        <div>
+          <FontAwesomeIcon icon={faFile} beatFade />
+        </div>
+      </button>
+         ):
+      (<div>
+             <Modal.Dialog className='d-flex flex-column'>
+             <Modal.Header>
+               <Modal.Title>Certificate of Incoporation</Modal.Title>
+             </Modal.Header>
+     
+             <Modal.Body>
+             <img className='certificate-image' src={image} alt='Certificate of Incorporation' />
+             </Modal.Body>
+     
+             <Modal.Footer className="d-flex justify-content-center">
+               <Button onClick={handleCloseModal} variant="secondary">Close</Button>
+             
+             </Modal.Footer>
+           </Modal.Dialog>
+           </div>
+      )}
+    </div>
+    <Steps/>
          <Referrals/>
          <Chart/>
          <Contact/>

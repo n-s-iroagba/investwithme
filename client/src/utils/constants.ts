@@ -54,159 +54,159 @@ export const getReferralDetailsRoute = `${domain}/get-referral-details`
 
 export const clientDomain= 'localhost:3000'
 export const messages = [
-    {
-      time: `10 min ago`,
-      message: `John made a withdrawal of $1500 from his investment portfolio.`
-    },
-    {
-      time: `1 hour ago`,
-      message: `Emma made a withdrawal of $2000 from her investment portfolio.`
-    },
-    {
-      time: `30 sec ago`,
-      message: `Michael made a withdrawal of $2500 from his investment portfolio.`
-    },
-    {
-      time: `20 min ago`,
-      message: `Olivia made a withdrawal of $3000 from her investment portfolio.`
-    },
-    {
-      time: `45 min ago`,
-      message: `David made a withdrawal of $3500 from his investment portfolio.`
-    },
-    {
-      time: `5 hours ago`,
-      message: `Sophia made a withdrawal of $4000 from her investment portfolio.`
-    },
-    {
-      time: `2 min ago`,
-      message: `James made a withdrawal of $4500 from his investment portfolio.`
-    },
-    {
-      time: `15 min ago`,
-      message: `Ava made a withdrawal of $5000 from her investment portfolio.`
-    },
-    {
-      time: `3 hours ago`,
-      message: `Daniel made a withdrawal of $5500 from his investment portfolio.`
-    },
-    {
-      time: `50 sec ago`,
-      message: `Emily made a withdrawal of $6000 from her investment portfolio.`
-    },
-    {
-      time: `12 min ago`,
-      message: `Ethan made a withdrawal of $6500 from his investment portfolio.`
-    },
-    {
-      time: `7 hours ago`,
-      message: `Isabella made a withdrawal of $7000 from her investment portfolio.`
-    },
-    {
-      time: `8 min ago`,
-      message: `Mia made a withdrawal of $7500 from her investment portfolio.`
-    },
-    {
-      time: `2 hours ago`,
-      message: `Lucas made a withdrawal of $8000 from his investment portfolio.`
-    },
-    {
-      time: `1 min ago`,
-      message: `Harper made a withdrawal of $8500 from her investment portfolio.`
-    },
-    {
-      time: `4 hours ago`,
-      message: `Alexander made a withdrawal of $9000 from his investment portfolio.`
-    },
-    {
-      time: `35 sec ago`,
-      message: `Charlotte made a withdrawal of $9500 from her investment portfolio.`
-    },
-    {
-      time: `25 min ago`,
-      message: `Benjamin made a withdrawal of $10000 from his investment portfolio.`
-    },
-    {
-      time: `6 hours ago`,
-      message: `Amelia made a withdrawal of $10500 from her investment portfolio.`
-    },
-    {
-      time: `3 min ago`,
-      message: `Henry made a withdrawal of $11000 from his investment portfolio.`
-    },
-    {
-      time: `18 min ago`,
-      message: `Ella made a withdrawal of $11500 from her investment portfolio.`
-    },
-    {
-      time: `2 hours ago`,
-      message: `Jacob made a withdrawal of $12000 from his investment portfolio.`
-    },
-    {
-      time: `50 sec ago`,
-      message: `Scarlett made a withdrawal of $12500 from her investment portfolio.`
-    },
-    {
-      time: `9 min ago`,
-      message: `William made a withdrawal of $13000 from his investment portfolio.`
-    },
-    {
-      time: `5 hours ago`,
-      message: `Luna made a withdrawal of $13500 from her investment portfolio.`
-    },
-    {
-      time: `1 min ago`,
-      message: `Michael made a withdrawal of $14000 from his investment portfolio.`
-    },
-    {
-      time: `10 min ago`,
-      message: `Grace made a withdrawal of $14500 from her investment portfolio.`
-    },
-    {
-      time: `2 hours ago`,
-      message: `Luke made a withdrawal of $15000 from his investment portfolio.`
-    },
-    {
-      time: `20 sec ago`,
-      message: `Chloe made a withdrawal of $15500 from her investment portfolio.`
-    },
-    {
-      time: `15 min ago`,
-      message: `Jack made a withdrawal of $16000 from his investment portfolio.`
-    },
-    {
-      time: `4 hours ago`,
-      message: `Zoe made a withdrawal of $16500 from her investment portfolio.`
-    },
-    {
-      time: `3 min ago`,
-      message: `Leo made a withdrawal of $17000 from his investment portfolio.`
-    },
-    {
-      time: `12 min ago`,
-      message: `Madison made a withdrawal of $17500 from her investment portfolio.`
-    },
-    {
-      time: `30 min ago`,
-      message: `Aiden made a withdrawal of $18000 from his investment portfolio.`
-    },
-    {
-      time: `2 hours ago`,
-      message: `Layla made a withdrawal of $18500 from her investment portfolio.`
-    },
-    {
-      time: `8 min ago`,
-      message: `Logan made a withdrawal of $19000 from his investment portfolio.`
-    },
-    {
-      time: `45 sec ago`,
-      message: `Aria made a withdrawal of $19500 from her investment portfolio.`
-    },
-    {
-      time: `25 min ago`,
-      message: `Carter made a withdrawal of $20000 from his investment portfolio.`
-    }
-  ];
+  {
+    time: `10 min ago`,
+    message: `John made a withdrawal of $3500 from his investment portfolio.`
+  },
+  {
+    time: `1 hour ago`,
+    message: `Emma made a withdrawal of $3600 from her investment portfolio.`
+  },
+  {
+    time: `30 sec ago`,
+    message: `Michael made a withdrawal of $3700 from his investment portfolio.`
+  },
+  {
+    time: `20 min ago`,
+    message: `Olivia made a withdrawal of $3800 from her investment portfolio.`
+  },
+  {
+    time: `45 min ago`,
+    message: `David made a withdrawal of $3900 from his investment portfolio.`
+  },
+  {
+    time: `5 hours ago`,
+    message: `Sophia made a withdrawal of $4000 from her investment portfolio.`
+  },
+  {
+    time: `2 min ago`,
+    message: `James made a withdrawal of $4100 from his investment portfolio.`
+  },
+  {
+    time: `15 min ago`,
+    message: `Ava made a withdrawal of $4200 from her investment portfolio.`
+  },
+  {
+    time: `3 hours ago`,
+    message: `Daniel made a withdrawal of $4300 from his investment portfolio.`
+  },
+  {
+    time: `50 sec ago`,
+    message: `Emily made a withdrawal of $4400 from her investment portfolio.`
+  },
+  {
+    time: `12 min ago`,
+    message: `Ethan made a withdrawal of $4500 from his investment portfolio.`
+  },
+  {
+    time: `7 hours ago`,
+    message: `Isabella made a withdrawal of $4600 from her investment portfolio.`
+  },
+  {
+    time: `8 min ago`,
+    message: `Mia made a withdrawal of $4700 from her investment portfolio.`
+  },
+  {
+    time: `2 hours ago`,
+    message: `Lucas made a withdrawal of $4800 from his investment portfolio.`
+  },
+  {
+    time: `1 min ago`,
+    message: `Harper made a withdrawal of $4900 from her investment portfolio.`
+  },
+  {
+    time: `4 hours ago`,
+    message: `Alexander made a withdrawal of $5000 from his investment portfolio.`
+  },
+  {
+    time: `35 sec ago`,
+    message: `Charlotte made a withdrawal of $5100 from her investment portfolio.`
+  },
+  {
+    time: `25 min ago`,
+    message: `Benjamin made a withdrawal of $5200 from his investment portfolio.`
+  },
+  {
+    time: `6 hours ago`,
+    message: `Amelia made a withdrawal of $5300 from her investment portfolio.`
+  },
+  {
+    time: `3 min ago`,
+    message: `Henry made a withdrawal of $5400 from his investment portfolio.`
+  },
+  {
+    time: `18 min ago`,
+    message: `Ella made a withdrawal of $5500 from her investment portfolio.`
+  },
+  {
+    time: `2 hours ago`,
+    message: `Jacob made a withdrawal of $5600 from his investment portfolio.`
+  },
+  {
+    time: `50 sec ago`,
+    message: `Scarlett made a withdrawal of $5700 from her investment portfolio.`
+  },
+  {
+    time: `9 min ago`,
+    message: `William made a withdrawal of $5800 from his investment portfolio.`
+  },
+  {
+    time: `5 hours ago`,
+    message: `Luna made a withdrawal of $5900 from her investment portfolio.`
+  },
+  {
+    time: `1 min ago`,
+    message: `Michael made a withdrawal of $6000 from his investment portfolio.`
+  },
+  {
+    time: `10 min ago`,
+    message: `Grace made a withdrawal of $6100 from her investment portfolio.`
+  },
+  {
+    time: `2 hours ago`,
+    message: `Luke made a withdrawal of $6200 from his investment portfolio.`
+  },
+  {
+    time: `20 sec ago`,
+    message: `Chloe made a withdrawal of $6300 from her investment portfolio.`
+  },
+  {
+    time: `15 min ago`,
+    message: `Jack made a withdrawal of $6400 from his investment portfolio.`
+  },
+  {
+    time: `4 hours ago`,
+    message: `Zoe made a withdrawal of $6500 from her investment portfolio.`
+  },
+  {
+    time: `3 min ago`,
+    message: `Leo made a withdrawal of $6600 from his investment portfolio.`
+  },
+  {
+    time: `12 min ago`,
+    message: `Madison made a withdrawal of $6700 from her investment portfolio.`
+  },
+  {
+    time: `30 min ago`,
+    message: `Aiden made a withdrawal of $6800 from his investment portfolio.`
+  },
+  {
+    time: `2 hours ago`,
+    message: `Layla made a withdrawal of $6900 from her investment portfolio.`
+  },
+  {
+    time: `8 min ago`,
+    message: `Logan made a withdrawal of $7000 from his investment portfolio.`
+  },
+  {
+    time: `45 sec ago`,
+    message: `Aria made a withdrawal of $7100 from her investment portfolio.`
+  },
+  {
+    time: `25 min ago`,
+    message: `Carter made a withdrawal of $7200 from his investment portfolio.`
+  }
+];
 
 export const testimonials = [
     {
@@ -256,7 +256,7 @@ export const testimonials = [
   export const whoWeAre = `Welcome to ${companyName}, where we take the risk so you don't have to. 
   As your investment partner, we make money work for you while you relax and monitor its progress.
    Our expertise in the financial markets ensures that your investments are actively managed, 
-   providing you with the opportunity to achieve your financial goals with ease and peace of mind`
+   providing you with the opportunity to achieve your financial goals with ease and peace of mind.`
 export const howWeDoIt =   `At ${companyName}, our mission is to achieve financial freedom for our investors. 
 We accomplish this by employing skilled and experienced fund managers spread across the globe. These experts expertly manage client portfolios, ensuring optimal yields on investments. Additionally, to provide our investors with peace of mind, as all deposits are secured under the European Deposit Insurance Scheme. 
 This measure guarantees that we do not default on our liabilities, further solidifying our commitment to the financial well-being of our valued investors.`

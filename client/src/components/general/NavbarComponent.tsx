@@ -34,7 +34,7 @@ const NavbarComponent: React.FC = () => {
       onToggle={handleOnToggle}
       fixed="top"
       expand="lg"
-      className="bg-body-tertiary px-4"
+      className="bg-body-tertiary px-4 mb-2"
     >  
      <div>{iconDisplay && <div onClick={()=>navigate('/signup') }><FontAwesomeIcon icon = {faUser}/></div>}</div>
         <Navbar.Brand><Logo logoImage={blacklogo}/></Navbar.Brand>

@@ -39,6 +39,7 @@ import Investors from "./pages/admin/Investors";
 import EmailVerificationError from "./pages/general/EmailVerificationError";
 import PasswordChangeCheckMail from "./pages/general/PasswordChangeCheckMail";
 import NewInvestment from "./pages/investor/NewInvestment";
+import FundManagers from "./pages/general/FundManagers";
 
 
 
@@ -120,10 +121,6 @@ export const router = createBrowserRouter([
         element: <PaymentWalletForm />
     },
     {
-        path: '/fund-managers',
-        element: <h5>a</h5>
-    },
-    {
         path: '/referral',
         element: <Referral id={1} />,
     },
@@ -187,7 +184,10 @@ export const router = createBrowserRouter([
         path: '/enter-email',
         element: <Email />
     },
-
+    {
+        path: '/fund-managers',
+        element: <FundManagers/>
+    },
     {
         path: '/new-password/:token',
         element: <NewPassword />

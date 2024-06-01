@@ -7,12 +7,12 @@ const Introduction: React.FC = () => {
             <div className='d-flex flex-column align-items-center pb-2'>
                 <h4>Who we are?</h4>
                 <div className='primary-line mb-2'></div>
-                <p>{whoWeAre}</p>
+                <p className='text-center'>{whoWeAre}</p>
             </div>
             <div className='d-flex flex-column align-items-center pb-2'>
                 <h4>How we do it.</h4>
                 <div className='primary-line mb-2'></div>
-                <p className=''>{howWeDoIt}</p>
+                <p className='text-center'>{howWeDoIt}</p>
             </div>
         </div>
         </>

@@ -7,7 +7,7 @@ import { ManagerData } from '../../../../common/types';
 import { sortManagers } from '../../utils/utils';
 import { getManagers } from '../../utils/managerHelper';
 
-const InvestmentCards: React.FC = () => {
+const InvestmentCards: React.FC<{text:string}> = ({text}) => {
 const [investmentData,setInvestementData] = useState<ManagerData[]>([])
 useEffect(() => {
     const fetchManagerData = async () => {
@@ -33,7 +33,7 @@ useEffect(() => {
             <Row className='gy-4'>
                 <Col xs={12}>
                     <h3 className='text-center mt-5 mb-2'>
-                        Select Your Fund Manager And Investment Tier
+                       {text}
                     </h3>
                 </Col>
                 <div className='d-flex justify-content-evenly'>

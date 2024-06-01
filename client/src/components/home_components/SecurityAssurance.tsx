@@ -1,7 +1,6 @@
 import React from 'react';
 import { Row, Col } from 'react-bootstrap';
 import Information from '../general/Information';
-import { ViewCerficateButton } from '../general/Button';
 import security from '../../assets/images/padlock.webp'
 import '../styles.css'
 import { faBank } from '@fortawesome/free-solid-svg-icons';
@@ -24,7 +23,7 @@ const SecurityAssurance: React.FC = () => {
             <Col lg={6}>
               <Information head='Bank level security' text="
             We use state-of-the-art data encryption when handling your financial information and two-factor authentication (2FA) protection. 
-             We're backed by top financial market operators and we not only meet traditional banking security standards, we exceed them" icon={faBank} />
+             We're backed by top financial market operators and we not only meet traditional banking security standards, we exceed them." icon={faBank} />
             </Col>
             <Col lg={6}>
               <Information head='Deposit Insurance' text="To safeguard our clients' financial interests and eliminate all risk, all deposits are insured securely under the European Deposit Insurance Scheme. This comprehensive insurance coverage ensures that no liability falls upon us in the event of unforeseen circumstances." icon={faBank} />
@@ -42,7 +41,7 @@ const SecurityAssurance: React.FC = () => {
       </Row>
       <Row className='d-flex justify-content-center align-items-center'>
         <div className=' button-width-wide'>
-          <ViewCerficateButton />
+      
         </div>
       </Row>
     </div>

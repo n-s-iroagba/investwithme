@@ -95,7 +95,7 @@ export const getTransactions = async (id:number)=>{
     return []
     }catch(error:any){
       console.error(error)
-      alert('unable to get transactions at this time')
+      
     }
 }
 export const getInvestment = async (id:number)=>{
@@ -106,7 +106,7 @@ export const getInvestment = async (id:number)=>{
     return response
     }catch(error:any){
       console.error(error)
-      alert('unable to get investment data at this time')
+
     }
 }
 

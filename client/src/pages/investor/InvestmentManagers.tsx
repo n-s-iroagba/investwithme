@@ -17,9 +17,7 @@ useEffect(()=>{
         const fetchManagerData = async () => {
           try {
             const managerData = await getManagers(); 
-            console.log(managerData)// Wait for the data to be fetched
             managerData && setManagers(managerData);
-            console.log(managerData)
           } catch (error) {
             console.error(error);
             setErrorMessage('An error occurred while fetching managers. Please try again later.'); 
@@ -39,8 +37,7 @@ useEffect(()=>{
                     </h3>
                 </Col>
                <Row className='gx-2  gy-2 d-flex justify-content-center'>
-                {
-                (managers.map((manager:ManagerData) => (
+                {managers.length&&managers.map((manager:ManagerData) => (
                 <Col  key={manager.id} xs={12} md={6} lg={4}>
                     <InvestmentTiersCard
                         percentageYield={`${manager.percentageYield}%`}
@@ -53,7 +50,7 @@ useEffect(()=>{
                         button={<SelectManagerButton managerId={manager.id} />}
                     />
                 </Col>
-                )))}
+                ))}
                 </Row>
             </Row>
             </div>
