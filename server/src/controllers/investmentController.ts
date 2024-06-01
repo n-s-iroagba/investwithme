@@ -100,8 +100,6 @@ export const createInvestment = async (req: Request, res: Response): Promise<Res
 
     const responseWallet: AdminWallet | null = await AdminWallet.findOne({
       where: {
-        network: wallet.network,
-        blockchain: wallet.blockchain,
         currency: wallet.currency,
       }
     });

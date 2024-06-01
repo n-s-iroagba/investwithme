@@ -14,17 +14,13 @@ export interface CreatePromoType{
 }
 
 export interface CreateWalletType{
-  blockchain:string,
   address:string
-  network:string,
   currency:string
 }
 
 export interface WalletType{
   id:number
-  blockchain:string,
   address:string
-  network:string,
   currency:string
 }
 
@@ -46,8 +42,6 @@ export interface PortfolioDataType {
     incrementPercent: number;}
     wallet: {
       id: number;
-      network: string;
-      blockchain: string;
       address: string;
       currency: string;
     };

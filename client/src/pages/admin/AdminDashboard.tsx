@@ -7,6 +7,8 @@ import { MiniFooter } from '../../components/home_components/Footer';
 import { useNavigate } from 'react-router-dom';
 import '../../components/styles.css';
 import { getNewbies, logOut } from '../../utils/helpers';
+import Logo from '../../components/general/Logo';
+import logo from '../../assets/logo/whitelogo.png'
 
 
 const AdminDashboard: React.FC<{ username: string }> = ({ username }) => {
@@ -23,7 +25,7 @@ const AdminDashboard: React.FC<{ username: string }> = ({ username }) => {
   return (
     <div className='primary-background'>
     <div className='full-height px-5 py-4'>
-      <div className='d-flex justify-content-center align-items-center mb-4'>Logo</div>
+      <div className='d-flex justify-content-center align-items-center mb-4'><Logo logoImage={logo}/></div>
       <AdminDashboardBar username={username} />
       <Row className="d-flex justify-content-center gy-2 gx-2">
         {texts.map((text, index) => (

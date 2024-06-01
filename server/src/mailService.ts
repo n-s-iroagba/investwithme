@@ -234,5 +234,25 @@ const sendReminderMail =async (investor:Investor) => {
 }
 
 
-
+export const update = async ()=>{
+  try{
+   const investors = await Investor.findAll();
+ 
+   for (const investor of investors) {
+ 
+     const investments = await Investment.findAll({
+       where: {
+         investorId: investor.id
+       }
+     })
+     const hasValidInvestment = investments.some(investment => investment.amountDeposited > 0);
+ 
+     if (!hasValidInvestment) { 
+       await sendReminderMail(investor)
+     }
+   }
+ }catch(error){
+   console.error(error)
+ }
+ }
 

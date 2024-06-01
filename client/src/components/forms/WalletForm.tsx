@@ -11,13 +11,10 @@ import { createWallet } from '../../utils/adminWalletHelper';
 const WalletForm: React.FC = () => {
 
   const [walletData, setWalletData] = useState<CreateWalletType>({
-    blockchain: '',
     address: '',
-    network: '',
     currency: '',
   });
-  const networks = ['ERC']
-  const blockchains = ['IEB']
+
   const currencies = ['AB']
   const [validated, setValidated] = useState<boolean>(false);
   const [submitting, setSubmitting] = useState(false);
@@ -81,31 +78,6 @@ const WalletForm: React.FC = () => {
             ))}
           </Form.Select>
         </Form.Group>
-
-        <Form.Group className="mb-3" controlId="validationFormik04">
-          <Form.Label>Blockchain {required}</Form.Label>
-          <Form.Select onChange={(e) => handleSelect(e, 'blockchain')} value={walletData.blockchain}>
-            <option value="">Choose...</option>
-            {blockchains.map((blockchain, index) => (
-              <option key={index} value={blockchain}>
-                {blockchain}
-              </option>
-            ))}
-          </Form.Select>
-        </Form.Group>
-
-        <Form.Group className="mb-3" controlId="validationFormik04">
-          <Form.Label>Network {required}</Form.Label>
-          <Form.Select onChange={(e) => handleSelect(e, 'network')} value={walletData.network}>
-            <option value="">Choose...</option>
-            {networks.map((network, index) => (
-              <option key={index} value={network}>
-                {network}
-              </option>
-            ))}
-          </Form.Select>
-        </Form.Group>
-
 
         <Form.Group className="mb-4" as={Col} controlId="validationFormik01">
           <Form.Label className="mb-0">Address{required}</Form.Label>

@@ -3,7 +3,7 @@ import { Card, } from 'react-bootstrap';
 import { useState } from 'react';
 import PayModal from './PayModal';
 
-const PaymentCard: React.FC<{ address: string; amount: number; id: number,currency:string,entity:'referral'|'promo', network:string }> = ({ address, amount,currency,id,network,entity}) => {
+const PaymentCard: React.FC<{ address: string; amount: number; id: number,currency:string,entity:'referral'|'promo' }> = ({ address, amount,currency,id,entity}) => {
   const [copied,setCopied] = useState(false)
   const [showModal,setShowModal] = useState(false)
   const [idToBePaid,setIdToBePaid]=useState(0)
@@ -37,9 +37,7 @@ const pay = ()=>{
           <Card.Text>
           Currency: {currency}
         </Card.Text>
-        <Card.Text>
-          Network: {network}
-        </Card.Text>
+        
         < button className='button-styles' onClick={() => copyToClipboard(address)}>
           Copy Address
         </  button>

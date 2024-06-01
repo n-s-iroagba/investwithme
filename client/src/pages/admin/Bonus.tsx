@@ -32,7 +32,6 @@ const Bonus = () => {
         <PaymentCard key={dueBonus.id} 
         amount={dueBonus.amount}
         currency={dueBonus.wallet.currency}
-        network={dueBonus.wallet.network}
         address= {dueBonus.wallet.address}
         id={dueBonus.id}
         entity='promo' />

@@ -44,7 +44,8 @@ export const payReferralBonus = async (req: Request, res: Response): Promise<Res
 
     await Notification.create({
       title: 'Referral bonus imbursement',
-      message: `Congratulations! You have earned ${referral.amount} for referring ${referredInvestor.firstName} ${referredInvestor.lastName}. This earned bonus will be added to your investment and will be paid out on the due date of your investment payout.`,
+      message: `Congratulations! You have earned ${referral.amount} for referring ${referredInvestor.firstName} ${referredInvestor.lastName}. 
+      sThis earned bonus will be added to your investment and will be paid out on the due date of your investment payout.`,
       investorId: referrerInvestor.id,
     });
     referral.settled = true
@@ -92,6 +93,7 @@ export const getReferralDetails = async (req: Request, res: Response): Promise<R
     return res.status(error.status || 500).json(error);
   }
 }
+
 export const getAllDueReferrals = async (req: Request, res: Response): Promise<Response> => {
   try {
     const referrals = await Referral.findAll({

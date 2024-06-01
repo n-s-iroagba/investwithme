@@ -5,20 +5,18 @@ import { AdminWallet } from '../types/adminTypes';
 export const createAdminWallet = async (req: Request, res: Response): Promise<Response> => {
   console.log(req)
   try {
-    const { address, blockchain, network, currency } = req.body;
+    const { address,  currency } = req.body;
 
-    if (!blockchain || !address || !network || !currency) {
-      console.log('blockchain', blockchain)
+    if ( !address || !currency) {
+
       console.log('address', address)
-      console.log('network', network)
+    
       console.log('currency', currency)
       throw customError('incomplete payload from client', 400)
     }
 
     const wallet = await AdminWallet.create({
       address,
-      blockchain,
-      network,
       currency,
     });
 

@@ -152,7 +152,7 @@ export const createPromo = async (req: Request, res: Response): Promise<Response
         narration: 'Promo bonus imbursement',
       });
   
-      await Notification.create({ title: 'Bonus Payout', message: `Your Promo bonus of ${promo.amount} was paid to your crypto wallet kindly check to confirm` });
+      await Notification.create({ title: 'Bonus Payout', message: `Your Promo bonus of ${promo.amount} was paid to your crypto wallet kindly check to confirm`,investorId: promo.investorId });
       promo.settled = true;
       promo.save()
       const investor = await Investor.findByPk(promo.investorId);

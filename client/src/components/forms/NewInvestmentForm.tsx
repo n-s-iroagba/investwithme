@@ -19,8 +19,6 @@ const NewInvestmentForm: React.FC<{ username: string, }> = ({ username }) => {
 
   const [wallets, setWallets] = useState<WalletType[]>([]);
   const [walletVerified, setWalletVerified] = useState<boolean>(true)
-  const [filteredCurrencywallets, setFilteredCurrencyWallets] = useState<WalletType[]>([]);
-  const [filteredBlockchainWallets, setFilteredBlockchainWallets] = useState<WalletType[]>([]);
   const [amount, setAmount] = useState(0)
   const [validated, setValidated] = useState<boolean>(false);
   const [smallAmount, setSmallAmount] = useState<boolean>(false);
@@ -39,10 +37,8 @@ const NewInvestmentForm: React.FC<{ username: string, }> = ({ username }) => {
   const [investmentData, setInvestmentData] = useState<CreateInvestmentType>({
     amount: 0,
     wallet: {
-      network: '',
       address: '',
       currency: '',
-      blockchain: ''
     },
     manager: dummyManager
 
@@ -127,36 +123,10 @@ const NewInvestmentForm: React.FC<{ username: string, }> = ({ username }) => {
         currency: e.target.value
       }
     }));
-    const newfilteredWallets = wallets.filter(wallet => wallet.currency === e.target.value);
-    setFilteredCurrencyWallets(newfilteredWallets);
-
-  };
-  const handleBlockchainChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setInvestmentData(prevData => ({
-      ...prevData,
-      wallet: {
-        ...prevData.wallet,
-        blockchain: e.target.value
-      }
-    }));
-    const newfilteredWallets = filteredCurrencywallets.filter(wallet => wallet.blockchain === e.target.value);
-    setFilteredBlockchainWallets(newfilteredWallets);
-
-  };
-
-  const handleNetworkChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const { value } = e.target;
-    setInvestmentData(prevData => ({
-      ...prevData,
-      wallet: {
-        ...prevData.wallet,
-        network: value
-      }
-    }));
   };
 
   const verifyAddress = (address: any) => {
-    return WAValidator.validate(address, investmentData.wallet.blockchain)
+    return WAValidator.validate(address)
   }
 
   const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -219,9 +189,7 @@ const NewInvestmentForm: React.FC<{ username: string, }> = ({ username }) => {
   return (
     <>
       <h6 className='text-center w-100'>*{`${username}'s`} first portfolio*</h6>
-      <Form className="form py-5" noValidate validated={validated} onSubmit={submitInvestment}
-      >
-
+      <Form className="form py-5" noValidate validated={validated} onSubmit={submitInvestment}>
         <Form.Group className='mb-4' as={Col} lg="12" controlId="validationFormik04">
           <Form.Label>Investment Amount (in USD) {required}</Form.Label>
           <Form.Control
@@ -229,15 +197,17 @@ const NewInvestmentForm: React.FC<{ username: string, }> = ({ username }) => {
             type="number"
             name="amount"
             value={amount}
-            onChange={(e)=>handleAmountChange(e)}
-            className=" custom-input bg-transparent form-control text-light"
+            onChange={(e) => handleAmountChange(e)}
+            className="custom-input bg-transparent form-control text-light"
           />
         </Form.Group>
         <br />
         <Form.Group className='mb-4' as={Col} lg="12" controlId="validationFormik04">
           <Form.Label className='mb-0'>Investment Manager{required}</Form.Label>
           <Form.Select onChange={(e) => handleManagerChange(e)} value={investmentData.manager.firstName}>
-            <option value={investmentData.manager.id}>{investmentData.manager.firstName} {investmentData.manager.lastName}</option>
+            <option value={investmentData.manager.id}>
+              {investmentData.manager.firstName} {investmentData.manager.lastName}
+            </option>
             {managers.map((manager, index) => (
               <option key={index} value={manager.id}>
                 {manager.firstName} {manager.lastName}
@@ -246,12 +216,11 @@ const NewInvestmentForm: React.FC<{ username: string, }> = ({ username }) => {
           </Form.Select>
         </Form.Group>
 
-
         {wallets && (
           <>
             <Form.Group className="mb-3" controlId="validationFormik04">
-              <Form.Label>Currency {required}</Form.Label>
-              <Form.Select onChange={(e) => handleCurrencyChange(e)} value={investmentData.wallet.currency} >
+              <Form.Label>Crypto Currency of Deposits {required}</Form.Label>
+              <Form.Select onChange={(e) => handleCurrencyChange(e)} value={investmentData.wallet.currency}>
                 <option value="">Choose...</option>
                 {wallets.map((wallet, index) => (
                   <option key={wallet.id} value={wallet.currency} className='text-dark'>
@@ -260,60 +229,36 @@ const NewInvestmentForm: React.FC<{ username: string, }> = ({ username }) => {
                 ))}
               </Form.Select>
             </Form.Group>
-
-            <Form.Group className="mb-3" controlId="validationFormik04">
-              <Form.Label>Blockchain {required}</Form.Label>
-              <Form.Select onChange={(e) => handleBlockchainChange(e)}>
-                <option value="">Choose...</option>
-                {filteredCurrencywallets.map((wallet) => (
-                  <option key={wallet.id} value={wallet.blockchain}>
-                    {wallet.blockchain}
-                  </option>
-                ))}
-              </Form.Select>
-            </Form.Group>
-
-            <Form.Group className="mb-3" controlId="validationFormik04">
-              <Form.Label>Network {required}</Form.Label>
-              <Form.Select onChange={(e) => handleNetworkChange(e)}>
-                <option value="">Choose...</option>
-                {filteredBlockchainWallets.map((wallet) => (
-                  <option key={wallet.id} value={wallet.network}>
-                    {wallet.network}
-                  </option>
-                ))}
-              </Form.Select>
-            </Form.Group>
           </>
         )}
-
         <br />
         <Form.Group as={Col} lg="12" controlId="validationFormik04">
           <Form.Label>Wallet address{required}</Form.Label>
           <Form.Control
             required
             type="text"
-            name="investmentName"
+            name="address"
             value={address}
             onChange={handleAddressChange}
-            className=" custom-input bg-transparent form-control text-light"
+            className="custom-input bg-transparent form-control text-light"
           />
-          <Form.Text className='text-light'>*The wallet you wish to receive your profits, it should be same as the wallet you will make deposits with.</Form.Text>
+          <Form.Text className='text-light'>
+            *The wallet you wish to receive your profits, it should be same as the wallet you will make deposits with.
+          </Form.Text>
         </Form.Group>
-
         <br />
-
         <div className='d-flex justify-content-evenly w-100'>
-          <button className='button-styles w-50 text-light' type={submitting ? 'submit' : 'submit'}>
+          <button className='button-styles w-50 text-light' type='submit'>
             {submitting ? <Spinner animation='border' size='sm' /> : 'Submit'}
           </button>
-          <button className='button-styles text-light w-50' onClick={() => navigate('/dashboard')}> Dashboard</button>
+          <button className='button-styles text-light w-50' onClick={() => navigate('/dashboard')} type='button'>
+            Dashboard
+          </button>
         </div>
       </Form>
       <ErrorMessage message={errorMessage} />
-
     </>
-  )
-}
-export default NewInvestmentForm
+  );
+};
 
+export default NewInvestmentForm;

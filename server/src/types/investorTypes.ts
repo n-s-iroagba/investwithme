@@ -42,8 +42,6 @@ declare id: CreationOptional<number>;
 declare address: string;
 declare investmentId:ForeignKey<Investment['id']>
 declare investment: NonAttribute<Investment>
-declare network: string
-declare blockchain:string
 declare currency: string
  }
 
@@ -181,14 +179,6 @@ DepositWallet.init(
       primaryKey: true,
     },
     address: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    network:{
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    blockchain:{
       type: DataTypes.STRING,
       allowNull: false,
     },

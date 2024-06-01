@@ -17,10 +17,6 @@ export class AdminWallet extends Model<InferAttributes<AdminWallet>, InferCreati
   declare id: CreationOptional<number>;
     declare address: string;
     declare currency: string;
-    declare blockchain: string;
-    declare network: string;  
-   
-
   }
 
 export class Manager extends Model<InferAttributes<Manager>, InferCreationAttributes<Manager>> {
@@ -59,16 +55,6 @@ AdminWallet.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    blockchain: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: 'unique_blockchain_network',
-    },
-    network: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: 'unique_blockchain_network',
-    },
   },
   {
     sequelize, 
@@ -76,8 +62,8 @@ AdminWallet.init(
     indexes: [
       {
         unique: true,
-        fields: ['blockchain', 'network'],
-        name: 'unique_blockchain_network_index', // Custom index name for the unique pair
+        fields: ['currency'],
+        name: 'unique_currency_index', // Custom index name for the unique pair
       },
     ],
   }

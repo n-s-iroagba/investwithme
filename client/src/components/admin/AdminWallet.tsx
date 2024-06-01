@@ -15,10 +15,6 @@ const WalletCard: React.FC<{ wallet: WalletType, deleteButton: React.ReactNode, 
     <div className='px-1'>
       <Card className={`shade  round-card my-1 w-100`}>
         <Card.Body>
-          <small>Blockchain:</small>
-          <Card.Text >{wallet.blockchain}</Card.Text>
-          <small>Network:</small>
-          <Card.Text>{wallet.network}</Card.Text>
           <small>Currency:</small>
           <Card.Text>{wallet.currency}</Card.Text>
           <small>Address:</small>
@@ -27,7 +23,6 @@ const WalletCard: React.FC<{ wallet: WalletType, deleteButton: React.ReactNode, 
           <br />
           {deleteButton}
         </Card.Body>
-
       </Card>
     </div>
   )
@@ -39,9 +34,7 @@ const AdminWallet = () => {
   const [errorMessage, setErrorMessage] = useState('')
   const [data, setData] = useState<WalletType>({
     id: 0,
-    blockchain: '',
     address: '',
-    network: '',
     currency: ''
   })
   const [idToBeDeleted, setIdToBeDeleted] = useState(0)

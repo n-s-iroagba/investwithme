@@ -13,9 +13,9 @@ const PaymentWalletForm: React.FC = () => {
   const [wallet, setWallet] = useState<WalletType>({
     id: 0,
     address: 'no address available',
-    blockchain: 'not available',
+ 
     currency: 'not available',
-    network: 'not available'
+  
   })
   const [showModal, setShowModal] = useState<boolean>(false)
 
@@ -40,30 +40,13 @@ const PaymentWalletForm: React.FC = () => {
   return (
     <div className='d-flex flex-column pt-3 align-items-center'>
       <SuccessModal propShow={showModal} message={'Porfolio successfully created'} />
-      <Information center head={'Proceed to make your deposit'} text={'Copy the wallet address and make a transfer, be sure to take note of the currency, blockchain and network'} icon={faDollarSign} />
+      <Information center head={'Proceed to make your deposit'} text={'Copy the wallet address and make a transfer, be sure to take note of the currency, in order not to loose your deposit'} icon={faDollarSign} />
       <Form className="form py-5">
         <Form.Group className='mb-4'>
           <Form.Label>Currency:</Form.Label>
           <FormControl
             value={wallet.currency}
             className='px-0 text-center text-light custom-input bg-transparent form-control'
-
-          />
-        </Form.Group>
-
-        <Form.Group className='mb-4'>
-          <Form.Label>Blockchain</Form.Label>
-          <FormControl
-            value={wallet.blockchain}
-            className='px-0 text-center text-light custom-input bg-transparent form-control'
-          />
-        </Form.Group>
-
-        <Form.Group  className='mb-4'>
-          <Form.Label>Network</Form.Label>
-          <FormControl
-            value={wallet.network}
-            className='px-0 text-center text-light custom-input bg-transparent '
 
           />
         </Form.Group>

@@ -1,5 +1,6 @@
 import { AdminWallet } from "../server/src/types/adminTypes";
 import { Investment, Investor } from "../server/src/types/investorTypes";
+import { afterAll } from '@jest/globals';
 
 export interface CreateManagerPayLoad{
     firstName: string;
@@ -34,7 +35,7 @@ export interface CreateManagerPayLoad{
   export interface InvestmentCreationPayLoad{
     
       amount: number
-      wallet: DepositWalletCreationPayLoad
+      wallet:{currency:string,address:string}
       managerId: number
 
   }
@@ -44,9 +45,7 @@ export interface CreateManagerPayLoad{
   }
 
 export interface  DepositWalletCreationPayLoad{
-   currency: string;
-   blockchain: string;
-   network: string; 
+   currency: string; 
    address: string;
 }
 export interface InvestorAndInvestment{

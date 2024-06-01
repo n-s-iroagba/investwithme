@@ -37,7 +37,6 @@ const AdminReferral = () => {
         <PaymentCard key={referral.id}  
         amount={referral.amount}
         currency={referral.wallet.currency}
-        network={referral.wallet.network}
         address= {referral.wallet.address}
         id={referral.id} entity='referral' />
         </Col>

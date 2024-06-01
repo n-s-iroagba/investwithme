@@ -23,17 +23,16 @@ const Referrals: React.FC<{id:number}>= ({id}) => {
     try {
       const response:ReferralDetails = await getReferralDetails(id);
       if (response){
-      const data = response
-      setCode(data.referralCode);
-      setLink(`${clientDomain}/signup/${data.referralCode}`)
-      setReferrer(data.referrer)
-      setReferred(data.referred)
+    
+      setCode( response.referralCode);
+      setLink(`${clientDomain}/signup/${ response.referralCode}`)
+      setReferrer( response.referrer)
+      setReferred( response.referred)
       }
     } catch (error) {
       console.error('Error fetching text:', error);
     }
   };
-
 
     fetchReferral(); 
   }, [id]);
