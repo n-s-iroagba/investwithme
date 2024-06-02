@@ -29,7 +29,7 @@ useEffect(()=>{
 
     return (
         <div className='primary-background'>
-        <div className='d-flex flex-column align-contents-center px-3 full-height'>
+        <div className='d-flex flex-column align-items-center px-3 full-height'>
             <Row className='gy-4 gx-1'>
                 <Col xs={12}>
                     <h3 className='text-center mt-4 text-light'>

@@ -21,18 +21,20 @@ const PayModal:React.FC<{id:number,show:boolean,confirmAmount:number,paymentEnti
     setShowModal(false);
     window.location.reload()
   }
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     try {
       if (amount === confirmAmount) {
         if (paymentEntity === 'referral') {
-          payReferral(id);
+          await payReferral(id);
         } else {
-          payPromoBonus(id);
+          await payPromoBonus(id);
         }
         handleClose();
       } else {
-        setError('Incorrect Account');
+        setError('Incorrect Amount');
+        return;
       }
+
     } catch (error) {
       console.error('Error handling confirmation:', error);
     }

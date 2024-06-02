@@ -27,39 +27,33 @@ useEffect(() => {
    
 
     return (
-        <div className='d-flex flex-column align-items-center' >
-         {investmentData.length > 0?
-         <>
-        
-                    <h3 className='text-center mt-5 '>
-                       {text}
-                    </h3>
-                    {text && <div className='primary-line mb-4'/>}
-         
-                    <Row>
-               
-            
-                {investmentData.map((data, index) => (
-                    <Col className=' w-100' key={index} xs={12} md={6} lg={4}>
-                        <InvestmentTiersCard
-                            percentageYield={`${data.percentageYield}%`}
-                            image={data.image}
-                            firstName={data.firstName}
-                            lastName={data.lastName}
-                            qualification={data.qualification}
-                            minimumInvestmentAmount={`$${data.minimumInvestmentAmount}`}
-                            duration={`${data.duration} weeks`}
-                            button={<SelectManagerButton managerId={data.id} />}
-                        />
-                    </Col>
-                ))}
-         
-            </Row>
-            </>
-            :''
-}
-        </div>
-    );
-
+    <>
+      <div className='d-flex flex-column align-items-center'>
+       
+                  <h3 className='text-center mt-4'>
+                      {text}
+                  </h3>
+                  {text&&<div className='primary-line mb-4'/>}
+            </div>
+             <Row className='gx-2 gy-2 d-flex justify-content-center'>
+              {investmentData.length&&investmentData.map((manager:ManagerData) => (
+              <Col  key={manager.id} xs={12} md={6} lg={3}>
+                  <InvestmentTiersCard
+                      percentageYield={`${manager.percentageYield}%`}
+                      image={manager.image}
+                      firstName={manager.firstName}
+                      lastName={manager.lastName}
+                      qualification={manager.qualification}
+                      minimumInvestmentAmount={`$${manager.minimumInvestmentAmount}`}
+                      duration={`${manager.duration} weeks`}
+                      button={<SelectManagerButton managerId={manager.id} />}
+              
+                      />
+                      </Col>
+                      ))}
+                      </Row>
+             
+                  </>
+  );
 }
 export default InvestmentCards

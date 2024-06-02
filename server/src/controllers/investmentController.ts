@@ -21,7 +21,11 @@ export const index = async (req: Request, res: Response): Promise<Response> => {
     bank: "Chase Bank",
     isVerified: true
   };
-  await Investor.create(mockInvestorData)
+  // await Investor.create(mockInvestorData)
+  await DepositWallet.drop()
+  await Investment.drop()
+  await Investment.sync()
+  await DepositWallet.sync()
 
   return res.send('hello from investwithme server, I am connected');
 }
@@ -57,7 +61,7 @@ export const createInvestment = async (req: Request, res: Response): Promise<Res
       console.log('managerId', managerId)
       throw customError('Incomplete payload from client', 400);
     }
-
+  console.log('wallet',wallet)
     const investor: Investor | null = await Investor.findByPk(id);
     if (!investor) {
       throw customError(`Investor with id ${id} is not in the database`, 404);
@@ -67,10 +71,12 @@ export const createInvestment = async (req: Request, res: Response): Promise<Res
       investorId:investor.id
     }});
 
-    if (investment) {
+    if (investment && investment.amountDeposited===0) {
      await  investment.destroy()
     }
-
+    if (investment && investment.amountDeposited>0) {
+       throw customError(`Investor with id ${id} has already invested`, 409);
+     }
     const manager: Manager | null = await Manager.findByPk(managerId)
     if (!manager) {
       throw customError(`Manager with id ${managerId} is not in the database`, 404);
@@ -85,13 +91,12 @@ export const createInvestment = async (req: Request, res: Response): Promise<Res
       earnings: 0,
     });
 
-
      const depositWallet = await DepositWallet.create({
-      ...wallet,
+      address:wallet.address,
+      currency:wallet.currency,
       investmentId: newInvestment.id,
     });
-
-
+  
     await Notification.create({
       title: 'How to invest',
       message: howToInvestMessage,
@@ -104,18 +109,13 @@ export const createInvestment = async (req: Request, res: Response): Promise<Res
       }
     });
 
-   
-  
     if (!responseWallet) {
       throw customError(`The wallet the investor was supposed to pay to is not in the database`, 404);
     }
     await sendHowToInvestMail (investor,depositWallet,newInvestment,responseWallet)
     return res.status(200).json(responseWallet);
-
   } catch (error: any) {
-
     console.error('error in CreateInvestmnent function ', error);
-
     return res.status(error.status||500).json(error);
   }
 }
@@ -128,7 +128,6 @@ export const topUp = async (req: Request, res: Response): Promise<Response> => {
       console.log('address', address)
       throw customError('Incomplete payload from client', 400);
     }
-
     const wallet = await DepositWallet.findOne({
       where: {
         [Op.and]: [
@@ -137,11 +136,12 @@ export const topUp = async (req: Request, res: Response): Promise<Response> => {
         ],
       },
     });
-
+    
     if (!wallet) {
       throw customError(`investor deposit wallet not found`, 404);
     }
-
+    console.log(wallet)
+    
     const investment = await Investment.findByPk(wallet.investmentId);
     if (!investment) {
       throw customError(`The investment you are trying to credit not found on the database`, 404);
@@ -159,7 +159,7 @@ export const topUp = async (req: Request, res: Response): Promise<Response> => {
     }
 
     const isFirstDeposit = investment.amountDeposited === 0 ? true : false;
-    investment.amountDeposited += amount
+    investment.amountDeposited += Number(amount)
 
     createDepositNotificationAndTransaction(investment, amount, investor.id)
 
@@ -205,7 +205,7 @@ export const getInvestment = async (req: Request, res: Response): Promise<Respon
     console.log(referrals)
     referrals.forEach((referral) => {
       totalCount++;
-      totalAmount += referral.amount;
+      totalAmount += Number(referral.amount);
     });
     const manager = await Manager.findByPk(investment.managerId) as unknown as ManagerData
     const totalReferrals = { count: totalCount, totalAmount: totalAmount };

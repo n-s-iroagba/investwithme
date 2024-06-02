@@ -36,7 +36,7 @@ export const handlePromo = async (investor: Investor, amount: number): Promise<v
   await Notification.create({
       investorId: investor.id,
       title: 'Promo Bonus',
-      message: `Congratulations!\nYou just earned ${promoBonus} on your first deposit`,
+      message: `Congratulations!\nYou just earned $${promoBonus} on your first deposit`,
   });
 
   await Transaction.create({
@@ -75,7 +75,7 @@ export const createDepositNotificationAndTransaction = async (investment:Investm
     const notificationTitle = investment.amountDeposited >= investment.amount ? 'Investment deposit' : 'Incomplete Investment Deposit';
     const notificationMessage =
       investment.amountDeposited >= investment.amount
-        ? `Thank you,\nWe have received your deposit of ${amount}, we look forward to growing wealth with you.\nCheers,`
+        ? `Thank you,\nWe have received your deposit of $${amount}, we look forward to growing wealth with you.\nCheers,`
         : `Thank you,\nWe have received your deposit. However, we wish to notify you that the deposited amount (${investment.amountDeposited}) is lower than the actual required amount (${investment.amount}). Kindly ensure you pay the remaining amount as soon as possible.\nCheers,`;
 
     await Notification.create({

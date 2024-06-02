@@ -25,7 +25,7 @@ export const COMPANY_SUPPORT_EMAIL = 'iroagba97@gmail'
 
 export const REFERRAL_BONUS_PERCENT = 0.15
 
-export const howToInvestMessage = 'aaafkkfnasljfnal'//implement
+export const howToInvestMessage = 'Kindly check you email for guidance of contact us on our social media handle if you face any difficulty'
 
 
 

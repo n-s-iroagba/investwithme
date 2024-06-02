@@ -6,9 +6,6 @@ import { Op } from 'sequelize';
 import { ReferralDetails } from '../../../common/types';
 
 
-
-  
-
 export const payReferralBonus = async (req: Request, res: Response): Promise<Response> => {
   const { id } = req.params;
   try {
@@ -44,8 +41,7 @@ export const payReferralBonus = async (req: Request, res: Response): Promise<Res
 
     await Notification.create({
       title: 'Referral bonus imbursement',
-      message: `Congratulations! You have earned ${referral.amount} for referring ${referredInvestor.firstName} ${referredInvestor.lastName}. 
-      sThis earned bonus will be added to your investment and will be paid out on the due date of your investment payout.`,
+      message: `Congratulations! You have earned $${referral.amount} for referring ${referredInvestor.firstName} ${referredInvestor.lastName}.`,
       investorId: referrerInvestor.id,
     });
     referral.settled = true

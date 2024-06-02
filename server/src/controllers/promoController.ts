@@ -114,17 +114,17 @@ export const createPromo = async (req: Request, res: Response): Promise<Response
         throw customError('investor for the promo payment has not invested',404)
       }
     
-     const wallet = DepositWallet.findOne({where:{
+     const wallet = await DepositWallet.findOne({where:{
       investmentId:investment.id
      }})
     if (!wallet) {
       throw customError('wallet for promo not found',404)
     }   
-  
-    responseBody.push({id:promo.id,amount:promo.amount,wallet:wallet})
+    console.log(wallet)
+    responseBody.push({id:promo.id,amount:promo.amount,wallet:{address:wallet.address,currency:wallet.currency}})
       
     }
-      return res.status(200).json(pendingPromos)
+      return res.status(200).json(responseBody)
   
     } catch (error: any) {
       console.error('Error in getPendingPromo function:', error);
