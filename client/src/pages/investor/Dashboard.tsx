@@ -52,7 +52,6 @@ const Dashboard: React.FC<{username:string,id:number}>= ({username,id}) => {
       
       try {
         const response = await getInvestment(id);
-        console.log(response)
        if (response.status===200){
         setEarnings(response.data.investment.earnings)
         setAmountInvested(response.data.investment.amountDeposited)
@@ -80,8 +79,8 @@ const Dashboard: React.FC<{username:string,id:number}>= ({username,id}) => {
     
     <Card className='w-100 mb-3 background-secondary'>
       <Card.Body className='w-100 background-secondary'>
-      <Card.Title className='text-light' >Amount Invested: ${numberWithCommas(amountInvested)}</Card.Title>
-      <Card.Title className='text-light'>Earnings:         ${numberWithCommas(earnings)}</Card.Title>
+      <Card.Text className='text-light' >Amount Invested: ${numberWithCommas(amountInvested)}</Card.Text>
+      <Card.Text className='text-light'>Earnings:         ${numberWithCommas(earnings)}</Card.Text>
       <Card.Text className='text-light' >{amountInvested>0?'':'no investment yet'}</Card.Text>
       </Card.Body>
 

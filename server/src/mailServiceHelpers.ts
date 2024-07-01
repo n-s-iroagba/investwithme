@@ -110,15 +110,16 @@ export const getInvestmentPausedEmailContent = (investor: Investor, investment: 
   
       To complete your investment, please follow the instructions below:
   
-      1. Transfer the investment amount of ${investment.amount} ${adminWallet.currency} to the following wallet address:
-         - Admin Wallet Address: ${adminWallet.address}
+      1. Transfer the investment amount of ${investment.amount}  to the following wallet address:
+         - Crypto currency: ${adminWallet.currency}
+         - Wallet Address: ${adminWallet.address}
   
       2. Ensure that the transfer is made from your deposit wallet address that you submitted on our website when creating your portfolio:
          - Your Deposit Wallet Address: ${depositWallet.address}
   
       Once the transfer is complete, you will receive the deposit in your investment account within 12 hours.
   
-      If you have any questions or need assistance, please contact our support team at ${COMPANY_SUPPORT_EMAIL}
+      If you have any questions or need assistance, please contact our support team at ${COMPANY_SUPPORT_EMAIL} of on any of our social media handles
   
       We appreciate your trust and investment with us. We look forward to helping you achieve your investment goals.
   
@@ -135,7 +136,7 @@ export const getInvestmentPausedEmailContent = (investor: Investor, investment: 
   
       We are pleased to inform you that you have earned a referral bonus!
   
-      Thanks for your referral, ${investor.firstName} ${investor.lastName}, you have received a bonus of ${referral.amount}.
+      Thanks for your referral, ${investor.firstName} ${investor.lastName}, you have received a bonus of $${referral.amount}.
   
       We greatly appreciate your trust and support in recommending ${COMPANY_NAME} to your network.
   

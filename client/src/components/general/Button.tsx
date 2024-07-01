@@ -14,7 +14,7 @@ import { useNavigate } from 'react-router-dom';
 
 export const GetStartedButton:React.FC =()=>{
   const navigate = useNavigate()
-    return<button onClick={()=>navigate('/invest/managers')} className='button-styles button-width-narrower'><div>Get Started</div><div ><FontAwesomeIcon icon={faDollarSign} beatFade/></div></button>
+    return<button onClick={()=>navigate('/invest/managers')} className='button-styles button-width-narrower'><div className='text-light'>Get Started</div><div ><FontAwesomeIcon icon={faDollarSign} style={{color:'white'}} beatFade/></div></button>
 }
 export const SelectManagerButton: React.FC<{ managerId?: number }> = ({ managerId }) => {
   const navigate = useNavigate();

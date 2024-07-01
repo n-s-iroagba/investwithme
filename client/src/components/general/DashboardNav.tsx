@@ -17,7 +17,7 @@ export const DashboardBar: React.FC<{ username: string, numberOfNewNotifications
         <h6 className='text-wrap'>{props.username}</h6>
       </Col>
       <Col xs={3} className="d-flex justify-content-center align-items-center mb-3">
-        {props.numberOfNewNotifications>0 ? <div className=' d-flex justify-content-center'><FontAwesomeIcon className='h-100' onClick={()=>navigate('/notifications')} icon={faBell} beat /><div className='rounded-circle bg-danger px-1 py-1'>+{props.numberOfNewNotifications}</div></div> : < FontAwesomeIcon  onClick={()=>navigate('/notifications')} icon={faBell}/>}
+        {props.numberOfNewNotifications>0 ? <div className=' d-flex justify-content-center'><FontAwesomeIcon className='h-100' onClick={()=>navigate('/notifications')} icon={faBell} beat /><div className='rounded-circle pt-1 pr-1 bg-danger'>+{props.numberOfNewNotifications}</div></div> : < FontAwesomeIcon  onClick={()=>navigate('/notifications')} icon={faBell}/>}
       </Col>
     </Row>
   );

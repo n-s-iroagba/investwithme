@@ -296,9 +296,9 @@ div .card-primary-background {
     height: 0.7cm;
 }
 .certificate-image{
-    width:5cm;
+  width:100%;
     @media(min-width: 15cm){
-        width: 8cm;
+        width: 50%;
     }
 
 }

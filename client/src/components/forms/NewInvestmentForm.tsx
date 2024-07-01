@@ -7,10 +7,10 @@ import '../styles.css'
 import { CreateInvestmentType, WalletType } from '../../utils/types'
 import { InvestmentCreationPayLoad, ManagerData } from '../../../../common/types'
 import { findManagerWithHighestMinInvestment, findManagerById, } from '../../utils/utils'
-import { createInvestment } from '../../utils/helpers'
 import { getInvestorAuthData } from '../../utils/auth'
 import { getManagers } from '../../utils/managerHelper'
 import { getAdminWallets } from '../../utils/adminWalletHelper'
+import { createInvestment } from '../../utils/investmentHelper'
 const WAValidator = require('multicoin-address-validator')
 
 

@@ -40,6 +40,7 @@ import EmailVerificationError from "./pages/general/EmailVerificationError";
 import PasswordChangeCheckMail from "./pages/general/PasswordChangeCheckMail";
 import NewInvestment from "./pages/investor/NewInvestment";
 import FundManagers from "./pages/general/FundManagers";
+import HowToGuides from "./pages/investor/HowToGuides";
 
 
 
@@ -66,7 +67,12 @@ export const router = createBrowserRouter([
         element: <AboutUs />
     },
 
+   
 
+    {
+        path: '/how-to-guide',
+        element: <HowToGuides />
+    },
 
     {
         path: '/verify-email',

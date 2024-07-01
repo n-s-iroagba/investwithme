@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { Modal, Form, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-
-import { addInvestment } from '../../utils/helpers';
 import { MiniFooter } from '../../components/home_components/Footer';
 import { PayInvestorPayLoad } from '../../../../common/types';
+import { addInvestment } from '../../utils/investmentHelper';
 
 
 interface ModalFormProps {

@@ -262,7 +262,7 @@ export const updateInvestmentEarningsAndNotifiy = async ()=>{
        await investment.save()
        await  Notification.create({
         title:'Earnings',
-        message: `You've earned a total of ${investment.earnings} in total.,\n Thanks for choosing us.`,
+        message: `You've earned a total of $${investment.earnings} in total.,\n Thanks for choosing us.`,
         investorId: investor.id,
        })
        await sendEarningsMail(investor, investment.earnings)
@@ -273,7 +273,7 @@ export const updateInvestmentEarningsAndNotifiy = async ()=>{
  }
  }
 const  sendEarningsMail =(investor:Investor, earnings:number)=>{
-  const emailHtmlContent = `Dear ${investor.firstName}  ${investor.lastName},\n\nYou've earned a total of ${earnings} in total.,\n Thanks for choosing us.
+  const emailHtmlContent = `Dear ${investor.firstName}  ${investor.lastName},\n\nYou've earned a total of $${earnings} in total.,\n Thanks for choosing us.
    \n\nBest regards,\n
    Investment Team`
   try {

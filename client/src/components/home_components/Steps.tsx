@@ -1,12 +1,15 @@
 import React from 'react';
-import { faUser, faWallet, faBank } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faWallet, faBank, faDollarSign } from '@fortawesome/free-solid-svg-icons';
 import Information from '../general/Information';
 import { Col, Row } from 'react-bootstrap';
 import moneyBag from '../../assets/images/moneyBag.webp'
 import '../styles.css'
-import { GetStartedButton } from '../general/Button';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useNavigate } from 'react-router-dom';
+
 
 const Steps: React.FC = () => {
+  const navigate = useNavigate()
 
   return (
     <div className='px-4 py-4'>
@@ -17,13 +20,13 @@ const Steps: React.FC = () => {
         <p>Attaining financial freedom has never been so easy. Get started in 3 easy steps:</p>
       </div>
       <Row>
-        <Col sm={12} lg={6}>
+        <Col sm={12} lg={4}>
           <img className='w-100'src={moneyBag} alt='money_bag' />
         </Col>
-        <Col sm={12} lg={6}>
+        <Col sm={12} lg={8}>
 
        
-          <Row>
+          <Row >
             <Col lg={4}>
               <Information head='Create an account' text='by filling in the sign-up form and verifying your email.' icon={faUser}/>
             </Col>
@@ -37,13 +40,14 @@ const Steps: React.FC = () => {
           </Row>
         </Col>
       </Row>
-      <div>
-        <Row className='mt-0 d-flex justify-content-center align-items-center'>
-          <div className=' button-width-narrow'>
-            <GetStartedButton />
-          </div>
-        </Row>
-      </div>
+      <div className='w-100 d-flex justify-content-center'>
+      <button onClick={()=>navigate('/invest/managers')} className='button-styles button-width-narrower'>
+        <div>Get Started
+        </div>
+        <div ><FontAwesomeIcon icon={faDollarSign}  beatFade/>
+        </div>
+        </button>
+         </div>
     </div>
   );
 };

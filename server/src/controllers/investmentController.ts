@@ -3,9 +3,12 @@ import { howToInvestMessage,  } from '../config';
 import { Investor, DepositWallet, Investment, Referral, Notification, } from '../types/investorTypes';
 import { AdminWallet, Manager } from '../types/adminTypes';
 import { changeManager, createDepositNotificationAndTransaction, customError,handleFirstDepositReferral, handleIsPaused, handlePromo } from '../helpers';
-import { Op, Sequelize } from 'sequelize';
+import { FindOptions, IncrementDecrementOptionsWithBy, InferAttributes, InferCreationAttributes, InstanceUpdateOptions, Model, Op, SaveOptions, Sequelize } from 'sequelize';
 import { InvestmentCreationPayLoad, ManagerData, PayInvestorPayLoad, Portfolio } from '../../../common/types';
 import { sendHowToInvestMail, sendInvestmentDepositReceivedEmail } from '../mailService';
+import { SequelizeHooks } from 'sequelize/types/hooks';
+import { ValidationOptions } from 'sequelize/types/instance-validator';
+import { Fn, Col, Literal } from 'sequelize/types/utils';
 
 
 
@@ -26,6 +29,8 @@ export const index = async (req: Request, res: Response): Promise<Response> => {
   await Investment.drop()
   await Investment.sync()
   await DepositWallet.sync()
+  // const investment = await Investment.findAll()
+  // console.log(investment)
 
   return res.send('hello from investwithme server, I am connected');
 }
@@ -61,7 +66,7 @@ export const createInvestment = async (req: Request, res: Response): Promise<Res
       console.log('managerId', managerId)
       throw customError('Incomplete payload from client', 400);
     }
-  console.log('wallet',wallet)
+
     const investor: Investor | null = await Investor.findByPk(id);
     if (!investor) {
       throw customError(`Investor with id ${id} is not in the database`, 404);
@@ -192,12 +197,24 @@ export const topUp = async (req: Request, res: Response): Promise<Response> => {
 export const getInvestment = async (req: Request, res: Response): Promise<Response> => {
   const { id } = req.params;
   console.log('id is ' + id)
-
+  const tempInvestment = {
+    id: 0,
+    amount: 0,
+    amountDeposited: 0,
+    earnings: 0,
+    investmentDate: null,
+    isPaused: false,
+    investorId: 0,
+    investor: 0,
+    manager: null,
+    managerId: 1,
+    depositWallet: null,
+  } as unknown as Investment
   try {
-    const investment = await Investment.findOne({ where: { investorId: id } });
-    console.log(investment)
+    let investment = await Investment.findOne({ where: { investorId: id } });
+
     if (!investment) {
-      throw customError('no investment yet', 404)
+      investment = tempInvestment
     }
 
     const referrals = await Referral.findAll({ where: { referrerId: id } })

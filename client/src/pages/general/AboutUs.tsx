@@ -15,7 +15,7 @@ const AboutUs:React.FC = ()=>{
         <div className='primary-line mb-2' />
         <Row>
 
-        <Col xs={12} md={6}><img src={image} className="w-100" alt='about-us'/></Col>
+        <Col xs={12} md={6}><img src={image} className="w-100 pt-3" alt='about-us'/></Col>
         <Col>
         <Information head={''} text={`
 Welcome to ${companyName}, where your financial success is our top priority. 

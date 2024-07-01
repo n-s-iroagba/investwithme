@@ -1,30 +1,17 @@
-import { deleteItem, getData, patchItem, postData,} from "./api";
-import { AddInvestmentType, } from "./types";
+import { deleteItem, getData} from "./api";
+
 
 import {
   getPendingReferralUrl,
   getInvestorsUrl,
   getReferralDetailsRoute,
  getPendingBonusUrl,
-createInvestmentRoute,  payUrl,
  deleteInvestorRoute, payReferralRoute,
   payBonusRoute, getTransactionsRoute,
    getNotificationsRoute, getInvestmentRoute, 
   getInvestmentStatusRoute, 
   markNotificationsRoute
 } from "./constants";
-
-export const createInvestment = async (data:any,investorId:string) => {
-  const createInvestmentUrl = `${createInvestmentRoute}/${investorId}`;
-  try {
-    const authorizationData = localStorage.getItem('cassockJwtToken');
-    return await postData(createInvestmentUrl, data, authorizationData);
-  }catch (error:any) {
-    console.error(error)
-    alert('sorry investments can not be made at this time, kindly come back later')
-   }
-};
-
 
 export const deleteInvestor = async (id:number)=>{
   const url =`${deleteInvestorRoute}/${id}`
@@ -42,25 +29,11 @@ export const deleteInvestor = async (id:number)=>{
 }
 }
 
-export const addInvestment =async (data:AddInvestmentType) =>{
-  try {
-    const authorizationData = localStorage.getItem('cassockJwtToken');
-    const response = await patchItem(payUrl,data,authorizationData);
-    if (response.status === 200) {
-      alert('investment deposit successfully added succesfully')
-      window.location.reload();
-  }
-}catch (error:any) {
- console.error(error)
-  alert('unable to add investment amount at this time')
-}
-}
-
-export const payReferral = (id:number)=>{
+export const payReferral = async (id:number)=>{
   const url = `${payReferralRoute}/${id}`
   const authorizationData = localStorage.getItem('cassockJwtToken');
   try{
-  const response:any = getData(url, authorizationData);
+  const response:any =await getData(url, authorizationData);
   if (response.status ===200)
   alert('referral successfully paid')
   window.location.reload();
@@ -69,11 +42,11 @@ export const payReferral = (id:number)=>{
    alert('unable to pay referral at this time')
   }
 }
-export const payPromoBonus = (id:number)=>{
+export const payPromoBonus =async (id:number)=>{
   const url = `${payBonusRoute}/${id}`
   const authorizationData = localStorage.getItem('cassockJwtToken');
   try{
-  const response:any = getData(url, authorizationData);
+  const response:any = await getData(url, authorizationData);
   if (response.status ===200){
     alert('promo bonus successfully paid')
     window.location.reload();

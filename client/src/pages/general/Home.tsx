@@ -69,13 +69,13 @@ useEffect(()=>{
       </button>
          ):
       (<div>
-             <Modal.Dialog className='d-flex flex-column'>
+             <Modal.Dialog>
              <Modal.Header>
-               <Modal.Title>Certificate of Incoporation</Modal.Title>
+               <Modal.Title className="w-100 text-center">Certificate of Incoporation</Modal.Title>
              </Modal.Header>
      
-             <Modal.Body>
-             <img className='certificate-image' src={image} alt='Certificate of Incorporation' />
+             <Modal.Body className="d-flex justify-content-center">
+             <img className=' certificate-image' src={image} alt='Certificate of Incorporation' />
              </Modal.Body>
      
              <Modal.Footer className="d-flex justify-content-center">

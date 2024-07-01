@@ -44,6 +44,7 @@ useEffect(() => {
     try {
       const data: InvestorAndInvestment[] = await getInvestors();
     data&& setInvestorData(data);
+    console.log('investor',data)
     } catch (error) {
       console.error('Error fetching  data.investor data:', error);
     }
