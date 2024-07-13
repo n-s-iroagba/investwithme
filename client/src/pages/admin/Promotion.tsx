@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import { Card } from 'react-bootstrap'
-import PromoFormModal from '../../components/admin/PromoFormModal'
-import { MiniFooter } from '../../components/home_components/Footer'
+import PromoFormModal from '../../features/promo/components/PromoFormModal'
+import MiniFooter from '../../common/components/MiniFooter'
+import ExtendPromoFormModal from '../../features/promo/components/ExtendPromoModal'
 
-import ExtendPromoFormModal from '../../components/admin/ExtendPromoModal'
-import { PromoType } from '../../utils/types'
-import { formatStartDate } from '../../utils/utils'
-import { getPromo } from '../../utils/promoHepler'
-import ErrorMessage from '../../components/general/ErrorMessage'
-
+import ErrorMessage from '../../common/components/ErrorMessage'
+import { PromoDto } from '../../../../common/promoTypes'
+import { formatStartDate } from '../../features/investment/utils/utils'
+import '../../common/styles/styles.css'
+import { getPromo } from '../../features/promo/helpers/promoApiHelpers'
 
 const Promotion = () => {
-    const [promo, setPromo] =useState<PromoType|null>(null)
+    const [promo, setPromo] =useState<PromoDto|null>(null)
     const [showAddPromoModal, setShowAddPromoModal] = useState(false)
     const [showEditPromoModal, setShowEditPromoModal] = useState(false)
     const [errorMessage,setErrorMessage] = useState('')

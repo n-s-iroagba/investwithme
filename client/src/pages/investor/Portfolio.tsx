@@ -1,14 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import PortfolioComponent from '../../components/investor/PortfolioComponent';
+import PortfolioLayout from '../../features/investment/layout/PortfolioLayout';
 import { useNavigate } from 'react-router-dom';
-import { Portfolio } from '../../../../common/types';
+
 import { Investment } from '../../../../server/src/types/investorTypes';
+
+import '../../common/styles/styles.css'
+import { getInvestment } from '../../features/investment/helpers/investmentApiHelpers';
+import { Manager } from '../../../../common/managerType';
+import { PortfolioDto } from '../../features/investment/types/types';
 
 
 
 const PortfolioWrapper:React.FC = ()=>{
 
-    const [investmentData, setInvestmentData] = useState<Portfolio>({
+    const [investmentData, setInvestmentData] = useState<PortfolioDto>({
       investment: {
         id: 1,
         investmentDate: new Date(),
@@ -18,35 +23,41 @@ const PortfolioWrapper:React.FC = ()=>{
         isPaused: false
       } as unknown as Investment,
       manager:{
-        id: 0,
         firstName: '',
         lastName: '',
-        image: '',
         duration: 0,
         qualification: '',
         minimumInvestmentAmount: 0,
         percentageYield: 0,
-      },
+      } as Manager,
     referrals: { totalAmount: 0, count: 0 },
   
     })
-  
+
     const navigate = useNavigate()
 
     useEffect(() => {
-      const investment = localStorage.getItem('cassockInvestment')
-      if (investment) {
-        setInvestmentData(JSON.parse(investment))
-      }
-    }, [])
-
+      const fetchData = async () => {
+        try {
+          const investment = await getInvestment(1);
+          localStorage.setItem('cassockInvestment','investment') //check if the user has invested else return empty object and promo pull should only be on the said day
+          if (investment) {//handle not invested case and handle not promo due case
+            setInvestmentData(investment.data);
+          }
+        } catch (error) {
+          console.error('Error fetching investment data:', error);
+        }
+      };
+  
+      fetchData();
+    }, []);
    
  return(
 <div className='d-flex flex-column align-items-center'>
     <h1 className='text-center my-2'>My Portfolio</h1>
 {investmentData.investment.amountDeposited===0 && <button className='mb-3 button-styles text-light button-width-narrow' onClick={()=>navigate('/invest/managers')}>Invest</button>
 }
-<PortfolioComponent investmentData={investmentData}/>
+<PortfolioLayout investmentData={investmentData}/>
 </div>
 
  )

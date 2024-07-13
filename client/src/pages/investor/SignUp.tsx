@@ -1,9 +1,10 @@
 import React from 'react'
-import SignUpForm from '../../components/auth/investor/SignUpForm'
-import { LoginOption } from '../../components/auth/general/AuthOption'
+import SignUpForm from '../../features/auth/layout/SignUpForm'
+import { LoginOption } from '../../features/auth/components/AuthOption'
 import { faUser } from '@fortawesome/free-solid-svg-icons'
-import Information from '../../components/general/Information'
-import { MiniFooter } from '../../components/home_components/Footer'
+import Information from '../../common/components/Information'
+import MiniFooter from '../../common/components/MiniFooter'
+import '../../common/styles/styles.css'
 
 const SignUp:React.FC = ()=>{
     return(
@@ -19,6 +20,7 @@ const SignUp:React.FC = ()=>{
      
         </div>
         <MiniFooter/>
+        
         </div>
     )
 }

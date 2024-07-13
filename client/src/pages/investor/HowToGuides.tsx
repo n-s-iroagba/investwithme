@@ -1,70 +1,81 @@
 import React from 'react';
-import { Row, Col,Card } from 'react-bootstrap';
-import { MiniFooter } from '../../components/home_components/Footer';
-
+import {  Col } from 'react-bootstrap';
+import MiniFooter from '../../common/components/MiniFooter';
+import '../../common/styles/styles.css'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCircleQuestion, faDiagramNext } from '@fortawesome/free-solid-svg-icons';
 // Define types for the step
 type Step = {
   title: string;
-  description: string;
-  icon: string;
+
+
 };
 
 // Steps data
 const steps: Step[] = [
   {
-    title: 'Step 1: Create an Account',
-    description: 'Sign up by providing your personal information and verifying your email address.',
-    icon: 'https://via.placeholder.com/50', // Replace with actual icon URL
+    title: 'Ensure you have a cryptocurrency wallet for deposits and withdrawals'
   },
   {
-    title: 'Step 2: Set Up Your Profile',
-    description: 'Complete your profile by adding financial details and investment preferences.',
-    icon: 'https://via.placeholder.com/50', // Replace with actual icon URL
+    title: 'Click on the "Invest" button on the dashboard',
+
+
   },
   {
-    title: 'Step 3: Link Your Bank Account',
-    description: 'Securely link your bank account to enable deposits and withdrawals.',
-    icon: 'https://via.placeholder.com/50', // Replace with actual icon URL
+    title: 'Select the manager you wish to manage your investment',
+
+
   },
   {
-    title: 'Step 4: Choose Your Investment Strategy',
-    description: 'Select an investment strategy that aligns with your financial goals and risk tolerance.',
-    icon: 'https://via.placeholder.com/50', // Replace with actual icon URL
+    title: 'Fill in the form accordingly and submit. Ensure that the currency selected matches the currency and wallet you wish to invest with.',
+
+
   },
   {
-    title: 'Step 5: Build Your Portfolio',
-    description: 'Add assets to your portfolio by purchasing stocks, bonds, or other investment products.',
-    icon: 'https://via.placeholder.com/50', // Replace with actual icon URL
+    title: 'Copy the address and proceed to make a deposit to the copied wallet address ',
+
   },
   {
-    title: 'Step 6: Monitor and Adjust',
-    description: 'Regularly monitor your portfolio and make adjustments as needed to stay on track with your goals.',
-    icon: 'https://via.placeholder.com/50', // Replace with actual icon URL
+    title: 'Monitor the progress of your investment',
+
+
   },
+  {
+    title: 'On your payout date, click the "Withdraw" button on the dashboard and then click the "Withdraw" button on the Withdrawal page',
+
+
+  },
+
 ];
 
 // HowToGuides component
 const HowToGuides: React.FC = () => {
   return (
-    <div className='primary-background text-light'>
-    <div className='full-height'>
-      <h2 className="text-center mb-4">How to Create a Portfolio</h2>
-      <Row  className="gx-2 gy-2 d-flex justify-content-center">
-      {steps.map((step, index) => (
-        
-          <Col   key={index} xs={10} md={6} lg={4}>
-            <Card className='w-100' style={{height:'4cm'}}>
-              <Card.Body>
-                <Card.Title>{step.title}</Card.Title>
-                <Card.Text>{step.description}</Card.Text>
-              </Card.Body>
-            </Card>
+    <div >
+      <div className='full-height px-3'>
+        <h2 className="text-center">Investment Process</h2>
+        <div className='d-flex justify-content-center'>
+        <div className='primary-line mb-2'></div>
+        </div>
+        <div className='d-flex justify-content-center flex-column align-items-center'>
+
+          <FontAwesomeIcon icon={faCircleQuestion} />
+        </div>
+
+        {steps.map((step, index) => (
+
+          <Col key={index}>
+
+            <FontAwesomeIcon icon={faDiagramNext} />
+            <h5>{`Step ${index+1}`}</h5>
+            <p>{step.title}</p>
+
           </Col>
-        
-      ))}
-      </Row>
+
+        ))}
+        <p className='text-center'>Thank you for trusting us...</p>
       </div>
-      <MiniFooter primaryVariant/>
+      <MiniFooter primaryVariant />
     </div>
   );
 };

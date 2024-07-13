@@ -1,9 +1,10 @@
 import React from 'react'
-import AdminSignUpForm from '../../components/auth/admin/AdminSignUpForm'
-import Information from '../../components/general/Information'
+import { LoginOption } from '../../features/auth/components/AuthOption'
 import { faUser } from '@fortawesome/free-solid-svg-icons'
-import { LoginOption } from '../../components/auth/general/AuthOption'
-import { MiniFooter } from '../../components/home_components/Footer'
+import Information from '../../common/components/Information'
+import AdminSignUpForm from '../../features/auth/layout/AdminSignUpForm'
+import MiniFooter from '../../common/components/MiniFooter'
+import '../../common/styles/styles.css'
 
 const AdminSignUp: React.FC = () => {
 

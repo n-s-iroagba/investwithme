@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { Row, Col } from 'react-bootstrap';
-import { InvestmentTiersCard } from '../../components/general/InvestmentTiersCard';
-import { MiniFooter } from '../../components/home_components/Footer';
-import { ManagerData } from '../../../../common/types';
-import { SelectManagerButton } from '../../components/general/Button';
-import { getManagers } from '../../utils/managerHelper';
-import ErrorMessage from '../../components/general/ErrorMessage';
-
+import ManagerCard from '../../common/components/ManagerCard'; 
+import MiniFooter from '../../common/components/MiniFooter';
+import { SelectManagerButton } from '../../common/components/Button';
+import ErrorMessage from '../../common/components/ErrorMessage';
+import '../../common/styles/styles.css'
+import { ManagerDto } from '../../../../common/managerType';
+import { getManagers } from '../../features/manager/helpers/managerApiHelpers';
 
 
 const InvestmentManagers: React.FC = () => {
-const [managers,setManagers] = useState<ManagerData[]>([])
+const [managers,setManagers] = useState<ManagerDto[]>([])
 const [errorMessage, setErrorMessage]=useState('')
 
 useEffect(()=>{
@@ -25,7 +25,7 @@ useEffect(()=>{
         }
   
       fetchManagerData(); 
-    }, []);
+    });
 
     return (
         <div className='primary-background'>
@@ -37,9 +37,9 @@ useEffect(()=>{
                     </h3>
                 </Col>
                <Row className='gx-2  gy-2 d-flex justify-content-center'>
-                {managers.length&&managers.map((manager:ManagerData) => (
+                {managers.length?managers.map((manager:ManagerDto) => (
                 <Col  key={manager.id} xs={12} md={6} lg={4}>
-                    <InvestmentTiersCard
+                    <ManagerCard
                         percentageYield={`${manager.percentageYield}%`}
                         image={manager.image}
                         firstName={manager.firstName}
@@ -50,7 +50,9 @@ useEffect(()=>{
                         button={<SelectManagerButton managerId={manager.id} />}
                     />
                 </Col>
-                ))}
+                ))
+              : <h3 className='text-light text-center'>No managers available yet</h3>
+              }
                 </Row>
             </Row>
             </div>

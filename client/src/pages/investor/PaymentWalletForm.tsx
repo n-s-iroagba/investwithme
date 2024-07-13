@@ -1,23 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import Form from 'react-bootstrap/Form';
-import { WalletType } from '../../utils/types';
-import '../../components/styles.css'
-import Information from '../../components/general/Information';
+import Information from '../../common/components/Information';
 import { faDollarSign } from '@fortawesome/free-solid-svg-icons';
-import SuccessModal from '../../components/general/SuccessModal';
 import { FormControl } from 'react-bootstrap';
-import { MiniFooter } from '../../components/home_components/Footer';
+import MiniFooter from '../../common/components/MiniFooter';
+import { WalletDto } from '../../../../common/walletTypes';
+import '../../common/styles/styles.css'
 
 
 const PaymentWalletForm: React.FC = () => {
-  const [wallet, setWallet] = useState<WalletType>({
+  const [wallet, setWallet] = useState<WalletDto>({
     id: 0,
     address: 'no address available',
  
     currency: 'not available',
   
   })
-  const [showModal, setShowModal] = useState<boolean>(false)
+
 
   const handleCopyToClipboard = async () => {
     try {
@@ -33,13 +32,12 @@ const PaymentWalletForm: React.FC = () => {
 
     if (storedWallet) {
       setWallet(JSON.parse(storedWallet));
-      setShowModal(true);
+    
     }
   }, [])
 
   return (
     <div className='d-flex flex-column pt-3 align-items-center'>
-      <SuccessModal propShow={showModal} message={'Porfolio successfully created'} />
       <Information center head={'Proceed to make your deposit'} text={'Copy the wallet address and make a transfer, be sure to take note of the currency, in order not to loose your deposit'} icon={faDollarSign} />
       <Form className="form py-5">
         <Form.Group className='mb-4'>

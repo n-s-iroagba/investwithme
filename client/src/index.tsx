@@ -3,14 +3,14 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import { RouterProvider } from 'react-router-dom';
 import reportWebVitals from './reportWebVitals';
-import {router} from './router'
+import {router} from './router/router'
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 // index.js or index.tsx
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { AuthContextProvider } from './context/AuthContext';
+import { AuthContextProvider } from './features/auth/context/AuthContext';
 
 
 const root = ReactDOM.createRoot(

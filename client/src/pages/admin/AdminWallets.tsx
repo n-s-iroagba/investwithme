@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import '../../components/styles.css'
-import AdminWallet from '../../components/admin/AdminWallet';
-import WalletForm from '../../components/forms/WalletForm';
-import { MiniFooter } from '../../components/home_components/Footer';
+import MiniFooter from '../../common/components/MiniFooter';
+import WalletForm from '../../features/wallet/layout/WalletForm';
+import AdminWallet from '../../features/wallet/layout/AdminWallet';
+import '../../common/styles/styles.css'
+
 const AdminWallets: React.FC = () => {
   const [showWallets, setShowWallets] = useState<boolean>(true)
 

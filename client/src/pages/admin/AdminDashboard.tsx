@@ -1,14 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Row, Col } from 'react-bootstrap';
-import DashboardNav from '../../components/general/DashboardNav';
-import { faHandHoldingDollar, faWallet, faUser, faDotCircle } from '@fortawesome/free-solid-svg-icons';
-import { AdminDashboardBar } from '../../components/general/DashboardNav';
-import { MiniFooter } from '../../components/home_components/Footer';
+
+import { faHandHoldingDollar, faWallet, faUser } from '@fortawesome/free-solid-svg-icons';
+
+import MiniFooter from '../../common/components/MiniFooter';
 import { useNavigate } from 'react-router-dom';
-import '../../components/styles.css';
-import { getNewbies, logOut } from '../../utils/helpers';
-import Logo from '../../components/general/Logo';
+import '../../common/styles/styles.css'
+
+import Logo from '../../common/components/Logo';
 import logo from '../../assets/logo/whitelogo.png'
+import DashboardNav, { AdminDashboardBar } from '../../features/investment/components/DashboardNav';
+import { logOut } from '../../features/auth/helpers/helper';
 
 
 const AdminDashboard: React.FC<{ username: string }> = ({ username }) => {
@@ -16,11 +18,8 @@ const AdminDashboard: React.FC<{ username: string }> = ({ username }) => {
   const icons = [faUser, faWallet, faUser, faHandHoldingDollar];
   const actions: string[] = ['admin/managers', 'admin/wallets', 'admin/investor-dashboard', 'admin/promo'];
   const texts: string[] = ['Managers', 'Wallets', 'Investors', 'Promo'];
-  const [newbies,setNewbies] = useState<string[]>([]);
-  useEffect(()=>{
-      const newbiesResponse = getNewbies()
-      setNewbies(newbiesResponse)
-  }, [],)
+
+
 
   return (
     <div className='primary-background'>
@@ -30,11 +29,9 @@ const AdminDashboard: React.FC<{ username: string }> = ({ username }) => {
       <Row className="d-flex justify-content-center gy-2 gx-2">
         {texts.map((text, index) => (
           <Col key={text} xs={6} sm={4} md={3}>
-              {newbies.includes(text) ? (
-                <DashboardNav action={() => navigate('/' + actions[index])} text={text} icon={icons[index]} notifIcon={faDotCircle} />
-              ) : (
+
                 <DashboardNav action={() => navigate('/' + actions[index])} text={text} icon={icons[index]} />
-              )}
+              
 
           </Col>
         ))}

@@ -16,11 +16,8 @@ code {
   --primary-color:#1a6e41;
 
   --secondary-color: #79b294;
- --opacity: rgba(254, 250, 250, 0.15);
-  --font-family: 'Arial', sans-serif;
-  --shallow-horizontal-space:5vw;
-  --deep-vertical-space:2cm;
-  --shallow-vertical-space: 1cm; 
-  --line-height:0.4cm
+  --opacity: rgba(254, 250, 250, 0.15);
+  --font-family: sans-serif;
+
 
 }

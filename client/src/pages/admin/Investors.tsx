@@ -1,39 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { Accordion, Card, Col, Row } from 'react-bootstrap';
-import DeleteModal from '../../components/admin/DeleteModal';
-import { getInvestors } from '../../utils/helpers';
-import { formatStartDate } from '../../utils/utils';
-import { InvestorAndInvestment } from '../../../../common/types';
-import { MiniFooter } from '../../components/home_components/Footer';
+import {Col, Row } from 'react-bootstrap';
+import DeleteModal from '../../common/components/DeleteModal';
 
-const InvestorsCard: React.FC<{ firstName: string, lastName: string,amount:number,amountDeposited:number,date:Date|null, deleteButton:JSX.Element }> = ({ firstName,
-  lastName,
-   amount,
-   amountDeposited,
-   date,
-  
-    deleteButton}) => {
+import MiniFooter from '../../common/components/MiniFooter';
+import { InvestorAndInvestment } from '../../../../common/compositeTypes';
+import '../../common/styles/styles.css'
+import InvestorsCard from '../../features/investor/components/InvestorsCard';
+import { getInvestors } from '../../features/investor/helpers/investorHelpers';
 
- return (
-   <Accordion>
-     <Accordion.Item eventKey="0">
-       <Accordion.Header> {firstName} {lastName}</Accordion.Header>
-       <Accordion.Body>
-         <Card className='w-100'>
-           <Card.Body>
-            <Card.Text>Investment Amount: {amount}</Card.Text>
-            <Card.Text>Amount currently deposited: {amountDeposited}</Card.Text>
-            <Card.Text>Date of firstDeposit {date?formatStartDate(new Date(date).toISOString()):'no deposit made yet'}</Card.Text>
-            <Card.Text></Card.Text>
-            <Card.Text></Card.Text>
-           </Card.Body> 
-         </Card>
-        <div className='d-flex justify-content-center mt-3'>{deleteButton}</div>
-       </Accordion.Body>
-       </Accordion.Item>
-   </Accordion>
- );
-};
+
+
 
 const Investors = () => {
   const [idToBeDeleted, setIdToBeDeleted] = useState(0)
@@ -66,13 +42,12 @@ setIdToBeDeleted(id)
       {investorData.length?investorData.map((data,index) => (
         <Col md={6}>
         <InvestorsCard
-         firstName={ data.investor.firstName}
-         lastName={data.investor.lastName}
-         amount={data.investment.amount}
-         date={data.investment.investmentDate}
-         amountDeposited={data.investment.amountDeposited}
-          deleteButton={<button className='red-button button-width-narrow' onClick={()=>handleDelete(data.investor.id)}>Delete</button>} 
-        />
+            firstName={data.investor.firstName}
+            lastName={data.investor.lastName}
+            amount={data.investment.amount}
+            date={data.investment.investmentDate || new Date()}
+            amountDeposited={data.investment.amountDeposited}
+            deleteButton={<button className='red-button button-width-narrow' onClick={() => handleDelete(data.investor.id)}>Delete</button>} hasInvested={false} withdrawalDate={''} dueForWithdrawal={false} completeDeposit={false}        />
         </Col>
       )):
       <h2 className='text-center text-light'>No Investors...</h2>

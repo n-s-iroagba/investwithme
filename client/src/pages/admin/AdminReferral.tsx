@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
-import { MiniFooter } from '../../components/home_components/Footer';
-import PaymentCard from '../../components/admin/PaymentCard';
-import { ReferralType } from '../../utils/types';
-import { getUnpaidReferrals } from '../../utils/helpers';
-
+import MiniFooter from '../../common/components/MiniFooter';
+import PaymentCard from '../../features/payments/components/PaymentCard';
+import { getUnpaidReferrals } from '../../features/referral/helpers/referralHelpers';
+import { ReferralDto } from '../../../../common/referralTypes'
+import '../../common/styles/styles.css'
 const AdminReferral = () => {
-  const [referrals, setReferral] = useState<ReferralType[]>([])
+  const [referrals, setReferral] = useState<ReferralDto[]>([])
   
  
     useEffect(() => {

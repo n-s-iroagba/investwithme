@@ -1,6 +1,6 @@
 import React from 'react';
-import ManagerForm from '../../components/forms/ManagerForm';
-import '../../components/styles.css'
+import ManagerForm from '../../features/manager/components/ManagerForm';
+import '../../common/styles/styles.css'
 import { useNavigate } from 'react-router-dom';
 const PatchManager: React.FC = () => {
   const navigate = useNavigate()

@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Form} from 'react-bootstrap';
-import Information from '../../components/general/Information';
+import Information from '../../common/components/Information';
 import { faUsers } from '@fortawesome/free-solid-svg-icons';
-import { getReferralDetails } from '../../utils/helpers';
-import { clientDomain } from '../../utils/constants';
-import { ReferralDetails } from '../../../../common/types';
+import '../../common/styles/styles.css'
+import { ReferralDetailsDto } from '../../../../common/referralTypes';
+import { clientDomain } from '../../constants/constants';
+import { getReferralDetails } from '../../features/referral/helpers/referralHelpers';
 
 
 
@@ -21,7 +22,8 @@ const Referrals: React.FC<{id:number}>= ({id}) => {
   const fetchReferral = async () => {
      
     try {
-      const response:ReferralDetails = await getReferralDetails(id);
+      const response:ReferralDetailsDto = await getReferralDetails(id);
+      console.log('response',response)
       if (response){
     
       setCode( response.referralCode);
@@ -52,7 +54,7 @@ const Referrals: React.FC<{id:number}>= ({id}) => {
        <Information  text="Share either the link or the code with your friends, and you'll receive 20% of their initial investment profits.." head= "Refer and Earn" icon={faUsers} />
     <Form className="form py-5 " >       
    
-        <Form.Group className='mb-5' controlId="validationFormik04">
+        <Form.Group className='mb-2' controlId="validationFormik04">
           <Form.Label className='mb-0'>Referral Code</Form.Label>
           <Form.Control
             readOnly={true}
@@ -66,7 +68,7 @@ const Referrals: React.FC<{id:number}>= ({id}) => {
          Copy Code
         </button>
       </div>
-      <Form.Group className='mb-5' controlId="validationFormik04">
+      <Form.Group className='mb-2' controlId="validationFormik04">
           <Form.Label className='mb-0'>Referral Link</Form.Label>
           <Form.Control
             readOnly={true}

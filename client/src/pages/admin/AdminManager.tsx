@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import AdminInvestmentManagersCard from '../../components/admin/AdminInvestmentManagersCard';
-import ManagerForm from '../../components/forms/ManagerForm';
-import '../../components/styles.css'
-import { MiniFooter } from '../../components/home_components/Footer';
+
+import ManagerForm from '../../features/manager/components/ManagerForm';
+import '../../common/styles/styles.css'
+import MiniFooter from '../../common/components/MiniFooter';
+import AdminManagerCards from '../../features/manager/layout/AdminManagerCards';
 const AdminManager: React.FC = () => {
   const [showManagers, setShowManagers] = useState<boolean>(true)
 
@@ -18,7 +19,7 @@ const AdminManager: React.FC = () => {
           <div className='d-flex justify-content-center'>
             <button className='button-styles button-width-narrow text-light' onClick={handleToggle}>Add Manager</button>
             </div>
-            <AdminInvestmentManagersCard />
+            <AdminManagerCards />
           </>
           :
           <>
