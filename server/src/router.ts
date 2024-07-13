@@ -1,14 +1,14 @@
 import express, { Router } from 'express';
 import multer from 'multer';
 
-import { isAdmin, isInvestor } from './auth';
+
 import { changePassword, confirmMailForPasswordChange, createAdmin, createInvestor, login, requestPasswordReset, resendVerificationToken, verifyMail } from './controllers/authController';
 import { createInvestment, getInvestment, index, topUp } from './controllers/investmentController';
 import { deleteInvestor, getAllInvestors } from './controllers/investorController';
 import { getAllDueReferrals, getReferralDetails, payReferralBonus } from './controllers/referralController';
 import { createPromo, deletePromo, getPendingPromo, getPromos, payPromoBonus, updatePromo } from './controllers/promoController';
 import { createManager, patchManager, getAllManagers, getSingleManager, deleteManager } from './controllers/managerController';
-import { createAdminWallet, deleteWallet, getAllWallets, patchWallet } from './controllers/adminWalletControllerr';
+import { createAdminWallet, deleteWallet, getAllAvailableCurrencies, getAllWallets, patchWallet } from './controllers/adminWalletControllerr';
 import { getNotifications, getTransactions } from './controllers/notificationAndTransactionController';
 // import { getNewbies } from './controllers/newbiesControlller';
 
@@ -19,11 +19,11 @@ router.get('/', index);
 
 router.post('/login', login);
 router.get('/verify-email/:token', verifyMail);
-router.get('/resend-verification-token/:id', resendVerificationToken);
+router.get('/resend-verification-token/:email', resendVerificationToken);
 router.post('/request-passswordChange', requestPasswordReset);
 router.get('/verify-password-token/:token', confirmMailForPasswordChange);
 router.post('/new-password/:id', changePassword);
-
+router.get ('/get-available-currencies',getAllAvailableCurrencies)
 router.post('/create-admin', createAdmin);
 router.post('/create-investor', createInvestor);
 router.get('/get-investors',  getAllInvestors);

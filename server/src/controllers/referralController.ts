@@ -1,9 +1,10 @@
 import { Request, Response } from 'express';
 import { Investor, Referral, Transaction,Notification, Investment, DepositWallet } from '../types/investorTypes';
-import { customError } from '../helpers';
-import { sendReferralBonusEmail } from '../mailService';
 import { Op } from 'sequelize';
-import { ReferralDetails } from '../../../common/types';
+import { customError } from '../helpers/commonHelpers';
+import { sendReferralBonusEmail } from '../service/mailService';
+import {ReferralDetailsDto} from '../../../common/referralTypes'
+
 
 
 export const payReferralBonus = async (req: Request, res: Response): Promise<Response> => {
@@ -82,7 +83,7 @@ export const getReferralDetails = async (req: Request, res: Response): Promise<R
         };
       })
     );
-    return res.status(200).json({ referralCode:investor.referralCode,referrer: referrer, referred: referred } as ReferralDetails);
+    return res.status(200).json({ referralCode:investor.referralCode,referrer: referrer, referred: referred } as ReferralDetailsDto);
   }
   catch (error: any) {
     console.error(error);

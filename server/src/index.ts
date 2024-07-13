@@ -1,10 +1,10 @@
-import express, { Request, Response } from 'express';
+import express from 'express';
 import sequelize from './orm_setup';
 import cron from 'node-cron';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import routes from './router';
-import { sendInvestmentReminderEmails, updateInvestmentEarningsAndNotifiy } from './mailService';
+import { updateInvestmentEarningsAndNotifiy, sendInvestmentReminderEmails } from './service/mailService';
 
 
 export const app = express();
@@ -25,7 +25,7 @@ app.use('/', routes);
 
 app.use('/login', routes);
 app.use('/verify-email/:token', routes);
-app.use("/resend-verification-token/:id", routes);
+app.use("/resend-verification-token/:email", routes);
 app.use("/request-passswordChange", routes);
 app.use('/new-password/:id', routes);
 app.use("/verify-password-token/:token", routes);
@@ -70,10 +70,14 @@ app.use('/get-notifications/:id', routes);
 app.use('/get-transactions/:id', routes);
 app.use('/get-newbies', routes); 
 app.use('/get-pending-referral', routes)
+app.use('/get-available-currencies',routes)
 
 app.use ('/get-referral-details/:id',routes)
 sequelize
-  .sync()
+  .sync({
+    alter:true,
+    // force:true
+  })
   .then(() => console.log('model formed'))
   .catch((err:any) => console.log(err));
 app.listen(PORT, () => {

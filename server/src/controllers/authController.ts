@@ -1,29 +1,32 @@
 import { Request, Response } from 'express';
 
 import bcrypt from 'bcrypt';
-import { Investor,Referral,Notification } from '../types/investorTypes';
+
 import { Admin } from '../types/adminTypes';
 
-import { 
-  generatePasswordResetToken, 
-  decodeJWT, 
-  generateEmailVerificationToken, 
-  createLoginJWT, 
-  encryptPassword, 
-  createNewPasswordToken, 
-  createAdminLoginJWT 
-} from '../auth';
-import { customError } from '../helpers';
-import { 
-  REFERRAL_BONUS_PERCENT, 
-  ALREADY_VERIFIED_ROUTE, 
-  EMAIL_VERIFICATION_ERROR_ROUTE, 
-  ADMIN_CLIENT_DASHBOARD_ROUTE, 
-  NEW_PASSWORD_URL, 
-  CLIENT_DASHBOARD_ROUTE, 
-  EMAIL_VERIFICATION_ROUTE 
-} from '../config';
-import { sendVerificationEmail, sendReferalCompletedMail, sendPasswordResetEmail } from '../mailService'
+import {
+  generateChangePasswordToken,
+  decodeJWT,
+  generateEmailVerificationToken,
+  createLoginJWT,
+  encryptPassword,
+  createNewPasswordToken,
+} from '../helpers/authHelper';
+
+import {
+  ALREADY_VERIFIED_ROUTE,
+  EMAIL_VERIFICATION_ERROR_ROUTE,
+  ADMIN_CLIENT_DASHBOARD_ROUTE,
+  NEW_PASSWORD_URL,
+  CLIENT_DASHBOARD_ROUTE,
+  EMAIL_VERIFICATION_ROUTE
+} from '../constants';
+import { sendVerificationEmail, sendPasswordResetEmail } from '../service/mailService';
+import { handleReferral } from '../helpers/investorHelpers';
+import { customError } from '../helpers/commonHelpers';
+import { Investor } from '../types/investorTypes';
+
+
 
 
 
@@ -37,21 +40,22 @@ export  const createAdmin= async (req: Request, res: Response): Promise<Response
         password:string
       };
       const existingAdmin = await Admin.findOne({ where: { email } });
+
       if (existingAdmin) {
         throw customError( 'Admin already exists',409);
       }
 
       password = await encryptPassword(password);
       const admin = await Admin.create({ name, email, password });
-      const verificationToken = generateEmailVerificationToken(admin.id);
+      const verificationToken = generateEmailVerificationToken(admin);
       admin.verificationToken = verificationToken;
       await admin.save();
 
-      await sendVerificationEmail(admin, verificationToken);
+      await sendVerificationEmail(admin);
       return res.status(201).json(verificationToken);
     } catch (error:any) {
       console.error('error in createAdmin function', error)
-      return res.status(error.status).json(error);
+      return res.status(error.status||500).json(error);
     }
   }
 
@@ -69,26 +73,22 @@ export  const createAdmin= async (req: Request, res: Response): Promise<Response
       const newInvestor = await Investor.create({ firstName, lastName, dateOfBirth, email, password, gender, country, bank });
       newInvestor.referralCode = newInvestor.id + 2222;
 
-      const token = generateEmailVerificationToken( newInvestor.id);
+      const token = generateEmailVerificationToken( newInvestor);
       newInvestor.verificationToken = token;
+      await newInvestor.save();
      
       if (referralCode) {
         const refereeInvestor = await Investor.findOne({ where: { referralCode: referralCode } });
         if (refereeInvestor) {
-          newInvestor.referrerId = refereeInvestor.id;
-          await Referral.create({referrerId: refereeInvestor.id,referredId:newInvestor.id});
-          await Notification.create({ investorId: refereeInvestor.id, title: 'Referral Registration', message: `Thank you!\n You just referred ${newInvestor.firstName} ${newInvestor.lastName}. You'd earn ${REFERRAL_BONUS_PERCENT*100}% on the first deposit` });
-          await sendReferalCompletedMail(refereeInvestor, newInvestor);
+         handleReferral(refereeInvestor,newInvestor);
         } 
       }
-
-      await newInvestor.save();
-      await sendVerificationEmail(newInvestor, token);
-
+      
+      await sendVerificationEmail(newInvestor);
       return res.status(201).json(token);
     } catch (error:any) {
       console.error('Error registerInvestor function:', error);
-      res.status(error.status).json(error)
+      res.status(error.status||500).json(error)
     }
   }
 
@@ -96,12 +96,10 @@ export  const createAdmin= async (req: Request, res: Response): Promise<Response
     const { email, password } = req.body;
   
     try {
-      let user:any= await Admin.findOne({ where: { email } });
-      let userType = 'admin';
+      let user:Admin|Investor|null = await Admin.findOne({ where: { email } });
   
       if (!user) {
         user = await Investor.findOne({ where: { email } });
-        userType = 'investor';
       }
       
       if (!user) {
@@ -110,31 +108,24 @@ export  const createAdmin= async (req: Request, res: Response): Promise<Response
 
       if (!user.isVerified) {
         const token = generateEmailVerificationToken( user);
-       user.verificationToken = token
-       user.save()
-
-        await sendVerificationEmail(user,token);
+        user.verificationToken = token
+        user.save()
+        await sendVerificationEmail(user);
         return res.status(201).json(token);
       }
+
       const passwordsMatch = await bcrypt.compare(password, user.password);
+
       if (passwordsMatch) {
-
-      let loginToken;
-
-      if (userType === 'investor') {
-      loginToken = createLoginJWT(user)
-      }else{
-        loginToken = createAdminLoginJWT(user)
-      }
-
-      return res.status(200).json({user:userType, token:loginToken})
+      const loginToken = createLoginJWT(user) 
+      return res.status(200).json({loginToken})
       
       }else{
         throw customError('wrong password',403);
       }
     } catch (error:any) {
       console.error('error in login function',error);
-      return res.status(error.status).json(error);
+      return res.status(error.status||500).json(error);
     }
   }
   
@@ -151,53 +142,62 @@ export  const createAdmin= async (req: Request, res: Response): Promise<Response
       const expirationTimeMs = creationTimeMs + (10 * 60 * 1000); // Adding 10 minutes in milliseconds
       
       if (currentTimeMs >= expirationTimeMs) {
-        return res.status(401).redirect(`${EMAIL_VERIFICATION_ROUTE}/?token=${token}`);
+        return res.redirect(`${EMAIL_VERIFICATION_ROUTE}/?token=${token}`);
       }
 
-      let user:any = await Admin.findOne({ where: { verificationToken: token } });
-      let userType = 'admin';
+      let user:Admin|Investor|null = await Admin.findOne({ where: { verificationToken: token } });
+     
       if (!user) {
         user = await Investor.findOne({ where: { verificationToken: token } });
-        userType = 'investor';
-
+       
         if (!user) {
-          throw new Error('Illegal request, no such user');
+          throw customError('Illegal request, no such user',404);
         }
       }
       if (user.isVerified) {
-        return res.redirect(ALREADY_VERIFIED_ROUTE);
+        return res.redirect(`${ALREADY_VERIFIED_ROUTE}/${user.email}`);
       }
       user.isVerified= true ;
       await user.save();
 
-      let redirectRoute = userType === 'admin' ? ADMIN_CLIENT_DASHBOARD_ROUTE : CLIENT_DASHBOARD_ROUTE;
-      const jwToken = userType === 'admin' ? createAdminLoginJWT(user) : createLoginJWT(user);
+      let redirectRoute = user instanceof Admin ? ADMIN_CLIENT_DASHBOARD_ROUTE : CLIENT_DASHBOARD_ROUTE;
+      const jwToken =  createLoginJWT(user);
 
       return res.redirect(`${redirectRoute}/?token=${jwToken}`);
     } catch (error:any) {
       console.error('Error verifying email:', error);
-      return res.status(error.status).json(error);
+      return res.status(error.status||500).json(error);
     }
   }
-
+{}
  export const resendVerificationToken= async (req: Request, res: Response) => {
-    const { id } = req.params;
+    const { email } = req.params;
+    console.log(email)
 
     try {
-      let user:Admin|Investor|null= await Admin.findByPk(id);
+      let user:Admin|Investor|null= await Admin.findOne({
+        where:{
+          email:email,
+        }
+      });
+
       if (!user) {
-        user = await Investor.findByPk(id);
+        user = await Investor.findOne({
+          where:{
+            email:email
+          }
+        });;
         if (!user) {
-          throw new Error('illegal request no such user')
+          throw customError('illegal request no such user',404)
         }
       }
-      const newToken = generateEmailVerificationToken( user.id);
+      const newToken = generateEmailVerificationToken( user);
       user.verificationToken = newToken;
       user.save();
-      await sendVerificationEmail(user, newToken); 
+      await sendVerificationEmail(user); 
       return res.status(200).json(newToken); 
-    } catch (error) {
-      res.status(500).json(error);
+    } catch (error:any) {
+      res.status(error.status||500).json(error);
     }
   }
 
@@ -217,11 +217,11 @@ export  const createAdmin= async (req: Request, res: Response): Promise<Response
         }
       }
   
-      const resetToken = generatePasswordResetToken(user.id, user.email, role);
+      const resetToken = generateChangePasswordToken(user);
       user.changePasswordToken = resetToken;
       await user.save();
   
-      await sendPasswordResetEmail(user, resetToken);
+      await sendPasswordResetEmail(user);
   
       return res.status(200).send(resetToken);
     } catch (error) {
@@ -276,16 +276,11 @@ export  const createAdmin= async (req: Request, res: Response): Promise<Response
 
        user.verificationToken=token
        await user.save()
-        await sendVerificationEmail(user,token);
+        await sendVerificationEmail(user);
         return res.status(201).json(token);
       }
-      let loginToken;
-      if (role == 'investor'){
-        loginToken = createLoginJWT(user) 
-      }else{
-      loginToken = createAdminLoginJWT(user)
-      }
-      
+      const loginToken = createLoginJWT(user) 
+   
    
       return res.status(200).json(loginToken)
 

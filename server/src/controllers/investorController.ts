@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { Investment, Investor } from '../types/investorTypes';
-import { InvestorAndInvestment } from '../../../common/types';
-import { customError } from '../helpers';
+import { InvestorAndInvestment } from '../../../common/compositeTypes';
+import { customError } from '../helpers/commonHelpers';
 
 export const getAllInvestors = async (req: Request, res: Response): Promise<Response> => {
     try {

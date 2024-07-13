@@ -150,7 +150,7 @@ Investor.init(
       allowNull: true,
     },
     verificationToken: {
-      type: DataTypes.STRING(255),
+      type: DataTypes.STRING(2048),
       allowNull: true,
     },
     referrerId: {
@@ -162,7 +162,7 @@ Investor.init(
       allowNull: true,
     },
     changePasswordToken: {
-      type: DataTypes.STRING(255),
+      type: DataTypes.STRING(2048),
       allowNull: true,
     },
   },

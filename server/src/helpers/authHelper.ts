@@ -1,8 +1,10 @@
 import { Request,Response } from 'express'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
-import { Investor } from './types/investorTypes'
-import { Admin } from './types/adminTypes'
+import { Investor } from '../types/investorTypes'
+import { Admin } from '../types/adminTypes'
+import {Role,TokenType,DecodedVerificationToken} from '../../../common/authTypes'
+
 const JWT_SECRET = 'ababanna'
 
 export const encryptPassword = (password:string) => {
@@ -12,23 +14,24 @@ export const decodeJWT = (token:string) => {
   return jwt.verify(token, JWT_SECRET);
 }
 
-export const createLoginJWT = (user:Investor) => {
+export const createLoginJWT = (user:Investor|Admin) => {
+  const role = user instanceof Investor? Role.INVESTOR : Role.ADMIN
+  const name = user instanceof Investor? user.firstName:user.name;
   return jwt.sign({ id: user.
-    id, email: user.email, username: user.firstName, role: 'investor', verified:user.isVerified }, JWT_SECRET);
-}
-export const createAdminLoginJWT = (user:Admin) => {
-  return jwt.sign({ username: user.name, email: user.email, verified: user.isVerified, role: 'admin', }, JWT_SECRET);
+    id, email: user.email, username: name, role: role, verified:user.isVerified,type:TokenType.LOGIN_TYPE }, JWT_SECRET);
 }
 
-export const generateEmailVerificationToken = (id:number) => {
-  const token = jwt.sign({ id: id, timeOfCreation: new Date() }, JWT_SECRET, {
+export const generateEmailVerificationToken = (user:Admin|Investor) => {
+  const role = user instanceof Admin? Role.ADMIN:Role.INVESTOR;
+  const token = jwt.sign({ role:role,email:user.email,type:TokenType.VERIFICATION_TYPE, timeOfCreation: new Date() } as DecodedVerificationToken, JWT_SECRET, {
     algorithm: 'HS256',
     expiresIn: '1h',
   });
   return token;
 };
-export const generatePasswordResetToken = (id: number, email: string, role: string) => {
-  return jwt.sign({ id: id, email: email, timeOfCreation: new Date(), role: role }, JWT_SECRET);
+export const generateChangePasswordToken = (user:Admin|Investor) => {
+  const role = user instanceof Admin? Role.ADMIN:Role.INVESTOR;
+  return jwt.sign({ id: user.id, role:role, type:TokenType.CHANGE_PASSWORD, timeOfCreation: new Date() }, JWT_SECRET);
 }
 
 export const createNewPasswordToken = (id:number, email: string) => {

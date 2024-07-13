@@ -1,9 +1,10 @@
 import { Request, Response } from 'express';
-import { customError } from "../helpers";
-import { sendPromoBonusEmail, sendPromoExtensionMail, sendPromoMail } from "../mailService";
+
 import { Promo } from "../types/adminTypes";
 import { DepositWallet, Investment, Investor,Notification, PendingPromo, Referral, Transaction } from "../types/investorTypes";
 import { Op } from 'sequelize';
+import { customError } from '../helpers/commonHelpers';
+import { sendPromoMail, sendPromoExtensionMail, sendPromoBonusEmail } from '../service/mailService';
 
 export const createPromo = async (req: Request, res: Response): Promise<Response> => {
     const { startDate, endDate, bonusPercent } = req.body;
@@ -34,25 +35,26 @@ export const createPromo = async (req: Request, res: Response): Promise<Response
       if (!promo) {
         throw customError(`promo to be updated with id ${id}  not found in database`, 404)
       }
-     console.log('days',days)
-      const dateObject = new Date(promo.endDate);
-      console.log('dateObject',dateObject)
-      console.log('date before update', dateObject.getDate())
-      const millisecs = dateObject.getTime()+ days* 24 * 60 * 60 * 1000;
+      console.log(promo)
+    //  console.log('days',days)
+    //   const dateObject = new Date(promo.endDate);
+    //   console.log('dateObject',dateObject)
+    //   console.log('date before update', dateObject.getDate())
+    //   const millisecs = dateObject.getTime()+ days* 24 * 60 * 60 * 1000;
 
-      console.log('date object  updated', dateObject)
-      promo.endDate = new Date (millisecs);
-      console.log('promo date',promo.endDate)
-      await promo.save();
+    //   console.log('date object  updated', dateObject)
+    //   promo.endDate = new Date (millisecs);
+    //   console.log('promo date',promo.endDate)
+    //   await promo.save();
   
-      const investors = await Investor.findAll();
-      investors.forEach(async (investor) => {
-        sendPromoExtensionMail(investor, promo)
-        await Notification.create({
-          investorId: investor.id, title: 'Promo Extension', message: `We are thrilled to announce the extension of our exclusive promotional period for you! 
-      The promotion will run from ${promo.startDate} to ${promo.endDate}.Invest before the ${promo.endDate} and earn a bonus of ${promo.bonusPercent}% on your initial investment deposit`
-        });
-      });
+    //   const investors = await Investor.findAll();
+    //   investors.forEach(async (investor) => {
+    //     sendPromoExtensionMail(investor, promo)
+    //     await Notification.create({
+    //       investorId: investor.id, title: 'Promo Extension', message: `We are thrilled to announce the extension of our exclusive promotional period for you! 
+    //   The promotion will run from ${promo.startDate} to ${promo.endDate}.Invest before the ${promo.endDate} and earn a bonus of ${promo.bonusPercent}% on your initial investment deposit`
+    //     });
+    //   });
   
       return res.status(200).json({ message: 'Promo updated successfully', promo });
     } catch (error: any) {

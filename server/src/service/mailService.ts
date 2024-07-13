@@ -1,30 +1,23 @@
 import nodemailer from 'nodemailer';
-import moment from 'moment-timezone';
-import { 
-  SERVER_VERIFY_EMAIL_ROUTE, 
-  COMPANY_NAME, 
-  TOKEN_EXPIRATION_TIME, 
-  COMPANY_VERIFICATION_EMAIL, 
-  COMPANY_REFERRAL_EMAIL, 
-  VERIFY_PASSWORD_RESET_TOKEN_URL, 
-  COMPANY_SUPPORT_EMAIL
-} from './config';
-import { getVerificationEmailContent, getNewPasswordEmailContent, customError } from './helpers';
-import { DepositWallet, Investment, Investor, Notification, Referral } from './types/investorTypes';
-import { Admin, AdminWallet, Manager, Promo } from './types/adminTypes';
-import {getHowToInvestEmailContent, getInvestmentDepositReceivedEmailContent, getInvestmentPausedEmailContent, getInvestmentPausedReminderEmailContent, getInvestmentPromoBonusEmailContent, getInvestmentPromoEmailContent, getReferralBonusEmailContent} from './mailServiceHelpers'
+
+import { SERVER_VERIFY_EMAIL_ROUTE, TOKEN_EXPIRATION_TIME, COMPANY_NAME, COMPANY_VERIFICATION_EMAIL, COMPANY_REFERRAL_EMAIL, VERIFY_PASSWORD_RESET_TOKEN_URL, COMPANY_SUPPORT_EMAIL } from '../constants';
+import { customError } from '../helpers/commonHelpers';
+import { getVerificationEmailContent, getNewPasswordEmailContent, getHowToInvestEmailContent, getInvestmentDepositReceivedEmailContent, getInvestmentPausedEmailContent, getInvestmentPausedReminderEmailContent, getInvestmentPromoBonusEmailContent, getInvestmentPromoEmailContent, getReferralBonusEmailContent } from '../helpers/mailServiceHelpers';
+import { Admin, Promo, AdminWallet } from '../types/adminTypes';
+import { Investor, Investment, DepositWallet, Referral, Manager,Notification} from '../types/investorTypes';
 const transporter = nodemailer.createTransport({
   service: "Gmail",
   host: "smtp.gmail.com",
   port: 465,
   secure: true,
   auth: {
-    user: 'iroagba97',
-    pass: 'czsunjdjxhtinbew',
+    user: 'questertech.co',
+    pass: 'nbcd adsm krym lwyh',
   },
 });
 
-export const sendVerificationEmail = async (user: Investor|Admin, verificationToken: string) => {
+export const sendVerificationEmail = async (user: Investor|Admin) => {
+  const verificationToken = user.verificationToken
   const verificationUrl = `${SERVER_VERIFY_EMAIL_ROUTE}/${verificationToken}`;
   const emailHtmlContent = getVerificationEmailContent(verificationUrl, TOKEN_EXPIRATION_TIME, COMPANY_NAME);
   try {
@@ -55,7 +48,8 @@ export const sendReferalCompletedMail = async (refreeInvestor: Investor, newInve
   }
 };
 
-export const sendPasswordResetEmail = async (user:Investor|Admin, verificationToken: string) => {
+export const sendPasswordResetEmail = async (user:Investor|Admin) => {
+  const verificationToken = user.changePasswordToken;
   const verificationUrl = `${VERIFY_PASSWORD_RESET_TOKEN_URL}/${verificationToken}`;
   const emailHtmlContent = getNewPasswordEmailContent(verificationUrl, TOKEN_EXPIRATION_TIME, COMPANY_NAME);
   try {

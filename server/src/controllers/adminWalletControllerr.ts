@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
-import { customError } from '../helpers';
+
 import { AdminWallet } from '../types/adminTypes';
+import { customError } from '../helpers/commonHelpers';
 
 export const createAdminWallet = async (req: Request, res: Response): Promise<Response> => {
   console.log(req)
@@ -23,6 +24,17 @@ export const createAdminWallet = async (req: Request, res: Response): Promise<Re
     return res.status(201).json({ message: 'Wallet created successfully', wallet });
   } catch (error: any) {
     console.error('Error createWalletAddress function:', error);
+    return res.status(error.status || 500).json(error);
+  }
+}
+
+export const getAllAvailableCurrencies = async (req: Request, res: Response): Promise<Response> => {
+  try {
+    const wallets = await AdminWallet.findAll();
+    const currencies = wallets.map(wallet => wallet.currency)
+    return res.status(200).json(currencies);
+  } catch (error: any) {
+    console.error('Error in getAllWallets function:', error);
     return res.status(error.status || 500).json(error);
   }
 }

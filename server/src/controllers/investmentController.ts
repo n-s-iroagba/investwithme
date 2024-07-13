@@ -1,14 +1,18 @@
-import { Request, response, Response } from 'express';
-import { howToInvestMessage,  } from '../config';
+import { Request,  Response } from 'express';
+import { howToInvestMessage,  } from '../constants';
 import { Investor, DepositWallet, Investment, Referral, Notification, } from '../types/investorTypes';
 import { AdminWallet, Manager } from '../types/adminTypes';
-import { changeManager, createDepositNotificationAndTransaction, customError,handleFirstDepositReferral, handleIsPaused, handlePromo } from '../helpers';
-import { FindOptions, IncrementDecrementOptionsWithBy, InferAttributes, InferCreationAttributes, InstanceUpdateOptions, Model, Op, SaveOptions, Sequelize } from 'sequelize';
-import { InvestmentCreationPayLoad, ManagerData, PayInvestorPayLoad, Portfolio } from '../../../common/types';
-import { sendHowToInvestMail, sendInvestmentDepositReceivedEmail } from '../mailService';
-import { SequelizeHooks } from 'sequelize/types/hooks';
-import { ValidationOptions } from 'sequelize/types/instance-validator';
-import { Fn, Col, Literal } from 'sequelize/types/utils';
+import { sendHowToInvestMail, sendInvestmentDepositReceivedEmail } from '../service/mailService';
+import { customError } from '../helpers/commonHelpers';
+import {CreateInvestmentDto} from '../../../common/compositeTypes'
+import {PayInvestorDto} from '../../../common/investmentTypes'
+import { Op, Sequelize } from 'sequelize';
+import {PortfolioDto} from '../../../common/investmentTypes';
+import { createDepositNotificationAndTransaction, handleIsPaused } from '../helpers/investmentHelpers';
+import { changeManager } from '../helpers/managerHelpers';
+import { handlePromo } from '../helpers/promoHelper';
+import { handleFirstDepositReferral } from '../helpers/referralHelper';
+import { ManagerDto } from '../../../common/managerType';
 
 
 
@@ -58,7 +62,7 @@ export const getInvestmentInitiationData = async (req: Request, res: Response): 
 
 export const createInvestment = async (req: Request, res: Response): Promise<Response> => {
   const id = req.params.id;
-  const { amount, wallet, managerId } = req.body as InvestmentCreationPayLoad
+  const { amount, wallet, managerId } = req.body as CreateInvestmentDto
   try {
     if (!amount || !wallet || !managerId) {
       console.log('amount', amount)
@@ -127,7 +131,7 @@ export const createInvestment = async (req: Request, res: Response): Promise<Res
 
 export const topUp = async (req: Request, res: Response): Promise<Response> => {
   try {
-    let { address, amount } = req.body as PayInvestorPayLoad
+    let { address, amount } = req.body as PayInvestorDto
     if (!amount || !address) {
       console.log('amount', amount)
       console.log('address', address)
@@ -224,12 +228,12 @@ export const getInvestment = async (req: Request, res: Response): Promise<Respon
       totalCount++;
       totalAmount += Number(referral.amount);
     });
-    const manager = await Manager.findByPk(investment.managerId) as unknown as ManagerData
+    const manager = await Manager.findByPk(investment.managerId) as unknown as ManagerDto
     const totalReferrals = { count: totalCount, totalAmount: totalAmount };
-    const responseData:Portfolio = {
+    const responseData:PortfolioDto = {
       referrals: totalReferrals,
       investment: investment,
-      manager:manager
+      manager: manager as unknown as Manager
     }
     return res.status(200).json(responseData);
 
@@ -238,6 +242,7 @@ export const getInvestment = async (req: Request, res: Response): Promise<Respon
     return res.status(error.status || 500).json(error);
   }
 }
+
 
 
 

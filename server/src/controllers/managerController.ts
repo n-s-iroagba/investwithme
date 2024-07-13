@@ -2,8 +2,9 @@ import { Request, Response } from 'express';
 import { Manager } from '../types/adminTypes';
 import multer from 'multer'
 import path from 'path';
-import { customError } from '../helpers';
-import { CreateManagerPayLoad } from '../../../common/types';
+
+import { CreateManagerDto } from '../../../common/managerType';
+import { customError } from '../helpers/commonHelpers';
 
 
 const storage = multer.diskStorage({
@@ -29,7 +30,7 @@ export const createManager = async (req: Request, res: Response): Promise<Respon
     percentageYield,
     duration,
     qualification,
-  } = req.body as CreateManagerPayLoad;
+  } = req.body as CreateManagerDto;
 
   if (!req.file || !req.file.buffer) {
     console.log('image file', req.file);
