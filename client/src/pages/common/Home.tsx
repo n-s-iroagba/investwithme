@@ -16,9 +16,11 @@ import '../../common/styles/styles.css'
 import ReferAndEarn from "../../features/home/layout/Referrals";
 import Certificate from "../../features/home/layout/Certificate";
 import PromoAdvert from "../../features/home/layout/PromoAdvert";
+import NavbarComponent from "../../common/components/NavbarComponent";
 const Home: React.FC = () => {
 
-  return <div>
+  return <>
+     <NavbarComponent />
     <Header />
     <TickerTape colorTheme="light" />
     <Introduction />
@@ -35,7 +37,7 @@ const Home: React.FC = () => {
     <Contact />
     <OfficeMap />
     <Footer />
-  </div>
+  </>
 
 
 }
