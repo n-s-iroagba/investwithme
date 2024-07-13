@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import PortfolioLayout from '../../features/investment/layout/PortfolioLayout';
 import { useNavigate } from 'react-router-dom';
 
-import { Investment } from '../../../../server/src/types/investorTypes';
+
 
 import '../../common/styles/styles.css'
 import { getInvestment } from '../../features/investment/helpers/investmentApiHelpers';
@@ -21,7 +21,7 @@ const PortfolioWrapper:React.FC = ()=>{
         earnings: 0,
         amountDeposited: 0,
         isPaused: false
-      } as unknown as Investment,
+      } ,
       manager:{
         firstName: '',
         lastName: '',
