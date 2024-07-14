@@ -6,10 +6,12 @@ import { changePassword, confirmMailForPasswordChange, createAdmin, createInvest
 import { createInvestment, getInvestment, index, topUp } from './controllers/investmentController';
 import { deleteInvestor, getAllInvestors } from './controllers/investorController';
 import { getAllDueReferrals, getReferralDetails, payReferralBonus } from './controllers/referralController';
-import { createPromo, deletePromo, getPendingPromo, getPromos, payPromoBonus, updatePromo } from './controllers/promoController';
+
 import { createManager, patchManager, getAllManagers, getSingleManager, deleteManager } from './controllers/managerController';
 import { createAdminWallet, deleteWallet, getAllAvailableCurrencies, getAllWallets, patchWallet } from './controllers/adminWalletControllerr';
 import { getNotifications, getTransactions } from './controllers/notificationAndTransactionController';
+import { payPromoBonus, getPendingPromo, createPromo, getPromos, getAdvertPromos, updatePromo, deletePromo } from './controllers/promoController';
+
 // import { getNewbies } from './controllers/newbiesControlller';
 
 const router: Router = express.Router();
@@ -51,6 +53,7 @@ router.delete('/delete-wallet/:id', deleteWallet);
 
 router.post('/create-promo', createPromo);
 router.get('/get-promo', getPromos);
+router.get('/get-adpromo', getAdvertPromos);
 router.patch('/patch-promo', updatePromo);
 router.delete('/delete-promo/:id', deletePromo);
 

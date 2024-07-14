@@ -63,16 +63,31 @@ export const createPromo = async (req: Request, res: Response): Promise<Response
     }
   }
   
-  export const getPromos = async (req: Request, res: Response): Promise<Response> => {
+  export const getAdvertPromos = async (req: Request, res: Response): Promise<Response> => {
     try {
-      const promos = await Promo.findOne()
-      return res.status(200).json(promos)
+      const promo = await Promo.findOne()
+      if (promo){
+      const today = new Date()
+      const isActive =  promo.startDate <= today
+      if (isActive) return res.status(200).json(promo) 
+      }
+      throw customError('no active promo',404)
     } catch (error: any) {
       console.error('Error in getPromos function:', error);
       return res.status(error.status||500).json({ error: 'Error getting promo from database' });
     }
   }
-  
+  export const getPromos = async (req: Request, res: Response): Promise<Response> => {
+    try {
+      const promo = await Promo.findOne()
+     
+      return res.status(200).json(promo) 
+     
+    } catch (error: any) {
+      console.error('Error in getPromos function:', error);
+      return res.status(error.status||500).json({ error: 'Error getting promo from database' });
+    }
+  }
   export const deletePromo = async (req: Request, res: Response): Promise<Response> => {
     const { id } = req.params;
     try {

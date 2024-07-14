@@ -1,18 +1,18 @@
 import { Request,  Response } from 'express';
 import { howToInvestMessage,  } from '../constants';
 import { Investor, DepositWallet, Investment, Referral, Notification, } from '../types/investorTypes';
-import { AdminWallet, Manager } from '../types/adminTypes';
+import { AdminWallet, Manager, Promo } from '../types/adminTypes';
 import { sendHowToInvestMail, sendInvestmentDepositReceivedEmail } from '../service/mailService';
 import { customError } from '../helpers/commonHelpers';
-import {CreateInvestmentDto} from '../../../common/compositeTypes'
-import {PayInvestorDto} from '../../../common/investmentTypes'
+import {CreateInvestmentDto} from '../../../../common/compositeTypes'
+import {PayInvestorDto} from '../../../../common/investmentTypes'
 import { Op, Sequelize } from 'sequelize';
-import {PortfolioDto} from '../../../common/investmentTypes';
+import {PortfolioDto} from '../../../../common/investmentTypes';
 import { createDepositNotificationAndTransaction, handleIsPaused } from '../helpers/investmentHelpers';
 import { changeManager } from '../helpers/managerHelpers';
 import { handlePromo } from '../helpers/promoHelper';
 import { handleFirstDepositReferral } from '../helpers/referralHelper';
-import { ManagerDto } from '../../../common/managerType';
+import { ManagerDto } from '../../../../common/managerType';
 
 
 
@@ -29,13 +29,14 @@ export const index = async (req: Request, res: Response): Promise<Response> => {
     isVerified: true
   };
   // await Investor.create(mockInvestorData)
-  await DepositWallet.drop()
-  await Investment.drop()
-  await Investment.sync()
-  await DepositWallet.sync()
+  // await DepositWallet.drop()
+  // await Investment.drop()
+  // await Investment.sync()
+  // await DepositWallet.sync()
   // const investment = await Investment.findAll()
   // console.log(investment)
-
+await Promo.drop()
+await Promo.sync()
   return res.send('hello from investwithme server, I am connected');
 }
 

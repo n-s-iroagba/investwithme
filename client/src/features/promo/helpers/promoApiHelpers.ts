@@ -1,5 +1,5 @@
 import { CreatePromoDto } from "../../../../../common/promoTypes";
-import { getDueBonusUrl, payBonusRoute } from "../../../constants/constants";
+import { getAdPromoUrl, getDueBonusUrl, payBonusRoute } from "../../../constants/constants";
 import { postData, getData, patchItem, deleteItem  } from "../../../common/utils/apiUtils";
 import { createPromoUrl, getPromoUrl, patchPromoUrl, deletePromoRoute } from "../../../constants/constants";
 
@@ -24,7 +24,21 @@ export const createPromo= async (data:CreatePromoDto) => {
     if (response.status ===200){
     return response.data
     }
-    return []
+    return null
+    }catch(error:any){
+      console.error(error)
+   
+    }
+  }
+
+  export const getAdPromo=async ()=>{
+    
+    try{
+    const response:any = await getData(getAdPromoUrl);
+    if (response.status ===200){
+    return response.data
+    }
+    return null
     }catch(error:any){
       console.error(error)
    

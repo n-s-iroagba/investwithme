@@ -3,7 +3,7 @@ import { Investor, Referral, Transaction,Notification, Investment, DepositWallet
 import { Op } from 'sequelize';
 import { customError } from '../helpers/commonHelpers';
 import { sendReferralBonusEmail } from '../service/mailService';
-import {ReferralDetailsDto} from '../../../common/referralTypes'
+import {ReferralDetailsDto} from '../../../../common/referralTypes'
 
 
 

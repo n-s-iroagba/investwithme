@@ -84,7 +84,7 @@ const PromoFormModal: React.FC<PromoFormModalProps> = ({ show }) => {
               name="startDate"
               value={promoData?.startDate && new Date(promoData.startDate).toISOString().split('T')[0]}
               onChange={handleChange}
-              min={new Date().toISOString().split('T')[0]}
+              // min={new Date().toISOString().split('T')[0]}
             />
           </Form.Group>
 

@@ -3,6 +3,7 @@
 const domain = 'http://localhost:8000';
 
 export const companyName = `Cassock`
+export const socialMediaLink = ''
 
 
 
@@ -35,6 +36,7 @@ export const getWalletsUrl = `${domain}/get-wallets`
 
 export const createPromoUrl = `${domain}/create-promo`
 export const getPromoUrl = `${domain}/get-promo`
+export const getAdPromoUrl =`${domain}/get-adpromo`
 export const patchPromoUrl = `${domain}/patch-promo`
 export const deletePromoRoute = `${domain}/delete-promo`
 

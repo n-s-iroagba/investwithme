@@ -1,16 +1,13 @@
 import React from 'react';
-import { faUser, faWallet, faBank, faDollarSign } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faWallet, faBank } from '@fortawesome/free-solid-svg-icons';
 import Information from '../../../common/components/Information';
 import { Col, Row } from 'react-bootstrap';
-import moneyBag from '../../../assets/images/moneyBag.webp'
-import '../../../common/styles/styles.css'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useNavigate } from 'react-router-dom';
+import moneyBag from '../../../assets/images/moneyBag.webp';
+import '../../../common/styles/styles.css';
+import { GetStartedButton } from '../../../common/components/Button';
 
 
 const Steps: React.FC = () => {
-  const navigate = useNavigate()
-
   return (
     <div className='px-4 py-4'>
       <div className='d-flex flex-column align-items-center'>
@@ -32,20 +29,13 @@ const Steps: React.FC = () => {
               <Information head='Start Investing' text='by selecting a dedicated fund manager to oversee your account.' icon={faBank}/>
             </Col>
             <Col lg={12}>
-              <Information head='Fund your account' text='via multiple crypto exchanges including Coinbase,TrusWallet etc.' icon={faWallet} />
+              <Information head='Fund your account' text='via multiple crypto exchanges including Coinbase,Trustwallet etc.' icon={faWallet} />
             </Col>
             
           </Row>
         </Col>
       </Row>
-      <div className='w-100 d-flex justify-content-center'>
-      <button onClick={()=>navigate('/invest/managers')} className='button-styles button-width-narrower'>
-        <div>Get Started
-        </div>
-        <div ><FontAwesomeIcon icon={faDollarSign}  beatFade/>
-        </div>
-        </button>
-         </div>
+     <GetStartedButton/>
     </div>
   );
 };

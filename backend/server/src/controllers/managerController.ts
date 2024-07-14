@@ -3,7 +3,7 @@ import { Manager } from '../types/adminTypes';
 import multer from 'multer'
 import path from 'path';
 
-import { CreateManagerDto } from '../../../common/managerType';
+import { CreateManagerDto } from '../../../../common/managerType';
 import { customError } from '../helpers/commonHelpers';
 
 

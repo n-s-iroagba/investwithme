@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import { Investor } from '../types/investorTypes'
 import { Admin } from '../types/adminTypes'
-import {Role,TokenType,DecodedVerificationToken} from '../../../common/authTypes'
+import {Role,TokenType,DecodedVerificationToken} from '../../../../common/authTypes'
 
 const JWT_SECRET = 'ababanna'
 

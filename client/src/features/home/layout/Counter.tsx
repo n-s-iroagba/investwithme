@@ -7,7 +7,7 @@ import useComponentVisibility from "../hooks/useComponentVisibility";
 const Counter:React.FC = ()=>{
 const assetTotal= 300000000
 const clientTotal = 60000
-const clientIncrement = 10000
+const clientIncrement = 1000
 const { componentRef, clientCount, assetCount } = useComponentVisibility(clientTotal, clientIncrement,assetTotal, assetTotal/(clientTotal/clientIncrement))
 
     return<div ref={componentRef} className="mb-4">

@@ -3,8 +3,9 @@ import React from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDollarSign} from '@fortawesome/free-solid-svg-icons';
 import'../styles/styles.css'
-import { faFacebook } from '@fortawesome/free-brands-svg-icons';
+import { faInstagram } from '@fortawesome/free-brands-svg-icons';
 import { useNavigate } from 'react-router-dom';
+import { socialMediaLink } from '../../constants/constants';
 
 
 
@@ -12,9 +13,9 @@ import { useNavigate } from 'react-router-dom';
 
 
 
-export const GetStartedButton:React.FC =()=>{
+export const GetStartedButton:React.FC<{primaryBackground?:boolean}> =({primaryBackground})=>{
   const navigate = useNavigate()
-    return<button onClick={()=>navigate('/invest/managers')} className='button-styles button-width-narrower'><div className='text-light'>Get Started</div><div ><FontAwesomeIcon icon={faDollarSign} style={{color:'white'}} beatFade/></div></button>
+    return<button onClick={()=>navigate('/invest/managers')} className=' button-styles button-width-narrower'><span>Get Started</span><span ><FontAwesomeIcon icon={faDollarSign} beatFade/></span></button>
 }
 export const SelectManagerButton: React.FC<{ managerId?: number }> = ({ managerId }) => {
   const navigate = useNavigate();
@@ -35,7 +36,7 @@ export const SelectManagerButton: React.FC<{ managerId?: number }> = ({ managerI
 
 export const  SocialMediaButton:React.FC = ()=>{
   return<div>
-    <FontAwesomeIcon icon={faFacebook} className='primary-color icon-size' beatFade/>
+    <a href={socialMediaLink}><FontAwesomeIcon icon={faInstagram} className='primary-color icon-size' beatFade/></a>
   </div>
 }
 

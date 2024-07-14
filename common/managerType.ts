@@ -11,18 +11,14 @@ export interface CreateManagerDto{
   export interface Manager {
     firstName: string;
     lastName: string;
-    duration: number|string;
+    duration: number;
     qualification: string;
-    minimumInvestmentAmount:number|string;
-    percentageYield: number|string;
+    minimumInvestmentAmount:number;
+    percentageYield: number;
     
   }
-
-
 
   export interface  ManagerDto extends Manager{
     id:number;
     image:  any;
-    minimumInvestmentAmount:number;
-
   }

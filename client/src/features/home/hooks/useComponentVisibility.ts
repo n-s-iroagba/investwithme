@@ -41,11 +41,11 @@ const useComponentVisibility = (clientMaxCount:number, clientIncrement:number, a
     if (isComponentVisible) {
       clientIntervalId = setInterval(() => {
         setClientCount((prevCounter) => (prevCounter < clientMaxCount ? prevCounter + clientIncrement : prevCounter));
-      }, 350);
+      }, 35);
 
       assetIntervalId = setInterval(() => {
         setAssetCount((prevCounter) => (prevCounter < assetMaxCount ? prevCounter + assetIncrement : prevCounter));
-      }, 350);
+      }, 35);
     } else {
       clearInterval(clientIntervalId);
       clearInterval(assetIntervalId);

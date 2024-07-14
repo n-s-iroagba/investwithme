@@ -20,13 +20,13 @@ const ManagerCards: React.FC<{ text?: string }> = ({ text }) => {
         {managers.map((manager: ManagerDto) => (
           <Col key={manager.id} xs={12} md={6} lg={3}>
             <ManagerCard
-              percentageYield={`${manager.percentageYield}%`}
+              percentageYield={manager.percentageYield}
               image={manager.image}
               firstName={manager.firstName}
               lastName={manager.lastName}
               qualification={manager.qualification}
-              minimumInvestmentAmount={`$${manager.minimumInvestmentAmount}`}
-              duration={`${manager.duration} weeks`}
+              minimumInvestmentAmount={manager.minimumInvestmentAmount}
+              duration={manager.duration}
               button={<SelectManagerButton managerId={manager.id} />}
             />
           </Col>
