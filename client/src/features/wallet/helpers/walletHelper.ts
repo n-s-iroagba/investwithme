@@ -1,3 +1,4 @@
+import { AxiosResponse } from "axios";
 import { CreateWalletDto, WalletDto } from "../../../../../common/walletTypes";
 
 import { postData, getData, patchItem, deleteItem  } from "../../../common/utils/apiUtils";
@@ -6,22 +7,20 @@ import { createWalletUrl, getWalletsUrl, patchWalletUrl, deleteWalletRoute } fro
 export const createWallet = async (data: CreateWalletDto) => {
     try {
         
-        const response = await postData(createWalletUrl, data);
+        const response:AxiosResponse<WalletDto>  = await postData(createWalletUrl, data);
         if (response.status === 201) {
             alert('wallet added succesfully')
             window.location.reload();
         }
     } catch (error: any) {
-        console.error(error)
-        alert('unable to create a wallet at this time')
+        throw new Error(error)
     }
 };
 
 export const getAdminWallets = async () => {
 
-   
     try {
-        const response: any = await getData(getWalletsUrl);
+        const response:AxiosResponse<WalletDto[]> = await getData(getWalletsUrl);
 
         if (response.status === 200 && Array.isArray(response.data)) {
             console.log(response.data)
@@ -35,16 +34,14 @@ export const getAdminWallets = async () => {
 
 export const patchWallet = async (data: WalletDto) => {
     try {
-        
-
-        const response = await patchItem(patchWalletUrl, data);
+        const response:AxiosResponse<WalletDto>  = await patchItem(patchWalletUrl, data);
         if (response.status === 200) {
             alert('wallet updated succesfully')
             window.location.reload();
         }
     } catch (error: any) {
         console.error(error)
-        alert('unable to update the wallet at this time')
+        throw new Error(error)
     }
 }
 

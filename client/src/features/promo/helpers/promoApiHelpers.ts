@@ -12,8 +12,8 @@ export const createPromo= async (data:CreatePromoDto) => {
       window.location.reload();
       } 
   }catch (error:any) {
-      alert('unable to create a promo at this time')
-      console.error(error)
+
+     throw new Error(error);
    }
   };
   
@@ -26,10 +26,38 @@ export const createPromo= async (data:CreatePromoDto) => {
     }
     return null
     }catch(error:any){
-      console.error(error)
-   
+      throw new Error(error);
     }
+
   }
+
+  export const patchPromo=async ( data:any) =>{
+    try {
+      
+      const response = await patchItem(patchPromoUrl, data);
+      if (response.status === 200) {
+        alert('promo updated succesfully')
+        window.location.reload();
+      }
+  }catch (error:any) {
+    throw new Error(error);
+  }
+  }
+  
+  export const deletePromo= async (id:number) => {
+    const url =`${deletePromoRoute}/${id}`
+      try {
+        
+        const response = await deleteItem(url);
+        if (response.status === 200) {
+          alert('promo deleted succesfully')
+          window.location.reload();
+        }
+      return response.status
+    }catch (error:any) {
+      throw new Error(error);
+    }
+    }
 
   export const getAdPromo=async ()=>{
     
@@ -40,7 +68,7 @@ export const createPromo= async (data:CreatePromoDto) => {
     }
     return null
     }catch(error:any){
-      console.error(error)
+      throw new Error(error);
    
     }
   }
@@ -54,8 +82,7 @@ export const payPromoBonus =async (id:number)=>{
     window.location.reload();
   }
   }catch(error:any){
-    console.error(error)
-   alert('unable to pay promo bonus at this time')
+    throw new Error(error);
   }
 }
 
@@ -74,32 +101,3 @@ export const getDueBonus =async ()=>{
 }
 
 
-  export const patchPromo=async ( data:any) =>{
-    try {
-      
-      const response = await patchItem(patchPromoUrl, data);
-      if (response.status === 200) {
-        alert('promo updated succesfully')
-        window.location.reload();
-      }
-  }catch (error:any) {
-   console.error(error)
-   alert('unable to update the promo at this time try again later')
-  }
-  }
-  
-  export const deletePromo= async (id:number) => {
-    const url =`${deletePromoRoute}/${id}`
-      try {
-        
-        const response = await deleteItem(url);
-        if (response.status === 200) {
-          alert('promo deleted succesfully')
-          window.location.reload();
-        }
-      return response.status
-    }catch (error:any) {
-     console.error(error)
-     alert('unable to delete promo at this time')
-    }
-    }

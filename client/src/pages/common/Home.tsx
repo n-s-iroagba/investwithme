@@ -17,28 +17,40 @@ import ReferAndEarn from "../../features/home/layout/Referrals";
 import Certificate from "../../features/home/layout/Certificate";
 import PromoAdvert from "../../features/home/layout/PromoAdvert";
 import NavbarComponent from "../../common/components/NavbarComponent";
+import useAppLoaded from "./hooks/useApploaded";
+import LoadingSpinner from "../../common/components/LoadingSpinner";
 const Home: React.FC = () => {
 
-  return <>
-     <NavbarComponent />
-    <Header />
-    <TickerTape colorTheme="light" />
-    <Introduction />
-    <SecurityAssurance />
-    <Counter />
-    <Testimonial />
-    <Awards />
-    <Certificate />
-    <Steps />
-    <PromoAdvert />
-    < ManagerCards text={'Select your investment tier and porfolio manager'} />
-    <ReferAndEarn />
-    <Chart />
-    <Contact />
-    <OfficeMap />
-    <Footer />
-  </>
 
+   const isLoaded = useAppLoaded()
 
-}
-export default Home
+  return (
+    <>
+      {!isLoaded ? (
+        <LoadingSpinner />
+      ) : (
+        <>
+          <NavbarComponent />
+          <Header />
+          <TickerTape colorTheme="light" />
+          <Introduction />
+          <SecurityAssurance />
+          <Counter />
+          <Testimonial />
+          <Awards />
+          <Certificate />
+          <Steps />
+          <PromoAdvert />
+          <ManagerCards text="Select your investment tier and portfolio manager" />
+          <ReferAndEarn />
+          <Chart />
+          <Contact />
+          <OfficeMap />
+          <Footer />
+        </>
+      )}
+    </>
+  );
+};
+
+export default Home;

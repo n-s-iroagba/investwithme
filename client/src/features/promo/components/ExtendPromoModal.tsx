@@ -1,49 +1,43 @@
 import React, { useEffect, useState } from 'react';
-import { Modal, Button, Form } from 'react-bootstrap';
+import { Modal, Button, Form, Spinner } from 'react-bootstrap';
 import { ExtendPromoFormModalProps } from '../types/types';
 import { hasEmptyKey } from '../../../common/utils/utils';
 import { patchPromo } from '../helpers/promoApiHelpers';
 import ErrorMessage from '../../../common/components/ErrorMessage';
 import { ExtendPromoDto } from '../../../../../common/promoTypes';
 
-
-
-
-
-
-                                                               
-
 const ExtendPromoFormModal: React.FC<ExtendPromoFormModalProps> = ({ show,id}) => {
     const [formData, setFormData] = useState<ExtendPromoDto|null>(null);
     const [modalShow, setModalShow] = useState<boolean>(show)
     const [errorMessage, setErrorMessage] = useState('')
+    const [submitting, setSubmitting] = useState(false)
 useEffect(()=>{
 setModalShow(show)
 }, [show])
 
 const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData((prevFormData) => {
-      if (prevFormData) {
-        return { ...prevFormData, [name]: value };
-      }
-      return null;
-    });
+    const { value } = e.target;
+    setFormData({id:id,days:Number(value)})
   };
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+      console.log(formData)
         e.preventDefault();
     
-        let shouldNotSubmit =  formData && hasEmptyKey(formData);
+        let shouldNotSubmit =  !formData || hasEmptyKey(formData);
         try {
           if (shouldNotSubmit) {
+            setErrorMessage('Kindly fill in the form appropriately')
           } else {
             await patchPromo(formData); 
             setModalShow(false); 
+            setSubmitting(true)
           }
         } catch (error) {
           console.error(error);
           setErrorMessage('Error trying to extend promo days');
+        }finally{
+          setSubmitting(false)
         }
       };
     
@@ -71,9 +65,10 @@ const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElemen
                         </Form.Control>
                     </Form.Group>
                     <br/>
-                    <Button variant="primary" type="submit">
-                        Extend Promo
-                    </Button>
+                  
+                    <Button disabled={submitting} variant="primary" type="submit">
+          {submitting? <Spinner animation='border' size='sm' /> :'Extend Promo'}
+          </Button>
                 </Form>
             </Modal.Body>
             <ErrorMessage message={errorMessage} />

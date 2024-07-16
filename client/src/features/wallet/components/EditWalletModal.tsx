@@ -1,35 +1,48 @@
-import React, { useEffect, useState } from 'react';
-import { Modal, Button, Form } from 'react-bootstrap';
-import { WalletDto } from '../../../../../common/walletTypes';
-import { patchWallet } from '../../wallet/helpers/walletHelper';
+import React, { useEffect, useState } from "react";
+import { Modal, Button, Form } from "react-bootstrap";
+import { WalletDto } from "../../../../../common/walletTypes";
+import { patchWallet } from "../../wallet/helpers/walletHelper";
+import { Spinner } from "react-bootstrap";
+import { hasEmptyKey } from "../../../common/utils/utils";
 
-const EditWalletModal: React.FC<{ data: WalletDto, show: boolean }> = ({ data, show }) => {
+const EditWalletModal: React.FC<{ data: WalletDto; show: boolean }> = ({
+  data,
+  show,
+}) => {
   const [error, setError] = useState<string | null>(null);
   const [showModal, setShowModal] = useState(show);
   const [walletData, setWalletData] = useState<WalletDto>(data);
+  const [submiting, setSubmiting] = useState<boolean>(false);
 
   useEffect(() => {
     setShowModal(show);
+  }, [data, show]);
 
-  }, [data, show])
   const handleClose = () => {
     setShowModal(false);
-  }
+  };
 
   const handleConfirm = async () => {
+    let shouldNotSubmit = hasEmptyKey(walletData);
     try {
-      if (walletData){
-        patchWallet(walletData);
-      }else{
-        alert("Kindly fill in the form")
+      if (walletData||!shouldNotSubmit) {
+        setSubmiting(true);
+        await patchWallet(walletData);
+      } else {
+        alert("Kindly Fill in the form.");
       }
     } catch (error: any) {
-      setError('Sorry an error occured while attempting to edit wallet')
+      setError("Sorry an error occured while attempting to edit wallet");
+    } finally {
+      setSubmiting(false);
     }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
+    let { name, value } = e.target;
+    if (name === 'currency'){
+      value = value.toUpperCase()
+     }
     setWalletData((prevData) => ({ ...prevData, [name]: value }));
   };
 
@@ -44,18 +57,18 @@ const EditWalletModal: React.FC<{ data: WalletDto, show: boolean }> = ({ data, s
             type="text"
             placeholder="enter new address"
             value={walletData?.address}
-            name='address'
+            name="address"
             onChange={handleChange}
           />
-          {error && <Form.Text className="text-danger">{error}</Form.Text>}
+          {error && <Form.Text className="text-danger text-center">{error}</Form.Text>}
         </Form.Group>
       </Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={handleClose}>
-          Back
+          Close
         </Button>
-        <Button variant="primary" onClick={handleConfirm}>
-          Submit
+        <Button className ='button-width-narrower'variant="primary" disabled={submiting} onClick={handleConfirm}>
+          {submiting ? <Spinner variant="light" size="sm" /> : "Submit"}
         </Button>
       </Modal.Footer>
     </Modal>

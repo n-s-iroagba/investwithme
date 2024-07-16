@@ -30,31 +30,31 @@ export const createPromo = async (req: Request, res: Response): Promise<Response
   export const updatePromo = async (req: Request, res: Response): Promise<Response> => {
     const { id } = req.params;
     const { days } = req.body;
+    console.log(req.body)
     try {
       const promo = await Promo.findOne()
       if (!promo) {
         throw customError(`promo to be updated with id ${id}  not found in database`, 404)
       }
-      console.log(promo)
-    //  console.log('days',days)
-    //   const dateObject = new Date(promo.endDate);
-    //   console.log('dateObject',dateObject)
-    //   console.log('date before update', dateObject.getDate())
-    //   const millisecs = dateObject.getTime()+ days* 24 * 60 * 60 * 1000;
+   
+      const dateObject = new Date(promo.endDate);
+      console.log('dateObject',dateObject)
+      console.log('date before update', dateObject.getDate())
+      const millisecs = dateObject.getTime()+ days* 24 * 60 * 60 * 1000;
 
-    //   console.log('date object  updated', dateObject)
-    //   promo.endDate = new Date (millisecs);
-    //   console.log('promo date',promo.endDate)
-    //   await promo.save();
+      console.log('date object  updated', dateObject)
+      promo.endDate = new Date (millisecs);
+      console.log('promo date',promo.endDate)
+      await promo.save();
   
-    //   const investors = await Investor.findAll();
-    //   investors.forEach(async (investor) => {
-    //     sendPromoExtensionMail(investor, promo)
-    //     await Notification.create({
-    //       investorId: investor.id, title: 'Promo Extension', message: `We are thrilled to announce the extension of our exclusive promotional period for you! 
-    //   The promotion will run from ${promo.startDate} to ${promo.endDate}.Invest before the ${promo.endDate} and earn a bonus of ${promo.bonusPercent}% on your initial investment deposit`
-    //     });
-    //   });
+      const investors = await Investor.findAll();
+      investors.forEach(async (investor) => {
+        sendPromoExtensionMail(investor, promo)
+        await Notification.create({
+          investorId: investor.id, title: 'Promo Extension', message: `We are thrilled to announce the extension of our exclusive promotional period for you! 
+      The promotion will run from ${promo.startDate.getDate()} to ${promo.endDate.getDate()}.Invest before the ${promo.endDate.getDate()} and earn a bonus of ${promo.bonusPercent}% on your initial investment deposit`
+        });
+      });
   
       return res.status(200).json({ message: 'Promo updated successfully', promo });
     } catch (error: any) {

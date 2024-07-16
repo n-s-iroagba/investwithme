@@ -4,7 +4,7 @@ import { faUsers } from '@fortawesome/free-solid-svg-icons'
 import '../../../common/styles/styles.css'
 
 const ReferAndEarn :React.FC =()=>{
-    return<div className='my-4 px-3'>
+    return<div className='my-4 px-4'>
         <div className='d-flex flex-column align-items-center mb-3'>
             <h2 className='text-center'>Refer a friend and earn a reward</h2>
             <div className='primary-line'></div>

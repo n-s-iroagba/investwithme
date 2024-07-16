@@ -15,7 +15,7 @@ import { socialMediaLink } from '../../constants/constants';
 
 export const GetStartedButton:React.FC<{primaryBackground?:boolean}> =({primaryBackground})=>{
   const navigate = useNavigate()
-    return<button onClick={()=>navigate('/invest/managers')} className=' button-styles button-width-narrower'><span>Get Started</span><span ><FontAwesomeIcon icon={faDollarSign} beatFade/></span></button>
+    return<button onClick={()=>navigate('/invest/managers')} className={`${ primaryBackground?'text-light border-0':''} button-styles button-width-narrower`}><span>Get Started</span><span ><FontAwesomeIcon icon={faDollarSign} beatFade/></span></button>
 }
 export const SelectManagerButton: React.FC<{ managerId?: number }> = ({ managerId }) => {
   const navigate = useNavigate();
@@ -42,5 +42,10 @@ export const  SocialMediaButton:React.FC = ()=>{
 
 
 
-
+export const AdminDashboardButton:React.FC =()=>{
+  const navigate = useNavigate()
+  return <button onClick={()=>{navigate('/admin/dashboard')}} className='button-styles button-width-narrow mt-4 text-light'>
+    Dashboard
+    </button>
+}
 

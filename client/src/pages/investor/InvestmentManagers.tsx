@@ -7,10 +7,11 @@ import ErrorMessage from '../../common/components/ErrorMessage';
 import '../../common/styles/styles.css'
 import { ManagerDto } from '../../../../common/managerType';
 import { getManagers } from '../../features/manager/helpers/managerApiHelpers';
+import LoadingSpinner from '../../common/components/LoadingSpinner';
 
 
 const InvestmentManagers: React.FC = () => {
-const [managers,setManagers] = useState<ManagerDto[]>([])
+const [managers,setManagers] = useState<ManagerDto[]|null>(null)
 const [errorMessage, setErrorMessage]=useState('')
 
 useEffect(()=>{
@@ -28,8 +29,9 @@ useEffect(()=>{
     });
 
     return (
-        <div className='primary-background'>
+       <div className='primary-background'>
         <div className='d-flex flex-column align-items-center px-3 full-height'>
+        {!managers?<LoadingSpinner/>:(
             <Row className='gy-4 gx-1'>
                 <Col xs={12}>
                     <h3 className='text-center mt-4 text-light'>
@@ -40,13 +42,7 @@ useEffect(()=>{
                 {managers.length?managers.map((manager:ManagerDto) => (
                 <Col  key={manager.id} xs={12} md={6} lg={4}>
                     <ManagerCard
-                        percentageYield={`${manager.percentageYield}%`}
-                        image={manager.image}
-                        firstName={manager.firstName}
-                        lastName={manager.lastName}
-                        qualification={manager.qualification}
-                        minimumInvestmentAmount={`$${manager.minimumInvestmentAmount}`}
-                        duration={`${manager.duration} weeks`}
+                        {...manager}
                         button={<SelectManagerButton managerId={manager.id} />}
                     />
                 </Col>
@@ -54,11 +50,12 @@ useEffect(()=>{
               : <h3 className='text-light text-center'>No managers available yet</h3>
               }
                 </Row>
-            </Row>
+            </Row>)}
             </div>
             <ErrorMessage message={errorMessage} />
             <MiniFooter primaryVariant={true} />
         </div>
+            
     );
 };
 

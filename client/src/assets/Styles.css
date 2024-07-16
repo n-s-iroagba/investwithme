@@ -23,6 +23,9 @@
     background:var(--primary-color) ;
     width:100%;
 }
+.primary-color{
+    color: var(--primary-color);
+}
 .dashboard-wrapper .dashboard-item{
     margin: 0;
 }

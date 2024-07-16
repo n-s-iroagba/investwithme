@@ -38,7 +38,7 @@ const Promo: React.FC<PromoProps> = ({ promo, countdown }) => {
             <small className='smallest-font mb-2'>**Time remaining till offer close.</small>
             <div className='d-flex justify-content-center'>
               <div className='button-width-narrower'>
-                <GetStartedButton primaryBackground/>
+                <GetStartedButton/>
               </div>
             </div>
           </div>

@@ -5,7 +5,7 @@ import { Modal, Button, Form,Spinner } from 'react-bootstrap';
 import ErrorMessage from '../../../common/components/ErrorMessage';
 import { createPromo } from '../../promo/helpers/promoApiHelpers';
 import { CreatePromoDto } from '../../../../../common/promoTypes';
-import { hasEmptyKey } from '../../../common/utils/utils';
+import { extractErrorCode, hasEmptyKey } from '../../../common/utils/utils';
 
 interface PromoFormModalProps {
   show: boolean
@@ -39,35 +39,32 @@ const PromoFormModal: React.FC<PromoFormModalProps> = ({ show }) => {
       }
     });
   };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    let shouldNotSubmit;
-    if (promoData) {
-    shouldNotSubmit = hasEmptyKey(promoData);
-    } else {
-      shouldNotSubmit = true;
-      alert('kindly fill in the form')
-    }
+    const shouldNotSubmit = !promoData || hasEmptyKey(promoData);
+    if (!shouldNotSubmit){
+      setSubmitting(true);
     try {
-      if (shouldNotSubmit) {
-        alert('form not properly filled')
-      } else {
-     setSubmitting(true);
-        promoData && await createPromo(promoData); 
-        setModalShow(false); 
-      }
-    } catch (error) {
-      console.error(error);
-      setErrorMessage('error trying to create promo')
+     await createPromo(promoData); 
       
+    } catch (error:any) {
+      console.error(error);
+      const code = extractErrorCode(error.message)
+      if(code === 409){
+        setErrorMessage('promo already exists,kindly delete the existing one and try again')
+      }else{
+      setErrorMessage('error trying to create promo')
+      }
     }finally{
       setSubmitting(false)
     }
   };
+}
 
   const onHide = () => {
     setModalShow(false);
+    window.location.reload()
   };
 
   return (
@@ -84,7 +81,7 @@ const PromoFormModal: React.FC<PromoFormModalProps> = ({ show }) => {
               name="startDate"
               value={promoData?.startDate && new Date(promoData.startDate).toISOString().split('T')[0]}
               onChange={handleChange}
-              // min={new Date().toISOString().split('T')[0]}
+              min={new Date().toISOString().split('T')[0]}
             />
           </Form.Group>
 
@@ -105,10 +102,11 @@ const PromoFormModal: React.FC<PromoFormModalProps> = ({ show }) => {
               name="bonusPercent"
               value={promoData?.bonusPercent}
               onChange={handleChange}
+              min={1}
             />
           </Form.Group>
 
-          <Button variant="primary" type="submit">
+          <Button disabled={submitting} variant="primary" type="submit">
           {submitting? <Spinner animation='border' size='sm' /> :'Create Promo'}
           </Button>
         </Form>

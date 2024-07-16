@@ -1,6 +1,7 @@
 import { CreationOptional, DataTypes, ForeignKey, InferAttributes, InferCreationAttributes, Model, NonAttribute,} from 'sequelize';
 import { Investment } from './investorTypes';
 import sequelize from '../orm_setup';
+import { customError } from '../helpers/commonHelpers';
 
 export class Admin extends Model<InferAttributes<Admin>, InferCreationAttributes<Admin>> {
   declare id: CreationOptional<number>;
@@ -187,7 +188,16 @@ Promo.init(
     },
   },
   {
-    sequelize, 
-    modelName: 'Promo', 
+    sequelize,
+    modelName: 'Promo',
+    hooks: {
+      beforeCreate: async (promo, options) => {
+        const existingPromo = await Promo.findOne();
+        if (existingPromo) {
+          throw customError('Only one promo can exist at a time',409);
+        }
+      },
+
+    },
   }
 );

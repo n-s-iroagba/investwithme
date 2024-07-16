@@ -49,7 +49,9 @@ app.use('/create-promo', routes);
 app.use('/patch-promo', routes);
 app.use('/get-promo', routes);
 app.use('/get-adpromo', routes);
+app.use('/delete-promo/:id',routes)
 app.use('/delete-manager', routes);
+
 
 app.use('/create-investment/:id', routes);
 app.use('/patch-investment', routes);

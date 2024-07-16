@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import MiniFooter from '../../common/components/MiniFooter';
 import WalletForm from '../../features/wallet/layout/WalletForm';
-import AdminWallet from '../../features/wallet/layout/AdminWallet';
+import AdminWalletLayout from '../../features/wallet/layout/AdminWalletLayout';
 import '../../common/styles/styles.css'
+import { AdminDashboardButton } from '../../common/components/Button';
 
 const AdminWallets: React.FC = () => {
   const [showWallets, setShowWallets] = useState<boolean>(true)
@@ -18,7 +19,7 @@ const AdminWallets: React.FC = () => {
           {showWallets ?
             <>
               <button className='button-styles button-width-narrow text-light' onClick={handleToggle}>Add Wallet</button>
-              <AdminWallet />
+              <AdminWalletLayout />
             </>
             :
             <>
@@ -26,9 +27,11 @@ const AdminWallets: React.FC = () => {
               <WalletForm />
             </>
           }
+          <AdminDashboardButton/>
 
         </div>
       </div >
+
       <MiniFooter primaryVariant />
     </div>
   )

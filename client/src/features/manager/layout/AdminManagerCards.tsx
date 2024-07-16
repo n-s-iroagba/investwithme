@@ -33,7 +33,6 @@ const AdminManagerCards: React.FC = () => {
   const [idToBeDeleted, setIdToBeDeleted] = useState(0);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const {managers, errorMessage} = useGetManagers()
-  const navigate = useNavigate()
 
   const handleDelete = (id: number) => {
     setShowDeleteModal(true);
@@ -51,13 +50,7 @@ const AdminManagerCards: React.FC = () => {
             {managers.map((manager:ManagerDto) => (
               <Col key={manager.id} xs={12} md={6} lg={3}>
                 <ManagerCard
-                  percentageYield={`${manager.percentageYield}%`}
-                  image={manager.image}
-                  firstName={manager.firstName}
-                  lastName={manager.lastName}
-                  qualification={manager.qualification}
-                  minimumInvestmentAmount={`$${manager.minimumInvestmentAmount}`}
-                  duration={`${manager.duration} weeks`}
+                  {...manager}
                   button={<MoveToPatchManager manager={manager} />}
                   deleteButton={<button className='red-button' onClick={() => handleDelete(manager.id)}>
                     Delete Manager
@@ -72,9 +65,6 @@ const AdminManagerCards: React.FC = () => {
           <h3 className='text-center mt-4 text-light'>
             No Managers yet, kindly add a manager.
           </h3>
-          <div className='d-flex justify-content-center mt-5'>
-            <button className='button-styles button-width-narrow text-light' onClick={() => navigate('/admin/dashboard')}>Dashboard</button>
-          </div>
           <ErrorMessage message={errorMessage} />
         </>
       )}

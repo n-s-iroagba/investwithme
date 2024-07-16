@@ -4,6 +4,7 @@ import ManagerForm from '../../features/manager/components/ManagerForm';
 import '../../common/styles/styles.css'
 import MiniFooter from '../../common/components/MiniFooter';
 import AdminManagerCards from '../../features/manager/layout/AdminManagerCards';
+import { AdminDashboardButton } from '../../common/components/Button';
 const AdminManager: React.FC = () => {
   const [showManagers, setShowManagers] = useState<boolean>(true)
 
@@ -29,6 +30,9 @@ const AdminManager: React.FC = () => {
             <ManagerForm />
           </>
         }
+          <div className='d-flex justify-content-center'>
+      <AdminDashboardButton/>
+      </div>
       </div>
       <MiniFooter primaryVariant={true} />
       </div>

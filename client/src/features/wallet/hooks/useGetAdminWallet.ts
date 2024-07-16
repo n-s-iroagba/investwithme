@@ -3,8 +3,8 @@ import { getAdminWallets } from "../../wallet/helpers/walletHelper"
 import {WalletDto} from '../../../../../common/walletTypes'
 
 
-const useGetAdminWallets = (): { wallets: WalletDto[], errorMessage: string } => {
-    const [wallets, setWallets] = useState<WalletDto[]>([]);
+const useGetAdminWallets = (): { wallets: WalletDto[]|null, errorMessage: string } => {
+    const [wallets, setWallets] = useState<WalletDto[]|null>(null);
     const [errorMessage, setErrorMessage] = useState('');
   
     useEffect(() => {

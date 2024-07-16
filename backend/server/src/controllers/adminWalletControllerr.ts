@@ -9,19 +9,24 @@ export const createAdminWallet = async (req: Request, res: Response): Promise<Re
     const { address,  currency } = req.body;
 
     if ( !address || !currency) {
-
-      console.log('address', address)
-    
-      console.log('currency', currency)
       throw customError('incomplete payload from client', 400)
     }
+    
+    const existingWallet =await  AdminWallet.findOne({
+      where:{
+        currency: currency,
+      }})
+     
+     if (existingWallet){
+      throw customError(`${existingWallet.currency} wallet already exist`,409)
+     }
 
     const wallet = await AdminWallet.create({
       address,
       currency,
     });
 
-    return res.status(201).json({ message: 'Wallet created successfully', wallet });
+    return res.status(201).json(wallet);
   } catch (error: any) {
     console.error('Error createWalletAddress function:', error);
     return res.status(error.status || 500).json(error);
@@ -59,7 +64,7 @@ export const patchWallet = async (req: Request, res: Response): Promise<Response
     }
     wallet.address = address
     await wallet.save();
-    return res.status(200).json({ message: 'Wallet address updated successfully', wallet });
+    return res.status(200).json(wallet);
   } catch (error: any) {
     console.error('Error in patchWallet function:', error);
     return res.status(error.status || 500).json(error);

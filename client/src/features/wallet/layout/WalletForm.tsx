@@ -1,7 +1,7 @@
 import React, {useState } from 'react';
 import { Col, Form, Spinner } from 'react-bootstrap';
 import { CreateWalletDto } from '../../../../../common/walletTypes';
-import { hasEmptyKey } from '../../../common/utils/utils';
+import { extractErrorCode, hasEmptyKey } from '../../../common/utils/utils';
 import { createWallet } from '../helpers/walletHelper';
 import { required } from '../../auth/components/required';
 import ErrorMessage from '../../../common/components/ErrorMessage';
@@ -19,8 +19,6 @@ const WalletForm: React.FC = () => {
   const [submitting, setSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
 
-
-
   const handleChange = (e: any) => {
     let { name,value } = e.target
      if (name === 'currency'){
@@ -35,20 +33,28 @@ const WalletForm: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(walletData)
+  
     let shouldNotSubmit = hasEmptyKey(walletData);
+    setValidated(true);
     try {
       if (shouldNotSubmit) {
-        setValidated(false);
+        setErrorMessage('Kindly fill the form appropriately.')
+        return;
       } else {
-        setSubmitting(true);
-
+        setSubmitting(true)
         await createWallet(walletData);
       }
 
-    } catch (error) {
+    } catch (error:any) {
+      const code = extractErrorCode(error.message);
       console.error(error);
-      setErrorMessage('Sorry we cannot complete your request at this time');
+      if (code === 409) {
+        setErrorMessage(`${walletData.currency} wallet already exists.`);
+      } 
+      else {
+        setErrorMessage('Sorry we cannot complete your request at this time.');
+      }
+      
     } finally {
       setSubmitting(false)
     }
@@ -84,7 +90,7 @@ const WalletForm: React.FC = () => {
         </Form.Group>
 
         <div className="d-flex justify-content-evenly w-100">
-          <button className="button-styles w-50 text-light" type={submitting ? 'submit' : 'submit'}>
+          <button className="button-styles w-50 text-light" type={submitting ? 'button' : 'submit'}>
             {submitting ? <Spinner animation="border" size="sm" /> : 'Submit'}
           </button>
           <button className="button-styles text-light w-50" onClick={() => console.log(walletData)}>Home</button>

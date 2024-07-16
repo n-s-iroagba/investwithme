@@ -35,7 +35,10 @@ const Steps: React.FC = () => {
           </Row>
         </Col>
       </Row>
-     <GetStartedButton/>
+      <div className='d-flex justify-content-center'>
+      <GetStartedButton/>
+      </div>
+    
     </div>
   );
 };
