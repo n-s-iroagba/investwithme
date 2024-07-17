@@ -19,6 +19,26 @@ export const postData = async (url: string, data: any) => {
     throw new Error(error.message);
   }
 };
+//authData(token) is passed in at call
+export const postChangePasswordData = async (url: string, data: any,authorizationData:string) => {
+ 
+   
+  const headers: { [key: string]: string } = {
+    'Content-Type': 'application/json',
+  };
+
+  if (authorizationData) {
+    headers['Authorization'] = authorizationData;
+  }
+
+  try {
+    const response: AxiosResponse<any> = await axios.post(url, data, { headers });
+    return response;
+  } catch (error: any) {
+    console.error(error);
+    throw new Error(error.message);
+  }
+};
 
 export const postFormData = async (url: string, formData: FormData) => {
  
@@ -49,6 +69,18 @@ export const getData = async (url: string) => {
 
   headers['Authorization'] = authorizationData;
 
+  try {
+    const response: AxiosResponse<any> = await axios.get(url, { headers });
+    return response;
+  } catch (error: any) {
+    console.error(error);
+    throw new Error(error.message);
+  }
+};
+export const getNotProtectedData = async (url: string) => {
+  const headers: { [key: string]: string } = {
+    'Content-Type': 'application/json'
+  };
   try {
     const response: AxiosResponse<any> = await axios.get(url, { headers });
     return response;

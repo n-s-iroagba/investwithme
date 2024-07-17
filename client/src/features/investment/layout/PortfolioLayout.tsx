@@ -22,8 +22,8 @@ const PortfolioLayout: React.FC<{ investmentData: PortfolioDto }> = ({ investmen
   };
  if (investmentData.investment.investmentDate){
   console.log(investmentData.investment.amountDeposited)
-  console.log(investmentData.manager?.percentageYield)
-  console.log(investmentData.manager?.duration as number*7)
+  console.log(investmentData.manager.percentageYield)
+  console.log(investmentData.manager.duration as number*7)
   chartObject = createInvestmentMultiplicationObject(new Date(investmentData.investment.investmentDate).toISOString(), 
   investmentData.investment.amountDeposited*(investmentData.manager.percentageYield as number/(investmentData.manager.duration as number*7*100)));
  }

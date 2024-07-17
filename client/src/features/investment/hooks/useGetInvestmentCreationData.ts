@@ -2,11 +2,12 @@ import { useState, useEffect } from 'react';
 import { ManagerDto } from "../../../../../common/managerType";
 import { getManagers } from "../../manager/helpers/managerApiHelpers";
 import { findManagerById } from "../../manager/helpers/managerHelpers";
-import { getAvailableCurrencies } from "../utils/apiUtills";
+import { getAvailableWallets } from "../utils/apiUtills";
+import { WalletDto } from '../../../../../common/walletTypes';
 
 const useGetInvestmentCreationData = () => {
     const [errorMessage, setErrorMessage] = useState('');
-    const [currencies, setCurrencies] = useState<string[]>([]);
+    const[wallets, setWallets] = useState<WalletDto[]>([]);
     const [managers, setManagers] = useState<ManagerDto[]>([]);
     const [selectedManager, setSelectedManager] = useState<ManagerDto | null>(null);
 
@@ -15,8 +16,8 @@ const useGetInvestmentCreationData = () => {
             const tempManagers: ManagerDto[] = await getManagers();
             console.log(tempManagers)
             setManagers(tempManagers);
-            const tempCurrencies= await getAvailableCurrencies();
-            setCurrencies(tempCurrencies);
+            const tempWallets= await getAvailableWallets();
+            setWallets(tempWallets);
 
             const managerId = localStorage.getItem('cassockNewInvestmentInitmanagerId');
             setSelectedManager(findManagerById(tempManagers, Number(managerId)));
@@ -31,7 +32,7 @@ const useGetInvestmentCreationData = () => {
     }, []); // Empty dependency array ensures this runs only once on mount
 
     return {
-        currencies,
+        wallets,
         managers,
         selectedManager,
         setSelectedManager,

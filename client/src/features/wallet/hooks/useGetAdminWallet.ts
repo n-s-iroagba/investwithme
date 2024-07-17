@@ -6,20 +6,21 @@ import {WalletDto} from '../../../../../common/walletTypes'
 const useGetAdminWallets = (): { wallets: WalletDto[]|null, errorMessage: string } => {
     const [wallets, setWallets] = useState<WalletDto[]|null>(null);
     const [errorMessage, setErrorMessage] = useState('');
-  
-    useEffect(() => {
-      const fetchWalletData = async () => {
+   const fetchWalletData = async () => {
         try {
           const walletData = await getAdminWallets();
           if (walletData) {
             setWallets(walletData);
           }
         } catch (error) {
-          console.error(error);
           setErrorMessage('Error fetching wallets');
+          console.error(error);
+         
         }
       };
   
+    useEffect(() => {
+     
       fetchWalletData();
     }, []); 
   

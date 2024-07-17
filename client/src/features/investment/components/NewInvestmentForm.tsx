@@ -27,7 +27,12 @@ const NewInvestmentForm: React.FC<{ username: string, id: number }> = ({ usernam
   const [address, setAddress] = useState('')
 
   const [investmentData, setInvestmentData] = useState<CreateInvestmentDto>({
-    wallet: { address: '', currency: '' },
+    wallet:{
+      identification: '',
+      currency: null,
+      identificationType:'CRYPTOCURRENCY WALLET',
+      depositMeans:'CRYPTOCURRENCY'
+    },
     managerId: 0,
     amount: 0
   });
@@ -35,14 +40,14 @@ const NewInvestmentForm: React.FC<{ username: string, id: number }> = ({ usernam
 
   const navigate = useNavigate();
 
-  const { currencies, managers, selectedManager, setSelectedManager, errorMessage, setErrorMessage } = useGetInvestmentCreationData()
-  console.log('currencies',currencies)
+  const { wallets, managers, selectedManager, setSelectedManager, errorMessage, setErrorMessage } = useGetInvestmentCreationData()
+
 
   const handleAmountChange = (e: any) => {
     setSelectedManager(null)
     setAmount(e.target.value)
     const manager:ManagerDto|null = findManagerWithHighestMinInvestment(managers, e.target.value)
-    console.log('manager',manager)
+   
 
     if (manager !==null) {
       setInvestmentData({
@@ -62,7 +67,15 @@ const NewInvestmentForm: React.FC<{ username: string, id: number }> = ({ usernam
       setSmallAmount(true)
     }
   }
-
+  const handleWalletChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setInvestmentData((prevData: CreateInvestmentDto) => ({
+      ...prevData,
+      wallet: {
+        ...prevData.wallet,
+        depositMeans: e.target.value
+      }
+    }));
+  };
 
   const handleCurrencyChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setInvestmentData((prevData: CreateInvestmentDto) => ({
@@ -88,7 +101,7 @@ const NewInvestmentForm: React.FC<{ username: string, id: number }> = ({ usernam
           ...prevData,
           wallet: {
             ...prevData.wallet,
-            address: value
+            identification: value
           }
         }));
       }
@@ -100,6 +113,8 @@ const NewInvestmentForm: React.FC<{ username: string, id: number }> = ({ usernam
 
   const submitInvestment = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    console.log(investmentData)
+  
     const form = event.currentTarget;
     let shouldSubmit: boolean = true;
 
@@ -157,24 +172,41 @@ const NewInvestmentForm: React.FC<{ username: string, id: number }> = ({ usernam
         />
       </Form.Group>
 
-      {currencies.length && (
-        <>
-          <Form.Group className="mb-3" controlId="validationFormik04">
-            <Form.Label>Crypto Currency{required}</Form.Label>
-            <Form.Select onChange={(e) => handleCurrencyChange(e)} value={investmentData.wallet.currency}>
-              <option value="">Select Deposit Crypto Currency...</option>
-              {currencies.map((currency, index) => (
-                <option key={index} value={currency} className='text-dark'>
-                  {currency}
+      <Form.Group className="mb-3" controlId="validationFormik04">
+            <Form.Label>Preferred Deposit Means{required}</Form.Label>
+            <Form.Select onChange={(e) => handleWalletChange(e)} value={investmentData.wallet.depositMeans}>
+              <option value="">Select means of fund deposit</option>
+              {wallets.map((wallet, index) => (
+                <option key={index} value={wallet.depositMeans} className='text-dark'>
+                  {wallet.depositMeans}
                 </option>
               ))}
             </Form.Select>
           </Form.Group>
-        </>
+
+       {   investmentData.wallet.depositMeans === 'CRYPTOCURRENCY' && (
+      <>
+        <Form.Group className="mb-1" controlId="validationFormik04">
+          <Form.Label>Crypto Currency{required}</Form.Label>
+          <Form.Select onChange={handleCurrencyChange} value={investmentData.wallet.currency || ''}>
+            <option value="">Select Deposit Crypto Currency...</option>
+            {wallets
+              .filter(wallet => 
+                wallet.identificationType === 'CRYPTOCURRENCY WALLET' && 
+                wallet.depositMeans === 'CRYPTOCURRENCY'
+              )
+              .map((wallet, index) => (
+                <option key={index} value={wallet.currency} className='text-dark'>
+                  {wallet.currency}
+                </option>
+              ))}
+          </Form.Select>
+        </Form.Group>
+      </>
       )}
       <br />
-      <Form.Group as={Col} lg="12" controlId="validationFormik04">
-        <Form.Label>Wallet address{required}</Form.Label>
+    <Form.Group as={Col} lg="12" controlId="validationFormik04">
+        <Form.Label>  {investmentData.wallet.depositMeans === 'CRYPTOCURRENCY'?'Wallet Address':<small className='text-center'>Tag or email address of deposit means entered previously for easy identification.</small>}</Form.Label>
         <Form.Control
           required
           type="text"
@@ -184,9 +216,10 @@ const NewInvestmentForm: React.FC<{ username: string, id: number }> = ({ usernam
           className="custom-input bg-transparent form-control text-light"
         />
         <Form.Text className='text-light'>
-          *The wallet you wish to receive your profits, it should be same as the wallet you will make deposits with.
+          *This is to ensure you are credited and that you receive your returns on investment with ease.
         </Form.Text>
       </Form.Group>
+       
       <br />
       <div className='d-flex justify-content-evenly w-100'>
         <button className='button-styles w-50 text-light' type='submit'>

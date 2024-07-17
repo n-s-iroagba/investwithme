@@ -16,8 +16,10 @@ export class Admin extends Model<InferAttributes<Admin>, InferCreationAttributes
 
 export class AdminWallet extends Model<InferAttributes<AdminWallet>, InferCreationAttributes<AdminWallet>> {
   declare id: CreationOptional<number>;
-    declare address: string;
-    declare currency: string;
+    declare identification: string;
+    declare currency: string|null;
+    declare identificationType:string;
+    declare depositMeans:string
   }
 
 export class Manager extends Model<InferAttributes<Manager>, InferCreationAttributes<Manager>> {
@@ -48,11 +50,26 @@ AdminWallet.init(
       allowNull: false,
       primaryKey: true,
     },
-    address: {
+    identification: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    depositMeans: {
       type: DataTypes.STRING,
       allowNull: false,
     },
     currency: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        isRequiredForCryptoWallet(value:string) {
+          if (this.identificationType === 'CRYPTOCURRENCY WALLET' && !value) {
+            throw customError('Currency is required when identification type is CRYPTO_WALLET',400);
+          }
+        },
+      },
+    },
+    identificationType: {
       type: DataTypes.STRING,
       allowNull: false,
     },

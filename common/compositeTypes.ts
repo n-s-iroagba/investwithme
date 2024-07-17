@@ -1,14 +1,10 @@
-import { Investment, Investor } from "../server/src/types/investorTypes";
+
 import { CreateWalletDto } from "./walletTypes";
 import { Manager, ManagerDto } from "./managerType";
 
 
 
 
-export interface InvestorAndInvestment{
-  investment:Investment
-  investor:Investor
-}
 
 
 

@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { Investment, Investor } from '../types/investorTypes';
-import { InvestorAndInvestment } from '../../../../common/compositeTypes';
+// import { InvestorAndInvestment } from '../../../../common/compositeTypes';
 import { customError } from '../helpers/commonHelpers';
 
 export const getAllInvestors = async (req: Request, res: Response): Promise<Response> => {
@@ -10,7 +10,7 @@ export const getAllInvestors = async (req: Request, res: Response): Promise<Resp
         throw customError('There are no investors in the database', 404);
       }
   
-      const investorsWithInvestments: InvestorAndInvestment[] = [];
+      const investorsWithInvestments:any[] = [];
   
       for (const investor of investors) {
         let investment = await Investment.findOne({

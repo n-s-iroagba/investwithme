@@ -9,7 +9,7 @@ import React, {
 } from "react";
 
 import { doPasswordsMatch } from "../utils/utils";
-import { postData } from "../../../common/utils/apiUtils";
+import { postChangePasswordData, postData } from "../../../common/utils/apiUtils";
 import {
   AdminData,
   AuthContextType,
@@ -22,7 +22,7 @@ import {
 import { loginUrl, newPasswordRoute } from "../../../constants/constants";
 import { extractErrorCode } from "../../../common/utils/utils";
 
-import { decodeChangePasswordToken } from "../helpers/helper";
+import { decodeChangePasswordToken, getLoginDecodedToken } from "../helpers/helper";
 
 export const AuthContext = createContext<AuthContextType | undefined>(
   undefined
@@ -129,7 +129,9 @@ export const AuthContextProvider: React.FC<{ children: ReactNode }> = ({
     localStorage.setItem(
         "cassockEmailVerificationToken",
         JSON.stringify(response.data)
+       
     );
+    console.log(response)
     shouldReload?window.location.reload(): navigateToVerifyEmailPage(navigate);
 }
   const handleChange = (
@@ -206,17 +208,20 @@ export const AuthContextProvider: React.FC<{ children: ReactNode }> = ({
     const decodedToken = getIdFromChangePasswordToken(token)
 
     if (
-      decodedToken
+      decodedToken && token
     ){
+      
       setSubmitting(true);
     }else{
+      setErrorMessage('Your are not authorised to make this request')
       return;
     }
-    
+ 
     try {
-      const response = await postData(
+      const response = await postChangePasswordData(
         `${newPasswordRoute}/${decodedToken.id}`,
-        data.password
+        {password:data.password},
+        token
       );
       if (response.status === 200) {
         localStorage.setItem("cassockJwtToken", JSON.stringify(response.data));
@@ -289,9 +294,10 @@ const handleLoginResponse = (response: any, navigate: (path: string) => void) =>
     }
   };
 
-  const handleSuccessfulLogin = (data:any,navigate:(path:string)=>void) => {
-    localStorage.setItem('cassockJwtToken', JSON.stringify(data.token));
-    const destination = data.user === 'investor' ? '/dashboard' : '/admin/dashboard';
+  const handleSuccessfulLogin = (token:string,navigate:(path:string)=>void) => {
+    localStorage.setItem('cassockJwtToken', JSON.stringify(token));
+    const role  = getLoginDecodedToken()?.role
+    const destination = role === Role.INVESTOR ? '/dashboard' : '/admin/dashboard';
     navigate(destination);
   };
   

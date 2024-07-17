@@ -1,5 +1,5 @@
 import { ManagerDto } from "../../../../../common/managerType";
-import { deleteItem, getData, patchFormDataItem, postFormData } from "../../../common/utils/apiUtils";
+import { deleteItem, getData, getNotProtectedData, patchFormDataItem, postFormData } from "../../../common/utils/apiUtils";
 import { createManagerUrl, getManagersUrl, getSingleMangerRoute, patchManagerUrl, deleteManagerRoute } from "../../../constants/constants";
 
 export const createManager= async (data:FormData) => {
@@ -15,6 +15,26 @@ export const createManager= async (data:FormData) => {
     alert('unable to create a manager at this time')
    }
   
+  };
+  
+  export const getNotProtectedManagers = async (): Promise<ManagerDto[]> => {
+    try {
+  
+
+  
+      const response = await getNotProtectedData(getManagersUrl);
+   
+      if (response.status === 200 && Array.isArray(response.data)) {
+        return response.data as ManagerDto[];
+      }
+  
+      return [];
+      
+    } catch (error: any) {
+      console.error(error);
+      return error
+    
+    }
   };
   
   export const getManagers = async (): Promise<ManagerDto[]> => {
@@ -36,8 +56,6 @@ export const createManager= async (data:FormData) => {
     
     }
   };
-  
-  
   
   export const getSingleManager = async (id:string)=>{
     const getSingleMangerUrl = `${getSingleMangerRoute}/${id}`

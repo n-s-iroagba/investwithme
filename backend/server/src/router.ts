@@ -8,7 +8,7 @@ import { deleteInvestor, getAllInvestors } from './controllers/investorControlle
 import { getAllDueReferrals, getReferralDetails, payReferralBonus } from './controllers/referralController';
 
 import { createManager, patchManager, getAllManagers, getSingleManager, deleteManager } from './controllers/managerController';
-import { createAdminWallet, deleteWallet, getAllAvailableCurrencies, getAllWallets, patchWallet } from './controllers/adminWalletControllerr';
+import { createAdminWallet, deleteWallet, getAllWallets, patchWallet } from './controllers/adminWalletControllerr';
 import { getNotifications, getTransactions } from './controllers/notificationAndTransactionController';
 import { payPromoBonus, getPendingPromo, createPromo, getPromos, getAdvertPromos, updatePromo, deletePromo } from './controllers/promoController';
 
@@ -25,7 +25,7 @@ router.get('/resend-verification-token/:email', resendVerificationToken);
 router.post('/request-passswordChange', requestPasswordReset);
 router.get('/verify-password-token/:token', confirmMailForPasswordChange);
 router.post('/new-password/:id', changePassword);
-router.get ('/get-available-currencies',getAllAvailableCurrencies)
+router.get ('/get-available-currencies',getAllWallets)
 router.post('/create-admin', createAdmin);
 router.post('/create-investor', createInvestor);
 router.get('/get-investors',  getAllInvestors);

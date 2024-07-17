@@ -111,11 +111,11 @@ export const getInvestmentPausedEmailContent = (investor: Investor, investment: 
       To complete your investment, please follow the instructions below:
   
       1. Transfer the investment amount of ${investment.amount}  to the following wallet address:
-         - Crypto currency: ${adminWallet.currency}
-         - Wallet Address: ${adminWallet.address}
+         - currency: ${adminWallet?.currency||'Any convinient currency, but the US Dollar is preferred'}
+         - Wallet Address: ${adminWallet.identification}
   
       2. Ensure that the transfer is made from your deposit wallet address that you submitted on our website when creating your portfolio:
-         - Your Deposit Wallet Address: ${depositWallet.address}
+         - Your Deposit Means identification: ${depositWallet.identification}
   
       Once the transfer is complete, you will receive the deposit in your investment account within 12 hours.
   

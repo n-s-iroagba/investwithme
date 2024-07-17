@@ -1,25 +1,47 @@
 import React from 'react';
 import { Card } from 'react-bootstrap';
-import '../../../common/styles/styles.css'
-import { WalletCardProps } from '../types/props/props';
+import { WalletCardProps } from '../types/props/props'; // Adjust path as needed
+import '../../../common/styles/styles.css';
 
-const WalletCard: React.FC<WalletCardProps> = ({ currency, address, editButton, deleteButton }) => {
+const WalletCard: React.FC<WalletCardProps> = ({
+  currency,
+  identificationType,
+  identification,
+  depositMeans,
+  editButton,
+  deleteButton,
+}) => {
   return (
-    <div className='px-1'>
-      <Card className='shade round-card my-1 w-100'>
-        <Card.Body>
-          <small>Currency:</small>
-          <Card.Text>{currency}</Card.Text>
-          <small>Address:</small>
-          <Card.Text>{address}</Card.Text>
-          {editButton && <div>{editButton}</div>}
+    
+      <Card className='shade round-card my-1'>
+        <Card.Body className='px-2'>
+          <div className='mb-3'>
+            <small>Currency:</small>
+            <Card.Text>{currency}</Card.Text>
+          </div>
+          <div className='mb-3'>
+            <small>Identification Type:</small>
+            <Card.Text>{identificationType}</Card.Text>
+          </div>
+          <div className='mb-3'>
+            <small>Identification:</small>
+            <Card.Text>{identification}</Card.Text>
+          </div>
+          <div className='mb-3'>
+            <small>Deposit Means:</small>
+            <Card.Text>{depositMeans}</Card.Text>
+          </div>
+          <div>
+          {editButton && <>{editButton}</>}
           {deleteButton && <div>{deleteButton}</div>}
+          </div>
         </Card.Body>
       </Card>
-    </div>
+    
   );
 };
 
 export default WalletCard;
+
 
 

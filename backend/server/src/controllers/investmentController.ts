@@ -101,9 +101,9 @@ export const createInvestment = async (req: Request, res: Response): Promise<Res
       earnings: 0,
     });
 
-     const depositWallet = await DepositWallet.create({
-      address:wallet.address,
-      currency:wallet.currency,
+    const depositWallet = await DepositWallet.create({
+      identification:wallet.identification,
+      depositMeans : wallet.depositMeans,
       investmentId: newInvestment.id,
     });
   
@@ -113,12 +113,22 @@ export const createInvestment = async (req: Request, res: Response): Promise<Res
       investorId: id as unknown as number,
     });
 
-    const responseWallet: AdminWallet | null = await AdminWallet.findOne({
+    let responseWallet;
+    
+    if (!wallet.currency){
+      responseWallet =  await AdminWallet.findOne({
+        where: {
+          depositMeans:wallet.depositMeans,
+        }
+      });
+  
+    }else{
+      responseWallet = await AdminWallet.findOne({
       where: {
-        currency: wallet.currency,
+        currency:wallet.currency
       }
     });
-
+  }
     if (!responseWallet) {
       throw customError(`The wallet the investor was supposed to pay to is not in the database`, 404);
     }
@@ -141,8 +151,8 @@ export const topUp = async (req: Request, res: Response): Promise<Response> => {
     const wallet = await DepositWallet.findOne({
       where: {
         [Op.and]: [
-          Sequelize.where(Sequelize.fn('LEFT', Sequelize.col('address'), 7), Sequelize.fn('LEFT', address, 7)),
-          Sequelize.where(Sequelize.fn('RIGHT', Sequelize.col('address'), 7), Sequelize.fn('RIGHT', address, 7)),
+          Sequelize.where(Sequelize.fn('LEFT', Sequelize.col('identification'), 7), Sequelize.fn('LEFT', address, 7)),
+          Sequelize.where(Sequelize.fn('RIGHT', Sequelize.col('identification'), 7), Sequelize.fn('RIGHT', address, 7)),
         ],
       },
     });
@@ -150,7 +160,7 @@ export const topUp = async (req: Request, res: Response): Promise<Response> => {
     if (!wallet) {
       throw customError(`investor deposit wallet not found`, 404);
     }
-    console.log(wallet)
+  
     
     const investment = await Investment.findByPk(wallet.investmentId);
     if (!investment) {

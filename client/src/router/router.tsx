@@ -90,6 +90,8 @@ export const router = createBrowserRouter([
     {
         path: '/dashboard',
         element:<PrivateRoute Component={Dashboard}/>,
+        //<Dashboard username={"Nnamdi"}/>
+        
 
     },
     {
@@ -110,7 +112,7 @@ export const router = createBrowserRouter([
     },
 
     {
-        path: '/invest/managers',
+        path: '/investment/managers',
         element: <InvestmentManagers />,
     },
     {

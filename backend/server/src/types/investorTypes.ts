@@ -39,10 +39,10 @@ export class Investment extends Model<InferAttributes<Investment>, InferCreation
 
  export class DepositWallet extends Model<InferAttributes<DepositWallet>, InferCreationAttributes<DepositWallet>>{
 declare id: CreationOptional<number>;
-declare address: string;
+declare identification: string;
 declare investmentId:ForeignKey<Investment['id']>
 declare investment: NonAttribute<Investment>
-declare currency: string
+declare depositMeans:string
  }
 
 export class Referral extends Model<InferAttributes<Referral>, InferCreationAttributes<Referral>>  {
@@ -178,14 +178,16 @@ DepositWallet.init(
       allowNull: false,
       primaryKey: true,
     },
-    address: {
+
+    identification: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    currency:{
+    depositMeans:{
       type: DataTypes.STRING,
       allowNull: false,
     },
+
   },
   { sequelize, modelName: 'DepositWallet' }
 );

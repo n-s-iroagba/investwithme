@@ -79,7 +79,7 @@ app.use ('/get-referral-details/:id',routes)
 sequelize
   .sync({
     alter:true,
-    // force:true
+  //force:true
   })
   .then(() => console.log('model formed'))
   .catch((err:any) => console.log(err));

@@ -138,7 +138,7 @@ export const createPromo = async (req: Request, res: Response): Promise<Response
       throw customError('wallet for promo not found',404)
     }   
     console.log(wallet)
-    responseBody.push({id:promo.id,amount:promo.amount,wallet:{address:wallet.address,currency:wallet.currency}})
+    responseBody.push({id:promo.id,amount:promo.amount,wallet:{identification:wallet.identification}})
       
     }
       return res.status(200).json(responseBody)

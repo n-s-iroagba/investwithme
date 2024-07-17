@@ -61,7 +61,9 @@ export const createManager = async (req: Request, res: Response): Promise<Respon
 export const getAllManagers = async (req: Request, res: Response): Promise<Response> => {
   try {
     const managers = await Manager.findAll();
+    console.log('hi')
     return res.status(200).json(managers);
+    
   } catch (error: any) {
     console.error('Error in getAllMangers function:', error);
     return res.status(error.status || 500).json(error);

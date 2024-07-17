@@ -8,19 +8,21 @@ import '../../common/styles/styles.css'
 
 import { useNavigate } from 'react-router-dom';
 import MiniFooter from '../../common/components/MiniFooter';
+import { getNotifications } from '../../features/notification/helpers/notificationApiHelpers';
 
 
 
-const Notifications = () =>{
+const Notifications:React.FC<{id:number}> =({id}) =>{
   const [notifications , setNotifications]= useState<NotificationDto[]>([])
   const navigate = useNavigate();
+  
 
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
         
-        const storedNotifications = localStorage.getItem('cassockNotifications');
-        const notifs: NotificationDto[] = storedNotifications ? JSON.parse(storedNotifications) : [];
+        
+        const notifs = await getNotifications(1)
 
         setNotifications(notifs);
       

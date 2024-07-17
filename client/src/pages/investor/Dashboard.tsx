@@ -10,6 +10,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import CircularButton from '../../features/investor/components/CircularButton'
 import Transactions from '../../features/transaction/layout/Transactions'
 import { numberWithCommas } from '../../common/utils/utils'
+import { useNavigate } from 'react-router-dom'
 
 
 
@@ -77,19 +78,27 @@ const DashboardHeader: React.FC <{username:string}> = ({username}) => {
 
 
 const DashboardActions: React.FC = () => {
-  const icons = [faQuestion, faHandHoldingDollar, faWallet, faMoneyBill, faUserFriends, faUser];
-  const actions: string[] = ['how-to-guide', 'invest/managers', 'portfolio', 'withdraw', `referral`, '/'];
-  const texts: string[] = ['Guides', 'Invest', 'Earnings', 'Withdraw', 'Referrals', 'logout'];
+  const navigate = useNavigate()
+  const icons = [faQuestion, faHandHoldingDollar, faWallet, faMoneyBill, faUserFriends];
+  const actions: string[] = ['how-to-guide', 'investment/managers', 'portfolio', 'withdraw', `referral`];
+  const texts: string[] = ['Guides', 'Invest', 'Earnings', 'Withdraw', 'Referrals',];
   return (
     <div className=' my-3 px-3'>
       <h4 className='text-center actions'>  Quick Actions</h4>
       <Row className=' gy-3 w-100 d-flex justify-content-center mt-3'>
         {texts.map((text, index) => (
           <Col className='d-flex justify-content-center' xs={4} md={2}>
-            <CircularButton icon={icons[index]} title={text} path={actions[index]} fn={logOut} />
+            <CircularButton icon={icons[index]} title={text} path={actions[index]}  />
           </Col>
         ))
         }
+        
+         <Col className='d-flex justify-content-center' xs={4} md={2}>
+         <button onClick={()=>logOut(navigate)} className="circular-button d-flex py-4 align-items-center justify-content-evenly flex-column">
+          <FontAwesomeIcon icon={faUser}/>
+          <small>logout</small>
+          </button>
+          </Col>
       </Row>
     </div>
   )

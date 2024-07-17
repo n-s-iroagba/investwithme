@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 import SignUp from '../pages/investor/SignUp';
-import { getLoginDecodedLogin } from '../features/auth/helpers/helper';
+import { getLoginDecodedToken } from '../features/auth/helpers/helper';
 import { DecodedLoginToken } from '../../../common/authTypes';
 
 const PrivateRoute: React.FC<{ Component: React.FC<any> }> = ({ Component }) => {
@@ -19,7 +19,7 @@ const PrivateRoute: React.FC<{ Component: React.FC<any> }> = ({ Component }) => 
       localStorage.setItem('cassockJwtToken', token);
       localStorage.setItem('cassockVerified', 'true');
     }
-    const authData:DecodedLoginToken|null = getLoginDecodedLogin()
+    const authData:DecodedLoginToken|null = getLoginDecodedToken()
     if (authData) {
         setUsername(authData.username)
         setId(authData.id)

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useNavigate} from 'react-router-dom'
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
@@ -13,23 +13,33 @@ import { AuthContext } from '../context/AuthContext';
 
 const PasswordForm: React.FC = ()=>{
   const navigate = useNavigate()
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get('token')
+    if (token) {
+      localStorage.setItem("cassockChangePasswordToken", token);
+    }else{
+      alert('You are not authorised to view this page')
+      navigate('/login')
+    }
+},[navigate])
  const { newPasswordData,
   setNewPasswordData,
   submitting,
   validated,
   handleConfirmPasswordsChange,
-  handleChangePassword,
+  handleSubmitForChangePassword,
   passwordType,
   showPassword,
-  isPasswordsMatch,
+  isMatchingPassword,
   errorMessage,
-handlePasswordChange,
+  handleChange,
   passwordValidityMessage
 } = useContext<any>(AuthContext)
 
   return (
     <div className="d-flex justify-content-center align-items-center flex-column my-3">
-      <Form className="form py-5 " noValidate validated={validated} onSubmit={(e) => handleChangePassword(newPasswordData, e, navigate)}>
+      <Form className="form py-5 " noValidate validated={validated} onSubmit={(e) => handleSubmitForChangePassword(newPasswordData, e, navigate)}>
       <Form.Group className='mb-4' as={Col} lg="12" controlId="validationFormik04">
           <Form.Label className='mb-0'>Password{required}</Form.Label>
           <InputGroup>
@@ -38,7 +48,7 @@ handlePasswordChange,
               type={passwordType}
               name='password'
               value={newPasswordData.password}
-              onChange={(e) => handlePasswordChange(newPasswordData, e, setNewPasswordData)}
+              onChange={(e) => handleChange(newPasswordData, e, setNewPasswordData)}
               className=" custom-input bg-transparent form-control text-light"
 
             />
@@ -76,7 +86,7 @@ handlePasswordChange,
           </InputGroup>
           <div>
             {
-              !isPasswordsMatch && <Form.Text className='text-danger'>*passwords do not match</Form.Text>
+              !isMatchingPassword && <Form.Text className='text-danger'>*passwords do not match</Form.Text>
             }
           </div>
         </Form.Group>

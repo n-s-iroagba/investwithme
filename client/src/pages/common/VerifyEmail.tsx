@@ -18,10 +18,11 @@ const VerifyEmail = () => {
   const [errorMessage, setErrorMessage] = useState('')
   const [submitting, setSubmitting] = useState(false)
   const navigate = useNavigate();
-  const [email, setEmail] = useState<any>(null);
+  const [email, setEmail] = useState<any>();
   const { handleEmailVerification } = useContext<any>(AuthContext)
+  localStorage.setItem('cassockVerified','true')
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+
   useEffect(() => {
     const storedToken = localStorage.getItem('cassockEmailVerificationToken');
 
@@ -57,16 +58,20 @@ const VerifyEmail = () => {
     const interval = setInterval(() => {
       setCounter((prevCounter) => Math.max(0, prevCounter - 1));
       const verificationStatus = localStorage.getItem('cassockVerified')
-      if (verificationStatus==='true'){
+     
+      if (verificationStatus){
         setCounter(0)
+        alert(verificationStatus)
+        
         localStorage.removeItem('cassockEmailVerificationToken')
         localStorage.removeItem('cassockVerified')
-        window.close()
+        navigate(`/already-verified/${email}`)
+       
       }
-    }, 1000);
+    }, 5000);
 
     return () => clearInterval(interval);
-  });
+  },[email, navigate]);
 
 
   const verifyAndUpdateToken = async () => {

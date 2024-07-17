@@ -5,7 +5,7 @@ import { jwtDecode } from "jwt-decode";
 import { DecodedLoginToken, DecodedVerificationToken} from '../../../../../common/authTypes'
 import { DecodedChangePasswordToken } from "../types/authTypes";
 
-export const getLoginDecodedLogin = (): DecodedLoginToken | null => {
+export const getLoginDecodedToken = (): DecodedLoginToken | null => {
   const token = localStorage.getItem('cassockJwtToken');
   
   if (!token) {

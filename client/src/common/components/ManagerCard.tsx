@@ -36,7 +36,7 @@ export const ManagerCard: React.FC<ManagerCardProps> = ({
 
     <Card bg="light" text="black" style={{width:'auto'}}>
       <Card.Header className="background-secondary py-2 d-flex flex-column justify-content-center align-items-center">
-        <Card.Title className="text-center">{percentageYield}</Card.Title>
+        <Card.Title className="text-center">{percentageYield}%</Card.Title>
         <Card.Title className="text-center">RETURN ON INVESTMENT</Card.Title>
       </Card.Header>
       <Card.Body>

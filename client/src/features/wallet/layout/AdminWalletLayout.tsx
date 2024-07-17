@@ -34,38 +34,42 @@ const AdminWalletLayout = () => {
 
   }
   return (
-<>
-  {wallets === null ? (
-    <LoadingSpinner primaryBackground/>
-  ) : (
-    <>
-      {walletToBeEdited && <EditWalletModal data={walletToBeEdited} show={showModal} />}
-      <Row className='mt-5'>
-        {wallets.length > 0 ? (
-          wallets.map((wallet, index) => (
-            <Col key={wallet.id} className={wallets.length === 1 ? 'w-100' : ''} xs={12} md={6} lg={4}>
-              <WalletCard 
-                {...wallet}
-                deleteButton={<button className='red-button button-width-narrow' onClick={() => handleDelete(wallet.id)}>Delete</button>}
-                editButton={<button className='button-styles button-width-narrow' onClick={() => handleEdit(wallet)}>Edit</button>} 
-              />
+    <section>
+    <ErrorMessage message={errorMessage} />
+    {wallets === null ? (
+      <LoadingSpinner primaryBackground />
+    ) : wallets.length > 0 ? (
+      <>
+        {walletToBeEdited && <EditWalletModal data={walletToBeEdited} show={showModal} />}
+        <Row  className="d-flex flex-column">
+          {wallets.map((wallet, index) => (
+            <Col xs={1} md={4}>
+            <WalletCard
+              key={wallet.id}
+              currency={wallet.currency}
+              identificationType={wallet.identificationType}
+              identification={wallet.identification}
+              depositMeans={wallet.depositMeans}
+              deleteButton={<button className='red-button button-width-narrow' onClick={() => handleDelete(wallet.id)}>Delete</button>}
+              editButton={<button className='button-styles button-width-narrow' onClick={() => handleEdit(wallet)}>Edit</button>} 
+            />
             </Col>
-          ))
-        ) : (
-          <>
-            <h2 className='text-light text-center'>No Wallets Added yet.</h2>
-            <div className='d-flex justify-content-center'>
-              <button className='button-width-narrow button-styles my-4 text-light' onClick={() => navigate('/admin/dashboard')}>Dashboard</button>
-            </div>
-            <ErrorMessage message={errorMessage} />
-          </>
-        )}
-      </Row>
-      <DeleteModal id={idToBeDeleted} show={showDeleteModal} entity='wallet' />
-    </>
-  )}
-</>
-
+          ))}
+        </Row>
+      </>
+    ) : (
+      <>
+        <h2 className='text-light text-center'>No Wallets Added yet.</h2>
+        <div className='d-flex justify-content-center'>
+          <button className='button-width-narrow button-styles my-4 text-light' onClick={() => navigate('/admin/dashboard')}>
+            Dashboard
+          </button>
+        </div>
+      </>
+    )}
+    <DeleteModal id={idToBeDeleted} show={showDeleteModal} entity='wallet' />
+  </section>
   )
 }
 export default AdminWalletLayout
+

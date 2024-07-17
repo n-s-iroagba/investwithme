@@ -14,7 +14,7 @@ const Contact = () => {
                 <div className="primary-line mb-3"></div>
             </div>
             <p className="text-center mb-4">Let's talk! We're happy to answer any questions you have.</p>
-            <Row className="mb-4">
+            <Row className="mb-4 px-4">
                 <Col xs={12} md={4}>
                     <div className="d-flex flex-column align-items-center px-4 mb-3">
                         < div ><FontAwesomeIcon icon={faEnvelope} className="my-2 primary-color icon-size" /></div>

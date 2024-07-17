@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getManagers } from "../../features/manager/helpers/managerApiHelpers";
+import {  getNotProtectedManagers } from "../../features/manager/helpers/managerApiHelpers";
 import { ManagerDto } from "../../../../common/managerType";
 import { sortManagers } from "../../features/manager/helpers/managerHelpers";
 
@@ -8,7 +8,7 @@ const useGetManagers = (): { managers: ManagerDto[], errorMessage: string } => {
     const [errorMessage, setErrorMessage] = useState('');
     const fetchManagerData = async () => {
       try {
-        const managerData = await getManagers(); 
+        const managerData = await getNotProtectedManagers(); 
         const sortedManagers = sortManagers( managerData)
         setManagers(sortedManagers);
 

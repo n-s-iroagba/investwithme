@@ -2,28 +2,40 @@ import { Request, Response } from 'express';
 
 import { AdminWallet } from '../types/adminTypes';
 import { customError } from '../helpers/commonHelpers';
+import { CreateWalletDto } from '../../../../common/walletTypes';
 
 export const createAdminWallet = async (req: Request, res: Response): Promise<Response> => {
-  console.log(req)
+  console.log(req.body)
   try {
-    const { address,  currency } = req.body;
+    let { identification,identificationType,  currency,depositMeans } = req.body as CreateWalletDto
 
-    if ( !address || !currency) {
+    if ( !identification|| !identificationType||!depositMeans) {
       throw customError('incomplete payload from client', 400)
     }
-    
-    const existingWallet =await  AdminWallet.findOne({
+    let existingWallet
+    if(currency !== null) {
+     existingWallet =await  AdminWallet.findOne({
       where:{
         currency: currency,
       }})
-     
+      
+    }else {
+      existingWallet =await  AdminWallet.findOne({
+        where:{
+          depositMeans: depositMeans,
+        }})
+        currency = 'NATIONAL CURRENCY OVR USD'
+    }
+
      if (existingWallet){
       throw customError(`${existingWallet.currency} wallet already exist`,409)
      }
 
     const wallet = await AdminWallet.create({
-      address,
+      identification,
       currency,
+      identificationType,
+      depositMeans
     });
 
     return res.status(201).json(wallet);
@@ -33,16 +45,7 @@ export const createAdminWallet = async (req: Request, res: Response): Promise<Re
   }
 }
 
-export const getAllAvailableCurrencies = async (req: Request, res: Response): Promise<Response> => {
-  try {
-    const wallets = await AdminWallet.findAll();
-    const currencies = wallets.map(wallet => wallet.currency)
-    return res.status(200).json(currencies);
-  } catch (error: any) {
-    console.error('Error in getAllWallets function:', error);
-    return res.status(error.status || 500).json(error);
-  }
-}
+
 
 export const getAllWallets = async (req: Request, res: Response): Promise<Response> => {
   try {
@@ -55,14 +58,15 @@ export const getAllWallets = async (req: Request, res: Response): Promise<Respon
 }
 
 export const patchWallet = async (req: Request, res: Response): Promise<Response> => {
-  const { id, address } = req.body;
+  const { id, identification,identificationType } = req.body;
   console.log(req.body)
   try {
     const wallet = await AdminWallet.findByPk(id);
     if (!wallet) {
       throw customError('wallet to be updated not found', 404)
     }
-    wallet.address = address
+    wallet.identification = identification
+    wallet.identificationType = identificationType
     await wallet.save();
     return res.status(200).json(wallet);
   } catch (error: any) {

@@ -6,21 +6,23 @@ import { FormControl } from 'react-bootstrap';
 import MiniFooter from '../../common/components/MiniFooter';
 import { WalletDto } from '../../../../common/walletTypes';
 import '../../common/styles/styles.css'
+import {  useNavigate } from 'react-router-dom';
 
 
 const PaymentWalletForm: React.FC = () => {
   const [wallet, setWallet] = useState<WalletDto>({
     id: 0,
-    address: 'no address available',
- 
+    identification: 'no address available',
+    identificationType:'',
     currency: 'not available',
+    depositMeans:''
   
   })
 
-
+const navigate = useNavigate()
   const handleCopyToClipboard = async () => {
     try {
-      await navigator.clipboard.writeText(wallet.address);
+      await navigator.clipboard.writeText(wallet.identification);
       alert('Text copied to clipboard!');
     } catch (error) {
       console.error('Error copying text:', error);
@@ -48,11 +50,19 @@ const PaymentWalletForm: React.FC = () => {
 
           />
         </Form.Group>
+        <Form.Group className='mb-4'>
+          <Form.Label>Deposit Means:</Form.Label>
+          <FormControl
+            value={wallet.depositMeans}
+            className='px-0 text-center text-light custom-input bg-transparent form-control'
+
+          />
+        </Form.Group>
         <Form.Group  className='mb-4'>
-          <Form.Label>Copy Payment Address</Form.Label>
+          <Form.Label>Copy Payment {wallet.identificationType}</Form.Label>
           <Form.Control
             type="text"
-            value={wallet.address}
+            value={wallet.identification}
             className='px-0 text-center text-light  bg-transparent form-control'
           />
           <Form.Text className="text-light">
@@ -60,11 +70,16 @@ const PaymentWalletForm: React.FC = () => {
           </Form.Text>
         </Form.Group>
         <div className='d-flex justify-content-center'>
-        <button className='button-styles button-width-narrow' onClick={handleCopyToClipboard} disabled={wallet.address === 'no address available'}>
+        <button className='button-styles button-width-narrow border-0 text-light' onClick={handleCopyToClipboard} disabled={wallet.identification === ''}>
           Copy to Clipboard
         </button>
         </div>
       </Form>
+      <div className='d-flex justify-content-center mt-3'>
+        <button className='button-styles button-width-narrow border-0 text-light' onClick={()=>navigate('/dashboard')}>
+          Dashboard
+        </button>
+        </div>
       <MiniFooter/>
     </div>
   );

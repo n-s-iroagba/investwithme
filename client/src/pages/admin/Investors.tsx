@@ -3,7 +3,7 @@ import {Col, Row } from 'react-bootstrap';
 import DeleteModal from '../../common/components/DeleteModal';
 
 import MiniFooter from '../../common/components/MiniFooter';
-import { InvestorAndInvestment } from '../../../../common/compositeTypes';
+// import { InvestorAndInvestment } from '../../../../common/compositeTypes';
 import '../../common/styles/styles.css'
 import InvestorsCard from '../../features/investor/components/InvestorsCard';
 import { getInvestors } from '../../features/investor/helpers/investorHelpers';
@@ -14,11 +14,11 @@ import { getInvestors } from '../../features/investor/helpers/investorHelpers';
 const Investors = () => {
   const [idToBeDeleted, setIdToBeDeleted] = useState(0)
 const [showDeleteModal,setShowDeleteModal]= useState(false)
-const [investorData, setInvestorData] = useState<InvestorAndInvestment[]>([])
+const [investorData, setInvestorData] = useState<any>([])
 useEffect(() => {
   const fetchInvestorData = async () => {
     try {
-      const data: InvestorAndInvestment[] = await getInvestors();
+      const data: [] = await getInvestors();
     data&& setInvestorData(data);
     console.log('investor',data)
     } catch (error) {
@@ -39,7 +39,7 @@ setIdToBeDeleted(id)
     <div className=' full-height px-2'>
     <h2 className='text-center text-light py-3'>Your Investors</h2>
     <Row className='flex flex-column align-items-center gy-3'>
-      {investorData.length?investorData.map((data,index) => (
+      {investorData.length?investorData.map((data:any,index:number) => (
         <Col md={6}>
         <InvestorsCard
             firstName={data.investor.firstName}

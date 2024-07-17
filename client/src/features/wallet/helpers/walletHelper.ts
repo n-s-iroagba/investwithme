@@ -28,7 +28,8 @@ export const getAdminWallets = async () => {
         }
         return []
     } catch (error: any) {
-        console.error(error)
+       
+        throw new Error(error)
     }
 }
 
@@ -40,7 +41,7 @@ export const patchWallet = async (data: WalletDto) => {
             window.location.reload();
         }
     } catch (error: any) {
-        console.error(error)
+       
         throw new Error(error)
     }
 }

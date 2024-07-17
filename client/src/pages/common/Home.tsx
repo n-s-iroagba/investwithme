@@ -27,7 +27,7 @@ const Home: React.FC = () => {
   return (
     <>
       {!isLoaded ? (
-        <LoadingSpinner />
+        <LoadingSpinner fullheight />
       ) : (
         <>
           <NavbarComponent />
