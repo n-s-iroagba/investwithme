@@ -6,7 +6,7 @@ import LoadingSpinner from '../../../common/components/LoadingSpinner';
 
 
 const Transactions: React.FC<{id:number}> = ({id}) => {
-  const [transactions, setTransactions] = useState<TransactionDto[]|null>([])
+  const [transactions, setTransactions] = useState<TransactionDto[]>([])
   const [currentIndex, setCurrentIndex] = useState(0);
   const itemsPerPage = 5;
 

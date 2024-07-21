@@ -29,14 +29,16 @@ export const index = async (req: Request, res: Response): Promise<Response> => {
     isVerified: true
   };
   // await Investor.create(mockInvestorData)
-  // await DepositWallet.drop()
+  await DepositWallet.drop()
   // await Investment.drop()
+  // await Investor.drop()
+  // await Investor.sync()
   // await Investment.sync()
   // await DepositWallet.sync()
   // const investment = await Investment.findAll()
   // console.log(investment)
-await Promo.drop()
-await Promo.sync()
+// await Promo.drop()
+// await Promo.sync()
   return res.send('hello from investwithme server, I am connected');
 }
 

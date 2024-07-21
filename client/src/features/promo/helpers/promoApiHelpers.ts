@@ -91,8 +91,7 @@ export const getDueBonus =async ()=>{
   try{
   const response:any = await getData(url);
   if (response.status ===200){
-    alert('promo bonus successfully paid')
-    window.location.reload();
+    return response.data
   }
   }catch(error:any){
     console.error(error)

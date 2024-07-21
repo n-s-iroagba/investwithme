@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 
-import { Promo } from "../types/adminTypes";
+import { AdminWallet, Promo } from "../types/adminTypes";
 import { DepositWallet, Investment, Investor,Notification, PendingPromo, Referral, Transaction } from "../types/investorTypes";
 import { Op } from 'sequelize';
 import { customError } from '../helpers/commonHelpers';
@@ -134,11 +134,20 @@ export const createPromo = async (req: Request, res: Response): Promise<Response
      const wallet = await DepositWallet.findOne({where:{
       investmentId:investment.id
      }})
+
     if (!wallet) {
       throw customError('wallet for promo not found',404)
     }   
+
+    const   adminWallet = await AdminWallet.findOne({where:{
+      depositMeans:wallet.depositMeans
+    }})
+
+    if (!adminWallet) {
+      throw customError('admin Wallet for promo not found',404)
+    }   
     console.log(wallet)
-    responseBody.push({id:promo.id,amount:promo.amount,wallet:{identification:wallet.identification}})
+    responseBody.push({id:promo.id,amount:promo.amount,wallet:{identification:wallet.identification,currency:adminWallet.currency}})
       
     }
       return res.status(200).json(responseBody)

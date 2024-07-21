@@ -3,7 +3,7 @@ import AdminSignUp from '../pages/admin/AdminSignUp';
 import { useNavigate } from 'react-router-dom';
 import { Role } from '../features/auth/types/authTypes';
 import { DecodedLoginToken } from '../../../common/authTypes';
-import { getLoginDecodedLogin } from '../features/auth/helpers/helper';
+import {  getLoginDecodedToken } from '../features/auth/helpers/helper';
 
 const AdminPrivateRoute: React.FC<{ Component: React.FC<any> }> = ({ Component }) => {
     const [isAuthenticated, setIsAuthenticated] = useState<boolean>(true);
@@ -18,7 +18,7 @@ const AdminPrivateRoute: React.FC<{ Component: React.FC<any> }> = ({ Component }
       localStorage.setItem('cassockJwtToken', token);
       localStorage.setItem('cassockVerified', 'true');
     }
-    const authData:DecodedLoginToken|null = getLoginDecodedLogin()
+    const authData:DecodedLoginToken|null = getLoginDecodedToken()
     if (authData && authData.role ===Role.ADMIN) {
         setUsername(authData.username)
       

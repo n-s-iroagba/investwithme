@@ -8,6 +8,7 @@ import { PortfolioDto } from '../../investment/types/types';
 export const getInvestmentDataWithUpdatedDate = (): number | null => {
   const MILLISECONDS_IN_A_DAY = 1000 * 60 * 60 * 24;
   const savedData = localStorage.getItem('cassockInvestment');
+
   if (!savedData) {
     return null;
   }
@@ -35,7 +36,8 @@ const WithdrawalDashboard: React.FC = () => {
 
   const renderMessage = () => {
     const investment = getInvestmentDataWithUpdatedDate()
-    if (investment){
+    console.log(investment)
+    if (investment!==null){
    
 
         return <div className='d-flex flex-column align-items-center px-3'>
@@ -46,7 +48,7 @@ const WithdrawalDashboard: React.FC = () => {
     }else{
         return (
           <div className='d-flex flex-column align-items-center'>
-            <p className='text-center text-light'>No investment yet</p>
+            <p className='text-center'>No investment yet</p>
             <button onClick={() => navigate('/invest/managers')} className='button-styles button-width-narrow'>Invest</button>
           </div>
         );

@@ -1,7 +1,7 @@
 import { PayInvestorDto } from '../../../../../common/investmentTypes';
 import { creditInvestment } from '../helpers/investmentApiHelpers';
 import React, { useEffect, useState } from 'react'
-import { Modal, Form, Button } from 'react-bootstrap';
+import { Modal, Form, Button, Spinner } from 'react-bootstrap';
 
 
 
@@ -12,6 +12,7 @@ interface ModalFormProps {
   const CreditInvestorModal: React.FC<ModalFormProps> = ({ show }) => {
     const [formData, setFormData] = useState< PayInvestorDto|null>(null);
     const [modalShow, setModalShow] = useState<boolean>(false)
+    const [submitting,setSubmitting] = useState<boolean>(false)
   
   
   
@@ -44,6 +45,7 @@ interface ModalFormProps {
       e.preventDefault();
       try{
        if (formData){
+      setSubmitting(true);
        await creditInvestment(formData)
        }else{
         alert('Please fill the form')
@@ -80,7 +82,7 @@ interface ModalFormProps {
                 type="number"
                 placeholder="Enter amount"
                 name="amount"
-                value={formData?.amount||0}
+                value={formData?.amount}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange(e)}
               />
             </Form.Group>
@@ -96,8 +98,8 @@ interface ModalFormProps {
               />
             </Form.Group>
             <br />
-            <Button variant="primary" type="submit">
-              Submit
+            <Button variant="primary" type="submit" disabled={submitting}>
+              {submitting?<Spinner size='sm'/>:'Submit'}
             </Button>
           </Form>
         </Modal.Body>

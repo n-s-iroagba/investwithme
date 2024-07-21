@@ -80,7 +80,7 @@ app.use ('/notifications/mark-all-as-read/:id',routes)
 sequelize
   .sync({
     alter:true,
-  //force:true
+  // force:true
   })
   .then(() => console.log('model formed'))
   .catch((err:any) => console.log(err));

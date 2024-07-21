@@ -45,9 +45,9 @@ setIdToBeDeleted(id)
             firstName={data.investor.firstName}
             lastName={data.investor.lastName}
             amount={data.investment.amount}
-            date={data.investment.investmentDate || new Date()}
+            date={data.investment.investmentDate}
             amountDeposited={data.investment.amountDeposited}
-            deleteButton={<button className='red-button button-width-narrow' onClick={() => handleDelete(data.investor.id)}>Delete</button>} hasInvested={false} withdrawalDate={''} dueForWithdrawal={false} completeDeposit={false}        />
+            deleteButton={<button className='red-button button-width-narrow' onClick={() => handleDelete(data.investor.id)}>Delete</button>}       />
         </Col>
       )):
       <h2 className='text-center text-light'>No Investors...</h2>

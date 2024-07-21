@@ -18,7 +18,7 @@ export const deleteInvestor = async (id:number)=>{
      
       const response = await deleteItem(url);
       if (response.status === 200) {
-        alert('promo deleted succesfully')
+        alert('investor deleted succesfully')
         window.location.reload();
     }
     return response.status

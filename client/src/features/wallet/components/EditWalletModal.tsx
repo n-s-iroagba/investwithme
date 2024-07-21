@@ -56,7 +56,7 @@ const EditWalletModal: React.FC<{ data: WalletDto; show: boolean }> = ({
           <Form.Control
             type="text"
             placeholder="enter new address"
-            value={walletData?.address}
+            value={walletData?.identification}
             name="address"
             onChange={handleChange}
           />

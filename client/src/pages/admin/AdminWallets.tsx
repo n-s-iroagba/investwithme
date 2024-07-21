@@ -20,7 +20,11 @@ const AdminWallets: React.FC = () => {
            <div className='d-flex flex-column align-items-center'>
              <button className='button-styles button-width-narrow text-light' onClick={handleToggle}>Add Wallet</button>
              <AdminWalletLayout />
+             <div className='d-flex justify-content-center'>
+          <AdminDashboardButton/>
+          </div >
              </div>
+             
              
             </>
             :
@@ -32,9 +36,7 @@ const AdminWallets: React.FC = () => {
               
             </>
           }
-               <div className='d-flex justify-content-center'>
-          <AdminDashboardButton/>
-          </div >
+               
       </div >
       <MiniFooter primaryVariant />
     </div>

@@ -23,7 +23,8 @@ const TransactionComponent: React.FC<{ transaction: TransactionDto }> = ({
           <small className='smallest-font'>(*{transaction.narration})</small>
         </Col>
         <Col xs={3} className="text-center">
-          {transaction.type === "Credit" ? "From" : "To"}
+        {transaction.type === "Debit" || transaction.narration === 'Promo bonus imbursement' ? "To" : "From"}
+
         </Col>
         <Col xs={3} className="text-center">
           <small>{transaction.participatingAccount}</small>

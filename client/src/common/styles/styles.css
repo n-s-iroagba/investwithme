@@ -8,7 +8,10 @@
     right: 2%;
   }
 
-
+  .scrollable-list-group {
+    max-height: 300px; /* Adjust the height as needed */
+    overflow-y: auto;
+  }
 
 .background-secondary {
     background-color: var(--secondary-color);

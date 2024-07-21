@@ -4,11 +4,12 @@ import { createInvestmentRoute, getInvestmentRoute, getInvestmentStatusRoute, pa
 
 import { PayInvestorDto } from "../../../../../common/investmentTypes";
 import { extractErrorCode } from "../../../common/utils/utils";
+import { CreateInvestmentDto } from "../../../../../common/compositeTypes";
 
 
 
 
-export const createInvestment = async (data:any,investorId:number) => {
+export const createInvestment = async (data:CreateInvestmentDto,investorId:number) => {
     const createInvestmentUrl = `${createInvestmentRoute}/${investorId}`;
     try {
 ;
@@ -17,7 +18,8 @@ export const createInvestment = async (data:any,investorId:number) => {
       console.error(error)
       const code = extractErrorCode(error.message);
       if (code === 409) {
-        alert('You have already made a previous investment, kindly check your mail for assistance')
+        alert('You already have an investment portfolio, make a deposit to top up')
+        return(error)
 
        }else if (code === 400){
          alert('Some fields are missing, kindly fill the form properly and retry')

@@ -13,6 +13,7 @@ import { findManagerWithHighestMinInvestment } from '../helpers/investmentHelper
 import { ManagerDto } from '../../../../../common/managerType'
 
 
+
 const WAValidator = require('multicoin-address-validator')
 
 
@@ -137,8 +138,10 @@ const NewInvestmentForm: React.FC<{ username: string, id: number }> = ({ usernam
           navigate('/invest/payment');
         }
       } catch (error: any) {
-        setErrorMessage('We are sorry, we cannot create new Investment portfolio at this time');
+        
         console.error(error);
+        setErrorMessage('We are sorry, we cannot create new Investment portfolio at this time');
+      
       } finally {
         setSubmitting(false);
       }

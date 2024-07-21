@@ -1,197 +1,210 @@
 import { COMPANY_NAME, COMPANY_SUPPORT_EMAIL } from "../constants";
 import { Promo, AdminWallet } from "../types/adminTypes";
 import { Investor, Investment, DepositWallet, Referral } from "../types/investorTypes";
+
+
 import { formatEndDate } from "./commonHelpers";
+
+export const getInvestmentDepositReceivedEmailContent = (investor: Investor, investment: Investment) => {
+  return `
+    <div style="font-family: Arial, sans-serif; color: #333;">
+      <p>Dear ${investor.firstName} ${investor.lastName},</p>
+
+      <p>We are pleased to inform you that we have received your investment.</p>
+
+      <p>Here are the details of your deposit:</p>
+      <ul>
+        <li><strong>Investment Amount:</strong> ${investment.amountDeposited}</li>
+        <li><strong>Deposit Date:</strong> ${investment.investmentDate && formatEndDate(investment.investmentDate)}</li>
+      </ul>
+
+      <p>Thank you for your trust in us. We are excited to help you achieve your investment goals.</p>
+
+      <p>If you have any questions or need further assistance, please contact our support team at <a href="mailto:${COMPANY_SUPPORT_EMAIL}">${COMPANY_SUPPORT_EMAIL}</a>.</p>
+
+      <p>We appreciate your continued trust and investment with us.</p>
+
+      <p>Best regards,</p>
+
+      <p>The Investment Team<br>${COMPANY_NAME}</p>
+    </div>
+  `;
+};
 
 
 export const getInvestmentPausedEmailContent = (investor: Investor, investment: Investment) => {
     return `
-      Dear ${investor.firstName} ${investor.lastName},
+      <p>Dear ${investor.firstName} ${investor.lastName},</p>
   
-      We hope this message finds you well. We are writing to inform you that your investment with ${COMPANY_NAME} has been paused.
+      <p>We hope this message finds you well. We are writing to inform you that your investment with <strong>${COMPANY_NAME}</strong> has been paused.</p>
   
-      The grace period for completing the deposit required to activate your investment has elapsed, and we have not received the necessary funds to proceed. As a result, we have temporarily paused your investment to prevent any potential issues.
+      <p>The grace period for completing the deposit required to activate your investment has elapsed, and we have not received the necessary funds to proceed. As a result, we have temporarily paused your investment to prevent any potential issues.</p>
   
-      Please review the details of your investment below:
-      - Investment Amount: ${investment.amount}
-      - Amount Deposited : ${investment.amountDeposited}
-      - Date of first deposit: ${investment.investmentDate && formatEndDate(investment.investmentDate)}
+      <p>Please review the details of your investment below:</p>
+      <ul>
+        <li>Investment Amount: ${investment.amount}</li>
+        <li>Amount Deposited: ${investment.amountDeposited}</li>
+        <li>Date of First Deposit: ${investment.investmentDate && formatEndDate(investment.investmentDate)}</li>
+      </ul>
   
-      To resume your investment, please complete the deposit at your earliest convenience. If you have already made the deposit and believe this message is in error, kindly contact our support team immediately at ${COMPANY_SUPPORT_EMAIL} or call chat us on our social media handle.
+      <p>To resume your investment, please complete the deposit at your earliest convenience. If you have already made the deposit and believe this message is in error, kindly contact our support team immediately at <a href="mailto:${COMPANY_SUPPORT_EMAIL}">${COMPANY_SUPPORT_EMAIL}</a> or chat with us on our social media handles.</p>
   
-      We value your investment and are here to assist you with any questions or concerns you may have. Thank you for your understanding and prompt attention to this matter.
+      <p>We value your investment and are here to assist you with any questions or concerns you may have. Thank you for your understanding and prompt attention to this matter.</p>
   
-      Best regards,
+      <p>Best regards,</p>
   
-      The Investment Team
-      ${COMPANY_NAME}
+      <p>The Investment Team<br />
+      ${COMPANY_NAME}</p>
     `;
-  }
-  
-  export const getInvestmentPausedReminderEmailContent  = (investor: Investor, investment: Investment) => {
-     return `    Dear ${investor.firstName} ${investor.lastName},
-    
-     We hope this message finds you well. We are writing to remind you that your investment with ${COMPANY_NAME} has been paused.
- 
-     The grace period for completing the deposit required to activate your investment has elapsed, and we have not received the necessary funds to proceed. As a result, we have temporarily paused your investment to prevent any potential issues.
- 
-     Please review the details of your investment below:
-     - Investment Amount: ${investment.amount}
-     - Amount Deposited: ${investment.amountDeposited}
-     - Date of First Deposit: ${investment.investmentDate && formatEndDate(investment.investmentDate)}
- 
-     To resume your investment, please complete the deposit at your earliest convenience. If you have already made the deposit and believe this message is in error, kindly contact our support team immediately at ${COMPANY_SUPPORT_EMAIL} or chat with us on  any of our social media handles.
- 
-     We value your investment and are here to assist you with any questions or concerns you may have. Thank you for your understanding and prompt attention to this matter.
- 
-     Best regards,
- 
-     The Investment Team
-     ${COMPANY_NAME}
-   `;
-  }
+}
 
-  export const getInvestmentPromoEmailContent = (investor: Investor, promo: Promo) => {
+export const getInvestmentPausedReminderEmailContent = (investor: Investor, investment: Investment) => {
     return `
-      Dear ${investor.firstName} ${investor.lastName},
+      <p>Dear ${investor.firstName} ${investor.lastName},</p>
   
-      We are excited to share an exclusive promotion from ${COMPANY_NAME} with you!
+      <p>We hope this message finds you well. We are writing to remind you that your investment with <strong>${COMPANY_NAME}</strong> has been paused.</p>
   
-      Introducing our latest promotion
-      Earn up to ${promo.bonusPercent} on your next investment!
-
+      <p>The grace period for completing the deposit required to activate your investment has elapsed, and we have not received the necessary funds to proceed. As a result, we have temporarily paused your investment to prevent any potential issues.</p>
   
-      This promotion is available until ${formatEndDate(promo.endDate)}. Don't miss out on this incredible opportunity to enhance your investment portfolio.
+      <p>Please review the details of your investment below:</p>
+      <ul>
+        <li>Investment Amount: ${investment.amount}</li>
+        <li>Amount Deposited: ${investment.amountDeposited}</li>
+        <li>Date of First Deposit: ${investment.investmentDate && formatEndDate(investment.investmentDate)}</li>
+      </ul>
   
-      If you have any questions or need further information, please contact our support team at ${COMPANY_NAME} or chat us on any of our social media handles.
+      <p>To resume your investment, please complete the deposit at your earliest convenience. If you have already made the deposit and believe this message is in error, kindly contact our support team immediately at <a href="mailto:${COMPANY_SUPPORT_EMAIL}">${COMPANY_SUPPORT_EMAIL}</a> or chat with us on our social media handles.</p>
   
-      We appreciate your continued trust and investment with ${COMPANY_NAME}.
+      <p>We value your investment and are here to assist you with any questions or concerns you may have. Thank you for your understanding and prompt attention to this matter.</p>
   
-      Best regards,
+      <p>Best regards,</p>
   
-      The Investment Team
-      ${COMPANY_NAME}
+      <p>The Investment Team<br />
+      ${COMPANY_NAME}</p>
     `;
-  };
+}
 
-  export const getInvestmentPromoExtensionEmailContent = (investor: Investor, promo: Promo) => {
+export const getInvestmentPromoEmailContent = (investor: Investor, promo: Promo) => {
     return `
-      Dear ${investor.firstName} ${investor.lastName},
+      <p>Dear ${investor.firstName} ${investor.lastName},</p>
   
-      We have some exciting news for you!
+      <p>We are excited to share an exclusive promotion from <strong>${COMPANY_NAME}</strong> with you!</p>
   
-      Our promotion has been extended! 
+      <p>Introducing our latest promotion:<br />
+      <strong>Earn up to ${promo.bonusPercent}% on your next investment!</strong></p>
   
-      Earn up to ${promo.bonusPercent} on your next investment!
+      <p>This promotion is available until ${formatEndDate(promo.endDate)}. Don't miss out on this incredible opportunity to enhance your investment portfolio.</p>
   
-      You now have until ${formatEndDate(promo.endDate)} to take advantage of this amazing opportunity. Don’t miss out on enhancing your investment portfolio with our extended promotional offer.
+      <p>If you have any questions or need further information, please contact our support team at <a href="mailto:${COMPANY_SUPPORT_EMAIL}">${COMPANY_SUPPORT_EMAIL}</a> or chat with us on any of our social media handles.</p>
   
-      If you have any questions or need further information, please contact our support team at ${COMPANY_SUPPORT_EMAIL} or call us at  chat us on any of our social media handles.
+      <p>We appreciate your continued trust and investment with <strong>${COMPANY_NAME}</strong>.</p>
   
-      We appreciate your continued trust and investment with${COMPANY_SUPPORT_EMAIL}.
+      <p>Best regards,</p>
   
-      Best regards,
-  
-      The Investment Team
-      ${COMPANY_NAME}
+      <p>The Investment Team<br />
+      ${COMPANY_NAME}</p>
     `;
-  };
+}
 
-  export const getHowToInvestEmailContent = (
+export const getInvestmentPromoExtensionEmailContent = (investor: Investor, promo: Promo) => {
+    return `
+      <p>Dear ${investor.firstName} ${investor.lastName},</p>
+  
+      <p>We have some exciting news for you!</p>
+  
+      <p>Our promotion has been extended!<br />
+      <strong>Earn up to ${promo.bonusPercent}% on your next investment!</strong></p>
+  
+      <p>You now have until ${formatEndDate(promo.endDate)} to take advantage of this amazing opportunity. Don’t miss out on enhancing your investment portfolio with our extended promotional offer.</p>
+  
+      <p>If you have any questions or need further information, please contact our support team at <a href="mailto:${COMPANY_SUPPORT_EMAIL}">${COMPANY_SUPPORT_EMAIL}</a> or chat with us on any of our social media handles.</p>
+  
+      <p>We appreciate your continued trust and investment with <strong>${COMPANY_NAME}</strong>.</p>
+  
+      <p>Best regards,</p>
+  
+      <p>The Investment Team<br />
+      ${COMPANY_NAME}</p>
+    `;
+}
+
+export const getHowToInvestEmailContent = (
     investor: Investor,
     depositWallet: DepositWallet,
     investment: Investment,
     adminWallet: AdminWallet
-  ) => {
+) => {
     return `
-      Dear ${investor.firstName} ${investor.lastName},
+      <p>Dear ${investor.firstName} ${investor.lastName},</p>
   
-      We hope this message finds you well. Thank you for choosing to with us.
+      <p>We hope this message finds you well. Thank you for choosing to invest with us.</p>
   
-      To complete your investment, please follow the instructions below:
+      <p>To complete your investment, please follow the instructions below:</p>
+      <ol>
+        <li>Transfer the investment amount of ${investment.amount} to the following wallet address:
+            <ul>
+              <li>Currency: ${adminWallet?.currency || 'Any convenient currency, but the US Dollar is preferred'}</li>
+              <li>Deposit Account/wallet: ${adminWallet.identification}</li>
+            </ul>
+        </li>
+        <li>Ensure that the transfer is made from your deposit wallet address that you submitted on our website when creating your portfolio:
+            <ul>
+              <li>Your Deposit Means Identification: ${depositWallet.identification}</li>
+            </ul>
+        </li>
+      </ol>
   
-      1. Transfer the investment amount of ${investment.amount}  to the following wallet address:
-         - currency: ${adminWallet?.currency||'Any convinient currency, but the US Dollar is preferred'}
-         - Wallet Address: ${adminWallet.identification}
+      <p>Once the transfer is complete, you will receive the deposit in your investment account within 12 hours.</p>
   
-      2. Ensure that the transfer is made from your deposit wallet address that you submitted on our website when creating your portfolio:
-         - Your Deposit Means identification: ${depositWallet.identification}
+      <p>If you have any questions or need assistance, please contact our support team at <a href="mailto:${COMPANY_SUPPORT_EMAIL}">${COMPANY_SUPPORT_EMAIL}</a> or on any of our social media handles.</p>
   
-      Once the transfer is complete, you will receive the deposit in your investment account within 12 hours.
+      <p>We appreciate your trust and investment with us. We look forward to helping you achieve your investment goals.</p>
   
-      If you have any questions or need assistance, please contact our support team at ${COMPANY_SUPPORT_EMAIL} of on any of our social media handles
+      <p>Best regards,</p>
   
-      We appreciate your trust and investment with us. We look forward to helping you achieve your investment goals.
-  
-      Best regards,
-  
-      The Investment Team
-      ${COMPANY_NAME}
+      <p>The Investment Team<br />
+      ${COMPANY_NAME}</p>
     `;
-  };
+}
 
-  export const getReferralBonusEmailContent = (investor: Investor, referral: Referral) => {
+export const getReferralBonusEmailContent = (investor: Investor, referral: Referral) => {
     return `
-      Dear ${investor.firstName} ${investor.lastName},
+      <p>Dear ${investor.firstName} ${investor.lastName},</p>
   
-      We are pleased to inform you that you have earned a referral bonus!
+      <p>We are pleased to inform you that you have earned a referral bonus!</p>
   
-      Thanks for your referral, ${investor.firstName} ${investor.lastName}, you have received a bonus of $${referral.amount}.
+      <p>Thanks for your referral, ${investor.firstName} ${investor.lastName}, you have received a bonus of $${referral.amount}.</p>
   
-      We greatly appreciate your trust and support in recommending ${COMPANY_NAME} to your network.
+      <p>We greatly appreciate your trust and support in recommending <strong>${COMPANY_NAME}</strong> to your network.</p>
   
-      If you have any questions or need further assistance, please contact our support team at ${COMPANY_SUPPORT_EMAIL} or chat us on any of our social media handles.
+      <p>If you have any questions or need further assistance, please contact our support team at <a href="mailto:${COMPANY_SUPPORT_EMAIL}">${COMPANY_SUPPORT_EMAIL}</a> or chat with us on any of our social media handles.</p>
   
-      Thank you once again for being a valued investor and helping us grow our community.
+      <p>Thank you once again for being a valued investor and helping us grow our community.</p>
   
-      Best regards,
+      <p>Best regards,</p>
   
-      The Investment Team
-      ${COMPANY_SUPPORT_EMAIL}
+      <p>The Investment Team<br />
+      ${COMPANY_NAME}</p>
     `;
-  };
+}
 
-
-  export const getInvestmentPromoBonusEmailContent = (investor: Investor, amount:Number) => {
+export const getInvestmentPromoBonusEmailContent = (investor: Investor, amount: Number) => {
     return `
-      Dear ${investor.firstName} ${investor.lastName},
+      <p>Dear ${investor.firstName} ${investor.lastName},</p>
   
-      We are excited to inform you about a special promotional bonus from us!
+      <p>We are excited to inform you about a special promotional bonus from us!</p>
   
-      As part of fullfilling our  promotion offer, you are havereceive a bonus of ${amount}.
+      <p>As part of fulfilling our promotion offer, you have received a bonus of $${amount}.</p>
   
-      We appreciate your continued trust and investment with ${COMPANY_NAME}.
+      <p>We appreciate your continued trust and investment with <strong>${COMPANY_NAME}</strong>.</p>
   
-      Best regards,
+      <p>Best regards,</p>
   
-      The Investment Team
-      ${COMPANY_NAME}
+      <p>The Investment Team<br />
+      ${COMPANY_NAME}</p>
     `;
-  };
+}
 
-
-  export const getInvestmentDepositReceivedEmailContent = (investor: Investor, investment: Investment) => {
-    return `
-      Dear ${investor.firstName} ${investor.lastName},
-  
-      We are pleased to inform you that we have received your investment.
-  
-      Here are the details of your deposit:
-      - Investment Amount: ${investment.amountDeposited} 
-      - Deposit Date: ${investment.investmentDate && formatEndDate(investment.investmentDate)}
-  
-      Thank you for your trust in uls. We are excited to help you achieve your investment goals.
-  
-      If you have any questions or need further assistance, please contact our support team at ${COMPANY_SUPPORT_EMAIL}.
-  
-      We appreciate your continued trust and investment with us.
-  
-      Best regards,
-  
-      The Investment Team
-      ${COMPANY_NAME} -
-    `;
-  };
 
 
 export const getVerificationEmailContent = (verificationUrl:string,TOKEN_EXPIRATION_TIME:string,COMPANY_NAME:string) => {
@@ -235,7 +248,11 @@ export  const getNewPasswordEmailContent = (newPasswordUrl:string,TOKEN_EXPIRATI
   <h1 class="text-center">Welcome to ${COMPANY_NAME}!</h1>
   <p  class="text-center">Thank you made a request to change your password. Kindly click the link or buttion below to change your password.</p>
   <p  class="text-center">
-    <a href="${newPasswordUrl}" class="btn btn-primary">Change Password</a>
+    <a href="${newPasswordUrl}" class="btn btn-primary">Change Password
+     <button style="background-color: #007bff; color: #fff; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">
+  Change Your Password
+</button>
+    </a>
   </p>
   <p>If the button doesn't work, you can copy and paste the following link into your browser:</p>
   <p>${newPasswordUrl}</p>

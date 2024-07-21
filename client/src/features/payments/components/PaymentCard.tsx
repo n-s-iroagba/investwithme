@@ -25,8 +25,8 @@ const pay = ()=>{
 
   return (
     <>
-    <PayModal show={showModal} id={idToBePaid} confirmAmount={confirmAmount} paymentEntity={entity}/>
-    <Card className='w-100'>
+    <PayModal  show={showModal} id={idToBePaid} confirmAmount={confirmAmount} paymentEntity={entity}/>
+    <Card>
       <Card.Body>
         <Card.Text>
           Wallet Address: {address}

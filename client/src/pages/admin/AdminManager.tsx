@@ -21,6 +21,9 @@ const AdminManager: React.FC = () => {
             <button className='button-styles button-width-narrow text-light' onClick={handleToggle}>Add Manager</button>
             </div>
             <AdminManagerCards />
+            <div className='d-flex justify-content-center'>
+      <AdminDashboardButton/>
+      </div>
           </>
           :
           <>
@@ -30,9 +33,7 @@ const AdminManager: React.FC = () => {
             <ManagerForm />
           </>
         }
-          <div className='d-flex justify-content-center'>
-      <AdminDashboardButton/>
-      </div>
+         
       </div>
       <MiniFooter primaryVariant={true} />
       </div>

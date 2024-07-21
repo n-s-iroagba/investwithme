@@ -17,7 +17,7 @@ import PaymentWalletForm from "../pages/investor/PaymentWalletForm";
 import Referrals from "../pages/investor/Referral";
 import PatchManager from "../pages/admin/PatchManager";
 import Investors from "../pages/admin/Investors";
-import Bonus from "../features/promo/layout/Bonus";
+
 import AdminReferral from "../pages/admin/AdminReferral";
 import AdminWallets from "../pages/admin/AdminWallets";
 import Promotion from "../pages/admin/Promotion";
@@ -33,6 +33,7 @@ import EmailVerificationError from "../pages/common/EmailVerificationError";
 import SignUp from "../pages/investor/SignUp";
 import AlreadyVerified from "../pages/common/AlreadyVerified";
 import PrivateRoute from "../wrappers/PrivateRoute";
+import Bonus from "../pages/admin/Bonus";
 
 
 

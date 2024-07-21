@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { getDueBonus } from "../helpers/promoApiHelpers";
+import { getDueBonus } from "../../../features/promo/helpers/promoApiHelpers";
+
 
 
 const useGetBonus = () =>{

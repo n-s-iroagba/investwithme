@@ -20,7 +20,7 @@ const VerifyEmail = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState<any>();
   const { handleEmailVerification } = useContext<any>(AuthContext)
-  localStorage.setItem('cassockVerified','true')
+
 
 
   useEffect(() => {
@@ -60,11 +60,9 @@ const VerifyEmail = () => {
       const verificationStatus = localStorage.getItem('cassockVerified')
      
       if (verificationStatus){
-        setCounter(0)
-        alert(verificationStatus)
-        
-        localStorage.removeItem('cassockEmailVerificationToken')
         localStorage.removeItem('cassockVerified')
+        localStorage.removeItem('cassockEmailVerificationToken')
+        
         navigate(`/already-verified/${email}`)
        
       }
