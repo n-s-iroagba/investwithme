@@ -76,6 +76,7 @@ app.use('/get-pending-referral', routes)
 app.use('/get-available-currencies',routes)
 
 app.use ('/get-referral-details/:id',routes)
+app.use ('/notifications/mark-all-as-read/:id',routes)
 sequelize
   .sync({
     alter:true,

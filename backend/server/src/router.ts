@@ -11,6 +11,7 @@ import { createManager, patchManager, getAllManagers, getSingleManager, deleteMa
 import { createAdminWallet, deleteWallet, getAllWallets, patchWallet } from './controllers/adminWalletControllerr';
 import { getNotifications, getTransactions } from './controllers/notificationAndTransactionController';
 import { payPromoBonus, getPendingPromo, createPromo, getPromos, getAdvertPromos, updatePromo, deletePromo } from './controllers/promoController';
+import { markAllUnreadAsRead } from './controllers/notificationController';
 
 // import { getNewbies } from './controllers/newbiesControlller';
 
@@ -58,6 +59,7 @@ router.patch('/patch-promo', updatePromo);
 router.delete('/delete-promo/:id', deletePromo);
 
 router.get('/get-notifications/:id', getNotifications);
+router.patch('/notifications/mark-all-as-read/:id', markAllUnreadAsRead)
 router.get('/get-transactions/:id', getTransactions);
 
 router.get('/get-pending-referral`', getAllDueReferrals)

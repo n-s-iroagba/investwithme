@@ -67,6 +67,8 @@ declare id: CreationOptional<number>;
 declare title:'Earnings'|'Bonus Payout'|'How To Deposit'|'Referral Registration'|'Referral bonus imbursement'|'Promo Bonus'|'Investment deposit'|
     'Investment Deposit'|'Incomplete Investment Deposit'|'Investment Paused' |'Investment Continued'|'Promo Notification'|'How to invest'|'Promo Extension';
 declare message:string
+
+declare read:boolean|null
 declare investorId:ForeignKey<Investor['id']>
 declare investor: NonAttribute<Investor>
  }
@@ -270,6 +272,10 @@ Notification.init(
     title: {
       type: DataTypes.STRING,
       allowNull: false,
+    },
+    read: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
     },
     message: {
       type: DataTypes.STRING,

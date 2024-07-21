@@ -1,5 +1,5 @@
 import { getData } from "../../../common/utils/apiUtils";
-import { getNotificationsRoute, markNotificationsRoute } from "../../../constants/constants";
+import { getNotificationsRoute} from "../../../constants/constants";
 
 export const getNotifications = async (id:number)=>{
     const url = `${getNotificationsRoute}/${id}`
@@ -14,17 +14,5 @@ export const getNotifications = async (id:number)=>{
       }catch(error:any){
         console.error(error)
       
-      }
-  }
-
-
-  export const markNoficationsAsRead= async (id:number)=>{
-    const url = `${markNotificationsRoute}/${id}`
-    
-     const response = await getData(url)
-     if (response.status ===200){
-      return
-      }else{
-        console.log(response)
       }
   }

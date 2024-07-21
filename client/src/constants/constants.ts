@@ -44,7 +44,7 @@ export const getTransactionsRoute = `${domain}/get-transactions`
 export const markTransactionsRoute = `${domain}/mark-transactions`
 
 export const getNotificationsRoute = `${domain}/get-notifications`
-export const markNotificationsRoute = `${domain}/mark-notifications`
+export const markNotificationsRoute = `${domain}/'/notifications/mark-all-as-read'`
 
 export const getDueBonusUrl = `${domain}/get-pending-bonus`
 export const getPendingReferralUrl = `${domain}/get-pending-referral`

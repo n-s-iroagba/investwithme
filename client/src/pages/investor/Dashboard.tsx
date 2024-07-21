@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Row, Col} from 'react-bootstrap'
 import { DashboardBar } from '../../features/investment/components/DashboardNav'
 import { faWallet, faHandHoldingDollar, faQuestion,  faMoneyBill, faUserFriends, faCircleArrowUp, faArrowCircleDown, faCircleDollarToSlot, faUser } from '@fortawesome/free-solid-svg-icons'
@@ -11,6 +11,8 @@ import CircularButton from '../../features/investor/components/CircularButton'
 import Transactions from '../../features/transaction/layout/Transactions'
 import { numberWithCommas } from '../../common/utils/utils'
 import { useNavigate } from 'react-router-dom'
+import { getInvestment } from '../../features/investment/helpers/investmentApiHelpers'
+import { PortfolioDto } from '../../../../common/investmentTypes'
 
 
 
@@ -38,17 +40,34 @@ const DashboardCard: React.FC<{ title: string, amount: number, icon: any }> = ({
   )
 }
 
-const DashboardHeader: React.FC <{username:string}> = ({username}) => {
-  const amount = 0
-  const earnings = 0
-  const amountInvested = 0
-  const numberOfNewNotifications = 1
+const DashboardHeader: React.FC <{username:string,id:number}> = ({username,id}) => {
+  const [earnings,setEarnings] = useState(0)
+  const [amountInvested,setAmountInvested] = useState(0)
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const investment = await getInvestment(1);
+        if (investment.status === 200 && investment.data) {
+          console.log('earnings',investment.data.investment.earnings);
+          setEarnings(investment.data.investment.earnings)
+          setAmountInvested(investment.data.investment.amountDeposited)
+          localStorage.setItem('cassockInvestment',JSON.stringify(investment.data as PortfolioDto)) 
+       
+        }  
+      } catch (error) {
+        console.error('Error fetching investment data:', error);
+      }
+    }
+    fetchData();
+  }, []);
+  const amount = earnings+amountInvested
+ 
   return (
 
 
     <div className='primary-background  dashboard-header  pt-4 pb-5 w-100'>
       <div className='d-flex flex-column align-items-center'>
-        <DashboardBar numberOfNewNotifications={numberOfNewNotifications} username={username} />
+        <DashboardBar id={id} username={username} />
       </div>
       <div className='px-3'>
         <h4 className='amount-text text-center mt-3'>Current Balance</h4>
@@ -104,12 +123,13 @@ const DashboardActions: React.FC = () => {
   )
 }
 
-const Dashboard: React.FC<{username:string}> = ({username}) => {
+const Dashboard: React.FC<{username:string,id:number}> = ({username,id}) => {
+  
   return (
     <>
-      <DashboardHeader username={username} />
+      <DashboardHeader username={username} id={id} />
       <DashboardActions />
-      <Transactions />
+      <Transactions id={id} />
       <MiniFooter />
     </>
   )

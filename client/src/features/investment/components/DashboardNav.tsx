@@ -1,21 +1,57 @@
-import React from 'react';
+import React, { useEffect,useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import '../../../common/styles/styles.css'
 import { Col, Row } from 'react-bootstrap';
 import { faBell } from '@fortawesome/free-solid-svg-icons';
 import logoImage from '../../../assets/logo/whitelogo.png'
-
-
-import { useNavigate } from 'react-router-dom';
 import { getGreeting } from '../utils/utils';
 import Logo from '../../../common/components/Logo';
+import NotificationsModal from '../../notification/layout/NotificationsModal';
+import { getNotifications } from '../../notification/helpers/notificationApiHelpers';
+import { NotificationDto } from '../../../../../common/notificationType';
+import { markNotificationsAsRead } from '../helpers/notificationHelpers';
 
-export const DashboardBar: React.FC<{ username: string, numberOfNewNotifications: number }> = (props) => {
-  const navigate = useNavigate();
+
+export const DashboardBar: React.FC<{ username: string,id:number }> = (props) => {
+  const [modalShow, setModalShow] = useState(false);
+ const [notifications,setNotifications] = useState<NotificationDto[]>([])
+
+ const countReadNotifications = (notifications: NotificationDto[]): number => {
+  return notifications.filter(notification => notification.read).length;
+}
+ const  numberOfNewNotifications = countReadNotifications(notifications)
+
+  useEffect(() => {
+    const fetchNotifications = async () => {
+      try {
+        
+        
+        const notifs = await getNotifications(1)
+
+        setNotifications(notifs);
+      
+      } catch (error) {
+        console.error('Error loading notifications from localStorage:', error);
+      }
+    };
+
+    fetchNotifications();
+  }, []);
+
+  const handleNotifications = () => {
+    setModalShow(true);
+    markNotificationsAsRead(props.id)
+  }
+
   return (
     <Row className="text-light w-100 d-flex align-items-center justify-content-between">
-
+  
+<NotificationsModal
+  show={modalShow}
+  onHide={() => setModalShow(false)}
+  notifications={notifications}
+/>
       <Col>
         <small className='smallest-font'>{getGreeting() + ','}</small>
         <h3 className='text-wrap'>{props.username}</h3>
@@ -24,16 +60,18 @@ export const DashboardBar: React.FC<{ username: string, numberOfNewNotifications
       <Col className='d-flex justify-content-center' >  <Logo logoImage={logoImage} /></Col>
 
       <Col className="d-flex justify-content-end align-items-center">
-        <FontAwesomeIcon className='icon' onClick={() => navigate('/notifications')} icon={faBell} />
+        <FontAwesomeIcon className='icon' onClick={() => handleNotifications()} icon={faBell} />
         {
-          props.numberOfNewNotifications > 0 &&
-          <small className='rounded-circle dash-nav text-center'>+{props.numberOfNewNotifications}</small>
+          numberOfNewNotifications > 0 &&
+          <small className='rounded-circle dash-nav text-center'>+{numberOfNewNotifications}</small>
 
         }
       </Col>
     </Row>
   );
 };
+
+
 
 
 export const AdminDashboardBar: React.FC<{ username: string }> = (props) => {
@@ -60,3 +98,5 @@ const DashboardNav: React.FC<{ notifIcon?: IconProp, icon: IconProp; text: strin
 };
 
 export default DashboardNav;
+
+

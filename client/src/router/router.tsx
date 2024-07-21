@@ -144,7 +144,7 @@ export const router = createBrowserRouter([
     },
     {
         path: '/notifications',
-        element: <Notifications />
+        element: <PrivateRoute Component={Notifications }/>
     },
     {
         path: '/admin/managers',
