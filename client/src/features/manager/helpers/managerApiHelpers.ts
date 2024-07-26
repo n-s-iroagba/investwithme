@@ -1,3 +1,4 @@
+import { AxiosResponse } from "axios";
 import { ManagerDto } from "../../../../../common/managerType";
 import { deleteItem, getData, getNotProtectedData, patchFormDataItem, postFormData } from "../../../common/utils/apiUtils";
 import { createManagerUrl, getManagersUrl, getSingleMangerRoute, patchManagerUrl, deleteManagerRoute } from "../../../constants/constants";
@@ -17,23 +18,15 @@ export const createManager= async (data:FormData) => {
   
   };
   
-  export const getNotProtectedManagers = async (): Promise<ManagerDto[]> => {
+  export const getNotProtectedManagers = async (): Promise<ManagerDto[]|void> => {
     try {
-  
-
-  
-      const response = await getNotProtectedData(getManagersUrl);
-   
+      const response:AxiosResponse<ManagerDto[]> = await getNotProtectedData(getManagersUrl);
       if (response.status === 200 && Array.isArray(response.data)) {
         return response.data as ManagerDto[];
       }
-  
-      return [];
-      
     } catch (error: any) {
       console.error(error);
-      return error
-    
+      throw error;
     }
   };
   
@@ -81,7 +74,7 @@ export const createManager= async (data:FormData) => {
       } 
   }catch (error:any) {
     console.error(error)
-    alert('unable to update the manager at this time')
+    alert('error updating manager')
   }
   }
   

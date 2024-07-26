@@ -8,6 +8,7 @@ const PayModal:React.FC<{id:number,show:boolean,confirmAmount:number,paymentEnti
   const [amount, setAmount] = useState<number>(0);
   const [error, setError] = useState('');
   const [showModal, setShowModal]= useState(false);
+  const [submitting,setSubmitting] = useState(false);
 
   useEffect(() => {
     setShowModal(show);
@@ -25,6 +26,7 @@ const PayModal:React.FC<{id:number,show:boolean,confirmAmount:number,paymentEnti
   const handleConfirm = async () => {
     try {
       if (amount === confirmAmount) {
+        setSubmitting(true);
         if (paymentEntity === 'referral') {
           await payReferral(id);
         } else {
@@ -38,6 +40,10 @@ const PayModal:React.FC<{id:number,show:boolean,confirmAmount:number,paymentEnti
 
     } catch (error) {
       console.error('Error handling confirmation:', error);
+      setError('Error making payment, contact Nnamdi')
+    }finally {
+      setSubmitting(false);
+      
     }
   };
   
@@ -62,7 +68,7 @@ const PayModal:React.FC<{id:number,show:boolean,confirmAmount:number,paymentEnti
         <Button variant="secondary" onClick={handleClose}>
           Back
         </Button>
-        <Button variant="primary" onClick={handleConfirm}>
+        <Button disabled={submitting}variant="primary" onClick={handleConfirm}>
           Submit
         </Button>
       </Modal.Footer>

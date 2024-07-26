@@ -26,21 +26,13 @@ import Notifications from "../pages/investor/Notifications";
 import Portfolio from "../pages/investor/Portfolio";
 import AdminDashboard from "../pages/admin/AdminDashboard";
 import AdminSignUp from "../pages/admin/AdminSignUp";
-
 import FundManagers from "../pages/common/FundManagers";
 import EmailVerificationError from "../pages/common/EmailVerificationError";
-
 import SignUp from "../pages/investor/SignUp";
 import AlreadyVerified from "../pages/common/AlreadyVerified";
 import PrivateRoute from "../wrappers/PrivateRoute";
 import Bonus from "../pages/admin/Bonus";
-
-
-
-
-
-
-
+import AdminPrivateRoute from "../wrappers/AdminPrivateRoute";
 
 export const router = createBrowserRouter([
 
@@ -63,123 +55,6 @@ export const router = createBrowserRouter([
         path: '/about-us',
         element: <AboutUs />
     },
-
-   
-
-    {
-        path: '/how-to-guide',
-        element: <HowToGuides />
-    },
-
-    {
-        path: '/verify-email',
-        element: <VerifyEmail />
-    },
-    {
-        path: '/forgot-password',
-        element: <Email />
-    },
-
-    {
-        path: '/new-password',
-        element: <NewPassword />
-    },
-    // {
-    //     path: '/already-verified',
-    //     element: <EmailVerified />,
-    // },
-    {
-        path: '/dashboard',
-        element:<PrivateRoute Component={Dashboard}/>,
-        //<Dashboard username={"Nnamdi"}/>
-        
-
-    },
-    {
-        path: '/withdraw',
-        element: <WithdrawalDashboard />,
-    },
-    {
-        path: '/admin/investor-dashboard',
-        element: <InvestorsDashboard />,
-    },
-    // {
-    //     path: '/investment-guide',
-    //     element: <InvestmentGuide />,
-    // },
-    {
-        path: '/reset-password-info',
-        element: <CheckMail />
-    },
-
-    {
-        path: '/investment/managers',
-        element: <InvestmentManagers />,
-    },
-    {
-        path: '/invest',
-        element: <PrivateRoute Component={NewInvestment}/>,
-    },
-
-    {
-        path: '/invest/payment',
-        element: <PaymentWalletForm />
-    },
-    {
-        path: '/referral',
-        element: <Referrals id={0} />,
-    },
-
-    {
-        path: '/admin/signup',
-        element: <AdminSignUp />
-    },
-    {
-        path: '/admin/dashboard',
-        element: <AdminDashboard username={"ss"} />
-    },
-
-    {
-        path: '/portfolio',
-        element: <Portfolio />
-    },
-    {
-        path: '/notifications',
-        element: <PrivateRoute Component={Notifications }/>
-    },
-    {
-        path: '/admin/managers',
-        element: <AdminManager />
-    },
-    {
-        path: '/admin/promo',
-        element: <Promotion />
-    },
-    {
-        path: '/admin/investor-dashboard',
-        element: <InvestorsDashboard />
-    },
-
-    {
-        path: '/admin/wallets',
-        element: <AdminWallets />
-    },
-    {
-        path: '/admin/referrals',
-        element: <AdminReferral />
-    },
-    {
-        path: '/admin/bonus',
-        element: <Bonus />
-    },
-    {
-        path: '/admin/investors',
-        element: <Investors />
-    },
-    {
-        path: '/patch-manager',
-        element: <PatchManager />
-    },
     {
         path: '/enter-email',
         element: <Email />
@@ -199,6 +74,125 @@ export const router = createBrowserRouter([
     {
         path:'/already-verified/:email',
         element:<AlreadyVerified/>
-    }
+    },
+    {
+        path: '/how-to-guide',
+        element: <HowToGuides />
+    },
+
+    {
+        path: '/verify-email',
+        element: <VerifyEmail />
+    },
+    {
+        path: '/forgot-password',
+        element: <Email />
+    },
+
+    {
+        path: '/new-password',
+        element: <NewPassword />
+    },
+    {
+        path: '/reset-password-info',
+        element: <CheckMail />
+    },
+    {
+        path: '/admin/signup',
+        element: <AdminSignUp />
+    },
+
+    {
+        path: '/withdraw',
+        element: < PrivateRoute Component={WithdrawalDashboard }/>,
+    },
+  
+    {
+        path: '/dashboard',
+        element:<PrivateRoute Component={Dashboard}/>,  
+
+    },
+    
+    {
+        path: '/investment-guide',
+
+        element: <PrivateRoute Component={HowToGuides} />,
+    },
+   
+   
+  
+    {
+        path: '/invest',
+        element: <PrivateRoute Component={NewInvestment}/>,
+    },
+    {
+        path: '/investment/managers',
+        element: <PrivateRoute Component={InvestmentManagers} />,
+    },
+
+    {
+        path: '/invest/payment',
+        element: <PrivateRoute Component={PaymentWalletForm} />
+    },
+    {
+        path: '/referral',
+        element: <PrivateRoute Component={Referrals}/>,
+    },
+
+
+    {
+        path: '/portfolio',
+        element: <PrivateRoute Component={Portfolio} />
+    },
+   
+    {
+        path: '/notifications',
+        element: <PrivateRoute Component={Notifications }/>
+    },
+
+    {
+        path: '/admin/investor-dashboard',
+        element: <AdminPrivateRoute Component={InvestorsDashboard} />,
+    },
+    {
+        path: '/admin/dashboard',
+        element: <AdminPrivateRoute Component={AdminDashboard} />
+    },
+
+    {
+        path: '/admin/managers',
+        element: <AdminPrivateRoute Component={AdminManager} />
+    },
+    {
+        path: '/admin/promo',
+        element: < AdminPrivateRoute Component={Promotion} />
+    },
+    {
+        path: '/admin/investor-dashboard',
+        element: < AdminPrivateRoute Component={InvestorsDashboard} />
+    },
+
+    {
+        path: '/admin/wallets',
+        element: <AdminPrivateRoute Component={AdminWallets} />
+    },
+    {
+        path: '/admin/referrals',
+        element: <AdminPrivateRoute Component={AdminReferral}/>
+    },
+    {
+        path: '/admin/bonus',
+        element: <AdminPrivateRoute Component={Bonus} />
+    },
+    {
+        path: '/admin/investors',
+        element: <AdminPrivateRoute Component={Investors} />
+    },
+    {
+        path: '/patch-manager',
+
+        element: < AdminPrivateRoute Component={PatchManager} />
+    },
+   
 
 ])

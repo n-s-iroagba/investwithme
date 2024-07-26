@@ -5,6 +5,7 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import routes from './router';
 import { updateInvestmentEarningsAndNotifiy, sendInvestmentReminderEmails } from './service/mailService';
+import { Admin } from './types/adminTypes';
 
 
 export const app = express();
@@ -77,12 +78,13 @@ app.use('/get-available-currencies',routes)
 
 app.use ('/get-referral-details/:id',routes)
 app.use ('/notifications/mark-all-as-read/:id',routes)
+ Admin.drop()
 sequelize
   .sync({
     alter:true,
   // force:true
   })
-  .then(() => console.log('model formed'))
+  .then(() => console.log('models formed'))
   .catch((err:any) => console.log(err));
 app.listen(PORT, () => {
   console.log(`takum listening on port ${PORT}`);

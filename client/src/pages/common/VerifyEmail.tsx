@@ -66,7 +66,7 @@ const VerifyEmail = () => {
         navigate(`/already-verified/${email}`)
        
       }
-    }, 5000);
+    }, 1000);
 
     return () => clearInterval(interval);
   },[email, navigate]);

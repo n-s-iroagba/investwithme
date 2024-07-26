@@ -12,8 +12,8 @@ const AdminManager: React.FC = () => {
     setShowManagers(!showManagers)
   }
   return (
-    <div className='primary-background'>
-    <div className=' full-height px-3 pt-5'>
+    <div className='primary-background '>
+    <div className=' full-height pt-5'>
   
         {showManagers ?
           <>
@@ -28,7 +28,7 @@ const AdminManager: React.FC = () => {
           :
           <>
           <div className='d-flex justify-content-center'>
-            <button className='button-styles button-width-narrow' onClick={handleToggle}>View Managers</button>
+            <button className='button-styles button-width-narrow border-0 text-light' onClick={handleToggle}>View Managers</button>
             </div>
             <ManagerForm />
           </>

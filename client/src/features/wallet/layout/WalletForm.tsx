@@ -1,11 +1,12 @@
 import React, {useState } from 'react';
-import { Col, Form, Spinner, ToggleButton } from 'react-bootstrap';
+import { Col, Form, Spinner } from 'react-bootstrap';
 import { CreateWalletDto } from '../../../../../common/walletTypes';
 import { extractErrorCode, hasEmptyKey } from '../../../common/utils/utils';
 import { createWallet } from '../helpers/walletHelper';
 import { required } from '../../auth/components/required';
 import ErrorMessage from '../../../common/components/ErrorMessage';
 import '../../../common/styles/styles.css'
+;
 
 const WalletForm: React.FC = () => {
 
@@ -19,6 +20,7 @@ const WalletForm: React.FC = () => {
   const [submitting, setSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [readOnly, setReadOnly] = useState(true)
+ 
 
   const handleChange = (e: any) => {
     let { name,value } = e.target
@@ -129,11 +131,11 @@ const WalletForm: React.FC = () => {
           />
         </Form.Group>
        }
-        <div className="d-flex justify-content-evenly w-100">
+        <div className="d-flex justify-content-center w-100">
           <button className="button-styles w-50 text-light" type={submitting ? 'button' : 'submit'}>
             {submitting ? <Spinner animation="border" size="sm" /> : 'Submit'}
           </button>
-          <button className="button-styles text-light w-50" onClick={() => console.log(walletData)}>Home</button>
+        
         </div>
       </Form>
       <ErrorMessage message={errorMessage} />

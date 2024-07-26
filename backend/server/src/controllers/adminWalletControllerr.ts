@@ -24,7 +24,7 @@ export const createAdminWallet = async (req: Request, res: Response): Promise<Re
         where:{
           depositMeans: depositMeans,
         }})
-        currency = 'NATIONAL CURRENCY OVR USD'
+        currency = 'NATIONAL CURRENCY OR USD'
     }
 
      if (existingWallet){

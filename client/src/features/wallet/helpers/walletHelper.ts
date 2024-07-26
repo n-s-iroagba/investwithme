@@ -52,7 +52,7 @@ export const deleteWallet = async (id: number) => {
         
         const response = await deleteItem(url);
         if (response.status === 200) {
-            alert('manager deleted succesfully')
+            alert('wallet deleted succesfully')
             window.location.reload();
         }
         return response.status

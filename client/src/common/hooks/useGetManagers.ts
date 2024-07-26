@@ -9,18 +9,16 @@ const useGetManagers = (): { managers: ManagerDto[], errorMessage: string } => {
     const fetchManagerData = async () => {
       try {
         const managerData = await getNotProtectedManagers(); 
-        const sortedManagers = sortManagers( managerData)
-        setManagers(sortedManagers);
-
-        console.log(managerData)
-      } catch (error) {
+        if (managerData){
+          setManagers(sortManagers(managerData));
+        }
+      } catch (error:any) {
         console.error(error);
         setErrorMessage('Error retrieving managers')
       }
     };
 
     useEffect(() => {
-    
       fetchManagerData();
     }, []);
   

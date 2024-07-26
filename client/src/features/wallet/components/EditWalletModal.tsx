@@ -16,6 +16,7 @@ const EditWalletModal: React.FC<{ data: WalletDto; show: boolean }> = ({
 
   useEffect(() => {
     setShowModal(show);
+    setWalletData(data)
   }, [data, show]);
 
   const handleClose = () => {
@@ -49,15 +50,15 @@ const EditWalletModal: React.FC<{ data: WalletDto; show: boolean }> = ({
   return (
     <Modal show={showModal} onHide={handleClose}>
       <Modal.Header closeButton>
-        <Modal.Title>Update Wallet Address</Modal.Title>
+        <Modal.Title>Update {data.depositMeans} identification (wallet or tag or email)</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form.Group controlId="adminPassword">
           <Form.Control
             type="text"
             placeholder="enter new address"
-            value={walletData?.identification}
-            name="address"
+            value={walletData.identification}
+            name="identification"
             onChange={handleChange}
           />
           {error && <Form.Text className="text-danger text-center">{error}</Form.Text>}

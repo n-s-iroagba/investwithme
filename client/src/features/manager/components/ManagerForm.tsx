@@ -276,11 +276,10 @@ const ManagerForm: React.FC<{ patch?: boolean }> = ({ patch }) => {
           />
         </Form.Group>
 
-        <div className="d-flex justify-content-evenly w-100">
+        <div className="d-flex justify-content-center w-100">
           <button className="button-styles w-50 text-light" type={submitting ? 'button' : 'submit'}>
             {submitting ? <Spinner animation='border' size='sm' /> : 'Submit'}
           </button>
-          <button className="button-styles text-light w-50" onClick={() => console.log(managerData)}>Dashboard</button>
         </div>
       </Form>
       <ErrorMessage message={errorMessage} />

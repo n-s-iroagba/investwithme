@@ -21,7 +21,7 @@
 
 .primary-background {
     background:var(--primary-color) ;
-    width:100%;
+   max-width:100%;
 }
 .primary-color{
     color: var(--primary-color);

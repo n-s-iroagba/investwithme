@@ -13,7 +13,7 @@ const WalletCard: React.FC<WalletCardProps> = ({
 }) => {
   return (
     
-      <Card className='shade round-card my-1'>
+      <Card className='shade round-card my-1 w-100'>
         <Card.Body className='px-2'>
           <div className='mb-3'>
             <small>Currency:</small>
@@ -31,9 +31,9 @@ const WalletCard: React.FC<WalletCardProps> = ({
             <small>Deposit Means:</small>
             <Card.Text>{depositMeans}</Card.Text>
           </div>
-          <div>
-          {editButton && <>{editButton}</>}
-          {deleteButton && <div>{deleteButton}</div>}
+          <div className='d-flex flex-column align-items-center'>
+          {editButton}
+          {deleteButton}
           </div>
         </Card.Body>
       </Card>

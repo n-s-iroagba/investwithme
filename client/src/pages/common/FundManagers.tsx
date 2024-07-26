@@ -30,6 +30,9 @@ const FundManagers = () => {
             <p className='text-center'></p>
             <h3 className='text-center'>Meet our Fund Managers</h3>
             <div className='primary-line mb-2' />
+        </div>
+        <div>
+            
             <ManagerCards />
 
             <MiniFooter />

@@ -50,7 +50,7 @@ export const createManager = async (req: Request, res: Response): Promise<Respon
       qualification
     });
 
-    return res.status(201).json({ message: 'Manager created successfully', manager });
+    return res.status(201).json(manager);
   } catch (error: any) {
     console.error('Error createManager function:', error);
     return res.status(error.status || 500).json(error);
@@ -61,9 +61,7 @@ export const createManager = async (req: Request, res: Response): Promise<Respon
 export const getAllManagers = async (req: Request, res: Response): Promise<Response> => {
   try {
     const managers = await Manager.findAll();
-    console.log('hi')
     return res.status(200).json(managers);
-    
   } catch (error: any) {
     console.error('Error in getAllMangers function:', error);
     return res.status(error.status || 500).json(error);
@@ -88,7 +86,7 @@ export const getSingleManager = async (req: Request, res: Response): Promise<Res
 
 export const patchManager = async (req: Request, res: Response): Promise<Response> => {
   const { id } = req.params
-  const { lastName, firstName, minimumInvestmentAmount, percentageYield, duration } = req.body;
+  const { lastName, firstName, minimumInvestmentAmount, percentageYield, duration,qualification } = req.body;
   try {
     const manager = await Manager.findByPk(id);
     if (!manager) {
@@ -102,8 +100,8 @@ export const patchManager = async (req: Request, res: Response): Promise<Respons
     manager.minimumInvestmentAmount = minimumInvestmentAmount;
     manager.percentageYield = percentageYield;
     manager.duration = duration;
-
-
+    manager.qualification= qualification
+    
     await manager.save();
 
     return res.status(200).json({ message: 'Manager updated successfully' });

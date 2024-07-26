@@ -11,7 +11,7 @@ const ManagerCards: React.FC<{ text?: string }> = ({ text }) => {
   const { managers, errorMessage } = useGetManagers();
 
   return (
-    <div className="px-3">
+    <>
       <div className="d-flex flex-column align-items-center ">
         <h3 className="text-center mt-4">{text}</h3>
         {text && <div className="primary-line mb-4" />}
@@ -33,7 +33,7 @@ const ManagerCards: React.FC<{ text?: string }> = ({ text }) => {
         ))}
       </Row>
       <ErrorMessage message={errorMessage} />
-    </div>
+    </>
   );
 };
 export default ManagerCards;

@@ -3,7 +3,7 @@ import MiniFooter from '../../common/components/MiniFooter';
 import WalletForm from '../../features/wallet/layout/WalletForm';
 import AdminWalletLayout from '../../features/wallet/layout/AdminWalletLayout';
 import '../../common/styles/styles.css'
-import { AdminDashboardButton } from '../../common/components/Button';
+
 
 const AdminWallets: React.FC = () => {
   const [showWallets, setShowWallets] = useState<boolean>(true)
@@ -13,24 +13,20 @@ const AdminWallets: React.FC = () => {
 
   }
   return (
-    <div className='primary-background'>
-    <div className=' full-height px-3 pt-5'>
+    <div className='primary-background px-3'>
+    <div className=' full-height pt-5'>
           {showWallets ?
            <>
-           <div className='d-flex flex-column align-items-center'>
-             <button className='button-styles button-width-narrow text-light' onClick={handleToggle}>Add Wallet</button>
+           <div className='d-flex justify-content-center'>
+             <button className='button-styles button-width-narrow text-light mb-3' onClick={handleToggle}>Add Wallet</button>
+             </div>       
              <AdminWalletLayout />
-             <div className='d-flex justify-content-center'>
-          <AdminDashboardButton/>
-          </div >
-             </div>
-             
              
             </>
             :
             <>
           <div className='d-flex flex-column align-items-center'>
-            <button className='button-styles button-width-narrow'onClick={handleToggle}>View Wallets</button>
+            <button className='button-styles button-width-narrow text-light'onClick={handleToggle}>View Wallets</button>
             <WalletForm />
             </div>
               
