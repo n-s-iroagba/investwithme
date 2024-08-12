@@ -1,6 +1,6 @@
 // import { serverTopUpInvestmentPath } from "../../../common/constants";
 
-const domain = 'http://localhost:8000';
+const domain = 'https://cassock1.fly.dev';
 
 export const companyName = `Cassock`
 export const socialMediaLink = ''

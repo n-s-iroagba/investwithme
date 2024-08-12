@@ -44,6 +44,8 @@ import { CreateWalletDto } from "../../../../common/walletTypes";
   export const numberWithCommas = (number: number) => {
     const str = String(number);
     let formatted = '';
+    if (str.length < 4)
+      return str;
   
     for (let i = str.length - 1, count = 0; i >= 0; i--, count++) {
       formatted = str[i] + formatted;

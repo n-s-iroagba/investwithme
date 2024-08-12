@@ -22,19 +22,14 @@ const DashboardCard: React.FC<{ title: string, amount: number, icon: any }> = ({
 
   return (
     <div className='px-1  '>
-      <div className='dash-nav py-1'>
-
-        <small className='text-light text center mb-1'>{title}</small>
+      <div className='dash-nav w-100 h-100 py-1'>
+        <small className='text-light text-center mb-1 smallest-font'>{title}</small>
         <div className='d-flex justify-content-center flex-column align-items-center'>
 
           <FontAwesomeIcon className='text-light mb-1' icon={icon} />
         </div>
 
         <h6 className='text-light'> ${numberWithCommas(amount) + '.00'}</h6>
-
-
-
-
       </div>
     </div>
   )
@@ -80,10 +75,10 @@ const DashboardHeader: React.FC <{username:string,id:number}> = ({username,id}) 
 
         </h1>
         <Row className='d-flex justify-content-between'>
-          <Col xs={6}>
+          <Col className='h-100' xs={6}>
             <DashboardCard icon={faCircleArrowUp} title='Amount invested' amount={amountInvested} />
           </Col>
-          <Col>
+          <Col className='h-100'>
             <DashboardCard icon={faArrowCircleDown} title='Earnings' amount={earnings} />
           </Col>
         </Row>
@@ -104,7 +99,7 @@ const DashboardActions: React.FC = () => {
   return (
     <div className=' my-3 px-3'>
       <h4 className='text-center actions'>  Quick Actions</h4>
-      <Row className=' gy-3 w-100 d-flex justify-content-center mt-3'>
+      <Row className=' gy-3 gx-1 w-100 d-flex justify-content-center mt-3'>
         {texts.map((text, index) => (
           <Col className='d-flex justify-content-center' xs={4} md={2}>
             <CircularButton icon={icons[index]} title={text} path={actions[index]}  />

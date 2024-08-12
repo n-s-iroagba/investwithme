@@ -2,10 +2,10 @@ import React from "react";
 import { Col, Row } from "react-bootstrap";
 import image1 from "../../../assets/awards/award1.png";
 import image2 from "../../../assets/awards/award2.png";
-import image3 from "../../../assets/awards/award4.png";
-import image4 from "../../../assets/awards/award5.png";
+import image3 from "../../../assets/awards/award3.png";
+import image4 from "../../../assets/awards/award4.png";
 import "../../../common/styles/styles.css";
-const awards = [image3, image1, image2, image4];
+const awards = [image4, image1, image2,image3 ];
 
 const Awards: React.FC = () => {
   return (
