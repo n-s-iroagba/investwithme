@@ -33,7 +33,7 @@ const investmentData: PortfolioDto = savedData ? JSON.parse(savedData) :
  return(
 <div className='d-flex flex-column align-items-center'>
     <h1 className='text-center my-2'>My Portfolio</h1>
-{investmentData.investment.amountDeposited===0 && <button className='mb-3 button-styles text-light button-width-narrow' onClick={()=>navigate('/invest/managers')}>Invest</button>
+{investmentData.investment.amountDeposited===0 && <button className='mb-3 button-styles text-light button-width-narrow' onClick={()=>navigate('/investment/managers')}>Invest</button>
 }
 <PortfolioLayout investmentData={investmentData}/>
 </div>

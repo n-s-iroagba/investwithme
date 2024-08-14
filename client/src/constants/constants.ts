@@ -1,9 +1,11 @@
 // import { serverTopUpInvestmentPath } from "../../../common/constants";
 
-const domain = 'https://cassock1.fly.dev';
+const domain = 'https://cassock.fly.dev';
 
-export const companyName = `Cassock`
+export const companyName = `cassock Equity`
 export const socialMediaLink = ''
+export const clientDomain= 'https://cassockequity.com'
+export const companySupportEmail = 'cassockequity1914@gmail.com'
 
 
 
@@ -57,7 +59,6 @@ export const getReferralDetailsRoute = `${domain}/get-referral-details`
 
 export const resendVerificationTokenRoute = `${domain}/resend-verification-token`
 
-export const clientDomain= 'localhost:3000'
 export const messages = [
   {
     time: `10 min ago`,
@@ -213,7 +214,6 @@ export const messages = [
   }
 ];
 
-export const companySupportEmail = 'nothing@cassock.com'
 export const testimonials = [
     {
       name: `Alice Johnson`,

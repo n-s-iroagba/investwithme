@@ -38,19 +38,17 @@ const WithdrawalDashboard: React.FC = () => {
     const investment = getInvestmentDataWithUpdatedDate()
     console.log(investment)
     if (investment!==null){
-   
-
-        return <div className='d-flex flex-column align-items-center px-3'>
+        return  <div className='d-flex flex-column align-items-center'>
+        <p className='text-center'>No investment yet</p>
+        <button onClick={() => navigate('/investment/managers')} className='button-styles button-width-narrow'>Invest</button>
+      </div>
+    }else{
+        return (
+          <div className='d-flex flex-column align-items-center px-3'>
           <p  className='text-center ' >You can not make withdrawals not until your pay out day.</p>
           <p  className='text-center ' >You've got {investment} days left</p>
           <button onClick={() => navigate('/dashboard')} className='button-styles button-width-narrower'>Dashboard</button>
         </div>
-    }else{
-        return (
-          <div className='d-flex flex-column align-items-center'>
-            <p className='text-center'>No investment yet</p>
-            <button onClick={() => navigate('/invest/managers')} className='button-styles button-width-narrow'>Invest</button>
-          </div>
         );
      
   };

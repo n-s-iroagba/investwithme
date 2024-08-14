@@ -16,18 +16,15 @@ import { markNotificationsAsRead } from '../helpers/notificationHelpers';
 export const DashboardBar: React.FC<{ username: string,id:number }> = (props) => {
   const [modalShow, setModalShow] = useState(false);
  const [notifications,setNotifications] = useState<NotificationDto[]>([])
-
- const countReadNotifications = (notifications: NotificationDto[]): number => {
-  return notifications.filter(notification => notification.read).length;
-}
- const  numberOfNewNotifications = countReadNotifications(notifications)
+ const [ numberOfNewNotifications,setNumberOfNewNotifications] = useState(0)
 
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
         
         
-        const notifs = await getNotifications(1)
+        const notifs = await getNotifications(props.id)
+         notifs.length && setNumberOfNewNotifications(notifs?.length||0)
 
         setNotifications(notifs);
       
@@ -37,7 +34,7 @@ export const DashboardBar: React.FC<{ username: string,id:number }> = (props) =>
     };
 
     fetchNotifications();
-  }, []);
+  }, [props.id]);
 
   const handleNotifications = () => {
     setModalShow(true);

@@ -46,7 +46,6 @@ const Footer = () => {
                   <SocialMediaButton/>
                   </Col>
                 </Row>
-                <p className='margin-top'>+44 (0)3308 285 883</p>
                 <p>{companySupportEmail}</p>
               </Col>
             </Row>
@@ -68,7 +67,7 @@ const Footer = () => {
         </Row>
         <Row>
             <Col xs={12}>
-            <p className="text-center">Copyright 2024 – Cassock</p>
+            <p className="text-center">Copyright 2024 – Cassock Equity</p>
             </Col>
             </Row>
       
